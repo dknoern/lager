@@ -1,0 +1,32 @@
+
+<h1 class="page-title"><span class="fw-semi-bold">Inventory</span></h1>
+
+<section class="widget" data-ng-controller="AngularWayCtrl">
+
+  <div class="widget-body">
+    <div class="mt">
+      <table data-datatable="ng" data-dt-options="dtOptions" class="table table-striped table-hover">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Description</th>
+          <th class="no-sort hidden-xs">Price</th>
+          <th class="hidden-xs">Style</th>
+          <th class="hidden-xs">Case</th>
+          <th class="no-sort">Notes</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr data-ng-repeat="item in people">
+          <td>{{item.itemNo}}</td>
+          <td><a href="item#/app/item">{{item.title}}</a></td>
+          <td>{{item.sellingPrice}}</td>
+          <td class="hidden-xs"><a href="#">{{item.style}}</a></td>
+          <td class="hidden-xs">{{item.case}}</td>
+          <td class="hidden-xs">{{item.notes}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

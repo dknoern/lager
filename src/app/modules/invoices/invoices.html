@@ -1,0 +1,35 @@
+
+<h1 class="page-title"><span class="fw-semi-bold">Invoices</span></h1>
+
+<section class="widget" data-ng-controller="InvoicesCtrl">
+  <div class="widget-body">
+    <div class="mt">
+      <table data-datatable="ng" data-dt-options="dtOptions" class="table table-striped table-hover">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Customer</th>
+          <th class="no-sort hidden-xs">Date</th>
+          <th class="hidden-xs">Ship Via</th>
+          <th class="hidden-xs">Paid By</th>
+          <th class="no-sort">Total</th>
+          <th>Address</th>
+          <th>City</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr data-ng-repeat="invoice in invoices">
+          <td><a href="invoice#/app/invoice">{{invoice.invoiceNo}}</a></td>
+          <td>{{invoice.custNo}}</td>
+          <td>{{invoice.invoiceDate}}</td>
+          <td class="hidden-xs">{{invoice.shipVia}}</td>
+          <td class="hidden-xs">{{invoice.paidBy}}</td>
+          <td class="hidden-xs">{{invoice.total}}</td>
+          <td class="hidden-xs">{{invoice.shipAddress1}}</td>
+          <td class="hidden-xs">{{invoice.shipCity}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

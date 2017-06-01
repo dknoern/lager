@@ -1,0 +1,35 @@
+
+<h1 class="page-title"><span class="fw-semi-bold">Customers</span></h1>
+
+<section class="widget" data-ng-controller="CustomersCtrl">
+  <div class="widget-body">
+    <div class="mt">
+      <table data-datatable="ng" data-dt-options="dtOptions" class="table table-striped table-hover">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Address</th>
+          <th>City</th>
+          <th>State</th>
+          <th>Zip</th>
+          <th>Phone</th>
+          <th>Company</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr data-ng-repeat="customer in customers">
+          <td>{{customer.custNo}}</td>
+          <td><a href="customer#/app/customer">{{customer.firstName}} {{customer.lastName}}</a></td>
+          <td>{{customer.address1}}</td>
+          <td>{{customer.city}}</td>
+          <td>{{customer.state}}</td>
+          <td>{{customer.zip}}</td>
+          <td>{{customer.phone}}</td>
+          <td>{{customer.company}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

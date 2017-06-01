@@ -1,0 +1,35 @@
+
+<h1 class="page-title"><span class="fw-semi-bold">Returns</span></h1>
+
+<section class="widget" data-ng-controller="ReturnsCtrl">
+  <div class="widget-body">
+    <div class="mt">
+      <table data-datatable="ng" data-dt-options="dtOptions" class="table table-striped table-hover">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Date</th>
+          <th>Invoice</th>
+          <th>Subtotal</th>
+          <th>Tax</th>
+          <th>Total</th>
+          <th>Customer</th>
+          <th>Sales Person</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr data-ng-repeat="return in returns">
+          <td>{{return.returnId}}</td>
+          <td>{{return.returnDate}}</td>
+          <td>{{return.invoiceNo}}</td>
+          <td>{{return.subTotal}}</td>
+          <td>{{return.salesTax}}</td>
+          <td>{{return.totalReturn}}</td>
+          <td>{{return.customerNo}}</td>
+          <td>{{return.salesPerson}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
