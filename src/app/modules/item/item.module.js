@@ -24,6 +24,14 @@
       .state('app.item', {
         url: '/item',
         templateUrl: 'app/modules/item/item.html'
-      })
+      });
+      $stateProvider
+        .state('app.new', {
+          url: '/new',
+          templateUrl: 'app/modules/item/new.html'
+        })
+
+
+
   }
 })();
