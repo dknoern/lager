@@ -35,7 +35,7 @@
         'singApp.invoice',
         'singApp.returns',
         'singApp.repairs',
-        //'singApp.reports',
+        'singApp.reports',
         //'singApp.admin',
         'singApp.form.validation',
         'singApp.form.wizard'
