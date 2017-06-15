@@ -1,0 +1,39 @@
+var mongoose = require('mongoose');
+
+var Schema = new mongoose.Schema();
+
+var CounterSchema = new mongoose.Schema({
+    _id: {type: String, required: true},
+    seq: {type: Number, default: 0}
+});
+var counter = mongoose.model('counter', CounterSchema);
+
+var InvoiceSchema = new mongoose.Schema({
+    customer: String,
+    project: String,
+    invoiceNumber: String,
+    documentType: String,
+    date: String,
+    lineItems: [{
+        lineItemId: String,
+        name: String,
+        amount: Number
+    }]
+});
+
+InvoiceSchema.pre('save', function (next) {
+    var doc = this;
+
+    if (doc.invoiceNumber==null) {
+        counter.findByIdAndUpdate({_id: 'invoiceNumber'}, {$inc: {seq: 1}}, function (error, counter) {
+            if (error)
+                return next(error);
+            doc.invoiceNumber = counter.seq;
+            next();
+        });
+    }else{
+        next();
+    }
+});
+
+module.exports = mongoose.model('Invoice', InvoiceSchema);
