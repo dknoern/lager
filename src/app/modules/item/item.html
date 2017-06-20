@@ -24,27 +24,40 @@
 
 
 
+
 <h1 class="page-title"><span class="fw-semi-bold">Product</span></h1>
-<div data-ng-controller="ItemCtrl">
+<div>
+
   <div class="row">
     <div class="col-md-12">
       <section class="widget">
         <div class="widget-body">
-          <form class="form-horizontal" role="form">
-
+          <form class="form-horizontal" role="form"
+          data-ui-jq="parsley"
+              data-parsley-priority-enabled="false"
+              novalidate="novalidate" data-ng-controller="ItemCtrl">
+    
 
             <div class="row">
               <div class="col-sm-7">
 
-
-
-
             <fieldset>
+
+
+              <div class="form-group">
+                <label for="normal-field" class="col-sm-3 control-label">ID</label>
+                <div class="col-sm-8">
+                  <input type="text" id="itemNumber" class="form-control" ng-model="data._id" readonly="readonly" >
+                </div>
+              </div>
+
 
               <div class="form-group">
                 <label for="hint-field" class="col-sm-3 control-label">Product Type</label>
                 <div class="col-sm-8">
-                  <select id="product-type" class="selectpicker" data-selectpicker
+
+
+                  <select ng-model="data.productType" id="product-type" class="selectpicker" data-selectpicker
                           data-width="auto" onchange="assignProductNumber()">
                     <option></option>
                     <option>Accessories</option>
@@ -53,10 +66,11 @@
                   </select>
                 </div>
               </div>
+              
               <div class="form-group">
                 <label for="hint-field" class="col-sm-3 control-label">Manufacturer</label>
                 <div class="col-sm-8">
-                  <select id="manufacturer" class="selectpicker" data-selectpicker
+                  <select ng-model="data.manufacturer" id="manufacturer" class="selectpicker" data-selectpicker
                           data-width="auto">
                     <option></option>
                     <option>A. Lange & Sohne</option>
@@ -101,7 +115,7 @@
               <div class="form-group">
                 <label for="normal-field" class="col-sm-3 control-label">Item No</label>
                 <div class="col-sm-8">
-                  <input type="text" id="itemNumber" class="form-control" value="" >
+                  <input type="text" id="itemNumber" class="form-control" ng-model="data.itemNo" >
                 </div>
               </div>
 
@@ -109,13 +123,13 @@
               <div class="form-group">
                 <label for="hint-field" class="col-sm-3 control-label">Pmt Amount</label>
                 <div class="col-sm-8">
-                  <input type="text" id="last-name-field" class="form-control" value="">
+                  <input type="text" id="paymentAmount" class="form-control" value="{{data.paymentAmount}}">
                 </div>
               </div>
             <div class="form-group">
               <label for="method" class="col-sm-3 control-label">Pmt Method</label>
               <div class="col-sm-8">
-                <select id="method" class="selectpicker" data-selectpicker
+                <select ng-model="data.paymentMethod" id="paymentMethod" class="selectpicker" data-selectpicker
                         data-width="auto" onchange="assignProductNumber()">
                   <option></option>
                   <option>Cash</option>
@@ -130,7 +144,7 @@
               <div class="form-group">
                 <label for="hint-field" class="col-sm-3 control-label">Pmt Details</label>
                 <div class="col-sm-8">
-                  <input type="text" id="last-name-field" class="form-control" value="">
+                  <input type="text" id="paymentDetails" class="form-control" value="{{data.paymentDetails}}">
                 </div>
               </div>
 
@@ -138,56 +152,85 @@
               <div class="form-group">
                 <label for="hint-field" class="col-sm-3 control-label">Title</label>
                 <div class="col-sm-8">
-                  <input type="text" id="last-name-field" class="form-control" value="Elite Platinum Nautical">
+                  <input type="text" id="title" class="form-control" ng-model="data.title" required="required">
                 </div>
               </div>
 
               <div class="form-group">
                 <label for="hint-field" class="col-sm-3 control-label">Style</label>
                 <div class="col-sm-8">
-                  <input type="text" id="last-name-field" class="form-control">
+                  <input type="text" id="style" class="form-control" value="{{data.style}}">
                 </div>
               </div>
 
               <div class="form-group">
-                <label for="hint-field" class="col-sm-3 control-label">Condition</label>
+                <label for="hint-field" class="col-sm-3 control-label">Model</label>
                 <div class="col-sm-8">
-                  <input type="text" id="last-name-field" class="form-control" value="New">
+                  <input type="text" id="model" class="form-control" value="{{data.model}}">
                 </div>
               </div>
+
+
+              <div class="form-group">
+                <label for="hint-field" class="col-sm-3 control-label">Condition</label>
+                <div class="col-sm-8">
+                  <select ng-model="data.condition" id="condition" class="selectpicker" data-selectpicker
+                        data-width="auto">
+                  <option></option>
+                  <option>Pre-owned</option>
+                  <option>Unused</option>
+                </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="hint-field" class="col-sm-3 control-label">Gender</label>
+                <div class="col-sm-8">
+                  <select ng-model="data.gender" id="gender" class="selectpicker" data-selectpicker
+                        data-width="auto">
+                  <option></option>
+                  <option>Ladies</option>
+                  <option>Men's</option>
+                  <option>Ladies or Men's</option>
+                  <option>Midsize</option>
+                  <option>Unisex</option>
+                </select>
+                </div>
+              </div>
+
 
 
               <div class="form-group">
                 <label for="hint-field" class="col-sm-3 control-label">Features</label>
                 <div class="col-sm-8">
-                  <input type="text" id="company-field" class="form-control">
+                  <input type="text" id="company-field" class="form-control" ng-model="data.features">
                 </div>
               </div>
 
               <div class="form-group">
-                <label for="hint-field" class="col-sm-3 control-label">Size</label>
+                <label for="hint-field" class="col-sm-3 control-label">Case</label>
                 <div class="col-sm-8">
-                  <input type="text" id="company-field" class="form-control">
+                  <input type="text" id="case" class="form-control" ng-model="data.case">
                 </div>
               </div>
               <div class="form-group">
-                <label for="hint-field" class="col-sm-3 control-label">Style</label>
+                <label for="hint-field" class="col-sm-3 control-label">Size</label>
                 <div class="col-sm-8">
-                  <input type="text" id="company-field" class="form-control">
+                  <input type="text" id="company-field" class="form-control" ng-model="data.size">
                 </div>
               </div>
 
               <div class="form-group">
                 <label for="hint-field" class="col-sm-3 control-label">Dial</label>
                 <div class="col-sm-8">
-                  <input type="text" id="company-field" class="form-control">
+                  <input type="text" id="company-field" class="form-control" ng-model="data.dial">
                 </div>
               </div>
 
               <div class="form-group">
                 <label for="hint-field" class="col-sm-3 control-label">Bracelet</label>
                 <div class="col-sm-8">
-                  <input type="text" id="company-field" class="form-control">
+                  <input type="text" id="company-field" class="form-control" ng-model="data.bracelet">
                 </div>
               </div>
 
@@ -195,14 +238,14 @@
               <div class="form-group">
                 <label for="hint-field" class="col-sm-3 control-label">Serial No</label>
                 <div class="col-sm-8">
-                  <input type="text" id="company-field" class="form-control">
+                  <input type="text" id="company-field" class="form-control" ng-model="data.serialNo">
                 </div>
               </div>
 
               <div class="form-group">
                 <label for="hint-field" class="col-sm-3 control-label">Long Desc</label>
                 <div class="col-sm-8">
-                  <input type="text" id="company-field" class="form-control">
+                  <input type="text" id="company-field" class="form-control" disabled="true" value="">
                 </div>
               </div>
 
@@ -221,8 +264,8 @@
               <div class="form-group">
                 <label for="hint-field" class="col-sm-3 control-label">Seller Type</label>
                 <div class="col-sm-8">
-                  <select id="product-type" class="selectpicker" data-selectpicker
-                          data-width="auto" onchange="assignProductNumber()">
+                  <select id="sellerType" class="selectpicker" data-selectpicker
+                          data-width="auto" onchange="assignProductNumber()" ng-model="data.sellerType">
                     <option>Normal</option>
                     <option>Partner</option>
                     <option>Consignment</option>
@@ -234,46 +277,39 @@
               <div class="form-group">
                 <label for="hint-field" class="col-sm-3 control-label">Seller</label>
                 <div class="col-sm-8">
-                  <input type="text" id="company-field" class="form-control">
+                  <input type="text" id="seller" class="form-control" ng-model="data.seller">
                 </div>
               </div>
 
 
               <div class="form-group">
                 <label for="hint-field" class="col-sm-3 control-label">Ebay NR</label>
-                <div class="col-sm-8">
-                  <input type="checkbox" id="company-field" class="form-control">
+                <div class="col-sm-4">
+                  <input type="checkbox" id="company-field" class="form-control" ng-model="data.ebayNoReserve">
                 </div>
               </div>
 
               <div class="form-group">
                   <label for="hint-field" class="col-sm-3 control-label">Inventory</label>
-                  <div class="col-sm-8">
-                      <input type="checkbox" id="company-field" class="form-control" checked="true">
+                  <div class="col-sm-4">
+                      <input type="checkbox" id="company-field" class="form-control" ng-model="data.inventoryItem">
                   </div>
               </div>
-
-
-
-
-
 
               <div class="form-group">
                 <label for="hint-field" class="col-sm-3 control-label">Status</label>
                 <div class="col-sm-8">
-                  <input type="text" id="company-field" class="form-control" disabled="disabled" value="New">
+                  <input type="text" id="company-field" class="form-control" disabled="disabled" value="Available">
                 </div>
               </div>
 
             </fieldset>
 
 
-
-
           <div class="form-group">
           <label for="normal-field" class="col-sm-3 control-label">Comments</label>
             <div class="col-sm-8">
-                  <textarea rows=6 cols="40"></textarea>
+                  <textarea rows=6 cols="40">{{data.comments}}</textarea>
               </div>
           </div>
 
@@ -293,33 +329,30 @@
                   <div class="form-group">
                     <label for="normal-field" class="col-sm-3 control-label">Our Price</label>
                     <div class="col-sm-8">
-                      <input type="text" id="normal-field" class="form-control" value="$37.00" >
+                      <input type="text" id="normal-field" class="form-control" ng-model="data.ourPrice">
                     </div>
                   </div>
 
                   <div class="form-group">
                     <label for="normal-field" class="col-sm-3 control-label">List Price</label>
                     <div class="col-sm-8">
-                      <input type="text" id="normal-field" class="form-control" value="$0.00" >
+                      <input type="text" id="normal-field" class="form-control" ng-model="data.listPrice" >
                     </div>
                   </div>
 
                   <div class="form-group">
                         <label for="normal-field" class="col-sm-3 control-label">Repair Cost</label>
                         <div class="col-sm-8">
-                          <input type="text" id="normal-field" class="form-control" value="$0.00" >
+                          <input type="text" id="normal-field" class="form-control" ng-model="data.repairCost" >
                         </div>
                   </div>
-
 
                   <div class="form-group">
                         <label for="normal-field" class="col-sm-3 control-label">Total Cost</label>
                         <div class="col-sm-8">
-                          <input type="text" id="normal-field" class="form-control" value="$0.00" >
+                          <input type="text" id="normal-field" class="form-control" ng-model="data.cost" >
                         </div>
                   </div>
-
-
 
 
                 </fieldset>
@@ -345,7 +378,7 @@
                   </tbody>
                 </table>
 
-                <button type="button" class="btn btn-success">Change Status</button>
+                <!--button type="button" class="btn btn-success">Change Status</button-->
               </div>
 
               <div class="tab-pane" id="tab3">
@@ -358,35 +391,20 @@
             </div>
 
 
-
-
-            <div class="clearfix">
-              <!--p>
-              <img src="assets/images/watch.jpeg"/ width="40">
-            </p-->
+            <!--div class="clearfix">
             <button class="btn btn-default mb-xs" role="button">
               Upload Image
             </button>
-            </div>
-
-
+            </div-->
             </div>
           </div>
-
-
-
-
-
-
-
-
 
             </fieldset>
             <div class="form-actions">
               <div class="row">
                 <div class="col-sm-offset-4 col-sm-7">
-                  <button type="submit" class="btn btn-primary">Save</button>
-                  <button type="button" class="btn btn-inverse">Cancel</button>
+                  <button type="submit" class="btn btn-primary" ng-click="go()">Save</button>
+                  <a href="/#/app/inventory"><button type="button" class="btn btn-inverse"> Cancel</button></a>
                 </div>
               </div>
             </div>
@@ -397,15 +415,6 @@
   </div>
 
 
-
-
-
-
-
-
-
-
-
   <div class="row">
     <div class="col-md-12">
 
@@ -413,25 +422,6 @@
 
     </div>
   </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 </div>

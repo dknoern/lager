@@ -7,10 +7,10 @@
     <div class="mt">
 
     <p>
-      <a href="item#/app/new"><button type="button" class="btn btn-primary">Add Product ("card" format)</button></a>
+      <a href="/#/app/new"><button type="button" class="btn btn-primary">Add Product ("card" format)</button></a>
     </p>
     <p>
-      <a href="item#/app/item"><button type="button" class="btn btn-primary">Add Product (consistent "item" format)</button></a>
+      <a href="/#/app/item"><button type="button" class="btn btn-primary">Add Product (consistent "item" format)</button></a>
     </p>
 
 
@@ -28,7 +28,7 @@
         <tbody>
         <tr data-ng-repeat="item in people">
           <td>{{item.itemNo}}</td>
-          <td><a href="item#/app/item">{{item.title}}</a></td>
+          <td><a href="/#/app/item/{{item._id}}">{{item.title}}</a></td>
           <td>{{item.sellingPrice}}</td>
           <td class="hidden-xs"><a href="#">{{item.style}}</a></td>
           <td class="hidden-xs">{{item.case}}</td>

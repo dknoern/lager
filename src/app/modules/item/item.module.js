@@ -17,13 +17,18 @@
 
   module.config(appConfig);
 
+
   appConfig.$inject = ['$stateProvider'];
 
   function appConfig($stateProvider) {
     $stateProvider
       .state('app.item', {
-        url: '/item',
-        templateUrl: 'app/modules/item/item.html'
+        url: '/item/:itemId',
+        templateUrl: 'app/modules/item/item.html',
+        controller: function($scope, $stateParams) {
+          $scope.itemId = $stateParams.itemId;
+
+        }
       });
       $stateProvider
         .state('app.new', {
@@ -31,7 +36,18 @@
           templateUrl: 'app/modules/item/new.html'
         })
 
-
+      $stateProvider
+        .state('app.newitem', {
+          url: '/item',
+          templateUrl: 'app/modules/item/item.html'
+        })
 
   }
+
+
+ function submitForm(){
+   alert('saving item!');
+ }
+
+
 })();

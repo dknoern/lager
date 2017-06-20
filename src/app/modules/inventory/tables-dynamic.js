@@ -85,7 +85,10 @@
       }
     } );
 
-    $scope.people = $resource('./assets/json/inventory.json').query();
+    //$scope.people = $resource('./assets/json/inventory.json').query();
+    $scope.people = $resource('api/products').query();
+
+
     $scope.dtOptions = DTOptionsBuilder.newOptions()
       .withBootstrap()
       .withOption('sDom', "<'row'<'col-md-6 hidden-xs'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>")
