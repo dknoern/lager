@@ -31,8 +31,8 @@ router.route('/products')
         product.paymentAmount = req.body.paymentAmount;
         product.paymentMethod = req.body.paymentMethod;
         product.paymentDetails = req.body.paymentDetails;
-        product.style = req.body.style;
         product.model = req.body.model;
+        product.modelNumber = req.body.modelNumber;
         product.condition = req.body.condition;
         product.gender = req.body.gender;
         product.features = req.body.features;
@@ -49,7 +49,6 @@ router.route('/products')
         //product.userId = req.body.userId;
         product.cost = req.body.cost;
         product.listPrice = req.body.listPrice;
-        product.ourPrice = req.body.ourPrice;
         product.repairCost = req.body.repairCost;
         //product.photo = req.body.photo;
         //product.saleDate = req.body.x;

@@ -106,7 +106,9 @@
       },
 
       isNavigationStatic: function(){
-        return this.scope.app.state['nav-static'] === true;
+        // dk: default to static
+        //return this.scope.app.state['nav-static'] === true;
+        return true;
       },
 
       changeActiveNavigationItem: function(event, toState, toParams){
