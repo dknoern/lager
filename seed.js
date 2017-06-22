@@ -35,7 +35,7 @@ db.products.save({
     status: "In Stock",
     notes: "9/16/16: All fixed, thanks!",
     seller: "Brian Kittrel",
-    sellerType: "Normal",
+    sellerType: "Individual",
     ebayNoReserve: false,
     inventoryItem: false
 });
