@@ -16,16 +16,15 @@ router.route('/invoices')
 
         // TODO: iterate through line items if any and copy.
 
-        invoice.save(function (err) {
-            if (err)
-                res.send(err);
-
-            res.json({message: 'Invoice created!'});
+        var query = { _id: invoice._id };
+        Invoice.findOneAndUpdate(query, invoice, { upsert: true }, function (err, doc) {
+            if (err) return res.send(500, { error: err });
+            return res.send("succesfully saved");
         });
+
     })
 
     .get(function (req, res) {
-
 
       console.log('getting invoces...');
         Invoice.find(function (err, invoices) {

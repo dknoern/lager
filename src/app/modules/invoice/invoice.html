@@ -50,6 +50,18 @@
                     <div class="form-group">
                       <label for="hint-field" class="col-sm-3 control-label">Paid By</label>
                       <div class="col-sm-8">
+
+                        <select ng-model="data.paidBy" id="paidBy" class="selectpicker" data-selectpicker
+                                data-width="auto" >
+                          <option></option>
+                          <option>Cash</option>
+                          <option>Check</option>
+                          <option>Card</option>
+                          <option>Paypal</option>
+                        </select>
+
+
+
                         <input type="text" id="address1-field" class="form-control" value="Check">
                       </div>
                     </div>

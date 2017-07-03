@@ -10,17 +10,11 @@ router.use(function (req, res, next) {
 router.route('/products')
     .post(function (req, res) {
 
-
         var product = new Product();
 
-
         product._id = req.body._id
-
-
-
         product.itemNo = req.body.itemNo;
         product.title = req.body.title;
-
 
         if(product.title==null)
         return res.send(500, { error: 'title required'});
@@ -65,10 +59,6 @@ router.route('/products')
             if (err) return res.send(500, { error: err });
             return res.send("succesfully saved");
         });
-
-
-
-
     })
 
     .get(function (req, res) {

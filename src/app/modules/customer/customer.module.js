@@ -22,8 +22,25 @@
   function appConfig($stateProvider) {
     $stateProvider
       .state('app.customer', {
-        url: '/customer',
-        templateUrl: 'app/modules/customer/customer.html'
-      })
+        url: '/customer/:customerId',
+        templateUrl: 'app/modules/customer/customer.html',
+        controller: function($scope, $stateParams) {
+          $scope.customerId = $stateParams.customerId;
+
+        }
+      });
+
+      $stateProvider
+        .state('app.newcustomer', {
+          url: '/customer',
+          templateUrl: 'app/modules/customer/customer.html'
+        })
   }
+
+
+ function submitForm(){
+   alert('saving customer!');
+ }
+
+
 })();

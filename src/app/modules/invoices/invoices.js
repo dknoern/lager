@@ -85,7 +85,8 @@
       }
     } );
 
-    $scope.invoices = $resource('./assets/json/invoices.json').query();
+    $scope.invoices = $resource('api/invoices').query();
+
     $scope.dtOptions = DTOptionsBuilder.newOptions()
       .withBootstrap()
       .withOption('sDom', "<'row'<'col-md-6 hidden-xs'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>")

@@ -85,9 +85,7 @@
       }
     } );
 
-    //$scope.people = $resource('./assets/json/inventory.json').query();
     $scope.people = $resource('api/products').query();
-
 
     $scope.dtOptions = DTOptionsBuilder.newOptions()
       .withBootstrap()

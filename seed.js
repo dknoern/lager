@@ -78,7 +78,7 @@ db.products.save({
     sellerType: "Consignment",
     ebayNoReserve: false,
     inventoryItem: true
-    
+
 });
 
 
@@ -137,8 +137,10 @@ db.invoices.save({
     customer: 'Mark Watney',
     project: "View Ridge Home Staging",
     invoiceNumber: "5275",
-    documentType: "INVOICE",
     date: "October 11, 2015",
+    shipVia: "UPS",
+    paidBy: "Card",
+    total: "$350.50",
     lineItems: [
         {
             name:"Living Room",
@@ -159,8 +161,10 @@ db.invoices.save({
     customer: 'Melissa Lewis',
     project: "Wedgewood Home Staging",
     invoiceNumber: "5273",
-    documentType: "INVOICE",
     date: "October 5, 2015",
+    shipVia: "USPS",
+    paidBy: "Check",
+    total: "$1200.00",
     lineItems: [
         {
             name:"Living room",
@@ -201,8 +205,10 @@ db.invoices.save({
     customer: 'Beth Johanssen',
     project: "North Seatle Town Home Staging",
     invoiceNumber: "5264",
-    documentType: "INVOICE",
     date: "September 27, 2015",
+    shipVia: "FedEx",
+    paidBy: "Cash",
+    total: "$795.00",
     lineItems: [
         {
             name:"Living room/kitchen",
@@ -226,88 +232,6 @@ db.invoices.save({
 
 
 
-
-db.invoices.save({
-    _id: ObjectId("100000000000000000000009"),
-    customer: 'Chris Beck',
-    project: "University District Home Staging",
-    invoiceNumber: "5265",
-    documentType: "INVOICE",
-    date: "September 27, 2015",
-    lineItems: [
-        {
-            name:"Staging",
-            _id: ObjectId("100000000000000000000051"),
-            amount:300
-        }
-    ]
-});
-
-
-
-
-db.invoices.save({
-    _id: ObjectId("100000000000000000000010"),
-    customer: 'Rick Martinez',
-    project: "West Seattle Staging",
-    invoiceNumber: "5263",
-    documentType: "INVOICE",
-    date: "September 1, 2015",
-    lineItems: [
-        {
-            name:"Design recommendations",
-            _id: ObjectId("100000000000000000000061"),
-            amount:100
-        },
-        {
-            name:"Dining room and design recommendations",
-            _id: ObjectId("100000000000000000000062"),
-            amount:250
-        }
-    ]
-});
-
-db.invoices.save({
-    _id: ObjectId("100000000000000000000011"),
-    customer: 'Alex Vogel',
-    project: "Capital Hill Staging",
-    invoiceNumber: "5256",
-    documentType: "INVOICE",
-    date: "July 24, 2015",
-    lineItems: [
-        {
-            name:"Living Room",
-            _id: ObjectId("100000000000000000000071"),
-            amount:450
-        },
-        {
-            name:"Kitchen",
-            _id: ObjectId("100000000000000000000072"),
-            amount:40
-        },
-        {
-            name:"Bedroom",
-            _id: ObjectId("100000000000000000000073"),
-            amount:300
-        },
-        {
-            name:"Bathroom",
-            _id: ObjectId("100000000000000000000074"),
-            amount:30
-        },
-        {
-            name:"Art",
-            _id: ObjectId("100000000000000000000075"),
-            amount:100
-        },
-        {
-            name:"Discount",
-            _id: ObjectId("100000000000000000000076"),
-            amount:-200
-        }
-    ]
-});
-
 db.counters.insert(
     {
         _id: "invoiceNumber",
@@ -323,17 +247,29 @@ db.counters.insert(
 
 db.customers.save({
     _id: ObjectId("400000000000000000000010"),
+    custNo: '10023',
     firstName: 'Rick',
     lastName: 'Martinez',
     email: 'rick@nasa.gov',
-    phone: '2065551112'
+    phone: '2065551112',
+    company: "NASA",
+    address1: '325 Ash Ave',
+    city: 'Ames',
+    state: 'IA',
+    zip: '50010'
 });
 
 
 db.customers.save({
     _id: ObjectId("400000000000000000000011"),
+    custNo: '21002',
     firstName: 'Beth',
     lastName: 'Johanssen',
     email: 'beth@nasa.gov',
-    phone: '2065551112'
+    phone: '2065551112',
+    company: 'Burger King',
+    address1: '1103 Raney Street',
+    city: 'Hiawatha',
+    state: 'IA',
+    zip: '52402'
 });

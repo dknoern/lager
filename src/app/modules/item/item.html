@@ -37,15 +37,15 @@
           data-ui-jq="parsley"
               data-parsley-priority-enabled="false"
               novalidate="novalidate" data-ng-controller="ItemCtrl">
-    
+
 
             <div class="row">
               <div class="col-sm-7">
 
             <fieldset>
-              
+
                   <input type="hidden" id="itemNumber" class="form-control" ng-model="data._id" readonly="readonly" >
-    
+
               <div class="form-group">
                 <label for="hint-field" class="col-sm-3 control-label">Product Type</label>
                 <div class="col-sm-8">
@@ -137,7 +137,6 @@
                   <option>Card</option>
                   <option>Paypal</option>
                 </select>
-
               </div>
             </div>
 
@@ -198,19 +197,17 @@
                 </div>
               </div>
 
-
-
               <div class="form-group">
                 <label for="hint-field" class="col-sm-3 control-label">Features</label>
                 <div class="col-sm-8">
-                  <input type="text" id="company-field" class="form-control" ng-model="data.features">
+                  <input type="text" id="company-field" class="form-control" ng-model="data.features" ng-disabled="data.productType != 'Watch' && data.productType != 'Pocket Watch'">
                 </div>
               </div>
 
               <div class="form-group">
                 <label for="hint-field" class="col-sm-3 control-label">Case</label>
                 <div class="col-sm-8">
-                  <input type="text" id="case" class="form-control" ng-model="data.case">
+                  <input type="text" id="case" class="form-control" ng-model="data.case" ng-disabled="data.productType != 'Watch' && data.productType != 'Pocket Watch'">
                 </div>
               </div>
               <div class="form-group">
@@ -223,14 +220,14 @@
               <div class="form-group">
                 <label for="hint-field" class="col-sm-3 control-label">Dial</label>
                 <div class="col-sm-8">
-                  <input type="text" id="company-field" class="form-control" ng-model="data.dial">
+                  <input type="text" id="company-field" class="form-control" ng-model="data.dial" ng-disabled="data.productType != 'Watch' && data.productType != 'Pocket Watch'">
                 </div>
               </div>
 
               <div class="form-group">
                 <label for="hint-field" class="col-sm-3 control-label">Bracelet</label>
                 <div class="col-sm-8">
-                  <input type="text" id="company-field" class="form-control" ng-model="data.bracelet">
+                  <input type="text" id="company-field" class="form-control" ng-model="data.bracelet" ng-disabled="data.productType != 'Watch'">
                 </div>
               </div>
 
@@ -250,7 +247,7 @@
               </div>
 
 
-              
+
 
             </fieldset>
 
