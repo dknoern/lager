@@ -12,12 +12,14 @@ var CustomerSchema   = new mongoose.Schema({
 		city: String,
 		state: String,
 		zip: String,
+		country: String,
 		billingAddress1: String,
 		billingAddress2: String,
 		billingAddress3: String,
 		billingCity: String,
 		billingState: String,
-		billingZip: String
+		billingZip: String,
+		billingCountry: String
 });
 
 module.exports = mongoose.model('Customer', CustomerSchema);

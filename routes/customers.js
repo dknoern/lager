@@ -26,6 +26,7 @@ router.route('/customers')
         customer.city = req.body.city;
         customer.state = req.body.state;
         customer.zip = req.body.zip;
+        customer.country = req.body.country;
 
         customer.billingAddress1 = req.body.billingAddress1;
         customer.billingAddress2 = req.body.billingAddress2;
@@ -33,6 +34,7 @@ router.route('/customers')
         customer.billingCity = req.body.billingCity;
         customer.billingState = req.body.billingState;
         customer.billingZip = req.body.billingZip;
+        customer.billingCountry = req.body.billingCountry;
 
         var query = { _id: customer._id };
         Customer.findOneAndUpdate(query, customer, { upsert: true }, function (err, doc) {

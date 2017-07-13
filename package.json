@@ -3,10 +3,10 @@
   "version": "2.0.2",
   "description": "Lager Inventory App",
   "dependencies": {
-      "express": "~4.15.3",
-      "mongoose": "~4.10.6",
-      "body-parser": "~1.0.1",
-      "mongodb-autoincrement": "~1.0.0"
+    "express": "~4.15.3",
+    "mongoose": "~4.10.6",
+    "body-parser": "~1.0.1",
+    "mongodb-autoincrement": "~1.0.0"
   },
   "scripts": {
     "test": "gulp test"

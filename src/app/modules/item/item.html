@@ -210,12 +210,7 @@
                   <input type="text" id="case" class="form-control" ng-model="data.case" ng-disabled="data.productType != 'Watch' && data.productType != 'Pocket Watch'">
                 </div>
               </div>
-              <div class="form-group">
-                <label for="hint-field" class="col-sm-3 control-label">Size</label>
-                <div class="col-sm-8">
-                  <input type="text" id="company-field" class="form-control" ng-model="data.size">
-                </div>
-              </div>
+
 
               <div class="form-group">
                 <label for="hint-field" class="col-sm-3 control-label">Dial</label>
@@ -310,7 +305,7 @@
 
 
           <div class="form-group">
-          <label for="normal-field" class="col-sm-3 control-label">Comments</label>
+          <label for="normal-field" class="col-sm-3 control-label">Box and Papers</label>
             <div class="col-sm-8">
                   <textarea rows=6 cols="40" ng-model="data.comments">{{data.comments}}</textarea>
               </div>
@@ -327,15 +322,6 @@
               <div class="tab-pane active clearfix" id="tab1">
 
                 <fieldset>
-                  <div class="form-group">
-                    <label for="normal-field" class="col-sm-3 control-label">Our Price</label>
-                    <div class="col-sm-8">
-                      <div class="input-group">
-                      <span class="input-group-addon">$</span>
-                      <input type="number" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency" id="paymentAmount" ng-model="data.paymentAmount" disabled="disabled">
-                      </div>
-                    </div>
-                  </div>
 
                   <div class="form-group">
                     <label for="normal-field" class="col-sm-3 control-label">List Price</label>
@@ -346,6 +332,19 @@
                       </div>
                     </div>
                   </div>
+
+
+                  <div class="form-group">
+                    <label for="normal-field" class="col-sm-3 control-label">Cost</label>
+                    <div class="col-sm-8">
+                      <div class="input-group">
+                      <span class="input-group-addon">$</span>
+                      <input type="number" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency" id="paymentAmount" ng-model="data.paymentAmount" disabled="disabled">
+                      </div>
+                    </div>
+                  </div>
+
+
 
                   <div class="form-group">
                         <label for="normal-field" class="col-sm-3 control-label">Repair Cost</label>
@@ -362,7 +361,7 @@
                         <div class="col-sm-8">
                                                 <div class="input-group">
                       <span class="input-group-addon">$</span>
-                          <input type="number" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency" id="paymentAmount" ng-model="data.cost" >
+                          <input type="number" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency" id="paymentAmount" value = "{{(data.paymentAmount-0) + (data.repairCost-0)}}"  disabled="disabled" >
                           </div>
                         </div>
                   </div>
