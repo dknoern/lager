@@ -55,10 +55,10 @@
         <a dropdown-toggle class="dropdown-toggle dropdown-toggle-notifications"
            id="notifications-dropdown-toggle">
                 <span class="thumb-sm avatar pull-left">
-                    <img class="img-circle" src="assets/images/people/a5.jpg" alt="...">
+                    <img class="img-circle" ng-src="{{ vm.profile.picture }}" class="avatar" alt="avatar">
                 </span>
           &nbsp;
-          Philip <strong>Smith</strong>&nbsp;
+          <strong>{{vm.profile.name}}</strong>&nbsp;
                 <span class="circle bg-warning fw-bold">
                     13
                 </span>
@@ -71,6 +71,12 @@
         <div class="dropdown-menu animated animated-fast fadeInUp"
              sn-notifications-menu></div>
       </li>
+
+      <li>
+
+</li>
+
+
       <li class="dropdown" data-dropdown>
         <a href class="dropdown-toggle" data-dropdown-toggle>
           <i class="fa fa-cog fa-lg"></i>
@@ -83,7 +89,11 @@
           <li><a data-ui-sref="app.inbox">Inbox &nbsp;&nbsp;<span class="badge bg-danger animated bounceIn">9</span></a></li>
           <li class="divider"></li>
           -->
-          <li><a data-ui-sref="login"><i class="fa fa-sign-out"></i> &nbsp; Log Out</a></li>
+
+
+
+
+          <li><a ng-click="vm.auth.logout()"><i class="fa fa-sign-out"></i> &nbsp; Log Out</a></li>
         </ul>
       </li>
       <!--li>

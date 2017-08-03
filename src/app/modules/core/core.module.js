@@ -16,8 +16,10 @@
       $stateProvider
           .state('app', {
               url: '/app',
-              abstract: true,
-              templateUrl: 'app/modules/core/app.html'
+              //abstract: true,
+              templateUrl: 'app/modules/core/app.html',
+              controller: 'App',
+              controllerAs: 'vm'
           });
 
       $urlRouterProvider.otherwise(function ($injector) {

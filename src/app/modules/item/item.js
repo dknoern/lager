@@ -14,10 +14,20 @@
     };
 
     if ($scope.itemId) {
-      $http.get('api/products/' + $scope.itemId).
-        success(function (data) {
-          $scope.data = data;
-        });
+
+
+      var getItem = $resource('api/products/:id');
+
+
+
+      $scope.data = getItem.get({id: $scope.itemId});
+
+
+
+      //$http.get('api/products/' + $scope.itemId).
+      //  success(function (data) {
+      //    $scope.data = data;
+      //  });
     }
 
     $scope.go = function () {
@@ -35,7 +45,7 @@ $http({
                         console.log(response.statusText);
 
 $state.go('app.inventory');
- 
+
 
 
                     }, function errorCallback(response) {

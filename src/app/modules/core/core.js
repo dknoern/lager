@@ -8,12 +8,32 @@
     .factory('$exceptionHandler', exceptionHandler)
   ;
 
-  AppController.$inject = ['config', '$scope', '$localStorage', '$state'];
-  function AppController(config, $scope, $localStorage, $state) {
+  AppController.$inject = ['config', '$scope', '$localStorage', '$state','authService'];
+  function AppController(config, $scope, $localStorage, $state,authService) {
     /*jshint validthis: true */
     var vm = this;
 
     vm.title = config.appTitle;
+
+    vm.auth = authService;
+    vm.profile;
+
+    if (authService.getCachedProfile()) {
+      vm.profile = authService.getCachedProfile();
+    } else {
+      authService.getProfile(function(err, profile) {
+        vm.profile = profile;
+        $scope.$apply();
+      });
+    }
+
+
+
+    //auth.profilePromise.then(function(profile) {
+  //    $scope.profile = profile;
+  //  });
+    // Or using the object
+    $scope.profile = vm.auth.profile;
 
     $scope.app = config;
     $scope.$state = $state;

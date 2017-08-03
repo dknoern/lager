@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <title>Inventory</title>
+  <base href="/">
   <meta name="description" content="">
   <meta name="author" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -43,10 +44,16 @@
   <!-- build:css({.tmp/serve,src}) styles/app.css -->
   <!-- inject:css -->
   <link rel="stylesheet" href="app/index.css">
+
+
+
   <!-- endinject -->
   <!-- endbuild -->
 </head>
 <body ng-controller="App" sn-demo ng-class="{'nav-static': app.state['nav-static'], 'login-page': $state.is('login'), 'error-page': $state.is('error')}">
+
+  <!--navbar></navbar-->
+
 <!--[if lt IE 10]>
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 <![endif]-->
@@ -145,6 +152,8 @@
 <script src="../bower_components/dropzone/dist/dropzone.js"></script>
 <script src="../bower_components/holderjs/holder.js"></script>
 <script src="../bower_components/switchery/dist/switchery.js"></script>
+
+
 <!-- endbower -->
 <!-- endbuild -->
 
@@ -260,6 +269,28 @@
 <script src="../src/app/modules/charts/charts.module.js"></script>
 <script src="../src/app/modules/charts/charts.js"></script>
 <script src="../src/app/index.js"></script>
+<script src="../src/app/app.run.js"></script>
+
+
+
+<!-- auth0 stuff -->
+
+
+<script type="text/javascript" src="auth0-variables.js"></script>
+<script type="text/javascript" src="node_modules/auth0-js/build/auth0.js"></script>
+<script type="text/javascript" src="node_modules/angular-auth0/dist/angular-auth0.js"></script>
+
+<script type="text/javascript" src="app/navbar/navbar.directive.js"></script>
+
+
+
+<!--script type="text/javascript" src="app/home/home.controller.js"></script>
+<script type="text/javascript" src="app/callback/callback.controller.js"></script-->
+
+
+<script type="text/javascript" src="app/auth/auth.service.js"></script>
+
+
 <!-- endinject -->
 
 <!-- inject:partials -->

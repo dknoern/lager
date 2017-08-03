@@ -5,8 +5,15 @@
     .controller('AngularWayCtrl', AngularWayCtrl)
   ;
 
-  AngularWayCtrl.$inject = ['$scope', '$resource', 'DTOptionsBuilder', 'jQuery'];
-  function AngularWayCtrl ($scope, $resource, DTOptionsBuilder, jQuery) {
+  AngularWayCtrl.$inject = ['$scope', '$resource', 'DTOptionsBuilder', 'jQuery','authService'];
+  function AngularWayCtrl ($scope, $resource, DTOptionsBuilder, jQuery,authService) {
+
+
+
+
+   var vm = this;
+    vm.auth = authService;
+
     jQuery.extend( jQuery.fn.dataTableExt.oPagination, {
       "bootstrap": {
         "fnInit": function( oSettings, nPaging, fnDraw ) {

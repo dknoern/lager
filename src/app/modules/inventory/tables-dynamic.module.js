@@ -17,7 +17,8 @@
       .state('app.inventory', {
         url: '/inventory',
         templateUrl: 'app/modules/inventory/inventory.html',
-        controller: 'AngularWayCtrl'
+        controller: 'AngularWayCtrl',
+        controllerAs: 'vm'
       })
   }
 })();
