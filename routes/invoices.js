@@ -26,7 +26,6 @@ router.route('/invoices')
 
     .get(function (req, res) {
 
-      console.log('getting invoces...');
         Invoice.find(function (err, invoices) {
             if (err)
                 res.send(err);

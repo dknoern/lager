@@ -7,11 +7,63 @@
     .run(summernoteConfigure)
   ;
 
-  InvoiceCtrl.$inject = ['$scope', '$window', 'jQuery'];
-  function InvoiceCtrl ($scope, $window, jQuery) {
+  InvoiceCtrl.$inject = ['$scope', '$resource','$http', '$window', '$location','$state', 'jQuery'];
+  function InvoiceCtrl ($scope, $resource, $http,$window, $location, $state, jQuery) {
     $scope.dtChanged = function(dt){
       $window.alert('Angular model changed to: ' + dt);
     };
+
+    if ($scope.invoiceId) {
+
+      if("new" == $scope.invoiceId){
+
+        var customerId = '400000000000000000000011';
+        $http.get('api/customers/' + customerId).
+          success(function (customer) {
+            $scope.customer = customer;
+
+            var fullName = customer.firstName + ' ' + customer.lastName;
+
+
+            $scope.data = {
+              customer: fullName,
+              salesPerson: "Ke",
+              date: new Date(),
+              shipToName: fullName,
+              shipAddress1: customer.address1,
+              shipAddress2: customer.address2,
+              shipAddress3: customer.address3,
+              shipCity: customer.city,
+              shipState: customer.state,
+              shipZip: customer.zip
+            }
+
+            //alert("for new invoice customer is " + customer.firstName + " " + customer.lastName);
+          });
+
+
+
+
+
+
+
+      // var customer =  $resource('api/customers/:id').get({id: '400000000000000000000011'});
+
+        //$scope.data = customer;
+
+/*
+        {
+          customer: customer.firstName + ' ' + customer.lastName,
+          salesPerson: "Ke"
+        }
+
+        */
+      }else{
+      $scope.data = $resource('api/invoices/:id').get({id: $scope.invoiceId});
+
+      }
+    }
+
 
     jQuery('#datetimepicker2').datetimepicker();
   }

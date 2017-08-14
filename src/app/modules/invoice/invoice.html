@@ -15,35 +15,41 @@
                     <div class="form-group">
                       <label for="hint-field" class="col-sm-3 control-label">Invoice No</label>
                       <div class="col-sm-8">
-                        <input type="text" id="address1-field" class="form-control" value="6700">
+                        <input type="text" id="address1-field" class="form-control" ng-model="data.invoiceNumber">
                       </div>
                     </div>
 
                     <div class="form-group">
                       <label for="hint-field" class="col-sm-3 control-label">Customer</label>
                       <div class="col-sm-8">
-                        <input type="text" id="address1-field" class="form-control" value="Betty Williams">
+                        <input type="text" id="address1-field" class="form-control" ng-model="data.customer">
                       </div>
                     </div>
 
                     <div class="form-group">
                       <label for="hint-field" class="col-sm-3 control-label">Sales Person</label>
                       <div class="col-sm-8">
-                        <input type="text" id="address1-field" class="form-control" value="David Knoernschild">
+                        <input type="text" id="address1-field" class="form-control" ng-model="data.salesPerson">
                       </div>
                     </div>
 
                     <div class="form-group">
                       <label for="hint-field" class="col-sm-3 control-label">Date</label>
                       <div class="col-sm-8">
-                        <input type="text" id="address1-field" class="form-control" value="11/30/2016">
+                        <input type="text" id="address1-field" class="form-control" ng-model="data.date">
                       </div>
                     </div>
 
                     <div class="form-group">
                       <label for="hint-field" class="col-sm-3 control-label">Invoice Type</label>
                       <div class="col-sm-8">
-                        <input type="text" id="address1-field" class="form-control">
+
+                        <select  id="invoiceType" class="selectpicker" data-selectpicker
+                                data-width="auto" ng-model="data.invoiceType">
+                          <option></option>
+                          <option>Basic</option>
+                          <option>Advanced</option>
+                        </select>
                       </div>
                     </div>
 
@@ -51,86 +57,91 @@
                       <label for="hint-field" class="col-sm-3 control-label">Paid By</label>
                       <div class="col-sm-8">
 
-                        <select ng-model="data.paidBy" id="paidBy" class="selectpicker" data-selectpicker
-                                data-width="auto" >
+                        <select id="paidBy" class="selectpicker" data-selectpicker
+                                data-width="auto" ng-model="data.paidBy">
                           <option></option>
                           <option>Cash</option>
                           <option>Check</option>
                           <option>Card</option>
                           <option>Paypal</option>
                         </select>
-
-
-
-                        <input type="text" id="address1-field" class="form-control" value="Check">
                       </div>
                     </div>
+
+
                     <div class="form-group">
                       <label for="hint-field" class="col-sm-3 control-label">Pmt ID</label>
                       <div class="col-sm-8">
-                        <input type="text" id="address1-field" class="form-control">
+                        <input type="text" id="address1-field" class="form-control" ng-model="data.paymentId">
                       </div>
                     </div>
                   </fieldset>
                 </div>
+
+
                 <div class="col-sm-6">
                   <fieldset>
 
-
-
                     <div class="form-group">
-                      <label for="hint-field" class="col-sm-3 control-label">Ship Via</label>
+                      <label for="shipVia" class="col-sm-3 control-label">Ship Via</label>
                       <div class="col-sm-8">
-                        <input type="text" id="address1-field" class="form-control" value="UPS">
+
+                        <select id="shipVia" class="selectpicker" data-selectpicker
+                                data-width="auto" ng-model="data.shipVia">
+                          <option></option>
+                          <option>USPS</option>
+                          <option>UPS</option>
+                          <option>FexEx</option>
+                        </select>
                       </div>
                     </div>
 
                     <div class="form-group">
-                      <label for="hint-field" class="col-sm-3 control-label">Ship To Name</label>
+                      <label for="shipToName-field" class="col-sm-3 control-label">Ship To Name</label>
                       <div class="col-sm-8">
-                        <input type="text" id="address1-field" class="form-control" value="Betty Williams">
+                        <input type="text" id="shipToName-field" class="form-control" ng-model="data.shipToName">
                       </div>
                     </div>
 
                     <div class="form-group">
                       <label for="hint-field" class="col-sm-3 control-label">Ship Address 1</label>
                       <div class="col-sm-8">
-                        <input type="text" id="address1-field" class="form-control" value="31 Ash Ave">
+                        <input type="text" id="address1-field" class="form-control" ng-model="data.shipAddress1">
                       </div>
                     </div>
 
                     <div class="form-group">
-                      <label for="hint-field" class="col-sm-3 control-label">Ship Address 32</label>
+                      <label for="hint-field" class="col-sm-3 control-label">Ship Address 2</label>
                       <div class="col-sm-8">
-                        <input type="text" id="address1-field" class="form-control">
+                        <input type="text" id="address1-field" class="form-control" ng-model="data.shipAddress2">
                       </div>
                     </div>
 
                     <div class="form-group">
                       <label for="hint-field" class="col-sm-3 control-label">Ship Address 3</label>
                       <div class="col-sm-8">
-                        <input type="text" id="address1-field" class="form-control">
+                        <input type="text" id="address1-field" class="form-control" ng-model="data.shipAddress3">
                       </div>
                     </div>
 
                     <div class="form-group">
                       <label for="hint-field" class="col-sm-3 control-label">Ship City</label>
                       <div class="col-sm-8">
-                        <input type="text" id="address1-field" class="form-control" value="Dallas">
+                        <input type="text" id="address1-field" class="form-control" ng-model="data.shipCity">
                       </div>
                     </div>
 
                     <div class="form-group">
                       <label for="hint-field" class="col-sm-3 control-label">Ship State</label>
                       <div class="col-sm-8">
-                        <input type="text" id="address1-field" class="form-control" value="TX">
+                        <input type="text" id="address1-field" class="form-control" ng-model="data.shipState">
                       </div>
                     </div>
 
                     <div class="form-group">
                       <label for="hint-field" class="col-sm-3 control-label">Ship Zip</label>
                       <div class="col-sm-8">
-                        <input type="text" id="address1-field" class="form-control" value="75022">
+                        <input type="text" id="address1-field" class="form-control" ng-model="data.shipZip">
                       </div>
                     </div>
 

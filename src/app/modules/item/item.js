@@ -15,19 +15,8 @@
 
     if ($scope.itemId) {
 
+      $scope.data = $resource('api/products/:id').get({id: $scope.itemId});
 
-      var getItem = $resource('api/products/:id');
-
-
-
-      $scope.data = getItem.get({id: $scope.itemId});
-
-
-
-      //$http.get('api/products/' + $scope.itemId).
-      //  success(function (data) {
-      //    $scope.data = data;
-      //  });
     }
 
     $scope.go = function () {

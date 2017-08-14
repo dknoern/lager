@@ -10,7 +10,6 @@
       .module('singApp.core')
       .service('authService', authService);
 
-
   authService.$inject = ['$state', 'angularAuth0', '$timeout'];
 
   function authService($state, angularAuth0, $timeout) {
@@ -56,6 +55,11 @@
     }
 
     function isAuthenticated() {
+
+
+      // to bypass auth, uncomment the following:
+      //return true;
+
       // Check whether the current time is past the
       // access token's expiry time
       let expiresAt = JSON.parse(localStorage.getItem('expires_at'));
@@ -84,7 +88,6 @@
     function getCachedProfile() {
       return userProfile;
     }
-
 
     return {
       login: login,

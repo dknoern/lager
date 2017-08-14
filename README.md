@@ -4,7 +4,9 @@
 ## Getting started
 
 ```
+rm -fr bower_components
 npm install
 bower install
-gulp serve
 ```
+
+choose angular 1.4.14

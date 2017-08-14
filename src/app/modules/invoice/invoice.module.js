@@ -17,13 +17,18 @@
 
   module.config(appConfig);
 
+
   appConfig.$inject = ['$stateProvider'];
 
   function appConfig($stateProvider) {
     $stateProvider
       .state('app.invoice', {
-        url: '/invoice',
-        templateUrl: 'app/modules/invoice/invoice.html'
+        url: '/invoice/:invoiceId',
+        templateUrl: 'app/modules/invoice/invoice.html',
+        controller: function($scope, $stateParams) {
+          $scope.invoiceId = $stateParams.invoiceId;
+
+        }
       })
   }
 })();
