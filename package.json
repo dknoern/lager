@@ -6,6 +6,7 @@
     "express": "~4.15.3",
     "mongoose": "~4.10.6",
     "body-parser": "~1.0.1",
+    "mongoose-increment": "0.8.0",
     "mongodb-autoincrement": "~1.0.0",
     "@uirouter/angularjs": "^1.0.5",
     "angular": "^1.6.1",

@@ -17,7 +17,8 @@
 
       if("new" == $scope.invoiceId){
 
-        var customerId = '400000000000000000000011';
+        var customerId = $location.search().customerId;
+
         $http.get('api/customers/' + customerId).
           success(function (customer) {
             $scope.customer = customer;
@@ -37,31 +38,29 @@
               shipState: customer.state,
               shipZip: customer.zip
             }
-
-            //alert("for new invoice customer is " + customer.firstName + " " + customer.lastName);
           });
 
-
-
-
-
-
-
-      // var customer =  $resource('api/customers/:id').get({id: '400000000000000000000011'});
-
-        //$scope.data = customer;
-
-/*
-        {
-          customer: customer.firstName + ' ' + customer.lastName,
-          salesPerson: "Ke"
-        }
-
-        */
       }else{
       $scope.data = $resource('api/invoices/:id').get({id: $scope.invoiceId});
 
       }
+    }
+
+    $scope.go = function() {
+
+        $http({
+            method: "POST",
+            url: "api/invoices/",
+            data: angular.toJson($scope.data),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(function successCallback(response) {
+            console.log(response.statusText);
+            $state.go('app.invoices');
+        }, function errorCallback(response) {
+            console.log(response.statusText);
+        });
     }
 
 

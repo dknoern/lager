@@ -132,6 +132,7 @@ db.products.save({
 
 
 
+
 db.invoices.save({
     _id: ObjectId("100000000000000000000006"),
     customer: 'Mark Watney',
@@ -141,6 +142,16 @@ db.invoices.save({
     shipVia: "UPS",
     paidBy: "Card",
     total: "$350.50",
+    paymentId: "10023",
+    salesPerson: "David Knoernschild",
+    invoiceType: "Advanced",
+    shipToName: "Mark Watney",
+    shipAddress1: "1300 Eagle Ridge Drive",
+    shipAddress2: "",
+    shipAddress3: "",
+    shipCity: "Renton",
+    shipState: "WA",
+    shipZip: "98055",
     lineItems: [
         {
             name:"Living Room",
@@ -152,7 +163,11 @@ db.invoices.save({
             _id: ObjectId("100000000000000000000008"),
             amount:100
         }
-    ]
+    ],
+    subtotal: "600",
+    tax: "60",
+    shipping: "0",
+    total: "660"
 });
 
 
@@ -165,6 +180,16 @@ db.invoices.save({
     shipVia: "USPS",
     paidBy: "Check",
     total: "$1200.00",
+    paymentId: "10023",
+    salesPerson: "David Knoernschild",
+    invoiceType: "Basic",
+    shipToName: "Mark Watney",
+    shipAddress1: "1300 Eagle Ridge Drive",
+    shipAddress2: "",
+    shipAddress3: "",
+    shipCity: "Renton",
+    shipState: "WA",
+    shipZip: "98055",
     lineItems: [
         {
             name:"Living room",
@@ -191,7 +216,11 @@ db.invoices.save({
             _id: ObjectId("100000000000000000000031"),
             amount:100
         }
-    ]
+    ],
+    subtotal: "1250",
+    tax: "125",
+    shipping: "0",
+    total: "1375"
 });
 
 
@@ -209,6 +238,16 @@ db.invoices.save({
     shipVia: "FedEx",
     paidBy: "Cash",
     total: "$795.00",
+    paymentId: "10023",
+    salesPerson: "David Knoernschild",
+    invoiceType: "Basic",
+    shipToName: "Mark Watney",
+    shipAddress1: "1300 Eagle Ridge Drive",
+    shipAddress2: "",
+    shipAddress3: "",
+    shipCity: "Renton",
+    shipState: "WA",
+    shipZip: "98055",
     lineItems: [
         {
             name:"Living room/kitchen",
@@ -225,7 +264,11 @@ db.invoices.save({
             _id: ObjectId("100000000000000000000043"),
             amount:100
         }
-    ]
+    ],
+    subtotal: "730",
+    tax: "73",
+    shipping: "0",
+    total: "803"
 });
 
 
@@ -239,7 +282,17 @@ db.counters.insert(
     }
 );
 
+function getNextSequence(name) {
+   var ret = db.counters.findAndModify(
+          {
+            query: { _id: name },
+            update: { $inc: { seq: 1 } },
+            new: true
+          }
+   );
 
+   return ret.seq;
+}
 
 
 
