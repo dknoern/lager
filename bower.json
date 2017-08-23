@@ -78,7 +78,8 @@
     "select2-bootstrap-css": "1.4.6",
     "dropzone": "4.0.0",
     "holderjs": "2.5.0",
-    "switchery": "0.8.1"
+    "switchery": "0.8.1",
+    "angular-file-upload": "2.5.0"
   },
   "overrides": {
     "bootstrap": {

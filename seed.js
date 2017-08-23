@@ -131,11 +131,49 @@ db.products.save({
 
 
 
+db.customers.save({
+    _id: ObjectId("400000000000000000000010"),
+    custNo: '10023',
+    firstName: 'Rick',
+    lastName: 'Martinez',
+    email: 'rick@nasa.gov',
+    phone: '2065551112',
+    company: "NASA",
+    address1: '325 Ash Ave',
+    city: 'Ames',
+    state: 'IA',
+    zip: '50010'
+});
+
+
+db.customers.save({
+    _id: ObjectId("400000000000000000000011"),
+    custNo: '21002',
+    firstName: 'Beth',
+    lastName: 'Johanssen',
+    email: 'beth@nasa.gov',
+    phone: '2065551112',
+    company: 'Burger King',
+    address1: '1103 Raney Street',
+    city: 'Hiawatha',
+    state: 'IA',
+    zip: '52402'
+});
+
+
+
+
+
+
+
+
+
 
 
 db.invoices.save({
     _id: ObjectId("100000000000000000000006"),
-    customer: 'Mark Watney',
+    customerId: "400000000000000000000011",
+    customer: 'Beth Johanssen',
     project: "View Ridge Home Staging",
     invoiceNumber: "5275",
     date: "October 11, 2015",
@@ -173,7 +211,8 @@ db.invoices.save({
 
 db.invoices.save({
     _id: ObjectId("100000000000000000000007"),
-    customer: 'Melissa Lewis',
+    customerId: "400000000000000000000011",
+    customer: 'Beth Johanssen',
     project: "Wedgewood Home Staging",
     invoiceNumber: "5273",
     date: "October 5, 2015",
@@ -231,7 +270,8 @@ db.invoices.save({
 
 db.invoices.save({
     _id: ObjectId("100000000000000000000008"),
-    customer: 'Beth Johanssen',
+    customerId: "400000000000000000000010",
+    customer: 'Rick Martinez',
     project: "North Seatle Town Home Staging",
     invoiceNumber: "5264",
     date: "September 27, 2015",
@@ -293,36 +333,3 @@ function getNextSequence(name) {
 
    return ret.seq;
 }
-
-
-
-
-
-db.customers.save({
-    _id: ObjectId("400000000000000000000010"),
-    custNo: '10023',
-    firstName: 'Rick',
-    lastName: 'Martinez',
-    email: 'rick@nasa.gov',
-    phone: '2065551112',
-    company: "NASA",
-    address1: '325 Ash Ave',
-    city: 'Ames',
-    state: 'IA',
-    zip: '50010'
-});
-
-
-db.customers.save({
-    _id: ObjectId("400000000000000000000011"),
-    custNo: '21002',
-    firstName: 'Beth',
-    lastName: 'Johanssen',
-    email: 'beth@nasa.gov',
-    phone: '2065551112',
-    company: 'Burger King',
-    address1: '1103 Raney Street',
-    city: 'Hiawatha',
-    state: 'IA',
-    zip: '52402'
-});

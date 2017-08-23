@@ -3,8 +3,6 @@
 
   angular.module('singApp.invoice')
     .controller('InvoiceCtrl', InvoiceCtrl)
-    .directive('summernoteFullscreenHelper', SummernoteFullscreenHelper)
-    .run(summernoteConfigure)
   ;
 
   InvoiceCtrl.$inject = ['$scope', '$resource','$http', '$window', '$location','$state', 'jQuery'];
@@ -28,6 +26,7 @@
 
             $scope.data = {
               customer: fullName,
+              customerId: customerId,
               salesPerson: "Ke",
               date: new Date(),
               shipToName: fullName,
@@ -44,6 +43,49 @@
       $scope.data = $resource('api/invoices/:id').get({id: $scope.invoiceId});
 
       }
+
+      $scope.products = $resource('api/products').query();
+
+    }
+
+
+    $scope.addItem = function(itemId)
+    {
+      $http.get("api/products/"+itemId)
+      .then(function(response) {
+
+        var lineItem = {
+          name: response.data.title,
+          id: response.data._id,
+          itemNo: response.data.itemNo,
+          amount: response.data.listPrice
+        }
+
+        $scope.data.lineItems.push(lineItem);
+
+
+        computeTotals();
+      });
+    }
+
+    $scope.removeItem = function(index)
+    {
+      var arr = $scope.data.lineItems;
+      $scope.data.lineItems.splice(index,1);
+      computeTotals();
+    }
+
+    function computeTotals()
+    {
+      var total = 0.0;
+      $scope.data.lineItems.forEach(function(item) {
+         total += item.amount;
+       });
+
+      $scope.data.subtotal = total;
+      $scope.data.tax = 0.09 * total;
+      $scope.data.shipping = 0.0;
+      $scope.data.total = $scope.data.subtotal + $scope.data.tax + $scope.data.shipping;
     }
 
     $scope.go = function() {
@@ -63,65 +105,6 @@
         });
     }
 
-
     jQuery('#datetimepicker2').datetimepicker();
   }
-
-  SummernoteFullscreenHelper.$inject = ['jQuery'];
-  function SummernoteFullscreenHelper(jQuery) {
-    return {
-      link: function (scope, $el, attrs) {
-        $el.on('click', '[data-event="fullscreen"]', function () {
-          jQuery('.page-controls').css('z-index',
-            $el.find('.note-editor.fullscreen').length ? 0 : ''
-          );
-        })
-      }
-    }
-  }
-
-  summernoteConfigure.$inject = ['jQuery'];
-  function summernoteConfigure (jQuery) {
-    // replace summernot dialog to make awesome-bootstrap-checkbox work
-    jQuery.summernote.renderer.addDialogInfo('link', function (lang, options) {
-      var body = '<div class="form-group">' +
-                   '<label>' + lang.link.textToDisplay + '</label>' +
-                   '<input class="note-link-text form-control" type="text" />' +
-                 '</div>' +
-                 '<div class="form-group">' +
-                   '<label>' + lang.link.url + '</label>' +
-                   '<input class="note-link-url form-control" type="text" value="http://" />' +
-                 '</div>' +
-                 (!options.disableLinkTarget ?
-                   '<div class="checkbox">' +
-                     '<input type="checkbox" checked id="summernoteLinkTargetCheckbox"> ' +
-                     '<label for="summernoteLinkTargetCheckbox">' +
-                     lang.link.openInNewWindow +
-                     '</label>' +
-                   '</div>' : ''
-                 );
-      var footer = '<button class="btn btn-primary note-link-btn disabled" disabled>' + lang.link.insert + '</button>';
-      return tplDialog('note-link-dialog', lang.link.insert, body, footer);
-    });
-
-    var tplDialog = function (className, title, body, footer) {
-      return '<div class="' + className + ' modal" aria-hidden="false">' +
-          '<div class="modal-dialog">' +
-            '<div class="modal-content">' +
-            (title ?
-              '<div class="modal-header">' +
-                '<button type="button" class="close" aria-hidden="true" tabindex="-1">&times;</button>' +
-                '<h4 class="modal-title">' + title + '</h4>' +
-              '</div>' : ''
-            ) +
-            '<div class="modal-body">' + body + '</div>' +
-            (footer ?
-              '<div class="modal-footer">' + footer + '</div>' : ''
-            ) +
-            '</div>' +
-          '</div>' +
-        '</div>';
-    }
-  }
-
 })();

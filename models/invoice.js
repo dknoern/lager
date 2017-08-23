@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-var increment = require('mongoose-increment');
 
 var Schema = new mongoose.Schema();
 
@@ -11,12 +10,16 @@ var counter = mongoose.model('counter', CounterSchema);
 
 var InvoiceSchema = new mongoose.Schema({
     customer: String,
+    customerId: String,
     project: String,
     invoiceNumber: String,
     documentType: String,
     date: String,
     shipVia: String,
     paidBy: String,
+    subtotal: String,
+    tax: String,
+    shipping: String,
     total: String,
     paymentId: String,
     salesPerson: String,
@@ -36,18 +39,6 @@ var InvoiceSchema = new mongoose.Schema({
     }]
 });
 
-
-/*
-InvoiceSchema.plugin(increment, {
-  modelName: 'Invoice',
-  fieldName: 'invoiceNumber',
-});
-*/
-
-//var InvoiceIncrement = mongoose.model('Invoice_increment', InvoiceSchema);
-
-
-
 InvoiceSchema.pre('save', function (next) {
     var doc = this;
 
@@ -65,7 +56,4 @@ InvoiceSchema.pre('save', function (next) {
     }
 });
 
-
 module.exports = mongoose.model('Invoice', InvoiceSchema);
-
-//module.exports =  mongoose.model('InvoiceIncrement', InvoiceSchema);

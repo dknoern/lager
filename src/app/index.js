@@ -5,6 +5,7 @@
         .module('singApp', [
         'auth0.auth0',
         'ui.router',
+        'angularFileUpload',
         'singApp.core',
         'singApp.customers',
         'singApp.customer',

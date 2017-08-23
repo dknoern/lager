@@ -14,6 +14,7 @@ router.route('/invoices')
         invoice._id = req.body._id;
         invoice.invoiceNumber = req.body.invoiceNumber;
         invoice.customer = req.body.customer;
+        invoice.customerId = req.body.customerId;
         invoice.project = req.body.project;
         invoice.date = req.body.date;
         invoice.shipVia = req.body.shipVia;
@@ -30,15 +31,12 @@ router.route('/invoices')
         invoice.shipState = req.body.shipState;
         invoice.shipZip = req.body.shipZip;
 
-        /*
-                if(!invoiceNumber || invoiceNumber==""){
-                  getNextSequence("userid"),
-                }
-        */
-        console.log("salesperson = " + invoice.salesPerson);
+        invoice.lineItems = req.body.lineItems;
 
-        // TODO: iterate through line items if any and copy.
-
+        invoice.subtotal = req.body.subtotal;
+        invoice.tax = req.body.tax;
+        invoice.shipping = req.body.shipping;
+        invoice.total = req.body.total;
 
         // use save for updates, findOne and update for inserts for now until we
         // figure out the problem with the "pre" in mongoose.
@@ -63,20 +61,43 @@ router.route('/invoices')
                 return res.send("invoice saved");
             });
         }
-
-
-
-
     })
 
     .get(function(req, res) {
 
-        Invoice.find(function(err, invoices) {
-            if (err)
-                res.send(err);
+        var customerId = req.query.customerId;
 
-            res.json(invoices);
-        });
+        if (!customerId) {
+
+            Invoice.find(function(err, invoices) {
+                if (err)
+                    res.send(err);
+                res.json(invoices);
+            });
+
+        } else {
+
+            var query = Invoice.find({ 'customerId': customerId });
+            //var query = Invoice.find({ 'customer': 'Beth Johanssen' });
+
+            // selecting the 'name' and 'age' fields
+            query.select('customer date invoiceNumber customerId total');
+
+            // limit our results to 5 items
+            //query.limit(5);
+
+            // sort by age
+            //query.sort({ age: -1 });
+
+            // execute the query at a later time
+            query.exec(function (err, invoices) {
+              if (err)
+                  res.send(err);
+
+              console.log("invoices")
+              res.json(invoices);
+            })
+        }
     });
 
 router.route('/invoices/:invoice_id')

@@ -210,15 +210,15 @@
             <thead>
             <tr>
               <th>Invoice No</th>
-              <th>Item No</th>
-              <th>Title</th>
+              <th>Date</th>
+              <th>Total</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-              <td>64</td>
-              <td>34211</td>
-              <td>Audermars Piguet Royal Oak Offshore Chronograph</td>
+            <tr data-ng-repeat="invoice in invoices">
+              <td><a href="/#/app/invoice/{{invoice._id}}">{{invoice.invoiceNumber}}</a></td>
+              <td>{{invoice.date}}</td>
+              <td>{{invoice.total | currency}}</td>
             </tr>
             </tbody>
           </table>
