@@ -61,6 +61,11 @@
           amount: response.data.listPrice
         }
 
+        if($scope.data.lineItems==null){
+          $scope.data.lineItems = new Array();
+        }
+
+
         $scope.data.lineItems.push(lineItem);
 
 

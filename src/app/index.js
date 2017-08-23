@@ -9,6 +9,7 @@
         'singApp.core',
         'singApp.customers',
         'singApp.customer',
+        'singApp.components.dropzone',
         'singApp.inventory',
         'singApp.item',
         'singApp.invoices',
