@@ -28,8 +28,9 @@
               customer: fullName,
               customerId: customerId,
               salesPerson: "Ke",
-              date: new Date(),
+              date: "08/23/2017",
               shipToName: fullName,
+              shipping: 5.95,
               shipAddress1: customer.address1,
               shipAddress2: customer.address2,
               shipAddress3: customer.address3,
@@ -64,12 +65,8 @@
         if($scope.data.lineItems==null){
           $scope.data.lineItems = new Array();
         }
-
-
         $scope.data.lineItems.push(lineItem);
-
-
-        computeTotals();
+        $scope.computeTotals();
       });
     }
 
@@ -77,10 +74,11 @@
     {
       var arr = $scope.data.lineItems;
       $scope.data.lineItems.splice(index,1);
-      computeTotals();
+      $scope.computeTotals();
     }
 
-    function computeTotals()
+    //function computeTotals()
+    $scope.computeTotals = function()
     {
       var total = 0.0;
       $scope.data.lineItems.forEach(function(item) {
@@ -88,8 +86,11 @@
        });
 
       $scope.data.subtotal = total;
-      $scope.data.tax = 0.09 * total;
-      $scope.data.shipping = 0.0;
+
+      var taxRate = 0.00;
+      if($scope.data.shipState == "TX")
+        taxRate = 0.0825;
+      $scope.data.tax = taxRate * total;
       $scope.data.total = $scope.data.subtotal + $scope.data.tax + $scope.data.shipping;
     }
 

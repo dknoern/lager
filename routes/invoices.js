@@ -20,7 +20,7 @@ router.route('/invoices')
         invoice.shipVia = req.body.shipVia;
         invoice.paidBy = req.body.paidBy;
         invoice.total = req.body.total;
-        invoice.paymentId = req.body.paymentId;
+        invoice.methodOfSale = req.body.methodOfSale;
         invoice.salesPerson = req.body.salesPerson;
         invoice.invoiceType = req.body.invoiceType;
         invoice.shipToName = req.body.shipToName;
@@ -94,7 +94,6 @@ router.route('/invoices')
               if (err)
                   res.send(err);
 
-              console.log("invoices")
               res.json(invoices);
             })
         }
