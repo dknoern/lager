@@ -26,11 +26,11 @@
 
         if (authResult && authResult.accessToken && authResult.idToken) {
           setSession(authResult);
-          $state.go('home');
+          $state.go('app.inventory');
         } else if (err) {
           alert('error');
           $timeout(function() {
-            $state.go('home');
+            $state.go('app.inventory');
           });
           console.log(err);
           alert('Error: ' + err.error + '. Check the console for further details.');
@@ -51,7 +51,7 @@
       localStorage.removeItem('access_token');
       localStorage.removeItem('id_token');
       localStorage.removeItem('expires_at');
-      $state.go('home');
+      $state.go('app.inventory');
     }
 
     function isAuthenticated() {
