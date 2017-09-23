@@ -15,6 +15,7 @@
         'singApp.invoices',
         'singApp.invoice',
         'singApp.returns',
+        'singApp.return',
         'singApp.repairs',
         'singApp.reports',
         'singApp.form.validation',
@@ -45,13 +46,6 @@
                 controllerAs: 'vm'
               });
 
-
-
-          // Initialization for the angular-auth0 library
-
-
-
-
           angularAuth0Provider.init({
             clientID: AUTH0_CLIENT_ID,
             domain: AUTH0_DOMAIN,
@@ -61,10 +55,6 @@
             scope: 'openid profile',
             icon: 'https://www.demesy.com/media/wysiwyg/footer-logo.png'
           });
-
-
-
-        // $urlRouterProvider.otherwise('/');
 
           $locationProvider.hashPrefix('');
 

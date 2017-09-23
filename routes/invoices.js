@@ -151,6 +151,8 @@ router.route('/invoices/:invoice_id/items')
             var lineItem = new LineItem;
             lineItem.name = req.body.name;
             lineItem.amount = req.body.amount;
+            lineItem.serialNo = req.body.serialNo;
+            lineItem.itemNo = req.body.itemNo;
 
             invoice.lineItems.push(lineItem);
 

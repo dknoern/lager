@@ -1,0 +1,136 @@
+<div class="row" data-ng-controller="InvoiceCtrl">
+  <div class="col-md-11">
+    <section class="widget widget-invoice">
+      <header>
+        <div class="row">
+          <div class="col-sm-6 col-print-6">
+            <img src="assets/images/logo/invoice-logo.png" alt="Logo" class="invoice-logo"/>
+          </div>
+          <div class="col-sm-3 col-print-3">
+            <div class="fine-print">
+            {{data.customer}}<br/>
+            {{data.shipAddress1}}<br/>
+            {{data.shipCity}}, {{data.shipState}} {{data.shipZip}}<br/>
+            {{data.phone}}
+            </div>
+          </div>
+
+          <div class="col-sm-3 col-print-3">
+            <div class="fine-print">
+            Invoice # {{data.invoiceNumber}}<br/>
+            Invoice Date {{data.date}}<br/>
+            Sold By {{data.salesPerson}}
+            </div>
+          </div>
+        </div>
+      </header>
+      <div class="widget-body">
+
+        <table class="table">
+          <thead>
+          <tr>
+            <th>Item Description</th>
+            <th width="15%"></th>
+            <th width="15%">Total</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr data-ng-repeat="lineItem in data.lineItems">
+            <td colspan="2" class="fine-print">{{lineItem.name  | uppercase}}
+              <div class="fine-print">{{lineItem.longDesc}}</div>
+
+              <div class="row">
+                  <div class="col-sm-6 col-print-6">Serial # - {{lineItem.serialNo}}</div>
+                  <div class="col-sm-6 col-print-6">SKU: {{lineItem.itemNo}}{{data.date.substr(0,2)}}</div>
+              </div>
+
+
+            </td>
+            <td>{{lineItem.amount | currency}}</td>
+          </tr>
+
+          <tr><td></td><td align="right">SUB TOTAL:</td><td>{{data.subtotal | currency}}</td></tr>
+          <tr><td></td><td align="right">TAX 8.5%:</td><td>{{data.tax | currency}}</td></tr>
+          <tr><td></td><td align="right">SHIPPING:</td><td>{{data.shipping | currency}}</td></tr>
+
+
+          <tr>
+            <td></td>
+            <td align="right" bgcolor="#C3AA63"><font color="white">TOTAL DUE:</font></td>
+          </font></td>
+
+          <td bgcolor="#C3AA63"><font color="white">{{data.total | currency}}</font></td>
+
+        </tr>
+
+          </tbody>
+        </table>
+
+
+
+        <p class="text-align-right mt-lg mb-xs">
+          Thank you for your business
+        </p>
+
+
+        <p class="text-align-left fine-print">
+          <b>Warranty:</b><br/>
+          DeMesy Fine Watches warranties all watches for one full year from date of invoice, unless otherwise indicated in the listing or on the invoice and with
+          the exception of vintage wristwatch, pocket watches. This warranty does not cover accessories, boxes, bands, batteries, or cracked or broken crystals.
+          Custom work, alterations and/or repairs done without written acknowledgement by DeMesy Fine Watches, rampering by unauthorized technicians, damage
+          from abuse or misuse, negligence, accidents (knocks, dents, crushing), or water damage due to improperly tightened crown, will render this warranty null and void.
+
+          <br/><br/>
+          All warranty work must by sent to our Dallas, TX orrice for repairs.<br/>
+          The warranty does not cover wholesale/dealer orders.<br/><br/>
+
+          <b>Return Privilege:</b><br/>
+          Any PRE-OWNED watch purchase from us online may be returned, provided that you notify us of your intention to do so within three (3) days of
+          receipt of the order, request a Return Authorization number, and return the item immediately, in the condition in which it was received, including all
+          boxes, books, papers, hang tags, etc.  The merchandise MUST BE RETURNED VIA UPS AIR EXPRESS (overnight), insured for the full purchase price.
+          Any item returned without a Return Authorization number noted on the outside of the package will not be accepted.  We will not be responsible for lost
+          packages. Upon receipt of the returned item, in the condition in which it was sold, we will refund the purchase price, less shipping.  Local, on-site, sales
+          are final and are not eligible for our return policy.<br/>
+          Unfortunately, NIB (New in Box) or UNUSED watches are not eligible for our retrurn policy.
+        </p>
+
+        <hr/>
+
+        <div class="row fine-print">
+          <div class="col-sm-3 col-print-3">
+            <div style="float: left;"><img src="assets/images/phone.png" width="32px" alt="Phone"/></div>
+            <div>PHONE<br/>+ 214.855.8777</div>
+          </div>
+          <div class="col-sm-5 col-print-5">
+            <div style="float: left;"><img src="assets/images/address.png"  width="32px" alt="Phone"/></div>
+            <div class="single-line">ADDRESS<br/>4524 Cole Ave. Suite 808, Dallas, TX 75205</div>
+          </div>
+          <div class="col-sm-4 col-print-4">
+            <div style="float: left;"><img src="assets/images/web.png" width="32px" alt="Web"/></div>
+            <div>WEB<br/>www.demesy.com</div>
+          </div>
+        </div>
+
+        <hr/>
+
+
+        <div class="btn-toolbar mt-lg text-align-right hidden-print">
+          <button data-ng-click="print()" class="btn btn-inverse">
+            <i class="fa fa-print"></i>
+            &nbsp;&nbsp;
+            Print
+          </button>
+
+          <a href="/#/app/invoice/edit/{{data._id}}">
+          <button class="btn btn-success">
+            Edit Invoice
+            &nbsp;
+                                <span class="circle bg-white">
+                                    <i class="fa fa-edit text-success"></i>
+                                </span>
+          </button></a>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

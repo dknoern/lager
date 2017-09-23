@@ -2,16 +2,20 @@ var mongoose = require('mongoose');
 
 var Schema = new mongoose.Schema();
 
-var CounterSchema = new mongoose.Schema({
-    _id: {type: String, required: true},
-    seq: {type: Number, default: 0}
-});
-var counter = mongoose.model('counter', CounterSchema);
+var Counter = require('./counter');
+
+//var CounterSchema = new mongoose.Schema({
+//    _id: {type: String, required: true},
+//    seq: {type: Number, default: 0}
+//});
+//var counter = mongoose.model('counter', CounterSchema);
 
 var InvoiceSchema = new mongoose.Schema({
     customer: String,
     customerId: String,
     project: String,
+    returnNumber: String,
+    invoiceId: String,
     invoiceNumber: String,
     documentType: String,
     date: String,
@@ -35,7 +39,10 @@ var InvoiceSchema = new mongoose.Schema({
     lineItems: [{
         lineItemId: String,
         name: String,
-        amount: Number
+        amount: Number,
+        serialNo: String,
+        itemNo: String,
+        longDesc: String
     }]
 });
 
@@ -43,12 +50,10 @@ InvoiceSchema.pre('save', function (next) {
     var doc = this;
 
     if (doc.invoiceNumber==null) {
-        counter.findByIdAndUpdate({_id: 'invoiceNumber'}, {$inc: {seq: 1}}, function (error, counter) {
+        Counter.findByIdAndUpdate({_id: 'invoiceNumber'}, {$inc: {seq: 1}}, function (error, counter) {
             if (error)
                 return next(error);
             doc.invoiceNumber = counter.seq;
-            console.log("--------- invoiceNumberIs " + doc.invoiceNumber);
-
             next();
         });
     }else{
@@ -57,3 +62,5 @@ InvoiceSchema.pre('save', function (next) {
 });
 
 module.exports = mongoose.model('Invoice', InvoiceSchema);
+
+//module.exports = mongoose.model('Counter', CounterSchema);

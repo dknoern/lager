@@ -13,6 +13,44 @@
             document.getElementById('itemNumber').value = "2000123";
         }
     }
+
+
+    function buildLongDesc()
+    {
+      var title = document.getElementById('title').value;
+      var modelName = document.getElementById('model').value;
+      var features = document.getElementById('features').value;
+      var caseText = document.getElementById('case').value;
+      var dial = document.getElementById('dial').value;
+      var bracelet = document.getElementById('bracelet').value;
+      var comments = document.getElementById('comments').value;
+
+      var longDesc = title + ' - ';
+
+      longDesc = addLongDescPart(longDesc,features);
+      longDesc = addLongDescPart(longDesc,model);
+      longDesc = addLongDescPart(longDesc,caseText);
+      longDesc = addLongDescPart(longDesc,dial);
+      longDesc = addLongDescPart(longDesc,bracelet);
+      longDesc = addLongDescPart(longDesc,comments);
+
+      var longDescField = document.getElementById("longDesc");
+      var element = angular.element(longDescField);
+      element.val(longDesc);
+      element.triggerHandler('input');
+    }
+
+    function addLongDescPart(longDesc, part)
+    {
+      if(part && part.length>0)
+        longDesc += part + '. ';
+      return longDesc;
+    }
+
+
+
+
+
 </script>
 
 
@@ -21,27 +59,18 @@
 
 <h1 class="page-title"><span class="fw-semi-bold">Product</span></h1>
 
-
-
-
-
-
-
-
-
-
 <div>
-
     <div class="row">
         <div class="col-md-12">
             <section class="widget">
-
-
                 <div class="widget-body">
                     <form class="form-horizontal" role="form" data-ui-jq="parsley" data-parsley-priority-enabled="false" novalidate="novalidate" data-ng-controller="ItemCtrl">
-
-
                         <div class="row">
+
+
+
+
+
                             <div class="col-sm-7">
 
                                 <fieldset>
@@ -150,14 +179,14 @@
                                     <div class="form-group">
                                         <label for="hint-field" class="col-sm-3 control-label">Title</label>
                                         <div class="col-sm-8">
-                                            <input type="text" id="title" class="form-control" ng-model="data.title" required="required">
+                                            <input type="text" id="title" class="form-control" ng-model="data.title" required="required" onchange="buildLongDesc()">
                                         </div>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="hint-field" class="col-sm-3 control-label">Model Name</label>
                                         <div class="col-sm-8">
-                                            <input type="text" id="model" class="form-control" ng-model="data.model">
+                                            <input type="text" id="model" class="form-control" ng-model="data.model" onchange="buildLongDesc()">
                                         </div>
                                     </div>
 
@@ -197,14 +226,14 @@
                                     <div class="form-group">
                                         <label for="hint-field" class="col-sm-3 control-label">Features</label>
                                         <div class="col-sm-8">
-                                            <input type="text" id="company-field" class="form-control" ng-model="data.features" ng-disabled="data.productType != 'Watch' && data.productType != 'Pocket Watch'">
+                                            <input type="text" id="features" class="form-control" ng-model="data.features" ng-disabled="data.productType != 'Watch' && data.productType != 'Pocket Watch'" onchange="buildLongDesc()">
                                         </div>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="hint-field" class="col-sm-3 control-label">Case</label>
                                         <div class="col-sm-8">
-                                            <input type="text" id="case" class="form-control" ng-model="data.case" ng-disabled="data.productType != 'Watch' && data.productType != 'Pocket Watch'">
+                                            <input type="text" id="case" class="form-control" ng-model="data.case" ng-disabled="data.productType != 'Watch' && data.productType != 'Pocket Watch'" onchange="buildLongDesc()">
                                         </div>
                                     </div>
 
@@ -212,14 +241,14 @@
                                     <div class="form-group">
                                         <label for="hint-field" class="col-sm-3 control-label">Dial</label>
                                         <div class="col-sm-8">
-                                            <input type="text" id="company-field" class="form-control" ng-model="data.dial" ng-disabled="data.productType != 'Watch' && data.productType != 'Pocket Watch'">
+                                            <input type="text" id="dial" class="form-control" ng-model="data.dial" ng-disabled="data.productType != 'Watch' && data.productType != 'Pocket Watch'" onchange="buildLongDesc()">
                                         </div>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="hint-field" class="col-sm-3 control-label">Bracelet</label>
                                         <div class="col-sm-8">
-                                            <input type="text" id="company-field" class="form-control" ng-model="data.bracelet" ng-disabled="data.productType != 'Watch'">
+                                            <input type="text" id="bracelet" class="form-control" ng-model="data.bracelet" ng-disabled="data.productType != 'Watch'" onchange="buildLongDesc()">
                                         </div>
                                     </div>
 
@@ -227,18 +256,17 @@
                                     <div class="form-group">
                                         <label for="hint-field" class="col-sm-3 control-label">Serial No</label>
                                         <div class="col-sm-8">
-                                            <input type="text" id="company-field" class="form-control" ng-model="data.serialNo">
+                                            <input type="text" id="serialNo" class="form-control" ng-model="data.serialNo">
                                         </div>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="hint-field" class="col-sm-3 control-label">Long Desc</label>
                                         <div class="col-sm-8">
-                                            <textarea class="form-control" disabled="disabled" rows="4">{{data.title}} - {{data.features}} - {{data.case}} - {{data.size}} - {{data.dial}} - {{data.bracelet}}  - {{data.comments}}</textarea>
+                                            <textarea class="form-control" rows="4" id="longDesc" ng-model="data.longDesc" ></textarea>
+
                                         </div>
                                     </div>
-
-
 
 
                                 </fieldset>
@@ -302,7 +330,7 @@
                                 <div class="form-group">
                                     <label for="normal-field" class="col-sm-3 control-label">Box and Papers</label>
                                     <div class="col-sm-8">
-                                        <textarea rows=6 cols="40" class="form-control" ng-model="data.comments">{{data.comments}}</textarea>
+                                        <textarea id="comments" rows=6 cols="40" class="form-control" ng-model="data.comments" onchange="buildLongDesc()">{{data.comments}}</textarea>
                                     </div>
                                 </div>
 
@@ -408,6 +436,20 @@
               Upload Image
             </button>
             </div-->
+
+
+            <div>
+              <table>
+                <tr>
+                  <td data-ng-repeat="image in images">
+                    <img ng-src="{{image}}" width=70%>
+                  </td>
+                </tr>
+              </table>
+            </div>
+
+
+
                             </div>
                         </div>
 
@@ -420,6 +462,11 @@
                                 </div>
                             </div>
                         </div>
+
+
+
+
+
                     </form>
                 </div>
             </section>
@@ -428,19 +475,23 @@
 
 
     <div class="row">
+
+
+
+    <div class="row">
         <div class="col-md-12">
             <div class="col-md-6">
                 <section class="widget">
                     <header>
-                        <h5><strong>Product Images</strong></h5>
+                        <h5><strong>Image Upload</strong></h5>
                     </header>
                     <div class="widget-body">
-                      <form class="dropzone" action="/api/upload" data-dropzone action="#" id="image-upload-form">
+                      <form class="dropzone" action="/api/upload" data-dropzone action="#" id="myDropzone">
+                        <input type="hidden" name="itemId" value="{{itemId}}"/>
                       </form>
                     </div>
                 </section>
             </div>
         </div>
     </div>
-
 </div>

@@ -4,14 +4,19 @@
     angular.module('singApp.item')
         .controller('ItemCtrl', ItemCtrl);
 
-    ItemCtrl.$inject = ['$scope', '$resource', '$http', '$window', '$location', '$state', 'jQuery'];
+    ItemCtrl.$inject = ['$scope', '$rootScope','$sce','$resource', '$http', '$window', '$location', '$state', 'jQuery'];
 
-    function ItemCtrl($scope, $resource, $http, $window, $location, $state, jQuery,$upload) {
+    function ItemCtrl($scope, $rootScope, $sce, $resource, $http, $window, $location, $state, jQuery,$upload) {
         $scope.dtChanged = function(dt) {
             $window.alert('Angular model changed to: ' + dt);
         };
 
         if ($scope.itemId) {
+                    $http.get('api/upload/'+$scope.itemId).
+                    success(function(images) {
+                        $scope.images = images;
+                    });
+
             $scope.data = $resource('api/products/:id').get({
                 id: $scope.itemId
             });
@@ -34,7 +39,6 @@
             });
         }
 
-
         $scope.uploadFile = function(){
           alert('uploading file');
           console.log('uploading file');
@@ -54,9 +58,6 @@
               });
             };
         };
-
-
-
 
         $scope.getLongDescritpion = function() {
             return 'this is a long description';

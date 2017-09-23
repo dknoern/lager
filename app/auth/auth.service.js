@@ -28,12 +28,14 @@
           setSession(authResult);
           $state.go('app.inventory');
         } else if (err) {
-          alert('error');
+          //alert('error');
           $timeout(function() {
             $state.go('app.inventory');
           });
           console.log(err);
-          alert('Error: ' + err.error + '. Check the console for further details.');
+
+          //alert('Error: ' + err.error + '. Check the console for further details.');
+          alert('Login must be enabled by admin, please request access');
         }
       });
     }
@@ -56,6 +58,11 @@
 
     function isAuthenticated() {
 
+      //if(userProfile && userProfile.sub) alert("sub:"+ userProfile.sub)
+
+      //if(userProfile && userProfile.sub && userProfile.sub !='facebook|10212774134421457')
+      //return false
+      //alert('profile='+ JSON.stringify(userProfile));
 
       // to bypass auth, uncomment the following:
       //return true;
@@ -83,9 +90,13 @@
 
     function setUserProfile(profile) {
       userProfile = profile;
+
     }
 
     function getCachedProfile() {
+
+
+
       return userProfile;
     }
 

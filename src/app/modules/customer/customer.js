@@ -22,6 +22,11 @@
                 $scope.invoices = invoices;
             });
 
+            $http.get('api/returns?customerId=' + $scope.customerId).
+            success(function(returns) {
+                $scope.returns = returns;
+            });
+
         }
 
         $scope.go = function() {

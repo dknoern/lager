@@ -18,7 +18,7 @@ router.route('/products')
 
         if(product.title==null)
         return res.send(500, { error: 'title required'});
-       
+
         product.productType = req.body.productType;
         product.manufacturer = req.body.manufacturer;
         product.title = req.body.title;
@@ -87,6 +87,7 @@ router.route('/products/:product_id')
             if (err)
                 res.send(err);
             product.itemNo = req.body.itemNo;
+            product.serialNo = req.body.serialNo;            
             product.title = req.body.title;
             product.sellingPrice = req.body.sellingPrice;
             product.save(function (err) {

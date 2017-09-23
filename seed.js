@@ -312,6 +312,41 @@ db.invoices.save({
 });
 
 
+db.returns.save({
+    _id: ObjectId("100000000000000000000008"),
+    customerId: "400000000000000000000010",
+    customer: 'Rick Martinez',
+    returnNumber: "1001",
+    invoiceId: "100000000000000000000008",
+    invoiceNumber: "5264",
+    date: "September 27, 2015",
+    total: "$795.00",
+    salesPerson: "David Knoernschild",
+    lineItems: [
+        {
+            name:"Living room/kitchen",
+            _id: ObjectId("100000000000000000000041"),
+            amount:430,
+            included: true
+        },
+        {
+            name:"Bedroom",
+            _id: ObjectId("100000000000000000000042"),
+            amount:200,
+           included: true
+        },
+        {
+            name:"Art",
+            _id: ObjectId("100000000000000000000043"),
+            amount:100,
+            included: false
+        }
+    ],
+    subtotal: "730",
+    tax: "73",
+    shipping: "0",
+    total: "803"
+});
 
 
 
@@ -319,6 +354,10 @@ db.counters.insert(
     {
         _id: "invoiceNumber",
         seq: 6000
+    },
+    {
+        _id: "returnNumber",
+        seq: 2000
     }
 );
 

@@ -7,8 +7,13 @@
 
   InvoiceCtrl.$inject = ['$scope', '$resource','$http', '$window', '$location','$state', 'jQuery'];
   function InvoiceCtrl ($scope, $resource, $http,$window, $location, $state, jQuery) {
+
     $scope.dtChanged = function(dt){
       $window.alert('Angular model changed to: ' + dt);
+    };
+
+    $scope.print = function(){
+      $window.print();
     };
 
     if ($scope.invoiceId) {
@@ -23,12 +28,11 @@
 
             var fullName = customer.firstName + ' ' + customer.lastName;
 
-
             $scope.data = {
               customer: fullName,
               customerId: customerId,
               salesPerson: "Ke",
-              date: "08/23/2017",
+              date: "09/22/2017",
               shipToName: fullName,
               shipping: 5.95,
               shipAddress1: customer.address1,
@@ -59,7 +63,10 @@
           name: response.data.title,
           id: response.data._id,
           itemNo: response.data.itemNo,
-          amount: response.data.listPrice
+          amount: response.data.listPrice,
+          serialNo: response.data.serialNo,
+          modelNumber: response.data.modelNumber,
+          longDesc: response.data.longDesc
         }
 
         if($scope.data.lineItems==null){
