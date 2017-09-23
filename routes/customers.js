@@ -4,7 +4,6 @@ var router = express.Router();
 var Customer = require('../models/customer');
 
 router.use(function (req, res, next) {
-    //console.log('Something is happening.');
     next();
 });
 
@@ -15,11 +14,9 @@ router.route('/customers')
         customer._id = req.body._id
         customer.firstName = req.body.firstName;
         customer.lastName = req.body.lastName;
-
         customer.company = req.body.company;
         customer.phone = req.body.phone;
         customer.email = req.body.email;
-
         customer.address1 = req.body.address1;
         customer.address2 = req.body.address2;
         customer.address3 = req.body.address3;
@@ -27,7 +24,6 @@ router.route('/customers')
         customer.state = req.body.state;
         customer.zip = req.body.zip;
         customer.country = req.body.country;
-
         customer.billingAddress1 = req.body.billingAddress1;
         customer.billingAddress2 = req.body.billingAddress2;
         customer.billingAddress3 = req.body.billingAddress3;

@@ -28,9 +28,7 @@ router.route('/invoices')
         invoice.shipCity = req.body.shipCity;
         invoice.shipState = req.body.shipState;
         invoice.shipZip = req.body.shipZip;
-
         invoice.lineItems = req.body.lineItems;
-
         invoice.subtotal = req.body.subtotal;
         invoice.tax = req.body.tax;
         invoice.shipping = req.body.shipping;

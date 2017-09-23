@@ -18,9 +18,7 @@ router.route('/returns')
         ret.date = req.body.date;
         ret.total = req.body.total;
         ret.salesPerson = req.body.salesPerson;
-
         ret.lineItems = req.body.lineItems;
-
         ret.subtotal = req.body.subtotal;
         ret.tax = req.body.tax;
         ret.shipping = req.body.shipping;
@@ -113,7 +111,6 @@ router.route('/returns/:return_id')
             });
         });
     })
-
 
 router.route('/returns/:return_id/items')
     .post(function(req, res) {

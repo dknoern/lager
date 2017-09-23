@@ -39,15 +39,9 @@ router.route('/products')
         product.modelYear = req.body.modelYear;
         product.longDesc = req.body.longDesc;
         product.supplier = req.body.supplier;
-        //product.lastUpdated = req.body.lastUpdated;
-        //product.userId = req.body.userId;
         product.cost = req.body.cost;
         product.listPrice = req.body.listPrice;
         product.repairCost = req.body.repairCost;
-        //product.photo = req.body.photo;
-        //product.saleDate = req.body.x;
-        //product.received = req.body.x;
-        //product.statusId = req.body.x;
         product.notes = req.body.notes;
         product.ebayNoReserve = req.body.ebayNoReserve;
         product.inventoryItem = req.body.inventoryItem;
@@ -87,7 +81,7 @@ router.route('/products/:product_id')
             if (err)
                 res.send(err);
             product.itemNo = req.body.itemNo;
-            product.serialNo = req.body.serialNo;            
+            product.serialNo = req.body.serialNo;
             product.title = req.body.title;
             product.sellingPrice = req.body.sellingPrice;
             product.save(function (err) {

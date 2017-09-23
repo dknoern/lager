@@ -1,13 +1,11 @@
 var express = require('express');
 var multer = require( 'multer' );
 var router = express.Router();
-
 var fs = require('fs');
 
 router.use(function (req, res, next) {
   next();
 });
-
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -37,8 +35,6 @@ router.route('/upload')
   return res.send("get...");
 });
 
-
-
 router.route('/upload/:product_id')
 .get(function (req, res){
 
@@ -48,7 +44,7 @@ router.route('/upload/:product_id')
 
   fs.readdir(path, function(err, items) {
 
-      for (var i=0; i<items.length; i++) {
+      for (var i=0; items!=null && i<items.length; i++) {
           if(items[i].startsWith(req.params.product_id))
           {
             urls.push("/uploads/"+items[i]);
@@ -57,12 +53,6 @@ router.route('/upload/:product_id')
       res.json(urls);
   });
 
-
-
-
-
-
-  //return res.send("get list of urls...");
 });
 
 module.exports = router;
