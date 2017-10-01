@@ -4,6 +4,7 @@
     angular
         .module('singApp', [
         'auth0.auth0',
+        'angular-jwt',
         'ui.router',
         'angularFileUpload',
         'singApp.core',
@@ -26,15 +27,19 @@
         config.$inject = [
           '$stateProvider',
           '$locationProvider',
-          '$urlRouterProvider'
-          ,'angularAuth0Provider'
+          '$urlRouterProvider',
+          'angularAuth0Provider',
+          '$httpProvider',
+          'jwtOptionsProvider'
         ];
 
         function config(
           $stateProvider,
           $locationProvider,
           $urlRouterProvider
-         , angularAuth0Provider
+         , angularAuth0Provider,
+         $httpProvider,
+         jwtOptionsProvider
         ) {
 
 
@@ -57,6 +62,20 @@
           });
 
           $locationProvider.hashPrefix('');
+
+
+          jwtOptionsProvider.config({
+               tokenGetter: function() {
+                 return localStorage.getItem('access_token');
+               },
+               //whiteListedDomains: ['localhost']
+             });
+
+             $httpProvider.interceptors.push('jwtInterceptor');
+
+
+
+
 
           /// Comment out the line below to run the app
           // without HTML5 mode (will use hashes in routes)

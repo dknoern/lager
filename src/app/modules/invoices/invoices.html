@@ -10,8 +10,8 @@
           <th>Invoice</th>
           <th>Customer</th>
           <th class="no-sort hidden-xs">Date</th>
-          <th class="hidden-xs">Ship Via</th>
-          <th class="hidden-xs">Paid By</th>
+          <th class="hidden-xs">Item #</th>
+          <th class="hidden-xs">Item</th>
           <th class="no-sort">Total</th>
           <th>Address</th>
           <th>City</th>
@@ -23,8 +23,8 @@
           <td><a href="/#/app/invoice/{{invoice._id}}">{{invoice.invoiceNumber}}</a></td>
           <td>{{invoice.customer}}</td>
           <td>{{invoice.date}}</td>
-          <td class="hidden-xs">{{invoice.shipVia}}</td>
-          <td class="hidden-xs">{{invoice.paidBy}}</td>
+          <td class="hidden-xs">{{invoice.lineItems[0].itemNo}}</td>
+          <td class="hidden-xs">{{invoice.lineItems[0].name}}</td>
           <td class="hidden-xs">{{invoice.total | currency}}</td>
           <td class="hidden-xs">{{invoice.shipAddress1}}</td>
           <td class="hidden-xs">{{invoice.shipCity}}</td>

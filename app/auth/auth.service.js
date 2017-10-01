@@ -79,6 +79,7 @@
       if (!accessToken) {
         //throw new Error('Access token must exist to fetch profile');
       }else{
+
         angularAuth0.client.userInfo(accessToken, function(err, profile) {
           if (profile) {
             setUserProfile(profile);

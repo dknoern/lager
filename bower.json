@@ -79,7 +79,8 @@
     "dropzone": "4.0.0",
     "holderjs": "2.5.0",
     "switchery": "0.8.1",
-    "angular-file-upload": "2.5.0"
+    "angular-file-upload": "2.5.0",
+    "angular-jwt": "0.1.9"
   },
   "overrides": {
     "bootstrap": {
