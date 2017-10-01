@@ -5,8 +5,10 @@ var Return = require('../models/return');
 
 var mongoose = require('mongoose');
 
+const checkJwt = require('./jwt-helper').checkJwt;
+
 router.route('/returns')
-    .post(function(req, res) {
+    .post(checkJwt, function(req, res) {
         var ret = new Return();
 
         ret._id = req.body._id;
@@ -49,7 +51,7 @@ router.route('/returns')
         }
     })
 
-    .get(function(req, res) {
+    .get(checkJwt, function(req, res) {
 
         var customerId = req.query.customerId;
 
@@ -63,7 +65,9 @@ router.route('/returns')
 
         } else {
 
-            var query = Return.find({ 'customerId': customerId });
+            var query = Return.find({
+                'customerId': customerId
+            });
 
             // selecting the 'name' and 'age' fields
             query.select('customer date returnNumber customerId total');
@@ -75,17 +79,17 @@ router.route('/returns')
             //query.sort({ age: -1 });
 
             // execute the query at a later time
-            query.exec(function (err, returns) {
-              if (err)
-                  res.send(err);
+            query.exec(function(err, returns) {
+                if (err)
+                    res.send(err);
 
-              res.json(returns);
+                res.json(returns);
             })
         }
     });
 
 router.route('/returns/:return_id')
-    .get(function(req, res) {
+    .get(checkJwt, function(req, res) {
         Return.findById(req.params.return_id, function(err, ret) {
             if (err)
                 res.send(err);
@@ -93,7 +97,7 @@ router.route('/returns/:return_id')
         });
     })
 
-    .put(function(req, res) {
+    .put(checkJwt, function(req, res) {
         Return.findById(req.params.return_id, function(err, ret) {
             if (err)
                 res.send(err);
@@ -113,7 +117,7 @@ router.route('/returns/:return_id')
     })
 
 router.route('/returns/:return_id/items')
-    .post(function(req, res) {
+    .post(checkJwt, function(req, res) {
         Return.findById(req.params.return_id, function(err, ret) {
             if (err)
                 res.send(err);

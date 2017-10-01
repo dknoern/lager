@@ -3,12 +3,14 @@ var router = express.Router();
 
 var Product = require('../models/product');
 
-router.use(function (req, res, next) {
+const checkJwt = require('./jwt-helper').checkJwt;
+
+router.use(function(req, res, next) {
     next();
 });
 
 router.route('/products')
-    .post(function (req, res) {
+    .post(checkJwt, function(req, res) {
 
         var product = new Product();
 
@@ -16,8 +18,10 @@ router.route('/products')
         product.itemNo = req.body.itemNo;
         product.title = req.body.title;
 
-        if(product.title==null)
-        return res.send(500, { error: 'title required'});
+        if (product.title == null)
+            return res.send(500, {
+                error: 'title required'
+            });
 
         product.productType = req.body.productType;
         product.manufacturer = req.body.manufacturer;
@@ -48,15 +52,21 @@ router.route('/products')
         product.seller = req.body.seller;
         product.sellerType = req.body.sellerType;
 
-        var query = { _id: product._id };
-        Product.findOneAndUpdate(query, product, { upsert: true }, function (err, doc) {
-            if (err) return res.send(500, { error: err });
+        var query = {
+            _id: product._id
+        };
+        Product.findOneAndUpdate(query, product, {
+            upsert: true
+        }, function(err, doc) {
+            if (err) return res.send(500, {
+                error: err
+            });
             return res.send("succesfully saved");
         });
     })
 
-    .get(function (req, res) {
-        Product.find(function (err, products) {
+    .get(checkJwt, function(req, res) {
+        Product.find(function(err, products) {
             if (err)
                 res.send(err);
 
@@ -65,10 +75,10 @@ router.route('/products')
     });
 
 router.route('/products/:product_id')
-    .get(function (req, res) {
+    .get(checkJwt, function(req, res) {
 
         if (req.params.product_id) {
-            Product.findById(req.params.product_id, function (err, product) {
+            Product.findById(req.params.product_id, function(err, product) {
                 if (err)
                     res.send(err);
                 res.json(product);
@@ -76,29 +86,33 @@ router.route('/products/:product_id')
         }
     })
 
-    .put(function (req, res) {
-        Product.findById(req.params.product_id, function (err, product) {
+    .put(checkJwt, function(req, res) {
+        Product.findById(req.params.product_id, function(err, product) {
             if (err)
                 res.send(err);
             product.itemNo = req.body.itemNo;
             product.serialNo = req.body.serialNo;
             product.title = req.body.title;
             product.sellingPrice = req.body.sellingPrice;
-            product.save(function (err) {
+            product.save(function(err) {
                 if (err)
                     res.send(err);
-                res.json({ message: 'Product updated!' });
+                res.json({
+                    message: 'Product updated!'
+                });
             });
         });
     })
 
-    .delete(function (req, res) {
+    .delete(checkJwt, function(req, res) {
         Product.remove({
             _id: req.params.product_id
-        }, function (err, product) {
+        }, function(err, product) {
             if (err)
                 res.send(err);
-            res.json({ message: 'Successfully deleted' });
+            res.json({
+                message: 'Successfully deleted'
+            });
         });
     });
 

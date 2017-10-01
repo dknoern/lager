@@ -3,6 +3,8 @@ var multer = require( 'multer' );
 var router = express.Router();
 var fs = require('fs');
 
+const checkJwt = require('./jwt-helper').checkJwt;
+
 router.use(function (req, res, next) {
   next();
 });
@@ -36,7 +38,7 @@ router.route('/upload')
 });
 
 router.route('/upload/:product_id')
-.get(function (req, res){
+.get(checkJwt,function (req, res){
 
   var path = 'uploads';
 
