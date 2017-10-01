@@ -46,6 +46,8 @@
       localStorage.setItem('access_token', authResult.accessToken);
       localStorage.setItem('id_token', authResult.idToken);
       localStorage.setItem('expires_at', expiresAt);
+
+    //  alert("access_token="+ authResult.accessToken + ", id_token="+authResult.idToken);
     }
 
     function logout() {

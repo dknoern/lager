@@ -55,7 +55,7 @@
             clientID: AUTH0_CLIENT_ID,
             domain: AUTH0_DOMAIN,
             responseType: 'token id_token',
-            audience: 'https://' + AUTH0_DOMAIN + '/userinfo',
+            audience: AUTH0_AUDIENCE,
             redirectUri: AUTH0_CALLBACK_URL,
             scope: 'openid profile',
             icon: 'https://www.demesy.com/media/wysiwyg/footer-logo.png'
