@@ -17,6 +17,7 @@
         'singApp.invoice',
         'singApp.returns',
         'singApp.return',
+        'singApp.repair',
         'singApp.repairs',
         'singApp.reports',
         'singApp.form.validation',

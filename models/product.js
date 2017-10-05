@@ -2,14 +2,14 @@ var mongoose     = require('mongoose');
 
 var ProductSchema   = new mongoose.Schema({
 
-	    itemNo: Number,
-	    productType: String,
-	    manufacturer: String,
-	    title: String,
+	  itemNo: Number,
+	  productType: String,
+	  manufacturer: String,
+	  title: String,
 		paymentAmount: Number,
 		paymentMethod: String,
 		paymentDetails: String,
-	    modelNumber: String,
+	  modelNumber: String,
 		model: String,
 		condition: String,
 		gender: String,
@@ -20,7 +20,6 @@ var ProductSchema   = new mongoose.Schema({
 		bracelet: String,
 		comments: String,
 		serialNo: String,
-		modelYear: String,
 		longDesc: String,
 		supplier: String,
 		lastUpdated: String,
@@ -31,15 +30,18 @@ var ProductSchema   = new mongoose.Schema({
 		photo: String,
 		saleDate: String,
 		received: String,
-		statusId: String,
+		status: String,
 		notes: String,
 		ebayNoReserve: Boolean,
 		inventoryItem: Boolean,
 		sellerType: String,
-		seller: String
+		seller: String,
+
+		history: [{
+      user: String,
+      date: Date,
+      action: String
+    }]
 });
 
 module.exports = mongoose.model('Product', ProductSchema);
-
-
-

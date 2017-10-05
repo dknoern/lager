@@ -18,7 +18,7 @@
           <div class="col-sm-3 col-print-3">
             <div class="fine-print">
             Invoice # {{data.invoiceNumber}}<br/>
-            Invoice Date {{data.date}}<br/>
+            Invoice Date {{data.date | date: 'MM/dd/y'}}<br/>
             Sold By {{data.salesPerson}}
             </div>
           </div>

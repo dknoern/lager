@@ -1,11 +1,13 @@
 var mongoose     = require('mongoose');
 
 var CustomerSchema   = new mongoose.Schema({
+	  customerNumber: String,
 	  firstName: String,
 	  lastName: String,
 		company: String,
 		email: String,
 	  phone: String,
+		cell: String,
 		address1: String,
 		address2: String,
 		address3: String,
@@ -19,7 +21,8 @@ var CustomerSchema   = new mongoose.Schema({
 		billingCity: String,
 		billingState: String,
 		billingZip: String,
-		billingCountry: String
+		billingCountry: String,
+		lastUpdated: Date
 });
 
 module.exports = mongoose.model('Customer', CustomerSchema);
