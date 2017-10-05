@@ -18,17 +18,20 @@ var ReturnSchema = new mongoose.Schema({
     returnNumber: String,
     parentInvoiceId: String,
     parentInvoiceNumber: String,
-    date: String,
+    date: Date,
     subtotal: String,
     tax: String,
     shipping: Number,
     total: String,
     salesPerson: String,
     lineItems: [{
-        lineItemId: String,
-        included: Boolean,
+        productId: String,
         name: String,
-        amount: Number
+        amount: Number,
+        serialNo: String,
+        itemNo: String,
+        longDesc: String,
+        included: Boolean
     }]
 });
 /*

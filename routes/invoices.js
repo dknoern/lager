@@ -1,11 +1,12 @@
 var express = require('express');
 var router = express.Router();
-
 var Invoice = require('../models/invoice');
-
+var Product = require('../models/product');
 var mongoose = require('mongoose');
+var history = require('./history');
 
 const checkJwt = require('./jwt-helper').checkJwt;
+
 
 router.route('/invoices')
     .post(checkJwt, function(req, res) {
@@ -16,12 +17,16 @@ router.route('/invoices')
         invoice.customer = req.body.customer;
         invoice.customerId = req.body.customerId;
         invoice.project = req.body.project;
-        invoice.date = req.body.date;
+        invoice.date = new Date(req.body.date);
         invoice.shipVia = req.body.shipVia;
         invoice.paidBy = req.body.paidBy;
         invoice.total = req.body.total;
         invoice.methodOfSale = req.body.methodOfSale;
         invoice.salesPerson = req.body.salesPerson;
+
+        //if(invoice.salesPersion==null||invoice.salesPerson.length==0)
+        //  invoice.salesPerson = eq.user['http://mynamespace/name'];
+
         invoice.invoiceType = req.body.invoiceType;
         invoice.shipToName = req.body.shipToName;
         invoice.shipAddress1 = req.body.shipAddress1;
@@ -35,6 +40,8 @@ router.route('/invoices')
         invoice.tax = req.body.tax;
         invoice.shipping = req.body.shipping;
         invoice.total = req.body.total;
+
+        history.updateProductHistory(req.body.lineItems,"SOLD","sold item",req.user['http://mynamespace/name']);
 
         // use save for updates, findOne and update for inserts for now until we
         // figure out the problem with the "pre" in mongoose.
@@ -62,17 +69,15 @@ router.route('/invoices')
     })
 
     .get(checkJwt, function(req, res) {
-
         var customerId = req.query.customerId;
+        console.log("username is " +  req.user['http://mynamespace/name']);
 
         if (!customerId) {
-
             Invoice.find(function(err, invoices) {
                 if (err)
                     res.send(err);
                 res.json(invoices);
             });
-
         } else {
 
             var query = Invoice.find({ 'customerId': customerId });

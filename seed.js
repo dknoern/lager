@@ -32,12 +32,18 @@ db.products.save({
     photo: "x",
     saleDate: "",
     received: "2/21/2012 0:00:00",
-    status: "In Stock",
+    status: "AVAILABLE",
     notes: "9/16/16: All fixed, thanks!",
     seller: "Brian Kittrel",
     sellerType: "Individual",
     ebayNoReserve: false,
-    inventoryItem: false
+    inventoryItem: false,
+    "history" : [{
+      "action" : "item entered",
+			"date" : Date.now(),
+			"user" : "system",
+			"_id" : ObjectId("000000000000000000000001")
+    }]
 });
 
 
@@ -72,12 +78,18 @@ db.products.save({
     photo: "x",
     saleDate: "",
     received: "2/21/2012 0:00:00",
-    status: "In Stock",
+    status: "AVAILABLE",
     notes: "9/16/14: All fixed, thanks!",
     seller: "Pastime",
     sellerType: "Consignment",
     ebayNoReserve: false,
-    inventoryItem: true
+    inventoryItem: true,
+    "history" : [{
+      "action" : "item entered",
+			"date" : Date.now(),
+			"user" : "system",
+			"_id" : ObjectId("000000000000000000000001")
+    }]
 
 });
 
@@ -113,12 +125,18 @@ db.products.save({
     photo: "x",
     saleDate: "",
     received: "2/21/2012 0:00:00",
-    status: "In Stock",
+    status: "AVAILABLE",
     notes: "9/4/16: All fixed, thanks!",
     seller: "BTI",
     sellerType: "Partner",
     ebayNoReserve: true,
-    inventoryItem: false
+    inventoryItem: false,
+    "history" : [{
+      "action" : "item entered",
+			"date" : Date.now(),
+			"user" : "system",
+			"_id" : ObjectId("000000000000000000000001")
+    }]
 });
 
 
@@ -161,195 +179,6 @@ db.customers.save({
 });
 
 
-
-
-
-
-
-
-
-
-
-db.invoices.save({
-    _id: ObjectId("100000000000000000000006"),
-    customerId: "400000000000000000000011",
-    customer: 'Beth Johanssen',
-    project: "View Ridge Home Staging",
-    invoiceNumber: "5275",
-    date: "October 11, 2015",
-    shipVia: "UPS",
-    paidBy: "Card",
-    total: "$350.50",
-    paymentId: "10023",
-    salesPerson: "David Knoernschild",
-    invoiceType: "Advanced",
-    shipToName: "Mark Watney",
-    shipAddress1: "1300 Eagle Ridge Drive",
-    shipAddress2: "",
-    shipAddress3: "",
-    shipCity: "Renton",
-    shipState: "WA",
-    shipZip: "98055",
-    lineItems: [
-        {
-            name:"Living Room",
-            _id: ObjectId("100000000000000000000007"),
-            amount:500
-        },
-        {
-            name:"Art/Accessories",
-            _id: ObjectId("100000000000000000000008"),
-            amount:100
-        }
-    ],
-    subtotal: "600",
-    tax: "60",
-    shipping: "0",
-    total: "660"
-});
-
-
-db.invoices.save({
-    _id: ObjectId("100000000000000000000007"),
-    customerId: "400000000000000000000011",
-    customer: 'Beth Johanssen',
-    project: "Wedgewood Home Staging",
-    invoiceNumber: "5273",
-    date: "October 5, 2015",
-    shipVia: "USPS",
-    paidBy: "Check",
-    total: "$1200.00",
-    paymentId: "10023",
-    salesPerson: "David Knoernschild",
-    invoiceType: "Basic",
-    shipToName: "Mark Watney",
-    shipAddress1: "1300 Eagle Ridge Drive",
-    shipAddress2: "",
-    shipAddress3: "",
-    shipCity: "Renton",
-    shipState: "WA",
-    shipZip: "98055",
-    lineItems: [
-        {
-            name:"Living room",
-            _id: ObjectId("100000000000000000000027"),
-            amount:450
-        },
-        {
-            name:"Dining room",
-            _id: ObjectId("100000000000000000000028"),
-            amount:300
-        },
-        {
-            name:"Bedroom",
-            _id: ObjectId("100000000000000000000029"),
-            amount:200
-        },
-        {
-            name:"Kitchen/bath",
-            _id: ObjectId("100000000000000000000030"),
-            amount:200
-        },
-        {
-            name:"Art/accessories",
-            _id: ObjectId("100000000000000000000031"),
-            amount:100
-        }
-    ],
-    subtotal: "1250",
-    tax: "125",
-    shipping: "0",
-    total: "1375"
-});
-
-
-
-
-
-
-
-db.invoices.save({
-    _id: ObjectId("100000000000000000000008"),
-    customerId: "400000000000000000000010",
-    customer: 'Rick Martinez',
-    project: "North Seatle Town Home Staging",
-    invoiceNumber: "5264",
-    date: "September 27, 2015",
-    shipVia: "FedEx",
-    paidBy: "Cash",
-    total: "$795.00",
-    paymentId: "10023",
-    salesPerson: "David Knoernschild",
-    invoiceType: "Basic",
-    shipToName: "Mark Watney",
-    shipAddress1: "1300 Eagle Ridge Drive",
-    shipAddress2: "",
-    shipAddress3: "",
-    shipCity: "Renton",
-    shipState: "WA",
-    shipZip: "98055",
-    lineItems: [
-        {
-            name:"Living room/kitchen",
-            _id: ObjectId("100000000000000000000041"),
-            amount:430
-        },
-        {
-            name:"Bedroom",
-            _id: ObjectId("100000000000000000000042"),
-            amount:200
-        },
-        {
-            name:"Art",
-            _id: ObjectId("100000000000000000000043"),
-            amount:100
-        }
-    ],
-    subtotal: "730",
-    tax: "73",
-    shipping: "0",
-    total: "803"
-});
-
-
-db.returns.save({
-    _id: ObjectId("100000000000000000000008"),
-    customerId: "400000000000000000000010",
-    customer: 'Rick Martinez',
-    returnNumber: "1001",
-    invoiceId: "100000000000000000000008",
-    invoiceNumber: "5264",
-    date: "September 27, 2015",
-    total: "$795.00",
-    salesPerson: "David Knoernschild",
-    lineItems: [
-        {
-            name:"Living room/kitchen",
-            _id: ObjectId("100000000000000000000041"),
-            amount:430,
-            included: true
-        },
-        {
-            name:"Bedroom",
-            _id: ObjectId("100000000000000000000042"),
-            amount:200,
-           included: true
-        },
-        {
-            name:"Art",
-            _id: ObjectId("100000000000000000000043"),
-            amount:100,
-            included: false
-        }
-    ],
-    subtotal: "730",
-    tax: "73",
-    shipping: "0",
-    total: "803"
-});
-
-
-
 db.counters.insert(
     {
         _id: "invoiceNumber",
@@ -372,3 +201,63 @@ function getNextSequence(name) {
 
    return ret.seq;
 }
+
+
+
+
+
+db.repairs.save({
+    _id: ObjectId("400000000000000000000010"),
+    repairNumber: '57228',
+    dateOut: '6/2/2017 0:00:00',
+    expectedReturnDate: '6/16/2017 0:00:00',
+    returnDate: '',
+    itemNumber: '57228',
+    description: 'Vintage Ladies Rolex 14k Yellow Gold Watch',
+    repairIssues: '',
+    vendor: 'Alex',
+    customerName: '',
+    phone: '',
+    email: '',
+    repairNotes: 'C.o.a., full service, refurbish, new set bridge.',
+    cost: '125.00',
+    hasPapers: false
+  });
+
+
+  db.repairs.save({
+      _id: ObjectId("400000000000000000000011"),
+      repairNumber: '58365',
+      dateOut: '6/2/2017 0:00:00',
+      expectedReturnDate: '6/16/2017 0:00:00',
+      returnDate: '',
+      itemNumber: '58365',
+      description: 'Vintage Rolex Air-King Mens Stainless Steel Oyster Perpetual Watch 5500',
+      repairIssues: 'Full service, c.o.a., refurbish, new crystal, new mainspring.',
+      vendor: 'Alex',
+      customerName: '',
+      phone: '',
+      email: '',
+      repairNotes: 'Full service, c.o.a., refurbish, new crystal, new mainspring.',
+      cost: '175.00',
+      hasPapers: false
+    });
+
+
+
+  //repairId,dateOut,expectedReturnDate,returnDate,itemNo,description,repairIssues,vendor,customerName,phone,email,
+  //repairNotes,cost,hasPapers
+
+//"58529",6/2/2017 0:00:00,6/12/2017 0:00:00,6/7/2017 0:00:00,"58529","Rolex Datejust Men's Stainless Steel Watch 16220",,"Alex",,,,"Fix power reserve only - no charge.",$0.00,0
+//"58842",6/2/2017 0:00:00,6/12/2017 0:00:00,,"58842","Cartier Tank Francaise Automatic Men's Stainless Steel Watch W51002Q3",,"Alex",,,,"Sent to  Alex on: 06/02/17",,0
+//"58841",6/2/2017 0:00:00,6/12/2017 0:00:00,,"58841","Rolex Ladies Datejust 2-Tone Jubilee Diamond Watch 179173",,"Alex",,,,"Sent to  Alex on: 06/02/17",,1
+//"58846",6/2/2017 0:00:00,6/12/2017 0:00:00,6/13/2017 0:00:00,"58846","Omega Steel Seamaster",,"Alex",,,,"Refurbish case and bracelet.",$75.00,0
+//"58854",6/7/2017 0:00:00,6/17/2017 0:00:00,,"58854","Cartier Pasha 18k White Gold & Diamond Automatic 32mm Ladies Watch","Please service and rhodium","Swiss Connection",,,,"Sent to  Swiss Connection on: 06/07/17",,0
+//"58874",6/13/2017 0:00:00,6/23/2017 0:00:00,,"58874","Rolex Datejust Men's Stainless Steel Watch 16220",,"Alex",,,,"Sent to  Alex on: 06/13/17",,0
+//"58876",6/16/2017 0:00:00,6/26/2017 0:00:00,,"58876","Cartier Tank Americaine (or American) Ladies WG Diamond Watch WB7018L1",,"Alex",,,,"Sent to  Alex on: 06/16/17",,1
+//"58868",6/16/2017 0:00:00,6/26/2017 0:00:00,,"58868","Rolex 2-Tone GMT-Master 16753",,"Alex",,,,"Sent to  Alex on: 06/16/17",,1
+//"58887",6/19/2017 0:00:00,6/29/2017 0:00:00,,"58887","Men's Rolex Yacht-Master II Regatta 18k Yellow Gold Watch 116688","Fix nicks in bazel and refinish watch.","Kovacs",,,,"Sent to  Kovacs on: 06/19/17",,1
+//"57364",6/7/2017 0:00:00,6/17/2017 0:00:00,,"57364","Cartier Tank Francaise Chronograph Men's 18k Gold Watch  W5000556","Warranty service - not running.  Just got it back from servise by you in March of this year.","Swiss Connection",,,,"Sent to  Swiss Connection on: 06/07/17",,0
+//"58855",6/7/2017 0:00:00,6/8/2017 0:00:00,,"58855","Rolex Datejust Men's Stainless Steel Automatic Winding Watch 116200",,"Alex",,,,"Sent to  Alex on: 06/07/17",,0
+//"58853",6/7/2017 0:00:00,6/8/2017 0:00:00,,"58853","Rolex 18k Yellow Gold Men's President 1803",,"Alex",,,,"Sent to  Alex on: 06/07/17",,0
+//"58844",6/8/2017 0:00:00,6/18/2017 0:00:00,,"58845","Cartier Tank Francaise Men's 2-Tone Watch W51005Q4",,"Alex",,,,"Sent to  Alex on: 06/08/17",,0

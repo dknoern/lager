@@ -18,7 +18,7 @@ var InvoiceSchema = new mongoose.Schema({
     invoiceId: String,
     invoiceNumber: String,
     documentType: String,
-    date: String,
+    date: Date,
     shipVia: String,
     paidBy: String,
     subtotal: String,
@@ -37,12 +37,18 @@ var InvoiceSchema = new mongoose.Schema({
     shipZip: String,
 
     lineItems: [{
-        lineItemId: String,
+        productId: String,
         name: String,
         amount: Number,
         serialNo: String,
         itemNo: String,
         longDesc: String
+    }],
+
+    history: [{
+      user: String,
+      date: String,
+      action: String
     }]
 });
 
@@ -62,5 +68,3 @@ InvoiceSchema.pre('save', function (next) {
 });
 
 module.exports = mongoose.model('Invoice', InvoiceSchema);
-
-//module.exports = mongoose.model('Counter', CounterSchema);

@@ -22,7 +22,7 @@
 
           <td><a href="/#/app/invoice/{{invoice._id}}">{{invoice.invoiceNumber}}</a></td>
           <td>{{invoice.customer}}</td>
-          <td>{{invoice.date}}</td>
+          <td>{{invoice.date | date: 'MM/dd/y'}}</td>
           <td class="hidden-xs">{{invoice.lineItems[0].itemNo}}</td>
           <td class="hidden-xs">{{invoice.lineItems[0].name}}</td>
           <td class="hidden-xs">{{invoice.total | currency}}</td>

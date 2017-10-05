@@ -5,8 +5,10 @@
     .controller('InvoiceCtrl', InvoiceCtrl)
   ;
 
-  InvoiceCtrl.$inject = ['$scope', '$resource','$http', '$window', '$location','$state', 'jQuery'];
-  function InvoiceCtrl ($scope, $resource, $http,$window, $location, $state, jQuery) {
+  InvoiceCtrl.$inject = ['$scope', '$resource','$http', '$window', '$location','$state', 'jQuery','authService'];
+  function InvoiceCtrl ($scope, $resource, $http,$window, $location, $state, jQuery,authService) {
+
+    var vm = this;
 
     $scope.dtChanged = function(dt){
       $window.alert('Angular model changed to: ' + dt);
@@ -28,11 +30,19 @@
 
             var fullName = customer.firstName + ' ' + customer.lastName;
 
+
+            var salesPerson = authService.getCachedProfile().name;
+            if(salesPerson!=null&&salesPerson.length>0&&salesPerson.indexOf("@")>0)
+            {
+              salesPerson = salesPerson.substring(0,salesPerson.indexOf("@"));
+            }
+
+
             $scope.data = {
               customer: fullName,
               customerId: customerId,
-              salesPerson: "Ke",
-              date: "09/22/2017",
+              salesPerson: salesPerson,
+              date: Date.now(),
               shipToName: fullName,
               shipping: 5.95,
               shipAddress1: customer.address1,
@@ -49,7 +59,7 @@
 
       }
 
-      $scope.products = $resource('api/products').query();
+      $scope.products = $resource('api/products?status=AVAILABLE').query();
 
     }
 
@@ -61,7 +71,7 @@
 
         var lineItem = {
           name: response.data.title,
-          id: response.data._id,
+          productId: response.data._id,
           itemNo: response.data.itemNo,
           amount: response.data.listPrice,
           serialNo: response.data.serialNo,
@@ -74,6 +84,18 @@
         }
         $scope.data.lineItems.push(lineItem);
         $scope.computeTotals();
+
+
+        // remove selected item from list
+        /*
+        for(var i=0;i<$scope.products;i++){
+          if($scope.products[i]._id == itemId){
+            $scope.products.splice(i,1);
+          }
+        }
+        */
+
+
       });
     }
 

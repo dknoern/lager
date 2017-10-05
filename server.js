@@ -25,6 +25,9 @@ app.use('/api', invoices);
 var returns = require('./routes/returns');
 app.use('/api', returns);
 
+var repairs = require('./routes/repairs');
+app.use('/api', repairs);
+
 var products = require('./routes/products');
 app.use('/api', products);
 

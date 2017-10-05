@@ -26,29 +26,17 @@
 
 
                                         <div class="form-group">
-                                            <label for="hint-field" class="col-sm-3 control-label">Customer</label>
+                                            <label for="hint-field" class="col-sm-3 control-label">Date</label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="address1-field" class="form-control" ng-model="data.customer">
+                                                <input type="text" id="date-field" class="form-control"  readonly="readonly" value="{{data.date | date: 'MM/dd/y'}}">
                                             </div>
                                         </div>
 
 
-
-
-
-
-
                                         <div class="form-group">
-                                            <label for="hint-field" class="col-sm-3 control-label">Date</label>
+                                            <label for="hint-field" class="col-sm-3 control-label">Customer</label>
                                             <div class="col-sm-8">
-                                                <!--input type="text" id="address1-field" class="form-control" ng-model="data.date"-->
-
-
-
-                                                <input id="datetimepicker1" data-ui-jq="datetimepicker" data-ui-options="{ format: 'MM/DD/YYYY' }" data-ng-init="data.date = '08/23/2017'" data-ng-model="data.date" data-ng-change="dtChanged(data.date)" type="text" class="form-control" />
-
-
-
+                                                <input type="text" id="address1-field" class="form-control" ng-model="data.customer">
                                             </div>
                                         </div>
 
@@ -164,7 +152,7 @@
                                                     <button ng-if="!lineItem.included" type="button" class="btn btn-success btn-sm" ng-click="includeItem($index,true)">
                                                       <span class="glyphicon glyphicon-plus" ></span> Include
                                                     </button>
-                                                    <button ng-if="lineItem.included"type="button" class="btn btn-danger btn-sm" ng-click="includeItem($index,false)">
+                                                    <button ng-if="lineItem.included && !data._id" type="button" class="btn btn-danger btn-sm" ng-click="includeItem($index,false)">
                                                       <span class="glyphicon glyphicon-minus" ></span> Exclude
                                                    </button>
                                                 </td>

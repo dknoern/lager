@@ -12,66 +12,97 @@ router.use(function(req, res, next) {
 router.route('/products')
     .post(checkJwt, function(req, res) {
 
-        var product = new Product();
-
-        product._id = req.body._id
-        product.itemNo = req.body.itemNo;
-        product.title = req.body.title;
-
-        if (product.title == null)
+        if (req.body.title == null)
             return res.send(500, {
                 error: 'title required'
             });
 
-        product.productType = req.body.productType;
-        product.manufacturer = req.body.manufacturer;
-        product.title = req.body.title;
-        product.paymentAmount = req.body.paymentAmount;
-        product.paymentMethod = req.body.paymentMethod;
-        product.paymentDetails = req.body.paymentDetails;
-        product.model = req.body.model;
-        product.modelNumber = req.body.modelNumber;
-        product.condition = req.body.condition;
-        product.gender = req.body.gender;
-        product.features = req.body.features;
-        product.case = req.body.case;
-        product.size = req.body.size;
-        product.dial = req.body.dial;
-        product.bracelet = req.body.bracelet;
-        product.comments = req.body.comments;
-        product.serialNo = req.body.serialNo;
-        product.modelYear = req.body.modelYear;
-        product.longDesc = req.body.longDesc;
-        product.supplier = req.body.supplier;
-        product.cost = req.body.cost;
-        product.listPrice = req.body.listPrice;
-        product.repairCost = req.body.repairCost;
-        product.notes = req.body.notes;
-        product.ebayNoReserve = req.body.ebayNoReserve;
-        product.inventoryItem = req.body.inventoryItem;
-        product.seller = req.body.seller;
-        product.sellerType = req.body.sellerType;
-
         var query = {
-            _id: product._id
+            _id: req.body._id
         };
-        Product.findOneAndUpdate(query, product, {
+
+        console.log("id is " + req.body._id);
+
+        var historyEntry = {
+            user: req.user['http://mynamespace/name'],
+            date: Date.now(),
+            action: "updated product info "
+        };
+
+        Product.findOneAndUpdate(query, {
+            "$push": {
+                "history": historyEntry
+            },
+            "$set": {
+                "title": req.body.title,
+                "productType": req.body.productType,
+                "manufacturer": req.body.manufacturer,
+                "paymentAmount": req.body.paymentAmount,
+                "paymentMethod": req.body.paymentMethod,
+                "paymentDetails": req.body.paymentDetails,
+                "model": req.body.model,
+                "modelNumber": req.body.modelNumber,
+                "condition": req.body.condition,
+                "gender": req.body.gender,
+                "features": req.body.features,
+                "case": req.body.case,
+                "size": req.body.size,
+                "dial": req.body.dial,
+                "bracelet": req.body.bracelet,
+                "comments": req.body.comments,
+                "serialNo": req.body.serialNo,
+                "longDesc": req.body.longDesc,
+                "supplier": req.body.supplier,
+                "cost": req.body.cost,
+                "listPrice": req.body.listPrice,
+                "repairCost": req.body.repairCost,
+                "notes": req.body.notes,
+                "ebayNoReserve": req.body.ebayNoReserve,
+                "inventoryItem": req.body.inventoryItem,
+                "seller": req.body.seller,
+                "sellerType": req.body.sellerType
+            }
+        }, {
             upsert: true
         }, function(err, doc) {
             if (err) return res.send(500, {
                 error: err
             });
+
             return res.send("succesfully saved");
         });
+
+
     })
 
     .get(checkJwt, function(req, res) {
-        Product.find(function(err, products) {
-            if (err)
-                res.send(err);
 
-            res.json(products);
-        });
+        var query = "";
+        var status = req.query.status;
+
+        if (status != null) {
+
+            Product.find({'status':status}, function(err, products) {
+                if (err)
+                    res.send(err);
+                res.json(products);
+            });
+            query = "status:" + status;
+        } else {
+            Product.find({}, function(err, products) {
+                if (err)
+                    res.send(err);
+                res.json(products);
+            });
+        }
+        console.log("looking for products with status=" + status);
+
+
+
+
+
+
+
     });
 
 router.route('/products/:product_id')

@@ -4,6 +4,12 @@
 <section class="widget" data-ng-controller="RepairsCtrl">
   <div class="widget-body">
     <div class="mt">
+
+      <p>
+        <a href="/#/app/repair/new"><button type="button" class="btn btn-primary">New Repair</button></a>
+      </p>
+
+
       <table data-datatable="ng" data-dt-options="dtOptions" class="table table-striped table-hover">
         <thead>
         <tr>
@@ -13,20 +19,20 @@
           <th>Item</th>
           <th>Description</th>
           <th>Total</th>
+          <th>Vendor</th>
           <th>Customer</th>
-          <th>Sales Person</th>
         </tr>
         </thead>
         <tbody>
         <tr data-ng-repeat="repair in repairs">
-          <td>{{repair.repairId}}</td>
-          <td>{{repair.dateOut}}</td>
-          <td>{{repair.expectedReturnDate}}</td>
-          <td>{{repair.itemNo}}</td>
+          <td><a href="/#/app/repair/{{repair._id}}">{{repair.repairNumber}}</a></td>
+          <td>{{repair.dateOut | date: 'MM/dd/y'}}</td>
+          <td>{{repair.expectedReturnDate | date: 'MM/dd/y'}}</td>
+          <td>{{repair.itemNumber}}</td>
           <td>{{repair.description}}</td>
-          <td>{{return.totalReturn}}</td>
-          <td>{{return.customerNo}}</td>
-          <td>{{return.salesPerson}}</td>
+          <td>${{repair.cost}}</td>
+          <td>{{repair.vendor}}</td>
+          <td>{{repair.customerName}}</td>
         </tr>
         </tbody>
       </table>

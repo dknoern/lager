@@ -5,6 +5,8 @@ var Return = require('../models/return');
 
 var mongoose = require('mongoose');
 
+var history = require('./history');
+
 const checkJwt = require('./jwt-helper').checkJwt;
 
 router.route('/returns')
@@ -17,7 +19,7 @@ router.route('/returns')
         ret.invoiceNumber = req.body.invoiceNumber;
         ret.customer = req.body.customer;
         ret.customerId = req.body.customerId;
-        ret.date = req.body.date;
+        ret.date = new Date(req.body.date);
         ret.total = req.body.total;
         ret.salesPerson = req.body.salesPerson;
         ret.lineItems = req.body.lineItems;
@@ -25,6 +27,17 @@ router.route('/returns')
         ret.tax = req.body.tax;
         ret.shipping = req.body.shipping;
         ret.total = req.body.total;
+
+
+
+
+
+
+
+
+
+
+
 
         // use save for updates, findOne and update for inserts for now until we
         // figure out the problem with the "pre" in mongoose.
@@ -49,6 +62,20 @@ router.route('/returns')
                 return res.send("return saved");
             });
         }
+
+        console.log("calling updateProductHistory")
+
+
+        // filter out non-included items
+        var includedLineItems = new Array();
+        for (var i = 0, len = req.body.lineItems.length; i < len; i++) {
+          if(req.body.lineItems[i].included){
+            includedLineItems.push(req.body.lineItems[i]);
+          }
+        }
+
+        history.updateProductHistory(includedLineItems,"AVAILABLE","item returned",req.user['http://mynamespace/name']);
+
     })
 
     .get(checkJwt, function(req, res) {
