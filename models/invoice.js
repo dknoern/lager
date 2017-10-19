@@ -11,12 +11,11 @@ var Counter = require('./counter');
 //var counter = mongoose.model('counter', CounterSchema);
 
 var InvoiceSchema = new mongoose.Schema({
-    customer: String,
-    customerId: String,
+  	_id: Number,
+    customerId: Number,
+    customerName: String,
     project: String,
     returnNumber: String,
-    invoiceId: String,
-    invoiceNumber: String,
     documentType: String,
     date: Date,
     shipVia: String,
@@ -40,16 +39,14 @@ var InvoiceSchema = new mongoose.Schema({
         productId: String,
         name: String,
         amount: Number,
-        serialNo: String,
-        itemNo: String,
+        serialNumber: String,
         longDesc: String
-    }],
-
-    history: [{
-      user: String,
-      date: String,
-      action: String
     }]
+    //,history: [{
+    //  user: String,
+    //  date: String,
+    //  action: String
+    //}]
 });
 
 InvoiceSchema.pre('save', function (next) {

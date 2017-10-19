@@ -3,7 +3,7 @@ var Product = require('../models/product');
 module.exports.updateProductHistory = function(lineItems,status,action,user) {
 
 
-    for (var i = 0, len = lineItems.length; i < len; i++) {
+    for (var i = 0; lineItems !=null &&i < lineItems.length; i++) {
         var lineItem = lineItems[i];
 
         console.log("product id " + lineItem.productId);

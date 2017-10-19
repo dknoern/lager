@@ -4,9 +4,9 @@ var Invoice = require('../models/invoice');
 var Product = require('../models/product');
 var mongoose = require('mongoose');
 var history = require('./history');
+var format = require('date-format');
 
 const checkJwt = require('./jwt-helper').checkJwt;
-
 
 router.route('/invoices')
     .post(checkJwt, function(req, res) {
@@ -41,7 +41,11 @@ router.route('/invoices')
         invoice.shipping = req.body.shipping;
         invoice.total = req.body.total;
 
-        history.updateProductHistory(req.body.lineItems,"SOLD","sold item",req.user['http://mynamespace/name']);
+
+
+
+
+      //  history.updateProductHistory(req.body.lineItems, "SOLD", "sold item", req.user['http://mynamespace/name']);
 
         // use save for updates, findOne and update for inserts for now until we
         // figure out the problem with the "pre" in mongoose.
@@ -68,38 +72,100 @@ router.route('/invoices')
         }
     })
 
-    .get(checkJwt, function(req, res) {
-        var customerId = req.query.customerId;
-        console.log("username is " +  req.user['http://mynamespace/name']);
+    .get(function(req, res) {
 
-        if (!customerId) {
-            Invoice.find(function(err, invoices) {
-                if (err)
-                    res.send(err);
-                res.json(invoices);
+        var query = "";
+        var draw = req.query.draw;
+        var start = 0;
+        var length = 10;
+        if (req.query.start) start = req.query.start;
+        if (req.query.length) length = req.query.length;
+        var search = req.query.search.value;
+        console.log('search string is ' + search);
+
+        var results = {
+            "draw": draw,
+            "recordsTotal": 0,
+            "recordsFiltered": 0,
+            "data": []
+        };
+
+        Invoice.find({
+            /*      'customer': new RegExp(search, 'i')
+
+            $or: [{
+                    'customer': new RegExp(search, 'i')
+                },
+                {
+                    'lastName': new RegExp(search, 'i')
+                }
+            ]*/
+        }, function(err, invoices) {
+            if (err)
+                res.send(err);
+
+            for (var i = 0; i < invoices.length; i++) {
+                results.data.push(
+                    [
+                        '<a href=\"/#/app/invoice/' + invoices[i]._id + '\">' + invoices[i]._id + '</a>',
+                        invoices[i].customerName,
+                        format('yyyy-MM-dd', invoices[i].date),
+                        invoices[i].shipAddress1,
+                        invoices[i].shipCity,
+                        invoices[i].total
+                    ]
+                );
+            }
+
+            Invoice.count({}, function(err, count) {
+                results.recordsTotal = count;
+
+                if (search == '' || search == null) {
+                    results.recordsFiltered = count;
+                    res.json(results);
+                } else {
+                    Invoice.count({
+                        'customer': new RegExp(search, 'i')
+                        /*$or: [{
+                                'firstName': new RegExp(search, 'i')
+                            },
+                            {
+                                'lastName': new RegExp(search, 'i')
+                            },
+                            {
+                                'city': new RegExp(search, 'i')
+                            },
+                            {
+                                'state': new RegExp(search, 'i')
+                            },
+                            {
+                                'phone': new RegExp(search, 'i')
+                            },
+                            {
+                                'email': new RegExp(search, 'i')
+                            },
+                            {
+                                'company': new RegExp(search, 'i')
+                            }
+                        ]*/
+                    }, function(err, count) {
+
+                        results.recordsFiltered = count;
+                        res.json(results);
+                    });
+                }
             });
-        } else {
 
-            var query = Invoice.find({ 'customerId': customerId });
-            //var query = Invoice.find({ 'customer': 'Beth Johanssen' });
+        }).sort({
+            _id: -1
+        }).skip(parseInt(start)).limit(parseInt(length)).select({
+            customerName: 1,
+            date: 1,
+            shipAddress1: 1,
+            shipCity: 1,
+            total: 1
+        });
 
-            // selecting the 'name' and 'age' fields
-            query.select('customer date invoiceNumber customerId total');
-
-            // limit our results to 5 items
-            //query.limit(5);
-
-            // sort by age
-            //query.sort({ age: -1 });
-
-            // execute the query at a later time
-            query.exec(function (err, invoices) {
-              if (err)
-                  res.send(err);
-
-              res.json(invoices);
-            })
-        }
     });
 
 router.route('/invoices/:invoice_id')
@@ -132,7 +198,7 @@ router.route('/invoices/:invoice_id')
         });
     })
 
-    .delete(checkJwt,function(req, res) {
+    .delete(checkJwt, function(req, res) {
         Invoice.remove({
             _id: req.params.invoice_id
         }, function(err, invoice) {

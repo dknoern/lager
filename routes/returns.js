@@ -1,13 +1,10 @@
 var express = require('express');
 var router = express.Router();
-
 var Return = require('../models/return');
-
 var mongoose = require('mongoose');
-
 var history = require('./history');
-
 const checkJwt = require('./jwt-helper').checkJwt;
+var format = require('date-format');
 
 router.route('/returns')
     .post(checkJwt, function(req, res) {
@@ -27,17 +24,6 @@ router.route('/returns')
         ret.tax = req.body.tax;
         ret.shipping = req.body.shipping;
         ret.total = req.body.total;
-
-
-
-
-
-
-
-
-
-
-
 
         // use save for updates, findOne and update for inserts for now until we
         // figure out the problem with the "pre" in mongoose.
@@ -78,41 +64,100 @@ router.route('/returns')
 
     })
 
-    .get(checkJwt, function(req, res) {
+    .get(function(req, res) {
 
-        var customerId = req.query.customerId;
+        var query = "";
+        var draw = req.query.draw;
+        var start = 0;
+        var length = 10;
+        if (req.query.start) start = req.query.start;
+        if (req.query.length) length = req.query.length;
+        var search = req.query.search.value;
+        console.log('search string is ' + search);
 
-        if (!customerId) {
+        var results = {
+            "draw": draw,
+            "recordsTotal": 0,
+            "recordsFiltered": 0,
+            "data": []
+        };
 
-            Return.find(function(err, returns) {
-                if (err)
-                    res.send(err);
-                res.json(returns);
+        Return.find({
+            /*      'customer': new RegExp(search, 'i')
+
+            $or: [{
+                    'customer': new RegExp(search, 'i')
+                },
+                {
+                    'lastName': new RegExp(search, 'i')
+                }
+            ]*/
+        }, function(err, returns) {
+            if (err)
+                res.send(err);
+
+            for (var i = 0; i < returns.length; i++) {
+                results.data.push(
+                    [
+                        '<a href=\"/#/app/return/' + returns[i]._id + '\">' + returns[i]._id + '</a>',
+                        returns[i].invoiceId,
+                        format('yyyy-MM-dd', returns[i].returnDate),
+                        returns[i].customerName,
+                        returns[i].salesPerson,
+                        "$"+returns[i].totalReturnAmount
+                    ]
+                );
+            }
+
+            Return.count({}, function(err, count) {
+                results.recordsTotal = count;
+
+                if (search == '' || search == null) {
+                    results.recordsFiltered = count;
+                    res.json(results);
+                } else {
+                    Return.count({
+                        'customer': new RegExp(search, 'i')
+                        /*$or: [{
+                                'firstName': new RegExp(search, 'i')
+                            },
+                            {
+                                'lastName': new RegExp(search, 'i')
+                            },
+                            {
+                                'city': new RegExp(search, 'i')
+                            },
+                            {
+                                'state': new RegExp(search, 'i')
+                            },
+                            {
+                                'phone': new RegExp(search, 'i')
+                            },
+                            {
+                                'email': new RegExp(search, 'i')
+                            },
+                            {
+                                'company': new RegExp(search, 'i')
+                            }
+                        ]*/
+                    }, function(err, count) {
+
+                        results.recordsFiltered = count;
+                        res.json(results);
+                    });
+                }
             });
 
-        } else {
+        }).sort({
+            _id: -1
+        }).skip(parseInt(start)).limit(parseInt(length)).select({
+            invoiceId: 1,
+            returnDate: 1,
+            customerName: 1,
+            salesPerson: 1,
+            totalReturnAmount: 1
+        });
 
-            var query = Return.find({
-                'customerId': customerId
-            });
-
-            // selecting the 'name' and 'age' fields
-            query.select('customer date returnNumber customerId total');
-
-            // limit our results to 5 items
-            //query.limit(5);
-
-            // sort by age
-            //query.sort({ age: -1 });
-
-            // execute the query at a later time
-            query.exec(function(err, returns) {
-                if (err)
-                    res.send(err);
-
-                res.json(returns);
-            })
-        }
     });
 
 router.route('/returns/:return_id')

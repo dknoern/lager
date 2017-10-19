@@ -62,6 +62,7 @@
         $scope.getLongDescritpion = function() {
             return 'this is a long description';
         }
+
         jQuery('#datetimepicker2').datetimepicker();
     }
 })();

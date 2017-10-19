@@ -21,22 +21,16 @@
     if ($scope.invoiceId) {
 
       if("new" == $scope.invoiceId){
-
         var customerId = $location.search().customerId;
-
         $http.get('api/customers/' + customerId).
           success(function (customer) {
             $scope.customer = customer;
-
             var fullName = customer.firstName + ' ' + customer.lastName;
-
-
             var salesPerson = authService.getCachedProfile().name;
             if(salesPerson!=null&&salesPerson.length>0&&salesPerson.indexOf("@")>0)
             {
               salesPerson = salesPerson.substring(0,salesPerson.indexOf("@"));
             }
-
 
             $scope.data = {
               customer: fullName,
@@ -54,15 +48,52 @@
             }
           });
 
-      }else{
-      $scope.data = $resource('api/invoices/:id').get({id: $scope.invoiceId});
 
+      }else{
+        $scope.data = $resource('api/invoices/:id').get({id: $scope.invoiceId});
       }
 
-      $scope.products = $resource('api/products?status=AVAILABLE').query();
+      $scope.products = $resource('api/instock').query();
+
+    }else if ($scope.productId) {
+
+      $scope.invoiceType ="Partner";
+
+      //var product = $resource('api/products/:id').get({id: $scope.productId});
+      //alert('product is ' + JSON.stringify(product));
+      $scope.data = {
+        date: Date.now(),
+        shipping: 0.00,
+        tax: 0.00,
+        lineItems: []
+      }
+
+      var product = $resource('api/products/:id', {id:'@id'});
+      product.get({id:$scope.productId})
+     .$promise.then(function(product) {
+
+       $scope.data.customer = product.seller;
+       $scope.data.shipToName = product.seller;
+       $scope.data.invoiceNumber = product._id;
+
+       var invoiceAmount = product.cost / 2.0;
+
+       $scope.data.subtotal = invoiceAmount;
+       $scope.data.total = invoiceAmount;
+
+       $scope.data.lineItems.push({
+         name: product.title,
+         longDesc: product.longDesc,
+         serialNo: product.serialNo,
+         modelNumber: product.modelNumber,
+         amount: invoiceAmount
+       });
+
+    });
+
+      //$scope.data.lineItems.push($resource('api/instock').query());
 
     }
-
 
     $scope.addItem = function(itemId)
     {

@@ -22,7 +22,7 @@
       $scope.data = $resource('api/repairs/:id').get({id: $scope.repairId});
 
       }
-      $scope.products = $resource('api/products').query();
+      //$scope.products = $resource('api/products').query();
     }
 
 

@@ -1,7 +1,18 @@
 
+<!--script>
+$(document).ready(function() {
+    var table = $('#example').DataTable( {
+        "processing": true,
+        "serverSide": true,
+        "ordering": false,
+        "ajax": "http://localhost:3000/api/products"
+    } );
+} );
+</script-->
+
 <h1 class="page-title"><span class="fw-semi-bold">Products</span></h1>
 
-<section class="widget" data-ng-controller="AngularWayCtrl">
+<section class="widget">
 
   <div class="widget-body">
     <div class="mt">
@@ -10,31 +21,18 @@
       <a href="/#/app/item"><button type="button" class="btn btn-primary">Add Product</button></a>
     </p>
 
-
-      <table data-datatable="ng" data-dt-options="dtOptions" class="table table-striped table-hover">
+    <table id="example" class="display" cellspacing="0" width="100%">
         <thead>
-        <tr>
-          <th>ID</th>
-          <th>Description</th>
-          <th class="no-sort hidden-xs">Price</th>
-          <th class="hidden-xs">Style</th>
-          <th class="hidden-xs">Case</th>
-          <th class="no-sort">Serial Number</th>
-        </tr>
+            <tr>
+                <th>Item</th>
+                <th>Title</th>
+                <th>Serial No</th>
+                <th>SKU</th>
+                <th>Status</th>
+                <th>Cost</th>
+            </tr>
         </thead>
-        <tbody>
-        <tr data-ng-repeat="item in people">
-          <td>{{item.itemNo}}</td>
-          <td><a href="/#/app/item/{{item._id}}">{{item.title}}</a></td>
-          <td>{{item.sellingPrice}}</td>
-          <td class="hidden-xs"><a href="#">{{item.style}}</a></td>
-          <td class="hidden-xs">{{item.case}}</td>
-          <td class="hidden-xs">{{item.serialNo}}</td>
-        </tr>
-        </tbody>
-      </table>
-
+    </table>
 
     </div>
   </div>
-</section>

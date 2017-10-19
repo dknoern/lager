@@ -32,13 +32,22 @@
 
 
         $stateProvider
-          .state('app.bro2', {
+          .state('app.extrainvoice', {
             url: '/invoice/:invoiceId',
             templateUrl: 'app/modules/invoice/extra-invoice.html',
             controller: function($scope, $stateParams) {
               $scope.invoiceId = $stateParams.invoiceId;
             }
           });
+
+          $stateProvider
+            .state('app.partnerinvoice', {
+              url: '/partnerinvoice/:productId',
+              templateUrl: 'app/modules/invoice/extra-invoice.html',
+              controller: function($scope, $stateParams) {
+                $scope.productId = $stateParams.productId;
+              }
+            });
 
 
 

@@ -1,56 +1,41 @@
+<style>
+    .form-group.required .control-label:after {
+        content: " *";
+        color: darkred;
+    }
+</style>
+
 <script>
-    function assignProductNumber() {
 
-        var type = document.getElementById('productType').value;
-        var itemNumber = document.getElementById('itemNumber').value;
-        var consignment = document.getElementById('consignment').value;
+    function buildLongDesc() {
+        var title = document.getElementById('title').value;
+        var modelName = document.getElementById('model').value;
+        var features = document.getElementById('features').value;
+        var caseText = document.getElementById('case').value;
+        var dial = document.getElementById('dial').value;
+        var bracelet = document.getElementById('bracelet').value;
+        var comments = document.getElementById('comments').value;
 
-        if (consignment != "") {
-            document.getElementById('itemNumber').value = "";
-        } else if (type == 'Jewelry') {
-            document.getElementById('itemNumber').value = "J2000123";
-        } else {
-            document.getElementById('itemNumber').value = "2000123";
-        }
+        var longDesc = title + ' - ';
+
+        longDesc = addLongDescPart(longDesc, features);
+        longDesc = addLongDescPart(longDesc, model);
+        longDesc = addLongDescPart(longDesc, caseText);
+        longDesc = addLongDescPart(longDesc, dial);
+        longDesc = addLongDescPart(longDesc, bracelet);
+        longDesc = addLongDescPart(longDesc, comments);
+
+        var longDescField = document.getElementById("longDesc");
+        var element = angular.element(longDescField);
+        element.val(longDesc);
+        element.triggerHandler('input');
     }
 
-
-    function buildLongDesc()
-    {
-      var title = document.getElementById('title').value;
-      var modelName = document.getElementById('model').value;
-      var features = document.getElementById('features').value;
-      var caseText = document.getElementById('case').value;
-      var dial = document.getElementById('dial').value;
-      var bracelet = document.getElementById('bracelet').value;
-      var comments = document.getElementById('comments').value;
-
-      var longDesc = title + ' - ';
-
-      longDesc = addLongDescPart(longDesc,features);
-      longDesc = addLongDescPart(longDesc,model);
-      longDesc = addLongDescPart(longDesc,caseText);
-      longDesc = addLongDescPart(longDesc,dial);
-      longDesc = addLongDescPart(longDesc,bracelet);
-      longDesc = addLongDescPart(longDesc,comments);
-
-      var longDescField = document.getElementById("longDesc");
-      var element = angular.element(longDescField);
-      element.val(longDesc);
-      element.triggerHandler('input');
+    function addLongDescPart(longDesc, part) {
+        if (part && part.length > 0)
+            longDesc += part + '. ';
+        return longDesc;
     }
-
-    function addLongDescPart(longDesc, part)
-    {
-      if(part && part.length>0)
-        longDesc += part + '. ';
-      return longDesc;
-    }
-
-
-
-
-
 </script>
 
 
@@ -64,33 +49,30 @@
         <div class="col-md-12">
             <section class="widget">
                 <div class="widget-body">
-                    <form class="form-horizontal" role="form" data-ui-jq="parsley" data-parsley-priority-enabled="false" novalidate="novalidate" data-ng-controller="ItemCtrl">
+                    <form name="productForm" class="form-horizontal" role="form" data-ui-jq="parsley" data-parsley-priority-enabled="false" data-ng-controller="ItemCtrl" novalidate="novalidate">
                         <div class="row">
-
-
-
-
-
                             <div class="col-sm-7">
-
                                 <fieldset>
-
-                                    <input type="hidden" id="itemNumber" class="form-control" ng-model="data._id" readonly="readonly">
-
-                                    <div class="form-group">
-                                        <label for="hint-field" class="col-sm-3 control-label">Product Type</label>
+                                    <div class="form-group required">
+                                        <label for="productType" class="col-sm-3 control-label">Product Type</label>
                                         <div class="col-sm-8">
-
-
-                                            <select ng-model="data.productType" id="productType" class="selectpicker" data-selectpicker data-width="auto" onchange="assignProductNumber()">
-                    <option></option>
-                    <option>Accessories</option>
-                    <option>Jewelry</option>
-                    <option>Watch</option>
-                    <option>Pocket Watch</option>
-                  </select>
+                                            <select ng-model="data.productType" id="productType" class="selectpicker form-control" data-selectpicker data-width="auto" required>
+                                              <option></option>
+                                              <option>Accessories</option>
+                                              <option>Jewelry</option>
+                                              <option>Watch</option>
+                                              <option>Pocket Watch</option>
+                                              </select>
                                         </div>
                                     </div>
+
+                                    <div class="form-group required">
+                                        <label for="title" class="col-sm-3 control-label">Title</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="title" class="form-control" ng-model="data.title" required="required" onchange="buildLongDesc()">
+                                        </div>
+                                    </div>
+
 
                                     <div class="form-group">
                                         <label for="hint-field" class="col-sm-3 control-label">Manufacturer</label>
@@ -117,7 +99,7 @@
                     <option>Girard-Perregaux</option>
                     <option>Hublot</option>
                     <option>IWC</option>
-                    <option>Jaeger-LeCou</option>ltre
+                    <option>Jaeger-LeCoultre</option>
                     <option>Movado</option>
                     <option>Omega</option>
                     <option>Panerai</option>
@@ -139,7 +121,7 @@
                                     <div class="form-group">
                                         <label for="normal-field" class="col-sm-3 control-label">Item No</label>
                                         <div class="col-sm-8">
-                                            <input type="text" id="itemNumber" class="form-control" ng-model="data.itemNo">
+                                            <input type="text" id="itemNumber" class="form-control" ng-model="data._id" readonly="readonly">
                                         </div>
                                     </div>
 
@@ -158,7 +140,7 @@
                                     <div class="form-group">
                                         <label for="method" class="col-sm-3 control-label">Pmt Method</label>
                                         <div class="col-sm-8">
-                                            <select ng-model="data.paymentMethod" id="paymentMethod" class="selectpicker" data-selectpicker data-width="auto" onchange="assignProductNumber()">
+                                            <select ng-model="data.paymentMethod" id="paymentMethod" class="selectpicker" data-selectpicker data-width="auto">
                   <option></option>
                   <option>Cash</option>
                   <option>Check</option>
@@ -176,12 +158,7 @@
                                     </div>
 
 
-                                    <div class="form-group">
-                                        <label for="hint-field" class="col-sm-3 control-label">Title</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" id="title" class="form-control" ng-model="data.title" required="required" onchange="buildLongDesc()">
-                                        </div>
-                                    </div>
+
 
                                     <div class="form-group">
                                         <label for="hint-field" class="col-sm-3 control-label">Model Name</label>
@@ -263,22 +240,18 @@
                                     <div class="form-group">
                                         <label for="hint-field" class="col-sm-3 control-label">Long Desc</label>
                                         <div class="col-sm-8">
-                                            <textarea class="form-control" rows="4" id="longDesc" ng-model="data.longDesc" ></textarea>
-
+                                            <textarea class="form-control" rows="4" id="longDesc" ng-model="data.longDesc"></textarea>
                                         </div>
                                     </div>
-
-
                                 </fieldset>
-
                             </div>
-
                             <div class="col-sm-5">
 
-                                <div class="form-group">
-                                    <label for="hint-field" class="col-sm-3 control-label">Seller Type</label>
+                                <div class="form-group required">
+                                    <label for="sellerType" class="col-sm-3 control-label">Seller Type</label>
                                     <div class="col-sm-8">
-                                        <select id="sellerType" class="selectpicker" data-selectpicker data-width="auto" onchange="assignProductNumber()" ng-model="data.sellerType">
+                                        <select id="sellerType" class="selectpicker" data-selectpicker data-width="auto" ng-model="data.sellerType" required>
+                    <option></option>
                     <option>Individual</option>
                     <option>Partner</option>
                     <option>Consignment</option>
@@ -286,26 +259,30 @@
                                     </div>
                                 </div>
 
-
-                                <div class="form-group">
-                                    <label for="hint-field" class="col-sm-3 control-label">Seller</label>
+                                <div class="form-group required">
+                                    <label for="seller" class="col-sm-3 control-label">Seller</label>
                                     <div class="col-sm-8">
-                                        <input type="text" id="seller" class="form-control" ng-model="data.seller">
+                                        <input type="text" id="seller" class="form-control" ng-model="data.seller" required>
                                     </div>
+                                </div>
+
+
+                                <div ng-if="'Partner' == data.sellerType" >
+                                  <a href="/#/app/partnerinvoice/{{data._id}}">Partner invoice</a>
                                 </div>
 
                                 <div class="form-group">
                                     <div class="col-sm-3"></div>
                                     <div class="col-sm-8">
-                                      <div class="form-group checkbox checkbox-primary">
-                                          <input type="checkbox" id="ebay" ng-model="data.ebayNoReserve">
-                                          <label for="ebay">Ebay NR</label>
-                                      </div>
+                                        <div class="form-group checkbox checkbox-primary">
+                                            <input type="checkbox" id="ebay" ng-model="data.ebayNoReserve">
+                                            <label for="ebay">Ebay NR</label>
+                                        </div>
 
-                                      <div class="form-group checkbox checkbox-primary">
+                                        <div class="form-group checkbox checkbox-primary">
                                             <input type="checkbox" id="inventory" ng-model="data.inventoryItem">
                                             <label for="inventory">Inventory</label>
-                                      </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -314,14 +291,14 @@
                                     <label for="hint-field" class="col-sm-3 control-label">Status</label>
                                     <div class="col-sm-8">
 
-                                      <!--select id="status" class="selectpicker" data-selectpicker data-width="auto" ng-model="data.status">
+                                        <!--select id="status" class="selectpicker" data-selectpicker data-width="auto" ng-model="data.status">
                                         <option>In Stock</option>
                                         <option>Sale Pending</option>
                                         <option>Repair</option>
                                         <option>At Show</option>
                                         <option>Unavailable</option>
                                       </select-->
-                                      <input type="text" id="status" class="form-control" ng-model="data.status" readonly="readonly"/>
+                                        <input type="text" id="status" class="form-control" ng-model="data.status" readonly="readonly">
                                     </div>
                                 </div>
 
@@ -371,7 +348,7 @@
                                                 <div class="col-sm-8">
                                                     <div class="input-group">
                                                         <span class="input-group-addon">$</span>
-                                                        <input type="number" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency" id="paymentAmount" ng-model="data.repairCost">
+                                                        <input type="number" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency" id="paymentAmount" ng-model="data.totalRepairCost">
                                                     </div>
                                                 </div>
                                             </div>
@@ -381,7 +358,7 @@
                                                 <div class="col-sm-8">
                                                     <div class="input-group">
                                                         <span class="input-group-addon">$</span>
-                                                        <input type="number" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency" id="paymentAmount" value="{{(data.paymentAmount-0) + (data.repairCost-0)}}" disabled="disabled">
+                                                        <input type="number" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency" id="paymentAmount" value="{{(data.paymentAmount-0) + (data.totalRepairCost-0)}}" disabled="disabled">
                                                     </div>
                                                 </div>
                                             </div>
@@ -399,9 +376,9 @@
                                             </thead>
                                             <tbody>
                                                 <tr data-ng-repeat="historyEntry in data.history">
-                                                  <td>{{historyEntry.date | date :  "MM/dd/y"}}</td>
-                                                  <td>{{historyEntry.user}}</td>
-                                                  <td>{{historyEntry.action}}</td>
+                                                    <td>{{historyEntry.date | date : "MM/dd/y"}}</td>
+                                                    <td>{{historyEntry.user}}</td>
+                                                    <td>{{historyEntry.action}}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -422,15 +399,15 @@
             </div-->
 
 
-            <div>
-              <table>
-                <tr>
-                  <td data-ng-repeat="image in images">
-                    <img ng-src="{{image}}" width=70%>
-                  </td>
-                </tr>
-              </table>
-            </div>
+                                <div>
+                                    <table>
+                                        <tr>
+                                            <td data-ng-repeat="image in images">
+                                                <img ng-src="{{image}}" width=70%>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
                             </div>
                         </div>
 
@@ -438,7 +415,7 @@
                         <div class="form-actions">
                             <div class="row">
                                 <div class="col-sm-offset-4 col-sm-7">
-                                    <button type="submit" class="btn btn-primary" ng-click="go()">Save</button>
+                                    <button type="submit" class="btn btn-primary" ng-click="go()" ng-disabled="productForm.$invalid">Save</button>
                                     <a href="/#/app/inventory"><button type="button" class="btn btn-inverse"> Cancel</button></a>
                                 </div>
                             </div>
@@ -454,20 +431,20 @@
 
 
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="col-md-6">
-                <section class="widget">
-                    <header>
-                        <h5><strong>Image Upload</strong></h5>
-                    </header>
-                    <div class="widget-body">
-                      <form class="dropzone" action="/api/upload" data-dropzone action="#" id="myDropzone">
-                        <input type="hidden" name="itemId" value="{{itemId}}"/>
-                      </form>
-                    </div>
-                </section>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-6">
+                    <section class="widget">
+                        <header>
+                            <h5><strong>Image Upload</strong></h5>
+                        </header>
+                        <div class="widget-body">
+                            <form class="dropzone" action="/api/upload" data-dropzone action="#" id="myDropzone">
+                                <input type="hidden" name="itemId" value="{{itemId}}" />
+                            </form>
+                        </div>
+                    </section>
+                </div>
             </div>
         </div>
     </div>
-</div>

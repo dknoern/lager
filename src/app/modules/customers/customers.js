@@ -85,28 +85,12 @@
       }
     } );
 
-    $scope.customers = $resource('api/customers').query();
-    $scope.dtOptions = DTOptionsBuilder.newOptions()
-      .withBootstrap()
-      .withOption('sDom', "<'row'<'col-md-6 hidden-xs'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>")
-      .withOption('oLanguage', {
-        "sLengthMenu": '_MENU_',
-        "sInfo": 'Showing <strong>_START_ to _END_</strong> of _TOTAL_ entries'
-      })
-      .withOption('sPaginationType', 'bootstrap')
-      .withOption('oClasses', {
-        "sFilter": 'pull-right',
-        "sFilterInput": 'form-control input-rounded ml-sm',
-        "sWrapper": 'dataTables_wrapper form-inline',
-        "sLength": 'dataTables_length blahblahcar'
-      })
-      .withOption('aoColumns', [null,null,{"bSortable": false}, null, null, {"bSortable": false},null,null])
-      .withOption('initComplete', function(){
-        //bad but creating a separate directive for demo is stupid
-        jQuery('.dataTables_length select').selectpicker({
-          width: 'auto'
-        });
-      });
+    jQuery('#example').DataTable( {
+            "processing": true,
+            "serverSide": true,
+            "ordering": false,
+            "ajax": "http://localhost:3000/api/customers"
+        } );
   }
 
 })();
