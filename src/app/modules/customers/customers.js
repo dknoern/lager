@@ -89,7 +89,7 @@
             "processing": true,
             "serverSide": true,
             "ordering": false,
-            "ajax": "http://localhost:3000/api/customers"
+            "ajax": "/api/customers"
         } );
   }
 
