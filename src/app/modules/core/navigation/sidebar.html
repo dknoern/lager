@@ -95,13 +95,33 @@
                 </a>
             </li>
 
+
             <li>
-                <a data-ui-sref="app.reports">
+
+                <a class="collapsed" data-target="#sidebar-tables" data-toggle="collapse" data-parent="#sidebar">
                     <span class="icon">
             <i class="glyphicon glyphicon-stats"></i>
           </span> Reports
+                    <i class="toggle fa fa-angle-down"></i>
                 </a>
+                <ul id="sidebar-tables" class="collapse">
+                    <li><a data-ui-sref="app.reports">Outstanding repairs</a></li>
+                    <li><a data-ui-sref="app.reports2">Items on memo</a></li>
+                    <li><a data-ui-sref="app.reports3">Daily sales</a></li>
+                    <li><a data-ui-sref="app.reports4">Returns summary</a></li>
+                    <li><a data-ui-sref="app.reports5">Partnership items</a></li>
+                    <li><a data-ui-sref="app.reports6">Monthly sales</a></li>
+                    <li><a data-ui-sref="app.reports7">Out at show</a></li>
+                    <li><a data-ui-sref="app.reports8">Show</a></li>
+                    <li><a data-ui-sref="app.reports9">Items received</a></li>
+                    <li><a data-ui-sref="app.reports10">Items bought</a></li>
+                </ul>
             </li>
+
+
+
+
+
 <!--
             <li>
                 <a data-ui-sref="app.profile">
@@ -116,6 +136,10 @@
 -->
 
         </ul>
+
+
+
+
 
 
 <!--
@@ -173,19 +197,7 @@
                     <li><a data-ui-sref="app.maps-vector">Vector Maps</a></li>
                 </ul>
             </li>
-            <li>
 
-                <a class="collapsed" data-target="#sidebar-tables" data-toggle="collapse" data-parent="#sidebar">
-                    <span class="icon">
-            <i class="fa fa-table"></i>
-          </span> Tables
-                    <i class="toggle fa fa-angle-down"></i>
-                </a>
-                <ul id="sidebar-tables" class="collapse">
-                    <li><a data-ui-sref="app.tables-basic">Tables Basic</a></li>
-                    <li><a data-ui-sref="app.tables-dynamic">Tables Dynamic <sup class="bg-transparent text-danger fs-sm fw-bold">ng</sup></a></li>
-                </ul>
-            </li>
             <li>
                 <a class="collapsed" data-target="#sidebar-extra" data-toggle="collapse" data-parent="#sidebar">
                     <span class="icon">
@@ -271,7 +283,6 @@
 
 
 -->
-
 
 
     </div>

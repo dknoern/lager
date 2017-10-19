@@ -1,7 +1,7 @@
 var mongoose     = require('mongoose');
 
 var CustomerSchema   = new mongoose.Schema({
-	  customerNumber: String,
+	  _id: Number,
 	  firstName: String,
 	  lastName: String,
 		company: String,
@@ -24,5 +24,6 @@ var CustomerSchema   = new mongoose.Schema({
 		billingCountry: String,
 		lastUpdated: Date
 });
+
 
 module.exports = mongoose.model('Customer', CustomerSchema);

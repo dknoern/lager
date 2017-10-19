@@ -183,12 +183,20 @@ db.counters.insert(
     {
         _id: "invoiceNumber",
         seq: 6000
-    },
-    {
+    });
+db.counters.insert({
         _id: "returnNumber",
         seq: 2000
-    }
-);
+    });
+db.counters.insert({
+        _id: "productNumber",
+        seq:100000
+    });
+
+    db.counters.insert({
+            _id: "customerNumber",
+            seq:4000
+        });
 
 function getNextSequence(name) {
    var ret = db.counters.findAndModify(

@@ -44,7 +44,6 @@
                   <div class="col-sm-6 col-print-6">SKU: {{lineItem.itemNo}}{{data.date.substr(0,2)}}</div>
               </div>
 
-
             </td>
             <td>{{lineItem.amount | currency}}</td>
           </tr>
@@ -52,7 +51,6 @@
           <tr><td></td><td align="right">SUB TOTAL:</td><td>{{data.subtotal | currency}}</td></tr>
           <tr><td></td><td align="right">TAX 8.5%:</td><td>{{data.tax | currency}}</td></tr>
           <tr><td></td><td align="right">SHIPPING:</td><td>{{data.shipping | currency}}</td></tr>
-
 
           <tr>
             <td></td>
@@ -120,8 +118,7 @@
             &nbsp;&nbsp;
             Print
           </button>
-
-          <a href="/#/app/invoice/edit/{{data._id}}">
+          <a href="/#/app/invoice/edit/{{data._id}}"  ng-if="'Partner' !=invoiceType" >
           <button class="btn btn-success">
             Edit Invoice
             &nbsp;

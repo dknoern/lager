@@ -54,7 +54,6 @@
 
       }
 
-      $scope.products = $resource('api/products').query();
 
     }
 

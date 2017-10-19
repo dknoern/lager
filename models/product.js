@@ -1,8 +1,7 @@
 var mongoose     = require('mongoose');
 
 var ProductSchema   = new mongoose.Schema({
-
-	  itemNo: Number,
+  	_id: String,
 	  productType: String,
 	  manufacturer: String,
 	  title: String,
@@ -22,11 +21,11 @@ var ProductSchema   = new mongoose.Schema({
 		serialNo: String,
 		longDesc: String,
 		supplier: String,
-		lastUpdated: String,
-		userId: String,
+		lastUpdated: Date,
 		cost: Number,
 		listPrice: Number,
-		repairCost: Number,
+		totalRepairCost: Number,
+    sellingPrice: Number,
 		photo: String,
 		saleDate: String,
 		received: String,

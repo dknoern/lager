@@ -11,18 +11,16 @@ var Counter = require('./counter');
 //var CounterSchema = require('./invoice');
 
 var ReturnSchema = new mongoose.Schema({
-    customer: String,
-    customerId: String,
-    project: String,
-    invoiceNumber: String,
-    returnNumber: String,
-    parentInvoiceId: String,
-    parentInvoiceNumber: String,
-    date: Date,
-    subtotal: String,
-    tax: String,
+    _id: Number,
+    customerName: String,
+    customerId: Number,
+    invoiceId: String,
+    returnDate: Date,
+    subTotal: Number,
+    taxable: Boolean,
+    salesTax: Number,
     shipping: Number,
-    total: String,
+    totalReturnAmount: Number,
     salesPerson: String,
     lineItems: [{
         productId: String,
