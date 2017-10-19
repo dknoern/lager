@@ -24,10 +24,10 @@ console.log("refreshing DB");
 //loadCsvFile("data/Inventory.txt",loadProduct);
 //loadCsvFile("data/Customers.txt",loadCustomer);
 //loadCsvFile("data/Invoices.txt", loadInvoice);
-loadCsvFile("data/Returns.txt",loadReturn);
+//loadCsvFile("data/Returns.txt",loadReturn);
 //loadCsvFile("data/Repairs.txt",loadRepair);
 //loadCsvFile("data/Invoice_Detail.txt",loadInvoiceDetail);
-//loadCsvFile("data/Returns_Detail.txt",loadReturnDetail);
+loadCsvFile("data/Returns_Detail.txt",loadReturnDetail);
 
 
 function loadCsvFile(file, functionRef) {
