@@ -34,6 +34,11 @@ app.use('/api', products);
 var upload = require('./routes/upload');
 app.use('/api', upload);
 
+var reports = require('./routes/reports');
+app.use('/api', reports);
+
+
+
 app.use('/', express.static(__dirname +  '/'));
 
 app.get('/*', function(req, res) {
