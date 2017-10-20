@@ -49,6 +49,11 @@ router.route('/repairs')
         history.updateProductHistory(lineItems,"REPAIR","in repair",req.user['http://mynamespace/name']);
     })
 
+
+
+
+
+
     .get(function(req, res) {
 
         var query = "";
@@ -144,6 +149,7 @@ router.route('/repairs')
         });
 
     });
+
 
 router.route('/repairs/:repair_id')
     .get(checkJwt, function(req, res) {

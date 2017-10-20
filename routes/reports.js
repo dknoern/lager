@@ -1,128 +1,64 @@
 var express = require('express');
 var router = express.Router();
 var Product = require('../models/product');
+var Repair = require('../models/repair');
 var Counter = require('../models/counter');
 const checkJwt = require('./jwt-helper').checkJwt;
+var format = require('date-format');
 
 router.use(function(req, res, next) {
     next();
 });
 
+router.route('/reports/outstanding-repairs')
+    .get(function(req, res) {
+        var results = {
+            //"draw": draw,
+            //"recordsTotal": 0,
+            //"recordsFiltered": 0,
+            "data": []
+        };
 
-var getNextSequence = function(){
-  Counter.findByIdAndUpdate({_id: 'productId'}, {$inc: {seq: 1}}, function (error, counter) {
-        return counter.seq;
+        Repair.find({
+            'returnDate': null
+
+        }, function(err, repairs) {
+            if (err)
+                res.send(err);
+
+            for (var i = 0; i < repairs.length; i++) {
+                results.data.push(
+                    [
+                        repairs[i].itemId,
+                        repairs[i].vendor,
+                        repairs[i].description,
+                        format('yyyy-MM-dd', repairs[i].dateOut)
+                    ]
+                );
+            }
+
+
+            res.json(results);
+
+        }).sort({
+            dateOut: -1
+        }).select({
+            itemId: 1,
+            vendor: 1,
+            description: 1,
+            dateOut: 1
+        });
     });
-}
-
-var upsertProduct = function(req,res,productId, action)
-{
-  var paymentAmount = req.body.paymentAmount || 0;
-  var totalRepairCost = req.body.totalRepairCost || 0;
-  var cost = paymentAmount + totalRepairCost;
-
-  Product.findOneAndUpdate({_id: productId}, {
-
-      "$push": {
-          "history": {
-              user: req.user['http://mynamespace/name'],
-              date: Date.now(),
-              action: action
-          }
-      },
-      "$set": {
-          "_id" : productId,
-          "title": req.body.title,
-          "productType": req.body.productType,
-          "manufacturer": req.body.manufacturer,
-          "paymentAmount": paymentAmount,
-          "paymentMethod": req.body.paymentMethod,
-          "paymentDetails": req.body.paymentDetails,
-          "model": req.body.model,
-          "modelNumber": req.body.modelNumber,
-          "condition": req.body.condition,
-          "gender": req.body.gender,
-          "features": req.body.features,
-          "case": req.body.case,
-          "size": req.body.size,
-          "dial": req.body.dial,
-          "bracelet": req.body.bracelet,
-          "comments": req.body.comments,
-          "serialNo": req.body.serialNo,
-          "longDesc": req.body.longDesc,
-          "supplier": req.body.supplier,
-          "cost": cost,
-          "listPrice": req.body.listPrice || 0,
-          "totalRepairCost": totalRepairCost,
-          "notes": req.body.notes,
-          "ebayNoReserve": req.body.ebayNoReserve,
-          "inventoryItem": req.body.inventoryItem,
-          "seller": req.body.seller,
-          "sellerType": req.body.sellerType,
-          "lastUpdated" : Date.now(),
-          "status": req.body.status
-      }
-  }, {
-      upsert: true
-  }, function(err, doc) {
-      if (err) return res.send(500, {error: err  });
-      return res.send("succesfully saved");
-  });
-}
-
-router.route('/instock')
-
-.get(checkJwt, function(req, res) {
-
-   var query = "";
-   var status = 'In Stock';
-   //var status = req.query.status;
-
-   if (status != null) {
-
-       Product.find({
-           'status': status
-       }, function(err, products) {
-           if (err) res.send(err);
-           res.json(products);
-       });
-       query = "status:" + status;
-   } else {
-       Product.find({}, function(err, products) {
-           if (err) res.send(err);
-           res.json(products);
-       });
-   }
-   console.log("looking for products with status=" + status);
-});
 
 
 
 
 
 
-router.route('/products')
-    .post(checkJwt, function(req, res) {
 
-        if (req.body._id == null) {
-          if(req.body.sellerType == 'Partner'){
-            req.body.status = 'Partnership';
-          }else{
-            req.body.status = 'In Stock';
-          }
-          Counter.findByIdAndUpdate({_id: 'productNumber'}, {$inc: {seq: 1}}, function (err, counter) {
-                if (err){
-                  console.log(err);
-                  return res.send(500, {error: err  });
-                }
-                return upsertProduct(req,res,counter.seq,"product created");
-          });
-        }else{
-          return upsertProduct(req,res,req.body._id,"product updated");
-        }
-      })
 
-    //.get(checkJwt, function(req, res) {
+
+router.route('/reports/products-memo')
     .get(function(req, res) {
 
         var query = "";
@@ -138,8 +74,8 @@ router.route('/products')
         var search = req.query.search.value;
         var results = {
             "draw": draw,
-            "recordsTotal": 57,
-            "recordsFiltered": 57,
+            "recordsTotal": 0,
+            "recordsFiltered": 0,
             "data": []
         };
 
@@ -177,11 +113,11 @@ router.route('/products')
                     var statusBadge = "";
 
                     var badgeStyle = "default"; // grey
-                    if (products[i].status == 'In Stock' || products[i].status == 'Partnership' ||  products[i].status == 'Problem')
-                      badgeStyle = "success"; // green
-                    else if (products[i].status =='Repair' || products[i].status =='Memo' || products[i].status =='At Show')
-                      badgeStyle = "warning" // yellow
-                      else if (products[i].status =='Sale Pending')
+                    if (products[i].status == 'In Stock' || products[i].status == 'Partnership' || products[i].status == 'Problem')
+                        badgeStyle = "success"; // green
+                    else if (products[i].status == 'Repair' || products[i].status == 'Memo' || products[i].status == 'At Show')
+                        badgeStyle = "warning" // yellow
+                    else if (products[i].status == 'Sale Pending')
                         badgeStyle = "danger" // red
 
                     results.data.push(
@@ -190,8 +126,8 @@ router.route('/products')
                             products[i].title,
                             products[i].serialNo,
                             products[i].model,
-                             "<span class=\"badge bg-"+badgeStyle+"\">"+products[i].status+"</span>",
-                            "$"+products[i].cost
+                            "<span class=\"badge bg-" + badgeStyle + "\">" + products[i].status + "</span>",
+                            "$" + products[i].cost
                         ]
                     );
                 }

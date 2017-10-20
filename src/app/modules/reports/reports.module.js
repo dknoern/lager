@@ -1,100 +1,110 @@
 (function() {
-  'use strict';
+        'use strict';
 
-  var module = angular.module('singApp.reports', [
-    'ui.router',
-    'ngResource',
-    'datatables',
-    'datatables.bootstrap'
-  ]);
+        var module = angular.module('singApp.reports', [
+            'ui.router',
+            'ngResource',
+            'datatables',
+            'datatables.bootstrap'
+        ]);
 
-  module.config(appConfig);
+        module.config(appConfig);
 
-  appConfig.$inject = ['$stateProvider'];
+        appConfig.$inject = ['$stateProvider'];
 
-  function appConfig($stateProvider) {
-    $stateProvider
-      .state('app.reports', {
-        url: '/reports',
-        templateUrl: 'app/modules/reports/reports.html',
-        controller: 'ReportsCtrl'
-      });
-
-      $stateProvider
-        .state('app.reports1', {
-          url: '/reports/1',
-          templateUrl: 'app/modules/reports/reports.html',
-          controller: 'ReportsCtrl'
-        });
-
-
-      $stateProvider
-        .state('app.reports2', {
-          url: '/reports/2',
-          templateUrl: 'app/modules/reports/reports.html',
-          controller: 'ReportsCtrl'
-        });
-        $stateProvider
-          .state('app.reports3', {
-            url: '/reports/3',
-            templateUrl: 'app/modules/reports/reports.html',
-            controller: 'ReportsCtrl'
-          });
-
-          $stateProvider
-            .state('app.reports4', {
-              url: '/reports/4',
-              templateUrl: 'app/modules/reports/reports.html',
-              controller: 'ReportsCtrl'
-            });
-
+        function appConfig($stateProvider) {
             $stateProvider
-              .state('app.reports5', {
-                url: '/reports/5',
-                templateUrl: 'app/modules/reports/reports.html',
-                controller: 'ReportsCtrl'
-              });
-
-              $stateProvider
-                .state('app.reports6', {
-                  url: '/reports/6',
-                  templateUrl: 'app/modules/reports/reports.html',
-                  controller: 'ReportsCtrl'
+                .state('app.reports1', {
+                    url: '/reports/1',
+                    templateUrl: 'app/modules/reports/outstanding-repairs.html',
+                    controller: function($scope, $stateParams) {
+                        $scope.reportId = "outstanding-repairs";
+                    }
                 });
 
-                $stateProvider
-                  .state('app.reports7', {
+            $stateProvider
+                .state('app.reports2', {
+                    url: '/reports/2',
+                    templateUrl: 'app/modules/reports/products-memo.html',
+                    controller: function($scope, $stateParams) {
+                        $scope.reportId = "products-memo";
+                    }
+                });
+
+            $stateProvider
+                .state('app.reports3', {
+                    url: '/reports/3',
+                    templateUrl: 'app/modules/reports/daily-sales.html',
+                    ccontroller: function($scope, $stateParams) {
+                        $scope.reportId = "daily-sales";
+                    }
+                });
+
+            $stateProvider
+                .state('app.reports4', {
+                    url: '/reports/4',
+                    templateUrl: 'app/modules/reports/returns-summary.html',
+                    ccontroller: function($scope, $stateParams) {
+                        $scope.reportId = "returns-summary";
+                    }
+                });
+
+            $stateProvider
+                .state('app.reports5', {
+                    url: '/reports/5',
+                    templateUrl: 'app/modules/reports/partnership-items.html',
+                    ccontroller: function($scope, $stateParams) {
+                        $scope.reportId = "partnership-items";
+                    }
+                });
+
+            $stateProvider
+                .state('app.reports6', {
+                    url: '/reports/6',
+                    templateUrl: 'app/modules/reports/monthly-sales.html',
+                    ccontroller: function($scope, $stateParams) {
+                        $scope.reportId = "monthly-sales";
+                    }
+                });
+
+            $stateProvider
+                .state('app.reports7', {
                     url: '/reports/7',
-                    templateUrl: 'app/modules/reports/reports.html',
-                    controller: 'ReportsCtrl'
-                  });
+                    templateUrl: 'app/modules/reports/out-at-show.html',
+                    ccontroller: function($scope, $stateParams) {
+                        $scope.reportId = "out-at-show";
+                    }
+                });
 
 
-                                  $stateProvider
-                                    .state('app.reports8', {
-                                      url: '/reports/8',
-                                      templateUrl: 'app/modules/reports/reports.html',
-                                      controller: 'ReportsCtrl'
-                                    });
+            $stateProvider
+                .state('app.reports8', {
+                    url: '/reports/8',
+                    templateUrl: 'app/modules/reports/show-report.html',
+                    ccontroller: function($scope, $stateParams) {
+                        $scope.reportId = "show-report";
+                    }
+                });
 
 
-                                                    $stateProvider
-                                                      .state('app.reports9', {
-                                                        url: '/reports/9',
-                                                        templateUrl: 'app/modules/reports/reports.html',
-                                                        controller: 'ReportsCtrl'
-                                                      });
+            $stateProvider
+                .state('app.reports9', {
+                    url: '/reports/9',
+                    templateUrl: 'app/modules/reports/items-received.html',
+                    ccontroller: function($scope, $stateParams) {
+                        $scope.reportId = "items-received";
+                    }
+                });
+
+            $stateProvider
+                .state('app.reports10', {
+                    url: '/reports/10',
+                    templateUrl: 'app/modules/reports/items-bought.html',
+                    ccontroller: function($scope, $stateParams) {
+                        $scope.reportId = "items-bought";
+                    }
+                });
 
 
-                                                                      $stateProvider
-                                                                        .state('app.reports10', {
-                                                                          url: '/reports/10',
-                                                                          templateUrl: 'app/modules/reports/reports.html',
-                                                                          controller: 'ReportsCtrl'
-                                                                        });
-
-
-
-
-  }
+}
 })();

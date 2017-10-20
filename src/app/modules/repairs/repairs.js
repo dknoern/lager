@@ -8,6 +8,11 @@
   RepairsCtrl.$inject = ['$scope', '$resource', 'DTOptionsBuilder', 'jQuery'];
   function RepairsCtrl ($scope, $resource, DTOptionsBuilder, jQuery) {
 
+
+   
+
+
+
     jQuery('#example').DataTable( {
             "processing": true,
             "serverSide": true,
