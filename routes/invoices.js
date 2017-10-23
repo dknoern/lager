@@ -14,7 +14,7 @@ router.route('/invoices')
 
         invoice._id = req.body._id;
         invoice.invoiceNumber = req.body.invoiceNumber;
-        invoice.customer = req.body.customer;
+        invoice.customerName = req.body.customerName;
         invoice.customerId = req.body.customerId;
         invoice.project = req.body.project;
         invoice.date = new Date(req.body.date);
@@ -41,15 +41,20 @@ router.route('/invoices')
         invoice.shipping = req.body.shipping;
         invoice.total = req.body.total;
 
+        var itemStatus = "Sold";
+        var itemAction = "sold item";
 
+        if("Memo" == invoice.invoiceType)
+        {
+          itemStatus = "Memo";
+          itemAction = "item memo"
+        }
 
-
-
-      //  history.updateProductHistory(req.body.lineItems, "SOLD", "sold item", req.user['http://mynamespace/name']);
+        history.updateProductHistory(req.body.lineItems, itemStatus, itemAction, req.user['http://mynamespace/name']);
 
         // use save for updates, findOne and update for inserts for now until we
         // figure out the problem with the "pre" in mongoose.
-        if (invoice.invoiceNumber == null || invoice._id == "") {
+        if (invoice._id == null || invoice._id == "") {
             invoice.save(function(err) {
                 if (err)
                     res.send(err);

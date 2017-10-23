@@ -32,9 +32,9 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="hint-field" class="col-sm-3 control-label">Customer</label>
+                                            <label for="customerName" class="col-sm-3 control-label">Customer</label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="address1-field" class="form-control" ng-model="data.customer">
+                                                <input type="text" id="customerName" class="form-control" ng-model="data.customerName">
                                             </div>
                                         </div>
 
@@ -304,7 +304,7 @@
                                         <tbody>
                                             <tr data-ng-repeat="lineItem in data.lineItems">
                                                 <td>{{lineItem.longDesc}}</td>
-                                                <td>{{lineItem.itemNo}}</td>
+                                                <td>{{lineItem.productId}}</td>
                                                 <td>{{lineItem.serialNo}}</td>
                                                 <td>${{lineItem.amount}}</td>
                                                 <td>

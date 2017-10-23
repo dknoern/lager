@@ -52,11 +52,11 @@ var InvoiceSchema = new mongoose.Schema({
 InvoiceSchema.pre('save', function (next) {
     var doc = this;
 
-    if (doc.invoiceNumber==null) {
+    if (doc._id==null) {
         Counter.findByIdAndUpdate({_id: 'invoiceNumber'}, {$inc: {seq: 1}}, function (error, counter) {
             if (error)
                 return next(error);
-            doc.invoiceNumber = counter.seq;
+            doc._id = counter.seq;
             next();
         });
     }else{

@@ -9,7 +9,6 @@
   function RepairsCtrl ($scope, $resource, DTOptionsBuilder, jQuery) {
 
 
-   
 
 
 
