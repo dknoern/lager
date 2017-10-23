@@ -35,7 +35,7 @@
                 .state('app.reports3', {
                     url: '/reports/3',
                     templateUrl: 'app/modules/reports/daily-sales.html',
-                    ccontroller: function($scope, $stateParams) {
+                    controller: function($scope, $stateParams) {
                         $scope.reportId = "daily-sales";
                     }
                 });
@@ -44,7 +44,7 @@
                 .state('app.reports4', {
                     url: '/reports/4',
                     templateUrl: 'app/modules/reports/returns-summary.html',
-                    ccontroller: function($scope, $stateParams) {
+                    controller: function($scope, $stateParams) {
                         $scope.reportId = "returns-summary";
                     }
                 });
@@ -53,7 +53,7 @@
                 .state('app.reports5', {
                     url: '/reports/5',
                     templateUrl: 'app/modules/reports/partnership-items.html',
-                    ccontroller: function($scope, $stateParams) {
+                    controller: function($scope, $stateParams) {
                         $scope.reportId = "partnership-items";
                     }
                 });
@@ -62,7 +62,7 @@
                 .state('app.reports6', {
                     url: '/reports/6',
                     templateUrl: 'app/modules/reports/monthly-sales.html',
-                    ccontroller: function($scope, $stateParams) {
+                    controller: function($scope, $stateParams) {
                         $scope.reportId = "monthly-sales";
                     }
                 });
@@ -71,8 +71,8 @@
                 .state('app.reports7', {
                     url: '/reports/7',
                     templateUrl: 'app/modules/reports/out-at-show.html',
-                    ccontroller: function($scope, $stateParams) {
-                        $scope.reportId = "out-at-show";
+                    controller: function($scope, $stateParams) {
+                        //$scope.reportId = "out-at-show";
                     }
                 });
 
@@ -81,8 +81,8 @@
                 .state('app.reports8', {
                     url: '/reports/8',
                     templateUrl: 'app/modules/reports/show-report.html',
-                    ccontroller: function($scope, $stateParams) {
-                        $scope.reportId = "show-report";
+                    controller: function($scope, $stateParams) {
+                        //$scope.reportId = "show-report";
                     }
                 });
 
@@ -91,8 +91,8 @@
                 .state('app.reports9', {
                     url: '/reports/9',
                     templateUrl: 'app/modules/reports/items-received.html',
-                    ccontroller: function($scope, $stateParams) {
-                        $scope.reportId = "items-received";
+                    controller: function($scope, $stateParams) {
+                        //$scope.reportId = "items-received";
                     }
                 });
 
@@ -100,8 +100,8 @@
                 .state('app.reports10', {
                     url: '/reports/10',
                     templateUrl: 'app/modules/reports/items-bought.html',
-                    ccontroller: function($scope, $stateParams) {
-                        $scope.reportId = "items-bought";
+                    controller: function($scope, $stateParams) {
+                        //$scope.reportId = "items-bought";
                     }
                 });
 

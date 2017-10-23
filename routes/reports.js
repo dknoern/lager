@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 var Product = require('../models/product');
 var Repair = require('../models/repair');
+var Return = require('../models/return');
+var Invoice = require('../models/invoice');
 var Counter = require('../models/counter');
 const checkJwt = require('./jwt-helper').checkJwt;
 var format = require('date-format');
@@ -13,9 +15,6 @@ router.use(function(req, res, next) {
 router.route('/reports/outstanding-repairs')
     .get(function(req, res) {
         var results = {
-            //"draw": draw,
-            //"recordsTotal": 0,
-            //"recordsFiltered": 0,
             "data": []
         };
 
@@ -36,8 +35,6 @@ router.route('/reports/outstanding-repairs')
                     ]
                 );
             }
-
-
             res.json(results);
 
         }).sort({
@@ -51,169 +48,223 @@ router.route('/reports/outstanding-repairs')
     });
 
 
-
-
-
-
-
-
-
 router.route('/reports/products-memo')
     .get(function(req, res) {
-
-        var query = "";
-        var status = req.query.status;
-
-        var draw = req.query.draw;
-        var start = 0;
-        var length = 10;
-
-        if (req.query.start) start = req.query.start;
-        if (req.query.length) length = req.query.length;
-
-        var search = req.query.search.value;
         var results = {
-            "draw": draw,
-            "recordsTotal": 0,
-            "recordsFiltered": 0,
             "data": []
         };
 
-        if (status != null) {
+        Product.find({
+            'status': 'Memo'
+        }, function(err, products) {
 
-            Product.find({
-                'status': status
-            }, function(err, products) {
-                if (err)
-                    res.send(err);
-                res.json(results);
-            });
-            query = "status:" + status;
-        } else {
+            if (err)
+                res.send(err);
 
-            //Product.find({'title': new RegExp(search, 'i') }, function(err, products) {
-            Product.find({
-                $or: [{
-                        'title': new RegExp(search, 'i')
-                    },
-                    {
-                        'serialNo': new RegExp(search, 'i')
-                    },
-                    {
-                        'model': new RegExp(search, 'i')
-                    }
-                ]
-            }, function(err, products) {
+            for (var i = 0; i < products.length; i++) {
 
-                if (err)
-                    res.send(err);
+                results.data.push(
+                    [
+                        products[i]._id,
+                        products[i].title,
+                        '',
+                        format('yyyy-MM-dd', products[i].lastUpdated)
+                    ]
+                );
+            }
+            res.json(results);
+        }).sort({
+            lastUpdated: -1
+        }).select({
+            _id: 1,
+            title: 1,
+            lastUpdated: 1
+        });
+    });
 
-                for (var i = 0; i < products.length; i++) {
 
-                    var statusBadge = "";
 
-                    var badgeStyle = "default"; // grey
-                    if (products[i].status == 'In Stock' || products[i].status == 'Partnership' || products[i].status == 'Problem')
-                        badgeStyle = "success"; // green
-                    else if (products[i].status == 'Repair' || products[i].status == 'Memo' || products[i].status == 'At Show')
-                        badgeStyle = "warning" // yellow
-                    else if (products[i].status == 'Sale Pending')
-                        badgeStyle = "danger" // red
 
-                    results.data.push(
-                        [
-                            '<a href=\"/#/app/item/' + products[i]._id + '\">' + products[i]._id,
-                            products[i].title,
-                            products[i].serialNo,
-                            products[i].model,
-                            "<span class=\"badge bg-" + badgeStyle + "\">" + products[i].status + "</span>",
-                            "$" + products[i].cost
-                        ]
-                    );
+router.route('/reports/daily-sales')
+    .get(function(req, res) {
+        var results = {
+            "data": []
+        };
+        Product.find({
+            "status": "Sold",
+            "lastUpdated": {
+                $gte: new Date(2013, 7, 8),
+                $lte: new Date(2013, 7, 10)
+            }
+        }, function(err, products) {
+
+            if (err)
+                res.send(err);
+
+            for (var i = 0; i < products.length; i++) {
+
+                results.data.push(
+                    [
+                        products[i]._id,
+                        format('yyyy-MM-dd', products[i].lastUpdated),
+                        products[i].title,
+                        products[i].supplier,
+                        ''
+                    ]
+                );
+            }
+            res.json(results);
+        }).sort({
+            lastUpdated: -1
+        }).select({
+            _id: 1,
+            lastUpdated: 1,
+            title: 1,
+            supplier: 1
+        });
+    });
+
+router.route('/reports/returns-summary')
+    .get(function(req, res) {
+        var results = {
+            "data": []
+        };
+        Return.find({
+            "returnDate": {
+                $gte: new Date(2017, 1, 1),
+                $lte: new Date(2017, 7, 10)
+            }
+        }, function(err, returns) {
+
+            if (err)
+                res.send(err);
+
+            for (var i = 0; i < returns.length; i++) {
+
+                var itemId = "";
+                if (returns[i].lineItems != null && returns[i].lineItems.length > 0)
+                    itemId = returns[i].lineItems[0].productId;
+
+                results.data.push(
+                    [
+                        itemId,
+                        format('yyyy-MM-dd', returns[i].returnDate),
+                        returns[i].customerName
+                    ]
+                );
+            }
+            res.json(results);
+        }).sort({
+            returnDate: -1
+        }).select({
+            lineItems: 1,
+            returnDate: 1,
+            customerName: 1
+        });
+    });
+
+
+
+
+
+
+router.route('/reports/partnership-items')
+    .get(function(req, res) {
+        var results = {
+            "data": []
+        };
+        Product.find({
+            "sellerType": "Partner"
+        }, function(err, products) {
+
+            if (err)
+                res.send(err);
+
+            for (var i = 0; i < products.length; i++) {
+
+                results.data.push(
+                    [
+                        products[i].seller,
+                        format('yyyy-MM-dd', products[i].lastUpdated),
+                        products[i]._id,
+                        products[i].title,
+                        products[i].cost,
+                        ''
+                    ]
+                );
+            }
+            res.json(results);
+        }).sort({
+            lastUpdated: -1
+        }).select({
+            seller: 1,
+            lastUpdated: 1,
+            _id: 1,
+            title: 1,
+            cost: 1,
+            sellingPrice: 1
+        });
+    });
+
+
+
+
+router.route('/reports/monthly-sales')
+    .get(function(req, res) {
+        var results = {
+            "data": []
+        };
+        Invoice.find({
+            "invoiceType": "Invoice",
+            "date": {
+                $gte: new Date(2017, 1, 1),
+                $lte: new Date(2017, 7, 10)
+            }
+
+        }, function(err, invoices) {
+
+            if (err)
+                res.send(err);
+
+            for (var i = 0; i < invoices.length; i++) {
+
+              var itemId = "";
+              var description = "";
+              if (invoices[i].lineItems != null && invoices[i].lineItems.length > 0){
+                  itemId = invoices[i].lineItems[0].productId;
+                  description = invoices[i].lineItems[0].productId;
                 }
 
-                Product.count({}, function(err, count) {
-                    results.recordsTotal = count;
+                console.log("date:"+invoices[i].date);
 
-                    if (search == '' || search == null) {
-                        results.recordsFiltered = count;
-                        res.json(results);
-                    } else {
-                        Product.count({
-                            $or: [{
-                                    'title': new RegExp(search, 'i')
-                                },
-                                {
-                                    'serialNo': new RegExp(search, 'i')
-                                },
-                                {
-                                    'model': new RegExp(search, 'i')
-                                }
-                            ]
-                        }, function(err, count) {
-                            results.recordsFiltered = count;
-                            res.json(results);
-                        });
-                    }
-                });
-
-            }).sort({
-                lastUpdated: -1
-            }).skip(parseInt(start)).limit(parseInt(length)).select({
-                title: 1,
-                cost: 1,
-                serialNo: 1,
-                model: 1,
-                status: 1,
-                productType: 1
-            });
-        }
-        console.log("looking for products with status=" + status);
-
-
-    });
-
-
-router.route('/products/:product_id')
-    .get(checkJwt, function(req, res) {
-
-        if (req.params.product_id) {
-            Product.findById(req.params.product_id, function(err, product) {
-                if (err)
-                    res.send(err);
-                res.json(product);
-            });
-        }
-    })
-
-    .put(checkJwt, function(req, res) {
-        Product.findById(req.params.product_id, function(err, product) {
-            if (err)
-                res.send(err);
-            product.itemNo = req.body.itemNo;
-            product.serialNo = req.body.serialNo;
-            product.title = req.body.title;
-            product.sellingPrice = req.body.sellingPrice;
-            product.save(function(err) {
-                if (err)
-                    res.send(err);
-                res.json({
-                    message: 'Product updated!'
-                });
-            });
-        });
-    })
-
-    .delete(checkJwt, function(req, res) {
-        Product.remove({
-            _id: req.params.product_id
-        }, function(err, product) {
-            if (err)
-                res.send(err);
-            res.json({
-                message: 'Successfully deleted'
-            });
+                results.data.push(
+                    [
+                        invoices[i].customerName,
+                        invoices[i].email,
+                        format('yyyy-MM-dd', invoices[i].date),
+                        invoices[i].total,
+                        itemId,
+                        description
+                    ]
+                );
+            }
+            res.json(results);
+        }).sort({
+            date: -1
+        }).select({
+            customerName: 1,
+            date: 1,
+            email: 1,
+            _id: 1,
+            total: 1,
+            lineItems: 1
         });
     });
+
+
+
+
+
+
 
 module.exports = router;

@@ -38,7 +38,6 @@ router.route('/repairs')
                 return res.send("repair saved");
             });
 
-
         console.log("calling updateProductHistory")
 
         var lineItems = new Array();
@@ -48,11 +47,6 @@ router.route('/repairs')
 
         history.updateProductHistory(lineItems,"REPAIR","in repair",req.user['http://mynamespace/name']);
     })
-
-
-
-
-
 
     .get(function(req, res) {
 
@@ -147,7 +141,6 @@ router.route('/repairs')
             customerName: 1,
             vendor: 1
         });
-
     });
 
 
@@ -178,7 +171,6 @@ router.route('/repairs/:repair_id')
             });
         });
     })
-
 
 
 module.exports = router;
