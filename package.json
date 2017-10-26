@@ -18,7 +18,8 @@
     "jwks-rsa": "1.2.0",
     "express-jwt-authz": "1.0.0",
     "csv-parse": "1.2.3",
-    "date-format": "1.1.0"
+    "date-format": "1.1.0",
+    "express-force-ssl": "0.3.2"
   },
   "scripts": {
     "test": "gulp test"

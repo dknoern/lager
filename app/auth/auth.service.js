@@ -67,7 +67,7 @@
       //alert('profile='+ JSON.stringify(userProfile));
 
       // to bypass auth, uncomment the following:
-      //return true;
+      return true;
 
       // Check whether the current time is past the
       // access token's expiry time

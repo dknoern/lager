@@ -5,6 +5,11 @@ const path = require('path');
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/lager');
 
+//var fs = require('fs');
+//var key = fs.readFileSync('server.key');
+//var cert = fs.readFileSync( 'server.crt' );
+//var https = require('https');
+//var forceSSL = require('express-force-ssl');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -38,6 +43,7 @@ var reports = require('./routes/reports');
 app.use('/api', reports);
 
 
+//app.use(forceSSL);
 
 app.use('/', express.static(__dirname +  '/'));
 
@@ -46,4 +52,13 @@ app.get('/*', function(req, res) {
 });
 
 app.listen(port);
-console.log('Listening on port ' + port);
+
+
+//var options = {
+//  key: key,
+//  cert: cert
+//};
+
+//https.createServer(options, app).listen(443);
+
+console.log('Listening on port ' + port );
