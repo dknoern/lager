@@ -228,14 +228,12 @@ router.route('/reports/monthly-sales')
 
             for (var i = 0; i < invoices.length; i++) {
 
-              var itemId = "";
-              var description = "";
-              if (invoices[i].lineItems != null && invoices[i].lineItems.length > 0){
-                  itemId = invoices[i].lineItems[0].productId;
-                  description = invoices[i].lineItems[0].productId;
+                var itemId = "";
+                var description = "";
+                if (invoices[i].lineItems != null && invoices[i].lineItems.length > 0) {
+                    itemId = invoices[i].lineItems[0].productId;
+                    description = invoices[i].lineItems[0].productId;
                 }
-
-                console.log("date:"+invoices[i].date);
 
                 results.data.push(
                     [
@@ -260,6 +258,82 @@ router.route('/reports/monthly-sales')
             lineItems: 1
         });
     });
+
+
+
+router.route('/reports/out-at-show')
+    .get(function(req, res) {
+        var results = {
+            "data": []
+        };
+
+        Product.find({
+            'status': 'At Show'
+        }, function(err, products) {
+
+            if (err)
+                res.send(err);
+
+            for (var i = 0; i < products.length; i++) {
+
+                results.data.push(
+                    [
+                        products[i]._id,
+                        products[i].title,
+                        '',
+                        format('yyyy-MM-dd', products[i].lastUpdated)
+                    ]
+                );
+            }
+            res.json(results);
+        }).sort({
+            lastUpdated: -1
+        }).select({
+            _id: 1,
+            title: 1,
+            lastUpdated: 1
+        });
+    });
+
+
+
+
+
+router.route('/reports/show-report')
+    .get(function(req, res) {
+        var results = {
+            "data": []
+        };
+
+        Product.find({
+            'status': 'At Show'
+        }, function(err, products) {
+
+            if (err)
+                res.send(err);
+
+            for (var i = 0; i < products.length; i++) {
+
+                results.data.push(
+                    [
+                        products[i]._id,
+                        products[i].title,
+                        '',
+                        format('yyyy-MM-dd', products[i].lastUpdated)
+                    ]
+                );
+            }
+            res.json(results);
+        }).sort({
+            lastUpdated: -1
+        }).select({
+            _id: 1,
+            title: 1,
+            lastUpdated: 1
+        });
+    });
+
+
 
 
 

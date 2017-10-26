@@ -72,7 +72,7 @@
                     url: '/reports/7',
                     templateUrl: 'app/modules/reports/out-at-show.html',
                     controller: function($scope, $stateParams) {
-                        //$scope.reportId = "out-at-show";
+                        $scope.reportId = "out-at-show";
                     }
                 });
 
@@ -82,28 +82,11 @@
                     url: '/reports/8',
                     templateUrl: 'app/modules/reports/show-report.html',
                     controller: function($scope, $stateParams) {
-                        //$scope.reportId = "show-report";
+                        $scope.reportId = "show-report";
                     }
                 });
 
 
-            $stateProvider
-                .state('app.reports9', {
-                    url: '/reports/9',
-                    templateUrl: 'app/modules/reports/items-received.html',
-                    controller: function($scope, $stateParams) {
-                        //$scope.reportId = "items-received";
-                    }
-                });
-
-            $stateProvider
-                .state('app.reports10', {
-                    url: '/reports/10',
-                    templateUrl: 'app/modules/reports/items-bought.html',
-                    controller: function($scope, $stateParams) {
-                        //$scope.reportId = "items-bought";
-                    }
-                });
 
 
 }
