@@ -13,10 +13,28 @@
   function snAction($rootScope, jQuery, $timeout){
     var singActions = {
       'toggle-navigation-state': function(e, scope){
+        //alert('toggling nav state!');
         scope.app.state['nav-static'] = !scope.app.state['nav-static'];
+        //scope.app.state['nav-static'] = true;
+
+
       },
       'toggle-navigation-collapse-state': function(){
         $rootScope.toggleNavigationCollapseState();
+      },
+      'toggle-chat-sidebar-state': function(){
+        //remove notification sign on a first click
+        jQuery(this).find('.chat-notification-sing').remove();
+        $rootScope.toggleChatSidebarState();
+
+
+        //demo-only stuff. TO-REMOVE in real app!
+        $timeout(function(){
+          // demo: add class & badge to indicate incoming messages from contact
+          // .js-notification-added ensures notification added only once
+          jQuery('.chat-sidebar-user-group:first-of-type .list-group-item:first-child:not(.js-notification-added)').addClass('active js-notification-added')
+            .find('.fa-circle').after('<span class="badge badge-danger pull-right animated bounceInDown">3</span>');
+        }, 1000)
       }
     };
     return {
@@ -93,9 +111,8 @@
       },
 
       isNavigationStatic: function(){
-        // dk: default to static
-        //return this.scope.app.state['nav-static'] === true;
         return true;
+        //return this.scope.app.state['nav-static'] === true;
       },
 
       changeActiveNavigationItem: function(event, toState, toParams){
