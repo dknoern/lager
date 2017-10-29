@@ -5,11 +5,11 @@ const path = require('path');
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/lager');
 
-//var fs = require('fs');
-//var key = fs.readFileSync('server.key');
-//var cert = fs.readFileSync( 'server.crt' );
-//var https = require('https');
-//var forceSSL = require('express-force-ssl');
+var fs = require('fs');
+var key = fs.readFileSync('server.key');
+var cert = fs.readFileSync( 'server.crt' );
+var https = require('https');
+var forceSSL = require('express-force-ssl');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -19,7 +19,8 @@ app.use('/app/modules', express.static('./src/app/modules'));
 app.use('/assets', express.static('./src/assets'));
 app.use('/uploads', express.static('./uploads'));
 
-var port = process.env.PORT || 3000;
+//var port = process.env.PORT || 80;
+var port = 80;
 
 var customers = require('./routes/customers');
 app.use('/api', customers);
@@ -43,7 +44,7 @@ var reports = require('./routes/reports');
 app.use('/api', reports);
 
 
-//app.use(forceSSL);
+app.use(forceSSL);
 
 app.use('/', express.static(__dirname +  '/'));
 
@@ -54,11 +55,11 @@ app.get('/*', function(req, res) {
 app.listen(port);
 
 
-//var options = {
-//  key: key,
-//  cert: cert
-//};
+var options = {
+  key: key,
+  cert: cert
+};
 
-//https.createServer(options, app).listen(443);
+https.createServer(options, app).listen(443);
 
 console.log('Listening on port ' + port );
