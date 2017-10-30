@@ -37,6 +37,10 @@
                     templateUrl: 'app/modules/reports/daily-sales.html',
                     controller: function($scope, $stateParams) {
                         $scope.reportId = "daily-sales";
+                        //$scope.itemId = $stateParams.itemId;
+                       $scope.day =0;
+                       $scope.month=0;
+                       $scope.year = 0;
                     }
                 });
 
