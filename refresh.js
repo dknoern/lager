@@ -26,8 +26,8 @@ console.log("refreshing DB");
 //loadCsvFile("data/Invoices.txt", loadInvoice);
 //loadCsvFile("data/Returns.txt",loadReturn);
 //loadCsvFile("data/Repairs.txt",loadRepair);
-//loadCsvFile("data/Invoice_Detail.txt",loadInvoiceDetail);
-loadCsvFile("data/Returns_Detail.txt",loadReturnDetail);
+loadCsvFile("data/Invoice_Detail.txt",loadInvoiceDetail);
+//loadCsvFile("data/Returns_Detail.txt",loadReturnDetail);
 
 
 function loadCsvFile(file, functionRef) {
@@ -297,6 +297,7 @@ function loadInvoice(line) {
                 if (customer != null) {
 
                     invoice.customerName = customer.firstName + " " + customer.lastName;
+                    invoice.customerEmail = customer.email;
                 }
                 saveInvoice(invoice);
             })

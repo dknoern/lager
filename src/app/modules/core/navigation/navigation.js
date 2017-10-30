@@ -5,6 +5,10 @@
     .directive('snAction', snAction)
     .directive('snNavigation', snNavigation)
   ;
+
+
+  //this.scope.app.state['nav-static'] = true;
+
   /* ========================================================================
    * Sing App actions. Shortcuts available via data-sn-action attribute
    * ========================================================================
@@ -13,11 +17,7 @@
   function snAction($rootScope, jQuery, $timeout){
     var singActions = {
       'toggle-navigation-state': function(e, scope){
-        //alert('toggling nav state!');
         scope.app.state['nav-static'] = !scope.app.state['nav-static'];
-        //scope.app.state['nav-static'] = true;
-
-
       },
       'toggle-navigation-collapse-state': function(){
         $rootScope.toggleNavigationCollapseState();
@@ -111,8 +111,7 @@
       },
 
       isNavigationStatic: function(){
-        return true;
-        //return this.scope.app.state['nav-static'] === true;
+        return this.scope.app.state['nav-static'] === true;
       },
 
       changeActiveNavigationItem: function(event, toState, toParams){

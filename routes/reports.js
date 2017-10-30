@@ -62,12 +62,11 @@ router.route('/reports/products-memo')
                 res.send(err);
 
             for (var i = 0; i < products.length; i++) {
-
+// TODO: add customer to table
                 results.data.push(
                     [
                         products[i]._id,
                         products[i].title,
-                        '',
                         format('yyyy-MM-dd', products[i].lastUpdated)
                     ]
                 );
@@ -85,42 +84,63 @@ router.route('/reports/products-memo')
 
 
 
-router.route('/reports/daily-sales')
+router.route('/reports/daily-sales/:year/:month/:day')
     .get(function(req, res) {
+
+
+      var year = parseInt(req.params.year);
+      var month = parseInt(req.params.month);
+      var day = parseInt(req.params.day);
+
+
+      console.log('month = ' + month);
+      console.log('day = ' + day);
+      console.log('year = ' + year);
+
+
         var results = {
             "data": []
         };
-        Product.find({
-            "status": "Sold",
-            "lastUpdated": {
-                $gte: new Date(2013, 7, 8),
-                $lte: new Date(2013, 7, 10)
+        Invoice.find({
+          //  "status": "Sold",
+            "date": {
+                $gte: new Date(year, month-1, day),
+                $lt: new Date(year, month-1,day+1)
             }
-        }, function(err, products) {
+        }, function(err, invoices) {
 
             if (err)
                 res.send(err);
 
-            for (var i = 0; i < products.length; i++) {
+            for (var i = 0; i < invoices.length; i++) {
+
+                var itemNo = "";
+                var title = "";
+
+                if(invoices[i].lineItems!=null && invoices[i].lineItems.length>0 ){
+                  itemNo = invoices[i].lineItems[0].productId;
+                  title = invoices[i].lineItems[0].name
+                }
 
                 results.data.push(
                     [
-                        products[i]._id,
-                        format('yyyy-MM-dd', products[i].lastUpdated),
-                        products[i].title,
-                        products[i].supplier,
-                        ''
+                        itemNo,
+                        format('yyyy-MM-dd', invoices[i].date),
+                        title,
+                        //title,
+                        invoices[i].salesPerson,
+                        invoices[i].methodOfSale
                     ]
                 );
             }
             res.json(results);
         }).sort({
-            lastUpdated: -1
+            date: -1
         }).select({
-            _id: 1,
-            lastUpdated: 1,
-            title: 1,
-            supplier: 1
+            date: 1,
+            lineItems: 1,
+            salesPerson: 1,
+            methodOfSale: 1
         });
     });
 
@@ -188,8 +208,8 @@ router.route('/reports/partnership-items')
                         format('yyyy-MM-dd', products[i].lastUpdated),
                         products[i]._id,
                         products[i].title,
-                        products[i].cost,
-                        ''
+                        '$' + products[i].cost,
+                        '$' + products[i].sellingPrice
                     ]
                 );
             }
@@ -232,13 +252,13 @@ router.route('/reports/monthly-sales')
                 var description = "";
                 if (invoices[i].lineItems != null && invoices[i].lineItems.length > 0) {
                     itemId = invoices[i].lineItems[0].productId;
-                    description = invoices[i].lineItems[0].productId;
+                    description = invoices[i].lineItems[0].name;
                 }
 
                 results.data.push(
                     [
                         invoices[i].customerName,
-                        invoices[i].email,
+                        invoices[i].customerEmail,
                         format('yyyy-MM-dd', invoices[i].date),
                         invoices[i].total,
                         itemId,
@@ -252,7 +272,7 @@ router.route('/reports/monthly-sales')
         }).select({
             customerName: 1,
             date: 1,
-            email: 1,
+            customerEmail: 1,
             _id: 1,
             total: 1,
             lineItems: 1
@@ -334,10 +354,44 @@ router.route('/reports/show-report')
     });
 
 
+    router.route('/reports/first-sale-date')
+        .get(function(req, res) {
+
+            Invoice.findOne({
+            }, function(err, invoice) {
+
+                if (err)
+                    res.send(err);
+                    var dateString = format('yyyy/MM/dd', invoice.date);
+                    console.log("date string is " + dateString);
+
+                res.json(dateString);
+            }).sort({
+                date: 1
+            }).select({
+                date: 1
+            });
+        });
 
 
+    router.route('/reports/last-sale-date')
+        .get(function(req, res) {
 
+            Invoice.findOne({
+            }, function(err, invoice) {
 
+                if (err)
+                    res.send(err);
+                    var dateString = format('yyyy/MM/dd', invoice.date);
+                    console.log("date string is " + dateString);
+
+                res.json(dateString);
+            }).sort({
+                date: -1
+            }).select({
+                date: 1
+            });
+        });
 
 
 

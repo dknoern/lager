@@ -110,13 +110,20 @@ router.route('/invoices')
                 res.send(err);
 
             for (var i = 0; i < invoices.length; i++) {
+
+                var itemNo = "";
+                var itemName = "";
+                if(invoices[i].lineItems!=null && invoices[i].lineItems.length>0 ){
+                  itemNo = invoices[i].lineItems[0].productId ;
+                  itemName = invoices[i].lineItems[0].name ;
+                }
                 results.data.push(
                     [
                         '<a href=\"/#/app/invoice/' + invoices[i]._id + '\">' + invoices[i]._id + '</a>',
                         invoices[i].customerName,
                         format('yyyy-MM-dd', invoices[i].date),
-                        invoices[i].shipAddress1,
-                        invoices[i].shipCity,
+                        itemNo,
+                        itemName,
                         invoices[i].total
                     ]
                 );
@@ -166,8 +173,7 @@ router.route('/invoices')
         }).skip(parseInt(start)).limit(parseInt(length)).select({
             customerName: 1,
             date: 1,
-            shipAddress1: 1,
-            shipCity: 1,
+            lineItems: 1,
             total: 1
         });
 

@@ -14,6 +14,7 @@ var InvoiceSchema = new mongoose.Schema({
   	_id: Number,
     customerId: Number,
     customerName: String,
+    customerEmail: String,
     project: String,
     returnNumber: String,
     documentType: String,
