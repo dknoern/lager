@@ -101,6 +101,10 @@ function loadCustomer(line) {
     customer.lastUpdated = line[20];
     //customer.country = req.body.country;
 
+
+   // using promise instead of callback
+  //  return Customer.findOneAndUpdate({ "_id" : customer.id }, customer, {'upsert': true}).exec();
+
     Customer.findOneAndUpdate({
         "_id": customer.id
     }, customer, {
@@ -207,7 +211,10 @@ function loadProduct(line) {
     var manufacturerId = line[2];
     product.manufacturer = mfrs[manufacturerId];
     product.title = line[3];
-    product.style = line[4];
+
+    //product.style = line[4];
+    product.modelNumber = line[4];
+
     product.model = line[5];
     var conditionId = line[6];
     product.condition = condition[conditionId];
