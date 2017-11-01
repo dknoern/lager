@@ -189,9 +189,8 @@ router.route('/products')
                             '<a href=\"/#/app/item/' + products[i]._id + '\">' + products[i]._id,
                             products[i].title,
                             products[i].serialNo,
-                            products[i].model,
-                             "<span class=\"badge bg-"+badgeStyle+"\">"+products[i].status+"</span>",
-                            "$"+products[i].cost
+                            products[i].modelNumber,
+                             "<span class=\"badge bg-"+badgeStyle+"\">"+products[i].status+"</span>"
                         ]
                     );
                 }
@@ -225,7 +224,6 @@ router.route('/products')
                 lastUpdated: -1
             }).skip(parseInt(start)).limit(parseInt(length)).select({
                 title: 1,
-                cost: 1,
                 serialNo: 1,
                 model: 1,
                 status: 1,
