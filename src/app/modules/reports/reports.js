@@ -9,6 +9,33 @@
     function ReportsCtrl($scope, $resource, $http, $window, DTOptionsBuilder, jQuery) {
 
 
+
+      $scope.selectDate = function(){
+
+        var selectedDate = document.getElementById('selectedDate').value;
+
+
+                      Messenger().post({
+                        message: 'setting date: ' + selectedDate,
+                        type: "success"
+                      }
+                      );
+
+
+
+      }
+
+
+
+
+
+
+      //  jQuery('#datepicker').datepicker();
+
+$scope.dt = "12/25/1966";
+    jQuery('#datetimepicker2').datetimepicker();
+
+
         var month = $scope.month;
         var day = $scope.day;
         var year = $scope.year;
@@ -46,6 +73,8 @@
                 }
                 reportUrl += "/" + $scope.year + "/" + $scope.month + "/" + $scope.day;
             }
+
+            $scope.dt= ""+ $scope.month + "/" + $scope.day + "/" +  $scope.year;
 
 
             jQuery('#example').DataTable({

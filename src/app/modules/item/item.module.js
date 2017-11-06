@@ -30,6 +30,18 @@
 
         }
       });
+
+      $stateProvider
+        .state('app.edititem', {
+          url: '/item/:itemId/edit',
+          templateUrl: 'app/modules/item/item.html',
+          controller: function($scope, $stateParams) {
+            $scope.itemId = $stateParams.itemId;
+
+          }
+        });
+
+
       $stateProvider
         .state('app.new', {
           url: '/new',

@@ -1,12 +1,50 @@
-
 <h1 class="page-title"><span class="fw-semi-bold">Daily Sales</span></h1>
 
 <section class="widget">
   <div class="widget-body" data-ng-controller="ReportsCtrl">
 
-    <h3>Sales for <a href=#>{{month}}/{{day}}/{{year}}</a></h3>
+    <h3>Sales for <b>{{month}}/{{day}}/{{year}}</b></h3>
+
+    <div class="hidden-print">
+      <a href="#"  data-toggle="modal" data-target="#myModal">Select date</a>
+    </div>
 
     <div class="mt">
+
+      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+
+          <div class="modal-dialog modal-sm" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <h4 class="modal-title text-align-center fw-bold mt" id="myModalLabel18">Select date</h4>
+                  <p class="text-align-center fs-mini text-muted mt-sm">
+                    Choose a new date for which to run report.
+                  </p>
+                </div>
+                <div class="modal-body bg-gray-lighter">
+                  <form>
+                    <div class="row">
+                      <div class="col-md-8">
+                        <div class="form-group">
+                          <input id="selectedDate" type="text" class="form-control input-no-border"
+                                 placeholder="MM/DD/YYYY">
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancel</button>
+                      <button type="button" class="btn btn-success btn-sm" ng-click="selectDate()" data-dismiss="modal">OK</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+
+
+
 
       <table id="example" class="display" cellspacing="0" width="100%">
           <thead>

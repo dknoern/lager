@@ -157,16 +157,21 @@ router.route('/products')
 
             //Product.find({'title': new RegExp(search, 'i') }, function(err, products) {
             Product.find({
-                $or: [{
-                        'title': new RegExp(search, 'i')
-                    },
-                    {
-                        'serialNo': new RegExp(search, 'i')
-                    },
-                    {
-                        'model': new RegExp(search, 'i')
-                    }
+              $and: [
+                {status: {$ne: "Deleted"}}
+                ,{
+                  $or: [{
+                    'title': new RegExp(search, 'i')
+                  },
+                  {
+                    'serialNo': new RegExp(search, 'i')
+                  },
+                  {
+                    'model': new RegExp(search, 'i')
+                  }
                 ]
+              }
+            ]
             }, function(err, products) {
 
                 if (err)
@@ -195,7 +200,7 @@ router.route('/products')
                     );
                 }
 
-                Product.count({}, function(err, count) {
+                Product.count({status: {$ne: "Deleted"}}, function(err, count) {
                     results.recordsTotal = count;
 
                     if (search == '' || search == null) {
@@ -203,16 +208,23 @@ router.route('/products')
                         res.json(results);
                     } else {
                         Product.count({
-                            $or: [{
-                                    'title': new RegExp(search, 'i')
-                                },
-                                {
-                                    'serialNo': new RegExp(search, 'i')
-                                },
-                                {
-                                    'model': new RegExp(search, 'i')
-                                }
+
+                          $and: [
+                            {status: {$ne: "Deleted"}}
+                            ,{
+                              $or: [{
+                                'title': new RegExp(search, 'i')
+                              },
+                              {
+                                'serialNo': new RegExp(search, 'i')
+                              },
+                              {
+                                'model': new RegExp(search, 'i')
+                              }
                             ]
+                          }
+                        ]
+
                         }, function(err, count) {
                             results.recordsFiltered = count;
                             res.json(results);
@@ -225,7 +237,7 @@ router.route('/products')
             }).skip(parseInt(start)).limit(parseInt(length)).select({
                 title: 1,
                 serialNo: 1,
-                model: 1,
+                modelNumber: 1,
                 status: 1,
                 productType: 1
             });
@@ -267,6 +279,21 @@ router.route('/products/:product_id')
     })
 
     .delete(checkJwt, function(req, res) {
+
+      Product.findById(req.params.product_id, function(err, product) {
+          if (err)
+              res.send(err);
+          product.status = 'Deleted';
+          product.save(function(err) {
+              if (err)
+                  res.send(err);
+              res.json({
+                  message: 'Product updated!'
+              });
+          });
+      });
+
+      /*
         Product.remove({
             _id: req.params.product_id
         }, function(err, product) {
@@ -276,6 +303,8 @@ router.route('/products/:product_id')
                 message: 'Successfully deleted'
             });
         });
+        */
+
     });
 
 module.exports = router;

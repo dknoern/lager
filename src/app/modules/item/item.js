@@ -39,6 +39,37 @@
             });
         }
 
+        $scope.deleteItem = function(){
+
+          var itemNumber = document.getElementById('itemNumber').value;
+
+          $http({
+              method: "DELETE",
+              url: "api/products/"+itemNumber,
+              headers: {
+                  'Content-Type': 'application/json'
+              }
+          }).then(function successCallback(response) {
+              console.log(response.statusText);
+              $state.go('app.inventory');
+
+              var theMessage = 'Deleted item ' + itemNumber;
+
+              Messenger().post({
+                message: theMessage,
+                type: "success",
+                showCloseButton: true
+              }
+              );
+
+
+
+          }, function errorCallback(response) {
+              console.log(response.statusText);
+          });
+        }
+
+
         $scope.uploadFile = function(){
           alert('uploading file');
           console.log('uploading file');
@@ -62,6 +93,11 @@
         $scope.getLongDescritpion = function() {
             return 'this is a long description';
         }
+
+
+
+
+
 
         jQuery('#datetimepicker2').datetimepicker();
     }
