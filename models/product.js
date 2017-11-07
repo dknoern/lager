@@ -20,7 +20,7 @@ var ProductSchema   = new mongoose.Schema({
 		comments: String,
 		serialNo: String,
 		longDesc: String,
-		supplier: String,
+		//supplier: String,
 		lastUpdated: Date,
 		cost: Number,
 		listPrice: Number,

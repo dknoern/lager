@@ -1,0 +1,5 @@
+mongo localhost/lager  --eval "db.products.drop()"
+mongo localhost/lager  --eval "db.customers.drop()"
+mongo localhost/lager  --eval "db.invoices.drop()"
+mongo localhost/lager  --eval "db.repairs.drop()"
+mongo localhost/lager  --eval "db.returns.drop()"
