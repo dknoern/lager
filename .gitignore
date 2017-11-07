@@ -9,3 +9,4 @@ package-lock.json
 auth0-variables.js
 uploads
 nohup.out
+.idea
