@@ -138,8 +138,8 @@ router.route('/products')
         var search = req.query.search.value;
         var results = {
             "draw": draw,
-            "recordsTotal": 57,
-            "recordsFiltered": 57,
+            "recordsTotal": 0,
+            "recordsFiltered": 0,
             "data": []
         };
 
@@ -191,7 +191,10 @@ router.route('/products')
 
                     results.data.push(
                         [
-                            '<a href=\"/#/app/item/' + products[i]._id + '\">' + products[i]._id,
+
+
+                          '<a href=\"#\" onclick=\"selectProduct(\'' + products[i]._id + '\');return false;\">' + products[i]._id + '</a>',
+                            //'<a href=\"/#/app/item/' + products[i]._id + '\">' + products[i]._id,
                             products[i].title,
                             products[i].serialNo,
                             products[i].modelNumber,

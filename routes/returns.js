@@ -55,12 +55,12 @@ router.route('/returns')
         // filter out non-included items
         var includedLineItems = new Array();
         for (var i = 0, len = req.body.lineItems.length; i < len; i++) {
-          if(req.body.lineItems[i].included){
-            includedLineItems.push(req.body.lineItems[i]);
-          }
+            if (req.body.lineItems[i].included) {
+                includedLineItems.push(req.body.lineItems[i]);
+            }
         }
 
-        history.updateProductHistory(includedLineItems,"AVAILABLE","item returned",req.user['http://mynamespace/name']);
+        history.updateProductHistory(includedLineItems, "AVAILABLE", "item returned", req.user['http://mynamespace/name']);
 
     })
 
@@ -104,7 +104,7 @@ router.route('/returns')
                         format('yyyy-MM-dd', returns[i].returnDate),
                         returns[i].customerName,
                         returns[i].salesPerson,
-                        "$"+returns[i].totalReturnAmount
+                        "$" + returns[i].totalReturnAmount
                     ]
                 );
             }
@@ -210,5 +210,23 @@ router.route('/returns/:return_id/items')
             });
         });
     })
+
+router.route('/customers/:customer_id/returns')
+    .get(checkJwt, function(req, res) {
+
+        var customerId = req.params.customer_id;
+        var query = Return.find({
+            'customerId': customerId
+        });
+
+        query.select('customer date returnNumber customerId total');
+
+        query.exec(function(err, returns) {
+            if (err)
+                res.send(err);
+
+            res.json(returns);
+        })
+    });
 
 module.exports = router;

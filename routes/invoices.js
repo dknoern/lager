@@ -2,19 +2,67 @@ var express = require('express');
 var router = express.Router();
 var Invoice = require('../models/invoice');
 var Product = require('../models/product');
+var Customer = require('../models/customer');
 var mongoose = require('mongoose');
 var history = require('./history');
 var format = require('date-format');
+var Counter = require('../models/counter');
 
 const checkJwt = require('./jwt-helper').checkJwt;
+
+
+
+function upsertInvoice(req,res,invoice){
+
+          var itemStatus = "Sold";
+          var itemAction = "sold item";
+
+          if ("Memo" == invoice.invoiceType) {
+              itemStatus = "Memo";
+              itemAction = "item memo"
+          }
+
+          history.updateProductHistory(req.body.lineItems, itemStatus, itemAction, req.user['http://mynamespace/name']);
+
+          // use save for updates, findOne and update for inserts for now until we
+          // figure out the problem with the "pre" in mongoose.
+          if (invoice._id == null || invoice._id == "") {
+              invoice.save(function(err) {
+                  if (err) {
+                      console.log('error saving invoice: ' + err);
+                      res.send(err);
+                  } else {
+                      res.json({
+                          message: 'invoice updated'
+                      });
+                  }
+              });
+          } else {
+              var query = {
+                  _id: invoice._id
+              };
+              Invoice.findOneAndUpdate(query, invoice, {
+                  upsert: true
+              }, function(err, doc) {
+                  if (err) return res.send(500, {
+                      error: err
+                  });
+                  return res.send("invoice saved");
+              });
+          }
+
+
+}
+
+
 
 router.route('/invoices')
     .post(checkJwt, function(req, res) {
         var invoice = new Invoice();
-
         invoice._id = req.body._id;
         invoice.invoiceNumber = req.body.invoiceNumber;
-        invoice.customerName = req.body.customerName;
+        invoice.customerFirstName = req.body.customerFirstName;
+        invoice.customerLastName = req.body.customerLastName;
         invoice.customerId = req.body.customerId;
         invoice.project = req.body.project;
         invoice.date = new Date(req.body.date);
@@ -23,10 +71,6 @@ router.route('/invoices')
         invoice.total = req.body.total;
         invoice.methodOfSale = req.body.methodOfSale;
         invoice.salesPerson = req.body.salesPerson;
-
-        //if(invoice.salesPersion==null||invoice.salesPerson.length==0)
-        //  invoice.salesPerson = eq.user['http://mynamespace/name'];
-
         invoice.invoiceType = req.body.invoiceType;
         invoice.shipToName = req.body.shipToName;
         invoice.shipAddress1 = req.body.shipAddress1;
@@ -41,39 +85,60 @@ router.route('/invoices')
         invoice.shipping = req.body.shipping;
         invoice.total = req.body.total;
 
-        var itemStatus = "Sold";
-        var itemAction = "sold item";
 
-        if("Memo" == invoice.invoiceType)
-        {
-          itemStatus = "Memo";
-          itemAction = "item memo"
-        }
+        customerId = req.body.customerId;
 
-        history.updateProductHistory(req.body.lineItems, itemStatus, itemAction, req.user['http://mynamespace/name']);
+        if(customerId == null){
+          console.log("customer id is null, will create customer");
 
-        // use save for updates, findOne and update for inserts for now until we
-        // figure out the problem with the "pre" in mongoose.
-        if (invoice._id == null || invoice._id == "") {
-            invoice.save(function(err) {
-                if (err)
-                    res.send(err);
-                res.json({
-                    message: 'invoice updated'
-                });
-            });
-        } else {
-            var query = {
-                _id: invoice._id
-            };
-            Invoice.findOneAndUpdate(query, invoice, {
-                upsert: true
-            }, function(err, doc) {
-                if (err) return res.send(500, {
-                    error: err
-                });
-                return res.send("invoice saved");
-            });
+          var customer = new Customer();
+
+          customer.firstName = req.body.customerFirstName;
+          customer.lastName = req.body.customerLastName;
+          customer.address1 = req.body.shipAddress1;
+          customer.city = req.body.shipCity;
+          customer.state = req.body.shipState;
+          customer.zip = req.body.shipZip;
+          customer.lastUpdated = Date.now();
+
+
+          Counter.findByIdAndUpdate({
+              _id: 'customerNumber'
+          }, {
+              $inc: {
+                  seq: 1
+              }
+          }, function(err, counter) {
+              if (err) {
+                  console.log(err);
+                  return res.send(500, {
+                      error: err
+                  });
+              }
+
+              customer._id=counter.seq;
+              customer.save(function(err) {
+                  if (err) {
+                      console.log('xxx-error saving customer: ' + err);
+                      res.send(err);
+                  } else {
+
+                    invoice.customerId = customer._id;
+                    upsertInvoice(req,res,invoice);
+
+                  }
+              });
+          });
+
+
+
+
+
+
+
+        }else{
+          upsertInvoice(req,res,invoice);
+          console.log("customer id is NOT null, will use existing customer");
         }
     })
 
@@ -113,14 +178,14 @@ router.route('/invoices')
 
                 var itemNo = "";
                 var itemName = "";
-                if(invoices[i].lineItems!=null && invoices[i].lineItems.length>0 ){
-                  itemNo = invoices[i].lineItems[0].productId ;
-                  itemName = invoices[i].lineItems[0].name ;
+                if (invoices[i].lineItems != null && invoices[i].lineItems.length > 0) {
+                    itemNo = invoices[i].lineItems[0].productId;
+                    itemName = invoices[i].lineItems[0].name;
                 }
                 results.data.push(
                     [
                         '<a href=\"/#/app/invoice/' + invoices[i]._id + '\">' + invoices[i]._id + '</a>',
-                        invoices[i].customerName,
+                        invoices[i].customerFirstName + " " + invoices[i].customerLastName,
                         format('yyyy-MM-dd', invoices[i].date),
                         itemNo,
                         itemName,
@@ -171,7 +236,8 @@ router.route('/invoices')
         }).sort({
             _id: -1
         }).skip(parseInt(start)).limit(parseInt(length)).select({
-            customerName: 1,
+            customerFirstName: 1,
+            customerLastName: 1,
             date: 1,
             lineItems: 1,
             total: 1
@@ -221,5 +287,20 @@ router.route('/invoices/:invoice_id')
             });
         });
     });
+
+// find invoices for a particular customer
+router.route('/customers/:customer_id/invoices')
+    .get(function(req, res) {
+
+         var customerId = req.params.customer_id;
+         var query = Invoice.find({ 'customerId': customerId });
+          query.select('customer date invoiceNumber customerId total');
+          query.exec(function (err, invoices) {
+          if (err)
+            res.send(err);
+            res.json(invoices);
+          })
+        });
+
 
 module.exports = router;

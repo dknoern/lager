@@ -8,7 +8,7 @@
           </div>
           <div class="col-sm-3 col-print-3">
             <div class="fine-print">
-            {{data.customer}}<br/>
+            {{data.customerFirstName}} {{data.customerLastName}}<br/>
             {{data.shipAddress1}}<br/>
             {{data.shipCity}}, {{data.shipState}} {{data.shipZip}}<br/>
             {{data.phone}}
@@ -17,7 +17,7 @@
 
           <div class="col-sm-3 col-print-3">
             <div class="fine-print">
-            Invoice # {{data.invoiceNumber}}<br/>
+            Invoice # {{data._id}}<br/>
             Invoice Date {{data.date | date: 'MM/dd/y'}}<br/>
             Sold By {{data.salesPerson}}
             </div>
@@ -40,7 +40,7 @@
               <div class="fine-print">{{lineItem.longDesc}}</div>
 
               <div class="row">
-                  <div class="col-sm-6 col-print-6">Serial # - {{lineItem.serialNo}}</div>
+                  <div class="col-sm-6 col-print-6">Serial # - {{lineItem.serialNumber}}</div>
                   <div class="col-sm-6 col-print-6">SKU: {{lineItem.productId}}{{data.date.substr(0,2)}}</div>
               </div>
 
