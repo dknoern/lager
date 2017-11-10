@@ -13,7 +13,8 @@ var Counter = require('./counter');
 var InvoiceSchema = new mongoose.Schema({
   	_id: Number,
     customerId: Number,
-    customerName: String,
+    customerFirstName: String,
+    customerLastName: String,    
     customerEmail: String,
     project: String,
     returnNumber: String,

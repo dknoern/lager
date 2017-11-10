@@ -336,7 +336,7 @@
             </thead>
             <tbody>
             <tr data-ng-repeat="invoice in invoices">
-              <td><a href="/#/app/invoice/{{invoice._id}}">{{invoice.invoiceNumber}}</a></td>
+              <td><a href="/#/app/invoice/{{invoice._id}}">{{invoice._id}}</a></td>
               <td>{{invoice.date}}</td>
               <td>{{invoice.total | currency}}</td>
             </tr>
@@ -356,7 +356,7 @@
             </thead>
             <tbody>
             <tr data-ng-repeat="ret in returns">
-              <td><a href="/#/app/return/{{return._id}}">{{ret.returnNumber}}</a></td>
+              <td><a href="/#/app/return/{{return._id}}">{{ret._id}}</a></td>
               <td>{{ret.date}}</td>
               <td>{{ret.total | currency}}</td>
             </tr>

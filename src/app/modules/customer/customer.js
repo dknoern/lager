@@ -17,16 +17,15 @@
                 $scope.data = data;
             });
 
-            $http.get('api/invoices?customerId=' + $scope.customerId).
+            $http.get('api/customers/'+$scope.customerId +'/invoices').
             success(function(invoices) {
                 $scope.invoices = invoices;
             });
 
-            $http.get('api/returns?customerId=' + $scope.customerId).
+            $http.get('api/customers/'+$scope.customerId + '/returns').
             success(function(returns) {
                 $scope.returns = returns;
             });
-
         }
 
         $scope.go = function() {

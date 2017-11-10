@@ -10,6 +10,21 @@ $(document).ready(function() {
 } );
 </script-->
 
+
+
+
+<script>
+
+function selectProduct(id){
+  //$('#productModal').modal('hide')
+
+  var uri = `/#app/item/${id}`;
+   document.location.href = "/#/app/item/"+id;
+}
+</script>
+
+
+
 <h1 class="page-title"><span class="fw-semi-bold">Products</span></h1>
 
 <section class="widget">
@@ -18,8 +33,13 @@ $(document).ready(function() {
     <div class="mt">
 
     <p>
-      <a href="/#/app/item"><button type="button" class="btn btn-primary">Add Product</button></a>
+      <a href="/#/app/item"><button type="button" class="btn btn-primary">
+        <span class="icon">
+          <i class="fa fa-plus-circle"></i>
+        </span>
+New Product</button></a>
     </p>
+
 
     <table id="example" class="display" cellspacing="0" width="100%">
         <thead>

@@ -1,4 +1,12 @@
 
+<script>
+function selectCustomer(id){
+  //alert('selecting customer ' + id);
+   document.location.href = "/#/app/customer/"+id;
+}
+</script>
+
+
 <h1 class="page-title"><span class="fw-semi-bold">Customers</span></h1>
 
 <section class="widget">
@@ -6,7 +14,9 @@
     <div class="mt">
 
       <p>
-        <a href="/#/app/customer"><button type="button" class="btn btn-primary">Add Customer</button></a>
+        <a href="/#/app/customer"><button type="button" class="btn btn-primary"><span class="icon">
+          <i class="fa fa-plus-circle"></i>
+        </span>New Customer</button></a>
       </p>
 
       <table id="example" class="display" cellspacing="0" width="100%">

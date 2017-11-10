@@ -1,26 +1,40 @@
 
 
+<style>
+    .form-group.required .control-label:after {
+        content: " *";
+        color: darkred;
+    }
+</style>
+
 
 <h1 class="page-title"><span class="fw-semi-bold">Invoice</span></h1>
-<div data-ng-controller="InvoiceCtrl">
+
+<div id="AngularInvoiceCtrl" data-ng-controller="InvoiceCtrl">
+
+  <script>
+  function selectProduct(id){
+    $('#productModal').modal('hide');
+    angular.element(document.getElementById('AngularInvoiceCtrl')).scope().addItem(id);
+  }
+  </script>
+
     <div class="row">
         <div class="col-md-12">
             <section class="widget">
                 <div class="widget-body">
-                    <form class="form-horizontal" role="form">
+                    <form class="form-horizontal" role="form" name="invoiceForm">
                         <fieldset>
-
                             <div class="row">
                                 <div class="col-sm-6">
                                     <fieldset>
                                         <input type="hidden" id="customerId" class="form-control" ng-model="data.customerId" readonly="readonly">
 
-                                        <input type="hidden" id="invoiceId" class="form-control" ng-model="data._id" readonly="readonly">
 
                                         <div class="form-group">
                                             <label for="hint-field" class="col-sm-3 control-label">Invoice No</label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="address1-field" class="form-control" ng-model="data.invoiceNumber" readonly="readonly">
+                                                <input type="text" id="invoiceId" class="form-control" ng-model="data._id" readonly="readonly">
                                             </div>
                                         </div>
 
@@ -31,17 +45,25 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group">
-                                            <label for="customerName" class="col-sm-3 control-label">Customer</label>
+                                        <div class="form-group required">
+                                            <label for="customerFirstName" class="col-sm-3 control-label">First Name</label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="customerName" class="form-control" ng-model="data.customerName">
+                                                <input type="text" id="customerName" class="form-control" ng-model="data.customerFirstName" required>
                                             </div>
                                         </div>
+
+                                        <div class="form-group required">
+                                            <label for="customerLastName" class="col-sm-3 control-label">Last Name</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="customerName" class="form-control" ng-model="data.customerLastName" required>
+                                            </div>
+                                        </div>
+
 
                                         <div class="form-group">
                                             <label for="hint-field" class="col-sm-3 control-label">Sales Person</label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="address1-field" class="form-control" ng-model="data.salesPerson">
+                                                <input type="text" id="address1-field" class="form-control" ng-model="data.salesPerson" readonly="readonly" >
                                             </div>
                                         </div>
 
@@ -122,10 +144,10 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group">
+                                        <div class="form-group required">
                                             <label for="hint-field" class="col-sm-3 control-label">Ship Address 1</label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="address1-field" class="form-control" ng-model="data.shipAddress1">
+                                                <input type="text" id="address1-field" class="form-control" ng-model="data.shipAddress1" required>
                                             </div>
                                         </div>
 
@@ -143,17 +165,17 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group">
+                                        <div class="form-group required">
                                             <label for="hint-field" class="col-sm-3 control-label">Ship City</label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="address1-field" class="form-control" ng-model="data.shipCity">
+                                                <input type="text" id="address1-field" class="form-control" ng-model="data.shipCity" required>
                                             </div>
                                         </div>
 
-                                        <div class="form-group">
+                                        <div class="form-group required">
                                             <label for="hint-field" class="col-sm-3 control-label">Ship State</label>
                                             <div class="col-sm-8">
-                                                <select id="shipState" class="selectpicker" data-selectpicker data-width="auto" ng-model="data.shipState" ng-change="computeTotals()">
+                                                <select id="shipState" class="selectpicker" data-selectpicker data-width="auto" ng-model="data.shipState" ng-change="computeTotals()" required>
                                                   <option></option>
                                                 	<option value="AL">Alabama</option>
                                                 	<option value="AK">Alaska</option>
@@ -217,10 +239,10 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group">
+                                        <div class="form-group required">
                                             <label for="hint-field" class="col-sm-3 control-label">Ship Zip</label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="address1-field" class="form-control" ng-model="data.shipZip">
+                                                <input type="text" id="address1-field" class="form-control" ng-model="data.shipZip" required>
                                             </div>
                                         </div>
 
@@ -244,44 +266,31 @@
                                     <!-- New line item modal -->
 
 
-                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">
+                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#productModal">
                                     Add line item
                                   </button>
 
                                     <!-- Modal -->
-                                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                    <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                                         <div class="modal-dialog modal-lg" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                                                    <h4 class="modal-title" id="myModalLabel">Select item</h4>
                                                 </div>
                                                 <div class="modal-body">
 
-                                                    <table data-datatable="ng" data-dt-options="dtOptions" class="table table-striped table-hover">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Action</th>
-                                                                <th>ID</th>
-                                                                <th>Description</th>
-                                                                <th class="no-sort hidden-xs">Price</th>
-                                                                <th class="hidden-xs">Style</th>
-                                                                <th class="hidden-xs">Case</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr data-ng-repeat="item in products">
-                                                                <td>
-                                                                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#myModal" ng-click="addItem(item._id)">Add</button>
-                                                                </td>
-                                                                <td>{{item._id}}</td>
-                                                                <td>{{item.title}}</td>
-                                                                <td>{{item.sellingPrice}}</td>
-                                                                <td class="hidden-xs"><a href="#">{{item.style}}</a></td>
-                                                                <td class="hidden-xs">{{item.case}}</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
+                                                  <table id="productTable" class="display" cellspacing="0" width="100%">
+                                                      <thead>
+                                                          <tr>
+                                                              <th style="white-space: nowrap;">Item No</th>
+                                                              <th>Title</th>
+                                                              <th>Serial No</th>
+                                                              <th>Model No</th>
+                                                              <th>Status</th>
+                                                          </tr>
+                                                      </thead>
+                                                  </table>
 
                                                 </div>
                                                 <div class="modal-footer">
@@ -356,7 +365,7 @@
                             <div class="row">
                                 <div class="col-sm-offset-4 col-sm-7">
 
-                                    <button type="submit" class="btn btn-primary" ng-click="go()">Save</button>
+                                    <button type="submit" class="btn btn-primary" ng-click="go()" ng-disabled="invoiceForm.$invalid">Save</button>
                                     <a href="/#/app/inventory"><button type="button" class="btn btn-inverse"> Cancel</button></a>
                                 </div>
                             </div>

@@ -15,6 +15,27 @@
             "ajax": "/api/invoices"
         } );
 
+
+        var customerTableShown = false;
+
+            $('#customerModal').on('show.bs.modal', function (e) {
+
+              if(customerTableShown==false){
+
+              jQuery('#customerTable').DataTable( {
+                      "processing": true,
+                      "serverSide": true,
+                      "ordering": false,
+                      "ajax": "/api/customers"
+                  } );
+                  customerTableShown = true;
+                }
+            })
+
+
+
+
+
   }
 
 })();

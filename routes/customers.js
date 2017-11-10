@@ -120,7 +120,8 @@ router.route('/customers')
             for (var i = 0; i < customers.length; i++) {
                 results.data.push(
                     [
-                        '<a href=\"/#/app/customer/' + customers[i]._id + '\">' + customers[i]._id + '</a>',
+                    //  '<a href=\"/#/app/customer/' + customers[i]._id + '\">' + customers[i]._id + '</a>',
+                      '<a href=\"#\" onclick=\"selectCustomer(' + customers[i]._id + ');return false;\">' + customers[i]._id + '</a>',
                         customers[i].firstName + ' ' + customers[i].lastName,
                         customers[i].city + ', ' + customers[i].state,
                         customers[i].email,

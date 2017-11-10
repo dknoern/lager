@@ -15,6 +15,7 @@
           "processing": true,
           "serverSide": true,
           "ordering": false,
+          "pageLength": 50,
           "ajax": "/api/products"
       } );
   }
