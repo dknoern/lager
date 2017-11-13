@@ -123,8 +123,6 @@ function loadCustomer(line) {
 
 function loadProduct(line) {
 
-
-
     var statuses = [];
     statuses[1] = "In Stock";
     statuses[2] = "Repair";
@@ -142,10 +140,7 @@ function loadProduct(line) {
     productTypes[3] = "Accessories";
     productTypes[4] = "Pocket Watch";
 
-
     var mfrs = [];
-
-
 
     mfrs[1] = "A. Lange & Sohne";
     mfrs[2] = "Audemars Piguet";

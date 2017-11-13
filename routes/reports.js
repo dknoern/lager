@@ -93,10 +93,6 @@ router.route('/reports/daily-sales/:year/:month/:day')
       var day = parseInt(req.params.day);
 
 
-      console.log('month = ' + month);
-      console.log('day = ' + day);
-      console.log('year = ' + year);
-
 
         var results = {
             "data": []
@@ -144,15 +140,20 @@ router.route('/reports/daily-sales/:year/:month/:day')
         });
     });
 
-router.route('/reports/returns-summary')
+router.route('/reports/returns-summary/:year/:month')
     .get(function(req, res) {
+
+
+      var year = parseInt(req.params.year);
+      var month = parseInt(req.params.month);
+
         var results = {
             "data": []
         };
         Return.find({
             "returnDate": {
-                $gte: new Date(2017, 1, 1),
-                $lte: new Date(2017, 7, 10)
+                $gte: new Date(year, month-1, 1),
+                $lte: new Date(year, month, 1)
             }
         }, function(err, returns) {
 
@@ -229,16 +230,19 @@ router.route('/reports/partnership-items')
 
 
 
-router.route('/reports/monthly-sales')
+router.route('/reports/monthly-sales/:year/:month')
     .get(function(req, res) {
+
+      var year = parseInt(req.params.year);
+      var month = parseInt(req.params.month);
         var results = {
             "data": []
         };
         Invoice.find({
-            "invoiceType": "Invoice",
+            //"invoiceType": "Invoice",
             "date": {
-                $gte: new Date(2017, 1, 1),
-                $lte: new Date(2017, 7, 10)
+              $gte: new Date(year, month-1, 1),
+              $lte: new Date(year, month, 1)
             }
 
         }, function(err, invoices) {
@@ -257,7 +261,7 @@ router.route('/reports/monthly-sales')
 
                 results.data.push(
                     [
-                        invoices[i].customerName,
+                        invoices[i].customerFirstName + " " + invoices[i].customerLastName,
                         invoices[i].customerEmail,
                         format('yyyy-MM-dd', invoices[i].date),
                         invoices[i].total,
@@ -270,7 +274,8 @@ router.route('/reports/monthly-sales')
         }).sort({
             date: -1
         }).select({
-            customerName: 1,
+            customerFirstName: 1,
+            customerLastName: 1,
             date: 1,
             customerEmail: 1,
             _id: 1,
