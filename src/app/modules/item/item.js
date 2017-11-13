@@ -22,6 +22,38 @@
             });
         }
 
+
+        $scope.toggleOutToShow = function() {
+
+
+          /*
+
+          if($scope.data.status == "At Show"){
+
+            $scope.data.status = "In Stock";
+            Messenger().post({
+              message: "marking item ",
+              type: "success",
+              showCloseButton: true
+            }
+            );
+          }
+          else if($scope.data.status == "In Stock"){
+            $scope.data.status = "At Show";
+            Messenger().post({
+              message: "marking item ",
+              type: "success",
+              showCloseButton: true
+            }
+            );
+
+
+          }*/
+
+
+        }
+
+
         $scope.go = function() {
 
             $http({

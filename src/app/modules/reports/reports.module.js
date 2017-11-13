@@ -37,7 +37,6 @@
                     templateUrl: 'app/modules/reports/daily-sales.html',
                     controller: function($scope, $stateParams) {
                         $scope.reportId = "daily-sales";
-                        //$scope.itemId = $stateParams.itemId;
                        $scope.day =0;
                        $scope.month=0;
                        $scope.year = 0;
@@ -50,6 +49,8 @@
                     templateUrl: 'app/modules/reports/returns-summary.html',
                     controller: function($scope, $stateParams) {
                         $scope.reportId = "returns-summary";
+                        $scope.month=0;
+                        $scope.year = 0;
                     }
                 });
 
@@ -68,6 +69,8 @@
                     templateUrl: 'app/modules/reports/monthly-sales.html',
                     controller: function($scope, $stateParams) {
                         $scope.reportId = "monthly-sales";
+                        $scope.month=0;
+                        $scope.year = 0;
                     }
                 });
 
