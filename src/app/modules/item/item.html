@@ -63,8 +63,10 @@
                   <li>Sell</li>
                   <li>Out to show</li-->
                   <li ng-if="'In Stock' == data.status || 'Memo' == data.status"><a href="#" data-toggle="modal" data-target="#customerModal">Create Invoice</a></li>
-                  <!--li ng-if="'In Stock' == data.status"><a href="#" ng-click="toggleOutToShow();return false;">Out to Show</a></li-->
-                  <!--li class="divider"></li-->
+                  <li><a ng-click="cloneItem()">Clone Item</a></li-->
+                  <li ng-if="'In Stock' == data.status"><a ng-click="toggleOutToShow()">Out to Show</a></li-->
+                  <li ng-if="'At Show' == data.status"><a ng-click="toggleOutToShow()">Back from Show</a></li-->
+                  <li class="divider"></li>
                   <li><a href="#" data-toggle="modal" data-target="#deleteModal">Delete</a></li>
               </ul>
           </div>

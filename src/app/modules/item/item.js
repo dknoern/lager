@@ -23,35 +23,52 @@
         }
 
 
+
+        $scope.cloneItem = function() {
+          $scope.data.paymentAmount = 0.0;
+          $scope.data._id=null;
+          $scope.data.seller=null;
+          $scope.data.status="In Stock";
+          $scope.data.history = null;
+
+          Messenger().post({
+            message: "Item cloned. Enter new seller, serial number, and cost then save.",
+            type: "success"
+          });
+        }
+
+
+
         $scope.toggleOutToShow = function() {
 
-
-          /*
+          var newStatus = "";
 
           if($scope.data.status == "At Show"){
-
-            $scope.data.status = "In Stock";
-            Messenger().post({
-              message: "marking item ",
-              type: "success",
-              showCloseButton: true
-            }
-            );
+            newStatus = "In Stock";
           }
           else if($scope.data.status == "In Stock"){
-            $scope.data.status = "At Show";
-            Messenger().post({
-              message: "marking item ",
-              type: "success",
-              showCloseButton: true
-            }
-            );
+            newStatus = "At Show";
+          }
 
+          var statusData = {
+            "status": newStatus
+          }
 
-          }*/
+          $http.put('api/products/'+$scope.itemId + '/status',statusData).
+          success(function(freshData) {
+              //$scope.images = images;
+          });
 
+          Messenger().post({
+            message: "setting item status to <i>" + newStatus + "</i>",
+            type: "success"
+          });
 
-        }
+          $scope.data = $resource('api/products/:id').get({
+              id: $scope.itemId
+          });
+
+      }
 
 
         $scope.go = function() {
