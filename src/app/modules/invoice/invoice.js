@@ -129,8 +129,6 @@
                 $scope.addItem(productId);
             }
 
-            $scope.products = $resource('api/instock').query();
-
         } else if ($scope.productId) {
 
             $scope.invoiceType = "Partner";
@@ -194,11 +192,16 @@
         $('#productModal').on('show.bs.modal', function(e) {
             if (productTableShown == false) {
 
-                jQuery('#productTable').DataTable({
+                jQuery('#productTable').dataTable({
                     "processing": true,
                     "serverSide": true,
                     "ordering": false,
-                    "ajax": "/api/products"
+                    "ajax": {
+                        "url": "/api/products",
+                        "data": {
+                            "status": "In Stock"
+                        }
+                      }
                 });
                 productTableShown = true;
             }
