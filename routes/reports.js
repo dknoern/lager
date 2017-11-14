@@ -62,11 +62,12 @@ router.route('/reports/products-memo')
                 res.send(err);
 
             for (var i = 0; i < products.length; i++) {
-// TODO: add customer to table
+
                 results.data.push(
                     [
                         products[i]._id,
                         products[i].title,
+                        products[i].seller,
                         format('yyyy-MM-dd', products[i].lastUpdated)
                     ]
                 );
@@ -77,22 +78,16 @@ router.route('/reports/products-memo')
         }).select({
             _id: 1,
             title: 1,
+            seller: 1,
             lastUpdated: 1
         });
     });
 
-
-
-
 router.route('/reports/daily-sales/:year/:month/:day')
     .get(function(req, res) {
-
-
       var year = parseInt(req.params.year);
       var month = parseInt(req.params.month);
       var day = parseInt(req.params.day);
-
-
 
         var results = {
             "data": []
