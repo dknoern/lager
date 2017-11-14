@@ -155,24 +155,25 @@ router.route('/products')
             "data": []
         };
 
+        var statusFilter;
         if (status != null) {
+          statusFilter = {
+            $eq: status
+          };
+        }else{
+          statusFilter = {
+            $ne: "Deleted"
+          };
+        }
 
-            Product.find({
-                'status': status
-            }, function(err, products) {
-                if (err)
-                    res.send(err);
-                res.json(results);
-            });
-            query = "status:" + status;
-        } else {
+
+
+
 
             //Product.find({'title': new RegExp(search, 'i') }, function(err, products) {
             Product.find({
                 $and: [{
-                    status: {
-                        $ne: "Deleted"
-                    }
+                    status: statusFilter
                 }, {
                     $or: [{
                             'title': new RegExp(search, 'i')
@@ -217,9 +218,7 @@ router.route('/products')
                 }
 
                 Product.count({
-                    status: {
-                        $ne: "Deleted"
-                    }
+                    status: statusFilter
                 }, function(err, count) {
                     results.recordsTotal = count;
 
@@ -262,7 +261,7 @@ router.route('/products')
                 status: 1,
                 productType: 1
             });
-        }
+
         console.log("looking for products with status=" + status);
 
 
