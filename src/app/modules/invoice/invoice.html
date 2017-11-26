@@ -12,13 +12,6 @@
 
 <div id="AngularInvoiceCtrl" data-ng-controller="InvoiceCtrl">
 
-  <script>
-  function selectProduct(id){
-    $('#productModal').modal('hide');
-    angular.element(document.getElementById('AngularInvoiceCtrl')).scope().addItem(id);
-  }
-  </script>
-
     <div class="row">
         <div class="col-md-12">
             <section class="widget">
@@ -230,12 +223,6 @@
                                                 	<option value="WY">Wyoming</option>
                                                 </select>
 
-
-
-
-
-
-
                                             </div>
                                         </div>
 
@@ -248,27 +235,19 @@
 
                                     </fieldset>
                                 </div>
-
-
                             </div>
-
                         </fieldset>
-
 
                         <div class="form-actions">
                             <div class="row">
                                 <div class="col-sm-offset-1 col-sm-10">
 
-
                                     <h2>Line Items</h2>
 
-
                                     <!-- New line item modal -->
-
-
                                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#productModal">
-                                    Add line item
-                                  </button>
+                                      Add line item
+                                    </button>
 
                                     <!-- Modal -->
                                     <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -342,16 +321,11 @@
                                                     <td><b><span id="currency-default">{{data.total | currency}}</span></b></td>
                                                     <td></td>
                                                 </tr>
-
                                         </tbody>
                                     </table>
-
-
-
                                 </div>
                             </div>
                         </div>
-
 
                         <div  ng-if="data._id" class="form-actions">
                             <div class="row">
@@ -373,13 +347,6 @@
                     </form>
                 </div>
             </section>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-
-
-
         </div>
     </div>
 </div>

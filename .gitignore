@@ -7,7 +7,8 @@ node_modules
 dist
 package-lock.json
 auth0-variables.js
+email-addresses.js
+aws-credentials.js
 uploads
 nohup.out
 .idea
-invoices.json

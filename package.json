@@ -19,7 +19,8 @@
     "express-jwt-authz": "1.0.0",
     "csv-parse": "1.2.3",
     "date-format": "1.1.0",
-    "express-force-ssl": "0.3.2"
+    "express-force-ssl": "0.3.2",
+    "aws-sdk": "latest"
   },
   "scripts": {
     "test": "gulp test"
