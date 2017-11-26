@@ -2,9 +2,19 @@ var express = require('express');
 var router = express.Router();
 var Repair = require('../models/repair');
 var mongoose = require('mongoose');
+var Counter = require('../models/counter');
 var history = require('./history');
 const checkJwt = require('./jwt-helper').checkJwt;
 var format = require('date-format');
+
+
+
+function formatDate(date) {
+    if (date == null) return "";
+    else {
+        return format('yyyy-MM-dd', date);
+    }
+}
 
 router.route('/repairs')
     .post(checkJwt, function(req, res) {
@@ -19,17 +29,58 @@ router.route('/repairs')
         repair.repairIssues = req.body.repairIssues;
         repair.repairNotes = req.body.repairNotes;
         repair.vendor = req.body.vendor;
-        repair.customerName = req.body.customerName;
+        repair.customerFirstName = req.body.customerFirstName;
+        repair.customerLastName = req.body.customerLastName;
         repair.phone = req.body.phone;
         repair.email = req.body.email;
         repair.productId = req.body.productId;
         repair.customerId = req.body.customerId;
+        repair.hasPapers = req.body.hasPapers;
+
+        console.log("calling updateProductHistory")
+
+        var lineItems = new Array();
+        lineItems[0] = {
+            productId: repair.itemNumber
+        }
 
 
-            var query = {
+
+        if (repair._id == null) {
+
+            history.updateProductHistory(lineItems, "Repair", "in repair", req.user['http://mynamespace/name']);
+
+            Counter.findByIdAndUpdate({
+                _id: 'repairNumber'
+            }, {
+                $inc: {
+                    seq: 1
+                }
+            }, function(err, counter) {
+                if (err) {
+                    console.log(err);
+                    return res.send(500, {
+                        error: err
+                    });
+                } else {
+                    repair._id = counter.seq;
+                    repair.save(function(err) {
+                        if (err) {
+                            res.send(err);
+                        }
+                        return res.send("repair saved");
+                    });
+                }
+            });
+        } else {
+
+            if (repair.returnDate != null) {
+                history.updateProductHistory(lineItems, "In Stock", "back from repair", req.user['http://mynamespace/name']);
+            }
+
+            Repair.findOneAndUpdate({
                 _id: repair._id
-            };
-            Repair.findOneAndUpdate(query, repair, {
+            }, repair, {
                 upsert: true
             }, function(err, doc) {
                 if (err) return res.send(500, {
@@ -37,15 +88,10 @@ router.route('/repairs')
                 });
                 return res.send("repair saved");
             });
-
-        console.log("calling updateProductHistory")
-
-        var lineItems = new Array();
-        var lineItem = {
-          productId: repair.productId
         }
 
-        history.updateProductHistory(lineItems,"REPAIR","in repair",req.user['http://mynamespace/name']);
+
+
     })
 
     .get(function(req, res) {
@@ -81,13 +127,21 @@ router.route('/repairs')
                 res.send(err);
 
             for (var i = 0; i < repairs.length; i++) {
+
+
+                var customerName = "";
+                if (repairs[i].customerFirstName) customerName += repairs[i].customerFirstName;
+                if (repairs[i].customerFirstName && repairs[i].customerLastName) customerName += " ";
+                if (repairs[i].customerLastName) customerName += repairs[i].customerLastName;
+
                 results.data.push(
                     [
                         '<a href=\"/#/app/repair/' + repairs[i]._id + '\">' + repairs[i]._id + '</a>',
                         repairs[i].description,
-                        format('yyyy-MM-dd', repairs[i].dateOut),
-                        format('yyyy-MM-dd', repairs[i].expectedReturnDate),
-                        repairs[i].customerName,
+                        formatDate(repairs[i].dateOut),
+                        formatDate(repairs[i].expectedReturnDate),
+                        formatDate(repairs[i].returnDate),
+                        customerName,
                         repairs[i].vendor
                     ]
                 );
@@ -138,7 +192,9 @@ router.route('/repairs')
             description: 1,
             dateOut: 1,
             expectedReturnDate: 1,
-            customerName: 1,
+            returnDate: 1,
+            customerFirstName: 1,
+            customerLastName: 1,
             vendor: 1
         });
     });

@@ -14,7 +14,7 @@ router.route('/returns')
         ret.returnNumber = req.body.invoiceNumber;
         ret.invoiceId = req.body.invoiceId;
         ret.invoiceNumber = req.body.invoiceNumber;
-        ret.customer = req.body.customer;
+        ret.customerName = req.body.customerName;
         ret.customerId = req.body.customerId;
         ret.date = new Date(req.body.date);
         ret.total = req.body.total;
@@ -30,10 +30,13 @@ router.route('/returns')
         if (ret.returnNumber == null || ret._id == "") {
             ret.save(function(err) {
                 if (err)
+                {
                     res.send(err);
+                  }else{
                 res.json({
                     message: 'return updated'
                 });
+              }
             });
         } else {
             var query = {
@@ -174,7 +177,7 @@ router.route('/returns/:return_id')
             if (err)
                 res.send(err);
 
-            ret.customer = req.body.customer;
+            ret.customerName = req.body.customerName;
             ret.returnNumber = req.body.returnNumber;
 
             ret.save(function(err) {

@@ -26,8 +26,8 @@ console.log("refreshing DB");
 //loadCsvFile("data/Customers.txt",loadCustomer);
 //loadCsvFile("data/Invoices.txt", loadInvoice);
 //loadCsvFile("data/Returns.txt",loadReturn);
-//loadCsvFile("data/Repairs.txt",loadRepair);
-loadCsvFile("data/Invoice_Detail.txt",loadInvoiceDetail);
+loadCsvFile("data/Repairs.txt",loadRepair);
+//loadCsvFile("data/Invoice_Detail.txt",loadInvoiceDetail);
 //loadCsvFile("data/Returns_Detail.txt",loadReturnDetail);
 
 function loadCsvFile(file, functionRef) {
@@ -382,13 +382,20 @@ function loadRepair(line) {
     repair.description = line[5];
     repair.repairIssues = line[6];
     repair.vendor = line[7];
-    repair.customerName = line[8];
+
+    var customerName = line[8];
+
+    var fields = customerName.split(" ");
+    if(fields!=null && fields.length>0){
+      repair.customerFirstName = fields[0];
+      if(fields.length>1)
+        repair.customerLastName = fields[1];
+    }
     repair.phone = line[9];
     repair.email = line[10];
     repair.repairNotes = line[11];
     repair.cost = line[12];
     repair.hasPapers = line[13];
-
 
     Repair.findOneAndUpdate({
         "_id": repair._id

@@ -1,4 +1,14 @@
 
+
+<script>
+
+function selectCustomer(id){
+  $('#customerModal').modal('hide')
+   document.location.href = "/#/app/repair/new?customerId="+id;
+}
+</script>
+
+
 <h1 class="page-title"><span class="fw-semi-bold">Repairs</span></h1>
 
 <section class="widget">
@@ -6,7 +16,7 @@
     <div class="mt">
 
       <p>
-        <a href="/#/app/repair/new"><button type="button" class="btn btn-primary">
+        <a href="#" data-toggle="modal" data-target="#customerModal"><button type="button" class="btn btn-primary">
           <span class="icon">
             <i class="fa fa-plus-circle"></i>
           </span>New Repair</button></a>
@@ -20,11 +30,49 @@
                   <th>Description</th>
                   <th>Date Out</th>
                   <th>Expected Return</th>
+                  <th>Return Date</th>
                   <th>Customer</th>
                   <th>Vendor</th>
               </tr>
           </thead>
       </table>
     </div>
+
+
+
+          <!-- Customer Modal -->
+          <div class="modal fade" id="customerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+              <div class="modal-dialog modal-lg" role="document">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                          <h4 class="modal-title" id="myModalLabel">Select customer for repair</h4>
+                      </div>
+                      <div class="modal-body">
+
+                        <table id="customerTable" class="display" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Number</th>
+                                    <th>Name</th>
+                                    <th>City</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Company</th>
+                                </tr>
+                            </thead>
+                        </table>
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancel</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+
+
+
+
   </div>
 </section>
