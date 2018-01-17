@@ -1,0 +1,161 @@
+
+<style>
+  .form-group.required .control-label:after {
+    content: " *";
+    color: darkred;
+  }
+</style>
+
+<script>
+ function assignProductNumber()
+ {
+
+   var type = document.getElementById('product-type').value;
+   var itemNumber = document.getElementById('itemNumber').value;
+  var consignment = document.getElementById('consignment').value;
+
+   if(consignment != "")
+   {
+     document.getElementById('itemNumber').value = "";
+   }
+
+    else if(type=='Jewelry')
+     {
+       document.getElementById('itemNumber').value = "J2000123";
+     }
+     else {
+       document.getElementById('itemNumber').value = "2000123";
+     }
+ }
+</script>
+
+
+
+<h1 class="page-title"><span class="fw-semi-bold">Log Item</span></h1>
+<div data-ng-controller="ItemCtrl">
+  <div class="row">
+    <div class="col-md-12">
+      <section class="widget">
+        <div class="widget-body">
+          <form class="form-horizontal" role="form">
+            <div class="row">
+              <div class="col-sm-12">
+            <fieldset>
+
+              <div class="form-group required">
+                <label for="receivedFrom" class="col-sm-3 control-label">Received From</label>
+                <div class="col-sm-8">
+
+                  <select id="receivedFrom" class="selectpicker" data-selectpicker
+                          data-width="auto" required>
+                    <option></option>
+                    <option>FexEx</option>
+                    <option>UPS</option>
+                    <option>USPS</option>
+                    <option>Courier</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+              </div>
+
+
+
+
+              <div class="form-group required">
+                <label for="itemNumber" class="col-sm-3 control-label">Item Number</label>
+                <div class="col-sm-8">
+                  <input type="text" id="itemNumber" class="form-control" value="" required>
+                </div>
+              </div>
+
+              <div class="form-group required">
+                <label for="title" class="col-sm-3 control-label">Item Received</label>
+                <div class="col-sm-8">
+                  <input type="text" id="title" class="form-control" value="" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="customerName" class="col-sm-3 control-label">Customer Name</label>
+                <div class="col-sm-8">
+                  <input type="text" id="customerName" class="form-control" value="" >
+                </div>
+              </div>
+
+
+              <div class="form-group">
+                <label for=receivedBy" class="col-sm-3 control-label">Received By</label>
+                <div class="col-sm-8">
+                  <input type="text" id="receivedBy" class="form-control" value="Janet">
+                </div>
+              </div>
+
+
+
+              <div class="form-group">
+                <label for="comments" class="col-sm-3 control-label">Comments</label>
+                <div class="col-sm-8">
+                  <textarea id="comments" rows=6 cols="40"></textarea>
+                </div>
+              </div>
+
+              <div>
+
+
+            </fieldset>
+
+          </div>
+
+
+          </div>
+
+
+            <div class="form-actions">
+              <div class="row">
+                <div class="col-sm-offset-4 col-sm-7">
+                  <a href="item#/app/inventory"><button type="submit" class="btn btn-primary">Save</button>
+                  <button type="button" class="btn btn-inverse">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
+    </div>
+  </div>
+
+
+
+  <div class="row">
+
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="col-md-12">
+          <section class="widget">
+            <header>
+              <h5><strong>Image Upload</strong></h5>
+            </header>
+            <div class="widget-body">
+              <form class="dropzone" action="/api/upload" data-dropzone action="#" id="myDropzone">
+                <input type="hidden" name="itemId" value="{{itemId}}" />
+              </form>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+  <div class="row">
+    <div class="col-md-12">
+
+    </div>
+  </div>
+
+
+</div>

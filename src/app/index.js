@@ -21,7 +21,9 @@
         'singApp.repairs',
         'singApp.reports',
         'singApp.form.validation',
-        'singApp.form.wizard'
+        'singApp.form.wizard',
+        'singApp.log',
+        'singApp.logitem'
 
   ]).config(config);
 

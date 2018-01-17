@@ -20,15 +20,15 @@ console.log("refreshing DB");
 //mongoose.disconnect();
 
 
-//var datadir = "/Users/davidk/Dropbox/demesy-data";
+var datadir = "/Users/davidk/Dropbox/demesy";
 
-//loadCsvFile("data/Inventory.txt",loadProduct);
-//loadCsvFile("data/Customers.txt",loadCustomer);
-//loadCsvFile("data/Invoices.txt", loadInvoice);
-//loadCsvFile("data/Returns.txt",loadReturn);
-loadCsvFile("data/Repairs.txt",loadRepair);
-//loadCsvFile("data/Invoice_Detail.txt",loadInvoiceDetail);
-//loadCsvFile("data/Returns_Detail.txt",loadReturnDetail);
+//loadCsvFile(datadir + "/Inventory.txt",loadProduct);
+//loadCsvFile(datadir + "/Customers.txt",loadCustomer);
+//loadCsvFile(datadir + "/Invoice.txt", loadInvoice);
+//loadCsvFile(datadir + "/Invoice_Detail.txt",loadInvoiceDetail);
+//loadCsvFile(datadir + "/Returns.txt",loadReturn);
+//loadCsvFile(datadir + "/Repairs.txt",loadRepair);
+loadCsvFile(datadir + "/Returns_Detail.txt",loadReturnDetail);
 
 function loadCsvFile(file, functionRef) {
 
