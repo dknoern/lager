@@ -17,102 +17,30 @@
                         $scope.images = images;
                     });
 
-            $scope.data = $resource('api/products/:id').get({
+            $scope.data = $resource('api/logitems/:id').get({
                 id: $scope.itemId
             });
         }
 
-
-        $scope.cloneItem = function() {
-          $scope.data.paymentAmount = 0.0;
-          $scope.data._id=null;
-          $scope.data.seller=null;
-          $scope.data.status="In Stock";
-          $scope.data.history = null;
-
-          Messenger().post({
-            message: "Item cloned. Enter new seller, serial number, and cost then save.",
-            type: "success"
-          });
-        }
-
-
-        $scope.toggleOutToShow = function() {
-
-          var newStatus = "";
-
-          if($scope.data.status == "At Show"){
-            newStatus = "In Stock";
-          }
-          else if($scope.data.status == "In Stock"){
-            newStatus = "At Show";
-          }
-
-          var statusData = {
-            "status": newStatus
-          }
-
-          $http.put('api/products/'+$scope.itemId + '/status',statusData).
-          success(function(freshData) {
-              //$scope.images = images;
-          });
-
-          Messenger().post({
-            message: "setting item status to <i>" + newStatus + "</i>",
-            type: "success"
-          });
-
-          $scope.data = $resource('api/products/:id').get({
-              id: $scope.itemId
-          });
-
-      }
 
 
         $scope.go = function() {
 
             $http({
                 method: "POST",
-                url: "api/products/",
+                url: "api/logitems/",
                 data: angular.toJson($scope.data),
                 headers: {
                     'Content-Type': 'application/json'
                 }
             }).then(function successCallback(response) {
                 console.log(response.statusText);
-                $state.go('app.inventory');
+                $state.go('app.reports9');
             }, function errorCallback(response) {
                 console.log(response.statusText);
             });
         }
 
-        $scope.deleteItem = function(){
-
-          var itemNumber = document.getElementById('itemNumber').value;
-
-          $http({
-              method: "DELETE",
-              url: "api/products/"+itemNumber,
-              headers: {
-                  'Content-Type': 'application/json'
-              }
-          }).then(function successCallback(response) {
-              console.log(response.statusText);
-              $state.go('app.inventory');
-
-              var theMessage = 'Deleted item ' + itemNumber;
-
-              Messenger().post({
-                message: theMessage,
-                type: "success",
-                showCloseButton: true
-              }
-              );
-
-          }, function errorCallback(response) {
-              console.log(response.statusText);
-          });
-        }
 
 
         $scope.uploadFile = function(){

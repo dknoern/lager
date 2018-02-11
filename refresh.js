@@ -9,48 +9,79 @@ var Invoice = require('./models/invoice');
 var Return = require('./models/return');
 var Repair = require('./models/repair');
 
-var app = express();
-var bodyParser = require('body-parser');
-const path = require('path');
 var mongoose = require('mongoose');
+
+mongoose.Promise = require('bluebird');
+
+var promises = null;
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+//mongoose.connect('mongodb://lager:wntNJy5DqatKcvdYWCDrwAxYr67JC32D@ds123698.mlab.com:23698/lager');
+
 mongoose.connect('mongodb://localhost:27017/lager');
 
-console.log("refreshing DB");
+function load(modelName, fileName, functionName) {
 
-//mongoose.disconnect();
+    promises = new Array();
+    var datadir = process.env.HOME + "/Dropbox/demesy";
 
+    var drops = new Array();
 
-var datadir = "/Users/davidk/Dropbox/demesy";
+    if (modelName != null) {
+        drops.push(modelName.remove({}, function (err, row) {
+        }));
+    }
 
-//loadCsvFile(datadir + "/Inventory.txt",loadProduct);
-//loadCsvFile(datadir + "/Customers.txt",loadCustomer);
-//loadCsvFile(datadir + "/Invoice.txt", loadInvoice);
-//loadCsvFile(datadir + "/Invoice_Detail.txt",loadInvoiceDetail);
-//loadCsvFile(datadir + "/Returns.txt",loadReturn);
-//loadCsvFile(datadir + "/Repairs.txt",loadRepair);
-loadCsvFile(datadir + "/Returns_Detail.txt",loadReturnDetail);
+    Promise.all(drops).then(function () {
+        loadCsvFile(datadir + "/" + fileName, functionName);
+    });
+}
+
+var collection = process.argv[2];
+
+if (collection == 'customers') load(Customer, 'Customers.txt', loadCustomer);
+else if (collection == 'products') load(Product, 'Inventory.txt', loadProduct);
+else if (collection == 'invoices') load(Invoice, 'Invoice.txt', loadInvoice);
+else if (collection == 'returns') load(Return, 'Returns.txt', loadReturn);
+else if (collection == 'repairs') load(Repair, 'Repairs.txt', loadRepair);
+else if (collection == 'returndetails') load(null, 'Returns_Detail.txt', loadReturnDetail);
+else if (collection == 'invoicedetails') load(null, 'Invoice_Detail.txt', loadInvoiceDetail);
+else console.log('invalid collection, specify customers | products | invoices | returns | repairs | returndetails | invoicedetails');
 
 function loadCsvFile(file, functionRef) {
 
-    var count = 0;
+    console.log('loading records from ' + file);
+
     var ids = new Array();
 
-    fs.readFile(file, 'utf8', function(err, data) {
+    fs.readFile(file, function (err, data) {
         if (err) {
             return console.log(err);
         }
 
         parse(data, {
             comment: '#'
-        }, function(err, output) {
+        }, function (err, output) {
             for (var i = 0; i < output.length; i++) {
                 line = output[i];
+
+                for (var j=0;j<line.length;j++){
+                    line[j] = line[j].replace(/\uFFFD/g, '');
+                }
                 id = line[0];
                 var line = output[i];
                 line[0] = dedupeValue(ids, id);
-                console.log("LINE:" + output[i]);
-                functionRef(line);
+                promises.push(functionRef(line));
             }
+        });
+
+        Promise.all(promises).then(async function () {
+            console.log(promises.length + ' records loaded from ' + file);
+            await sleep(2000);
+            mongoose.disconnect();
         });
     });
 }
@@ -64,8 +95,6 @@ function dedupeValue(array, value) {
     }
     return value;
 }
-
-
 
 
 function loadCustomer(line) {
@@ -101,23 +130,15 @@ function loadCustomer(line) {
     customer.lastUpdated = line[20];
     //customer.country = req.body.country;
 
-
-   // using promise instead of callback
-  //  return Customer.findOneAndUpdate({ "_id" : customer.id }, customer, {'upsert': true}).exec();
-
     Customer.findOneAndUpdate({
         "_id": customer.id
     }, customer, {
         upsert: true
-    }, function(err, doc) {
+    }, function (err, doc) {
         if (err) {
             console.log("error" + err);
         }
     });
-
-    console.log("loaded customer " + line[0] + " " + line[1] + " " + line[2]);
-    //return Promise.resolve(true);
-    return Promise.resolve(true);
 }
 
 
@@ -181,7 +202,7 @@ function loadProduct(line) {
     mfrs[37] = "Maurice Lacroix";
     mfrs[38] = "Zenith";
 
-    var  condition = [];
+    var condition = [];
     condition[6] = "Pre-owned";
     condition[7] = "Unused";
 
@@ -228,11 +249,16 @@ function loadProduct(line) {
     var mfgr = line[18];  // never used
 
     product.lastUpdated = new Date(line[19]);
+    if (product.lastUpdated == undefined) {
+        product.lastUpdated = new Date();
+    }
+
     var userId = line[20]; // never used
-    product.cost = line[21].replace("$", "").replace(")", "").replace("(", "-");
-    product.listPrice = line[22].replace("$", "").replace(")", "").replace("(", "-");
-    product.sellingPrice = line[23].replace("$", "").replace(")", "").replace("(", "-");
-    product.totalRepairCost = line[24].replace("$", "").replace(")", "").replace("(", "-");
+
+    product.cost = cleanMoney(line[21]);
+    product.listPrice = cleanMoney(line[22]);
+    product.sellingPrice = cleanMoney(line[23]);
+    product.totalRepairCost = cleanMoney(line[24]);
     product.photo = line[25];
     product.saleDate = line[26];
     product.received = line[27];
@@ -245,21 +271,25 @@ function loadProduct(line) {
         action: "item created"
     }];
 
-    product.save(function(err, doc) {
+    var promise = product.save(function (err, doc) {
         if (err) {
             console.log("error" + err);
         }
     });
 
-    console.log("loaded product " + product._id + " " + product.title);
-    return Promise.resolve(true);
+    return promise;
 }
 
-
-
+function cleanMoney(s) {
+    if (s != null) {
+        return s.replace("$", "").replace(")", "").replace("(", "-");
+    } else {
+        return s;
+    }
+}
 
 function loadInvoice(line) {
-    //console.log("line is "+ line);
+    //console.log("invoice "+ line);
 
     // INVOICE FIELDS
     // invoiceNo,custNo,invoiceDate,invoiceType,shipVia,paidBy,pmtId,taxable,subtotal,shipping,salesTax,
@@ -276,7 +306,7 @@ function loadInvoice(line) {
     invoice.paymemtId = line[6];
     invoice.taxable = line[7];
     invoice.subtotal = line[8];
-    invoice.shipping = line[9];
+    invoice.shipping = cleanMoney(line[9]);
     invoice.salesTax = line[10];
     invoice.total = line[11];
     invoice.salesPerson = line[12];
@@ -289,41 +319,27 @@ function loadInvoice(line) {
     invoice.shipZip = line[19];
 
     // do not inport blank invoices
-    if (invoice.invoiceType!=null && invoice.invoiceType != "") {
+    if (invoice.invoiceType != null && invoice.invoiceType != "") {
 
         if (invoice.customerId != null) {
-            Customer.findById(invoice.customerId, function(err, customer) {
-                if (err) {
-                    console.log(err);
-                }
-                if (customer != null) {
 
-                    invoice.customerFirstName = customer.firstName;
-                    invoice.customerLastName = customer.lastName;
-                    invoice.customerEmail = customer.email;
-                }
-                saveInvoice(invoice);
-            })
-        } else {
-            saveInvoice(invoice);
+            var promise = Customer.findById(invoice.customerId).exec();
+
+            promise.then(function (customerFromDb) {
+                var customer = customerFromDb;
+                invoice.customerFirstName = customer.firstName;
+                invoice.customerLastName = customer.lastName;
+                invoice.customerEmail = customer.email;
+                return invoice.save();
+
+            });
+        }
+        else {
+            invoice.save();
         }
     }
-    return Promise.resolve(true);
 }
 
-function saveInvoice(invoice) {
-    Invoice.findOneAndUpdate({
-        "_id": invoice.id
-    }, invoice, {
-        upsert: true
-    }, function(err, doc) {
-        if (err) {
-            console.log("error" + err);
-
-            console.log("loaded invoice " + line[0]);
-        }
-    });
-}
 
 function loadReturn(line) {
 
@@ -337,16 +353,16 @@ function loadReturn(line) {
     retrn.returnDate = line[1];
     retrn.invoiceId = line[2];
     retrn.taxable = line[3];
-    retrn.subTotal = line[4].replace("$", "").replace(")", "").replace("(", "-");
-    retrn.shipping = line[5].replace("$", "").replace(")", "").replace("(", "-");
-    retrn.salesTax = line[6].replace("$", "").replace(")", "").replace("(", "-");
-    retrn.totalReturnAmount = line[7].replace("$", "").replace(")", "").replace("(", "-");
+    retrn.subTotal = cleanMoney(line[4]);
+    retrn.shipping = cleanMoney(line[5]);
+    retrn.salesTax = cleanMoney(line[6]);
+    retrn.totalReturnAmount = cleanMoney(line[7]);
     retrn.salesPerson = line[8];
     retrn.customerId = line[9];
     retrn.processed = line[10];
 
     if (retrn.customerId != null) {
-        Customer.findById(retrn.customerId, function(err, customer) {
+        Customer.findById(retrn.customerId, function (err, customer) {
             if (err) {
                 console.log(err);
             }
@@ -359,10 +375,9 @@ function loadReturn(line) {
         saveReturn(retrn);
     }
 
-    console.log("loaded return " + line[0]);
+    //console.log("loaded return " + line[0]);
     return Promise.resolve(true);
 }
-
 
 
 function loadRepair(line) {
@@ -370,7 +385,6 @@ function loadRepair(line) {
     // REPAIR FIELDS
     // repairId,dateOut,expectedReturnDate,returnDate,itemNo,description,
     //repairIssues,vendor,customerName,phone,email,repairNotes,cost,hasPapers
-
 
     var repair = new Repair();
 
@@ -386,10 +400,10 @@ function loadRepair(line) {
     var customerName = line[8];
 
     var fields = customerName.split(" ");
-    if(fields!=null && fields.length>0){
-      repair.customerFirstName = fields[0];
-      if(fields.length>1)
-        repair.customerLastName = fields[1];
+    if (fields != null && fields.length > 0) {
+        repair.customerFirstName = fields[0];
+        if (fields.length > 1)
+            repair.customerLastName = fields[1];
     }
     repair.phone = line[9];
     repair.email = line[10];
@@ -401,7 +415,7 @@ function loadRepair(line) {
         "_id": repair._id
     }, repair, {
         upsert: true
-    }, function(err, doc) {
+    }, function (err, doc) {
         if (err) {
             console.log("error" + err);
         } else {
@@ -449,17 +463,14 @@ function loadInvoiceDetail(line) {
         }
     }, {
         upsert: true
-    }, function(err, doc) {
+    }, function (err, doc) {
         if (err) {
             console.log("ERROR adding line item " + err);
         }
-        console.log('line item ' + invoiceDetailId + " added to invoice " + invoiceId);
     });
-
 
     return Promise.resolve(true);
 }
-
 
 
 function saveReturn(retrn) {
@@ -467,17 +478,12 @@ function saveReturn(retrn) {
         "_id": retrn.id
     }, retrn, {
         upsert: true
-    }, function(err, doc) {
+    }, function (err, doc) {
         if (err) {
             console.log("error" + err);
         }
     });
 }
-
-
-
-
-
 
 
 function loadReturnDetail(line) {
@@ -524,13 +530,12 @@ function loadReturnDetail(line) {
         }
     }, {
         upsert: true
-    }, function(err, doc) {
+    }, function (err, doc) {
         if (err) {
             console.log("ERROR adding line item " + err);
         }
-        console.log('line item ' + invoiceDetailId + " added to return " + returnId);
+        //  console.log('line item ' + invoiceDetailId + " added to return " + returnId);
     });
-
 
     return Promise.resolve(true);
 }

@@ -5,15 +5,17 @@ var Repair = require('../models/repair');
 var Return = require('../models/return');
 var Invoice = require('../models/invoice');
 var Counter = require('../models/counter');
+var LogItem = require('../models/logitem');
+//var LogItem = require('../models/logItem');
 const checkJwt = require('./jwt-helper').checkJwt;
 var format = require('date-format');
 
-router.use(function(req, res, next) {
+router.use(function (req, res, next) {
     next();
 });
 
 router.route('/reports/outstanding-repairs')
-    .get(function(req, res) {
+    .get(function (req, res) {
         var results = {
             "data": []
         };
@@ -21,7 +23,7 @@ router.route('/reports/outstanding-repairs')
         Repair.find({
             'returnDate': null
 
-        }, function(err, repairs) {
+        }, function (err, repairs) {
             if (err)
                 res.send(err);
 
@@ -49,14 +51,14 @@ router.route('/reports/outstanding-repairs')
 
 
 router.route('/reports/products-memo')
-    .get(function(req, res) {
+    .get(function (req, res) {
         var results = {
             "data": []
         };
 
         Product.find({
             'status': 'Memo'
-        }, function(err, products) {
+        }, function (err, products) {
 
             if (err)
                 res.send(err);
@@ -84,21 +86,21 @@ router.route('/reports/products-memo')
     });
 
 router.route('/reports/daily-sales/:year/:month/:day')
-    .get(function(req, res) {
-      var year = parseInt(req.params.year);
-      var month = parseInt(req.params.month);
-      var day = parseInt(req.params.day);
+    .get(function (req, res) {
+        var year = parseInt(req.params.year);
+        var month = parseInt(req.params.month);
+        var day = parseInt(req.params.day);
 
         var results = {
             "data": []
         };
         Invoice.find({
-          //  "status": "Sold",
+            //  "status": "Sold",
             "date": {
-                $gte: new Date(year, month-1, day),
-                $lt: new Date(year, month-1,day+1)
+                $gte: new Date(year, month - 1, day),
+                $lt: new Date(year, month - 1, day + 1)
             }
-        }, function(err, invoices) {
+        }, function (err, invoices) {
 
             if (err)
                 res.send(err);
@@ -108,9 +110,9 @@ router.route('/reports/daily-sales/:year/:month/:day')
                 var itemNo = "";
                 var title = "";
 
-                if(invoices[i].lineItems!=null && invoices[i].lineItems.length>0 ){
-                  itemNo = invoices[i].lineItems[0].productId;
-                  title = invoices[i].lineItems[0].name
+                if (invoices[i].lineItems != null && invoices[i].lineItems.length > 0) {
+                    itemNo = invoices[i].lineItems[0].productId;
+                    title = invoices[i].lineItems[0].name
                 }
 
                 results.data.push(
@@ -118,7 +120,6 @@ router.route('/reports/daily-sales/:year/:month/:day')
                         itemNo,
                         format('yyyy-MM-dd', invoices[i].date),
                         title,
-                        //title,
                         invoices[i].salesPerson,
                         invoices[i].methodOfSale
                     ]
@@ -135,22 +136,73 @@ router.route('/reports/daily-sales/:year/:month/:day')
         });
     });
 
+
+
+router.route('/reports/log-items/:year/:month/:day')
+    .get(function (req, res) {
+        var year = parseInt(req.params.year);
+        var month = parseInt(req.params.month);
+        var day = parseInt(req.params.day);
+
+        var results = {
+            "data": []
+        };
+        LogItem.find({
+
+            "date": {
+                $gte: new Date(year, month - 1, day),
+                $lt: new Date(year, month - 1, day + 1)
+            }
+        }, function (err, logItems) {
+
+            if (err)
+                res.send(err);
+
+            for (var i = 0; i < logItems.length; i++) {
+
+                results.data.push(
+                    [
+                        format('yyyy-MM-dd', logItems[i].date),
+                        logItems[i].receivedFrom,
+                        "<a href=\"/#/app/log-item/" + logItems[i].id +"\">" + logItems[i].title + "</a>",
+                        logItems[i].receivedBy,
+                        logItems[i].comments,
+                    ]
+                );
+            }
+            res.json(results);
+        }).sort({
+            date: -1
+        }).select({
+            _id: 1,
+            date: 1,
+            comments: 1,
+            title: 1,
+            receivedBy: 1,
+            receivedFrom: 1
+        });
+    });
+
+
+
+
+
 router.route('/reports/returns-summary/:year/:month')
-    .get(function(req, res) {
+    .get(function (req, res) {
 
 
-      var year = parseInt(req.params.year);
-      var month = parseInt(req.params.month);
+        var year = parseInt(req.params.year);
+        var month = parseInt(req.params.month);
 
         var results = {
             "data": []
         };
         Return.find({
             "returnDate": {
-                $gte: new Date(year, month-1, 1),
+                $gte: new Date(year, month - 1, 1),
                 $lte: new Date(year, month, 1)
             }
-        }, function(err, returns) {
+        }, function (err, returns) {
 
             if (err)
                 res.send(err);
@@ -180,18 +232,14 @@ router.route('/reports/returns-summary/:year/:month')
     });
 
 
-
-
-
-
 router.route('/reports/partnership-items')
-    .get(function(req, res) {
+    .get(function (req, res) {
         var results = {
             "data": []
         };
         Product.find({
             "sellerType": "Partner"
-        }, function(err, products) {
+        }, function (err, products) {
 
             if (err)
                 res.send(err);
@@ -223,24 +271,22 @@ router.route('/reports/partnership-items')
     });
 
 
-
-
 router.route('/reports/monthly-sales/:year/:month')
-    .get(function(req, res) {
+    .get(function (req, res) {
 
-      var year = parseInt(req.params.year);
-      var month = parseInt(req.params.month);
+        var year = parseInt(req.params.year);
+        var month = parseInt(req.params.month);
         var results = {
             "data": []
         };
         Invoice.find({
             //"invoiceType": "Invoice",
             "date": {
-              $gte: new Date(year, month-1, 1),
-              $lte: new Date(year, month, 1)
+                $gte: new Date(year, month - 1, 1),
+                $lte: new Date(year, month, 1)
             }
 
-        }, function(err, invoices) {
+        }, function (err, invoices) {
 
             if (err)
                 res.send(err);
@@ -280,16 +326,15 @@ router.route('/reports/monthly-sales/:year/:month')
     });
 
 
-
 router.route('/reports/out-at-show')
-    .get(function(req, res) {
+    .get(function (req, res) {
         var results = {
             "data": []
         };
 
         Product.find({
             'status': 'At Show'
-        }, function(err, products) {
+        }, function (err, products) {
 
             if (err)
                 res.send(err);
@@ -314,20 +359,17 @@ router.route('/reports/out-at-show')
             lastUpdated: 1
         });
     });
-
-
-
 
 
 router.route('/reports/show-report')
-    .get(function(req, res) {
+    .get(function (req, res) {
         var results = {
             "data": []
         };
 
         Product.find({
             'status': 'At Show'
-        }, function(err, products) {
+        }, function (err, products) {
 
             if (err)
                 res.send(err);
@@ -354,45 +396,41 @@ router.route('/reports/show-report')
     });
 
 
-    router.route('/reports/first-sale-date')
-        .get(function(req, res) {
+router.route('/reports/first-sale-date')
+    .get(function (req, res) {
 
-            Invoice.findOne({
-            }, function(err, invoice) {
+        Invoice.findOne({}, function (err, invoice) {
 
-                if (err)
-                    res.send(err);
-                    var dateString = format('yyyy/MM/dd', invoice.date);
-                    console.log("date string is " + dateString);
+            if (err)
+                res.send(err);
+            var dateString = format('yyyy/MM/dd', invoice.date);
+            console.log("date string is " + dateString);
 
-                res.json(dateString);
-            }).sort({
-                date: 1
-            }).select({
-                date: 1
-            });
+            res.json(dateString);
+        }).sort({
+            date: 1
+        }).select({
+            date: 1
         });
+    });
 
 
-    router.route('/reports/last-sale-date')
-        .get(function(req, res) {
+router.route('/reports/last-sale-date')
+    .get(function (req, res) {
 
-            Invoice.findOne({
-            }, function(err, invoice) {
+        Invoice.findOne({}, function (err, invoice) {
 
-                if (err)
-                    res.send(err);
-                    var dateString = format('yyyy/MM/dd', invoice.date);
-                    console.log("date string is " + dateString);
+            if (err)
+                res.send(err);
+            var dateString = format('yyyy/MM/dd', invoice.date);
+            console.log("date string is " + dateString);
 
-                res.json(dateString);
-            }).sort({
-                date: -1
-            }).select({
-                date: 1
-            });
+            res.json(dateString);
+        }).sort({
+            date: -1
+        }).select({
+            date: 1
         });
-
-
+    });
 
 module.exports = router;

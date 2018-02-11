@@ -51,6 +51,7 @@
       </div>
       <div class="col-md-2">
 
+          <div ng-if="data._id">
           <div class="btn-group" data-dropdown>
               <button class="btn btn-success dropdown-toggle" data-dropdown-toggle data-original-title="" title="">
           &nbsp; Action &nbsp;
@@ -58,6 +59,7 @@
         </button>
 
               <ul class="dropdown-menu">
+                  <li><a href="#" data-toggle="modal" data-toggle="modal" data-target="#addImagesModal">Add Images</a></li>
                   <!--li><a href="/#/app/item/{{data._id}}/edit">Edit</a></li>
                   <li>Add photos</li>
                   <li>Sell</li>
@@ -70,7 +72,36 @@
                   <li><a href="#" data-toggle="modal" data-target="#deleteModal">Delete</a></li>
               </ul>
           </div>
+          </div>
       </div>
+
+
+
+      <!-- Add image modal -->
+      <div class="modal fade" id="addImagesModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                  <div class="modal-body">
+
+                      <section class="widget">
+                          <header>
+                              <h5><strong>Image Upload</strong></h5>
+                          </header>
+                          <div class="widget-body">
+                              <form class="dropzone" action="/api/upload" data-dropzone action="#" id="myDropzone">
+                                  <input type="hidden" name="itemId" value="{{itemId}}" />
+                              </form>
+                          </div>
+                      </section>
+
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-success btn-sm" ng-click="deleteItem()" data-dismiss="modal">OK</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+
 
       <!-- Delete Modal -->
       <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -100,8 +131,6 @@
 
                     <p>
 
-
-
                       <a href="#" onclick="selectCustomer('new')"><button type="button" class="btn btn-primary"><span class="icon">
                         <i class="fa fa-plus-circle"></i>
                       </span>New Customer</button></a>
@@ -126,8 +155,6 @@
               </div>
           </div>
       </div>
-
-
 
   </div>
 
@@ -161,7 +188,7 @@
 
 
                                     <div class="form-group">
-                                        <label for="hint-field" class="col-sm-3 control-label">Manufacturer</label>
+                                        <label for="manufacturer" class="col-sm-3 control-label">Manufacturer</label>
                                         <div class="col-sm-8">
                                             <select ng-model="data.manufacturer" id="manufacturer" class="selectpicker" data-selectpicker data-width="auto">
                     <option></option>
@@ -205,56 +232,22 @@
 
 
                                     <div class="form-group">
-                                        <label for="normal-field" class="col-sm-3 control-label">Item No</label>
+                                        <label for="itemNumber" class="col-sm-3 control-label">Item No</label>
                                         <div class="col-sm-8">
                                             <input type="text" id="itemNumber" class="form-control" ng-model="data._id" readonly="readonly">
                                         </div>
                                     </div>
 
 
-                                    <!--div class="form-group">
-                                        <label for="hint-field" class="col-sm-3 control-label">Pmt Amount</label>
-                                        <div class="col-sm-8">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">$</span>
-                                                <input type="number" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency" id="paymentAmount" ng-model="data.paymentAmount">
-
-                                            </div>
-                                        </div>
-                                    </div>
-
                                     <div class="form-group">
-                                        <label for="method" class="col-sm-3 control-label">Pmt Method</label>
-                                        <div class="col-sm-8">
-                                            <select ng-model="data.paymentMethod" id="paymentMethod" class="selectpicker" data-selectpicker data-width="auto">
-                  <option></option>
-                  <option>Cash</option>
-                  <option>Check</option>
-                  <option>Card</option>
-                  <option>Paypal</option>
-                </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="hint-field" class="col-sm-3 control-label">Pmt Details</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" id="paymentDetails" class="form-control" ng-model="data.paymentDetails">
-                                        </div>
-                                    </div-->
-
-
-
-
-                                    <div class="form-group">
-                                        <label for="hint-field" class="col-sm-3 control-label">Model Name</label>
+                                        <label for=model" class="col-sm-3 control-label">Model Name</label>
                                         <div class="col-sm-8">
                                             <input type="text" id="model" class="form-control" ng-model="data.model" onchange="buildLongDesc()">
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="hint-field" class="col-sm-3 control-label">Model Number</label>
+                                        <label for="modelNumber" class="col-sm-3 control-label">Model Number</label>
                                         <div class="col-sm-8">
                                             <input type="text" id="modelNumber" class="form-control" ng-model="data.modelNumber">
                                         </div>
@@ -262,7 +255,7 @@
 
 
                                     <div class="form-group">
-                                        <label for="hint-field" class="col-sm-3 control-label">Condition</label>
+                                        <label for="condition" class="col-sm-3 control-label">Condition</label>
                                         <div class="col-sm-8">
                                             <select ng-model="data.condition" id="condition" class="selectpicker" data-selectpicker data-width="auto">
                   <option></option>
@@ -273,7 +266,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="hint-field" class="col-sm-3 control-label">Gender</label>
+                                        <label for="gender" class="col-sm-3 control-label">Gender</label>
                                         <div class="col-sm-8">
                                             <select ng-model="data.gender" id="gender" class="selectpicker" data-selectpicker data-width="auto">
                   <option></option>
@@ -287,14 +280,14 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="hint-field" class="col-sm-3 control-label">Features</label>
+                                        <label for="features" class="col-sm-3 control-label">Features</label>
                                         <div class="col-sm-8">
                                             <input type="text" id="features" class="form-control" ng-model="data.features" ng-disabled="data.productType != 'Watch' && data.productType != 'Pocket Watch'" onchange="buildLongDesc()">
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="hint-field" class="col-sm-3 control-label">Case</label>
+                                        <label for="case" class="col-sm-3 control-label">Case</label>
                                         <div class="col-sm-8">
                                             <input type="text" id="case" class="form-control" ng-model="data.case" ng-disabled="data.productType != 'Watch' && data.productType != 'Pocket Watch'" onchange="buildLongDesc()">
                                         </div>
@@ -302,14 +295,14 @@
 
 
                                     <div class="form-group">
-                                        <label for="hint-field" class="col-sm-3 control-label">Dial</label>
+                                        <label for="dial" class="col-sm-3 control-label">Dial</label>
                                         <div class="col-sm-8">
                                             <input type="text" id="dial" class="form-control" ng-model="data.dial" ng-disabled="data.productType != 'Watch' && data.productType != 'Pocket Watch'" onchange="buildLongDesc()">
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="hint-field" class="col-sm-3 control-label">Bracelet</label>
+                                        <label for="bracelet" class="col-sm-3 control-label">Bracelet</label>
                                         <div class="col-sm-8">
                                             <input type="text" id="bracelet" class="form-control" ng-model="data.bracelet" ng-disabled="data.productType != 'Watch'" onchange="buildLongDesc()">
                                         </div>
@@ -317,14 +310,14 @@
 
 
                                     <div class="form-group">
-                                        <label for="hint-field" class="col-sm-3 control-label">Serial No</label>
+                                        <label for="serialNo" class="col-sm-3 control-label">Serial No</label>
                                         <div class="col-sm-8">
                                             <input type="text" id="serialNo" class="form-control" ng-model="data.serialNo">
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="hint-field" class="col-sm-3 control-label">Long Desc</label>
+                                        <label for="longDesc" class="col-sm-3 control-label">Long Desc</label>
                                         <div class="col-sm-8">
                                             <textarea class="form-control" rows="4" id="longDesc" ng-model="data.longDesc"></textarea>
                                         </div>
@@ -374,16 +367,8 @@
 
 
                                 <div class="form-group">
-                                    <label for="hint-field" class="col-sm-3 control-label">Status</label>
+                                    <label for="status" class="col-sm-3 control-label">Status</label>
                                     <div class="col-sm-8">
-
-                                        <!--select id="status" class="selectpicker" data-selectpicker data-width="auto" ng-model="data.status">
-                                        <option>In Stock</option>
-                                        <option>Sale Pending</option>
-                                        <option>Repair</option>
-                                        <option>At Show</option>
-                                        <option>Unavailable</option>
-                                      </select-->
                                         <input type="text" id="status" class="form-control" readonly="readonly" value={{data.status}}>
                                     </div>
                                 </div>
@@ -391,7 +376,7 @@
                                 </fieldset>
 
                                 <div class="form-group">
-                                    <label for="normal-field" class="col-sm-3 control-label">Box and Papers</label>
+                                    <label for="comments" class="col-sm-3 control-label">Box and Papers</label>
                                     <div class="col-sm-8">
                                         <textarea id="comments" rows=6 cols="40" class="form-control" ng-model="data.comments" onchange="buildLongDesc()">{{data.comments}}</textarea>
                                     </div>
@@ -399,23 +384,20 @@
 
                                 <div class="clearfix">
                                     <ul id="tabs1" class="nav nav-tabs pull-left">
-                                        <!-- remove pull-left to get a cool effect too -->
                                         <li class="active"><a data-target="#tab1" data-toggle="tab">Financials</a></li>
                                         <li class=""><a data-target="#tab2" data-toggle="tab">History</a></li>
-
                                     </ul>
                                 </div>
 
                                 <div id="tabs1c" class="tab-content mb-lg">
                                     <div class="tab-pane active clearfix" id="tab1">
                                         <fieldset>
-
                                           <div class="form-group">
-                                              <label for="normal-field" class="col-sm-3 control-label">Our Price</label>
+                                              <label for="sellingPrice" class="col-sm-3 control-label">Our Price</label>
                                               <div class="col-sm-8">
                                                   <div class="input-group">
                                                       <span class="input-group-addon">$</span>
-                                                      <input type="number" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency" id="paymentAmount" ng-model="data.sellingPrice">
+                                                      <input type="number" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency" id="sellingPrice" ng-model="data.sellingPrice">
                                                   </div>
                                               </div>
                                           </div>
@@ -423,17 +405,17 @@
 
 
                                             <div class="form-group">
-                                                <label for="normal-field" class="col-sm-3 control-label">List Price</label>
+                                                <label for="listPrice" class="col-sm-3 control-label">List Price</label>
                                                 <div class="col-sm-8">
                                                     <div class="input-group">
                                                         <span class="input-group-addon">$</span>
-                                                        <input type="number" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency" id="paymentAmount" ng-model="data.listPrice">
+                                                        <input type="number" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency" id="listPrice" ng-model="data.listPrice">
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
-                                                <label for="normal-field" class="col-sm-3 control-label">Cost</label>
+                                                <label for="paymentAmount" class="col-sm-3 control-label">Cost</label>
                                                 <div class="col-sm-8">
                                                     <div class="input-group">
                                                         <span class="input-group-addon">$</span>
@@ -443,17 +425,17 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label for="normal-field" class="col-sm-3 control-label">Repair Cost</label>
+                                                <label for="totalRepairCost" class="col-sm-3 control-label">Repair Cost</label>
                                                 <div class="col-sm-8">
                                                     <div class="input-group">
                                                         <span class="input-group-addon">$</span>
-                                                        <input type="number" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency" id="paymentAmount" ng-model="data.totalRepairCost">
+                                                        <input type="number" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency" id="totalRepairCost" ng-model="data.totalRepairCost">
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
-                                                <label for="normal-field" class="col-sm-3 control-label">Total Cost</label>
+                                                <label for="paymentAmount" class="col-sm-3 control-label">Total Cost</label>
                                                 <div class="col-sm-8">
                                                     <div class="input-group">
                                                         <span class="input-group-addon">$</span>
@@ -513,8 +495,6 @@
 
 
     <div class="row">
-
-
         <div class="row">
             <div class="col-md-12">
                 <div class="col-md-6">

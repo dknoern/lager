@@ -66,7 +66,6 @@
 
           $locationProvider.hashPrefix('');
 
-
           jwtOptionsProvider.config({
                tokenGetter: function() {
                  return localStorage.getItem('access_token');
@@ -75,9 +74,6 @@
              });
 
              $httpProvider.interceptors.push('jwtInterceptor');
-
-
-
 
 
           /// Comment out the line below to run the app
