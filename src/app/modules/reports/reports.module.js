@@ -95,6 +95,21 @@
 
 
 
+            $stateProvider
+                .state('app.reports9', {
+                    url: '/reports/9',
+                    templateUrl: 'app/modules/reports/log-items.html',
+                    controller: function($scope, $stateParams) {
+                        $scope.reportId = "log-items";
+                        $scope.day =0;
+                        $scope.month=0;
+                        $scope.year = 0;
+                    }
+                });
 
-}
+
+
+
+
+        }
 })();

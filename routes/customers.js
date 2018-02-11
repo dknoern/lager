@@ -118,12 +118,19 @@ router.route('/customers')
                 res.send(err);
 
             for (var i = 0; i < customers.length; i++) {
+
+
+                var cityAndState = customers[i].city;
+                if(customers[i].state!=null && customers[i].state!=""){
+                    cityAndState += ', ' + customers[i].state;
+                }
+
                 results.data.push(
                     [
                     //  '<a href=\"/#/app/customer/' + customers[i]._id + '\">' + customers[i]._id + '</a>',
                       '<a href=\"#\" onclick=\"selectCustomer(' + customers[i]._id + ');return false;\">' + customers[i]._id + '</a>',
                         customers[i].firstName + ' ' + customers[i].lastName,
-                        customers[i].city + ', ' + customers[i].state,
+                       cityAndState,
                         customers[i].email,
                         customers[i].phone,
                         customers[i].company

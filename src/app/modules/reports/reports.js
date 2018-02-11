@@ -11,15 +11,12 @@
     function ReportsCtrl($scope, $resource, $http, $window, DTOptionsBuilder, jQuery) {
 
         function isDailyReport(reportId) {
-            return "daily-sales" == reportId;
+            return "daily-sales" == reportId || "log-items" == reportId;
         }
 
         function isMonthlyReport(reportId) {
             return "returns-summary" == reportId || "monthly-sales" == reportId;
         }
-
-
-
 
 
         // check date string to see if format is mm/dd/yyyy
@@ -105,7 +102,7 @@
                 $scope.day = d.getDate();
             }
 
-            if ("daily-sales" == reportId) {
+            if ("daily-sales" == reportId || "log-items" == reportId) {
                 $scope.selectedDate = $scope.month + "/" + $scope.day + "/" + $scope.year;
                 reportUrl += "/" + $scope.year + "/" + $scope.month + "/" + $scope.day;
             } else if ("returns-summary" == reportId || "monthly-sales" == reportId) {

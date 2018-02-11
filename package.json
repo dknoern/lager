@@ -4,7 +4,7 @@
   "description": "Lager Inventory App",
   "dependencies": {
     "express": "~4.15.3",
-    "mongoose": "~4.10.6",
+    "mongoose": "~5.0.4",
     "body-parser": "~1.0.1",
     "mongoose-increment": "0.8.0",
     "mongodb-autoincrement": "~1.0.0",
