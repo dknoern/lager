@@ -43,12 +43,6 @@ app.use('/api', upload);
 var reports = require('./routes/reports');
 app.use('/api', reports);
 
-
-var logitems = require('./routes/logitems');
-app.use('/api', logitems);
-
-
-
 app.use('/', express.static(__dirname +  '/'));
 
 app.get('/*', function(req, res) {
