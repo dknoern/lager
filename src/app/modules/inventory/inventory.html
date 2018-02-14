@@ -1,15 +1,3 @@
-
-<!--script>
-$(document).ready(function() {
-    var table = $('#example').DataTable( {
-        "processing": true,
-        "serverSide": true,
-        "ordering": false,
-        "ajax": "/api/products"
-    } );
-} );
-</script-->
-
 <script>
 function selectProduct(id){
    document.location.href = "/#/app/item/"+id;
@@ -40,6 +28,7 @@ New Product</button></a>
                 <th>Serial No</th>
                 <th>Model No</th>
                 <th>Status</th>
+                <th>Updated</th>
             </tr>
         </thead>
     </table>

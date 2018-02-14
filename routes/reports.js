@@ -4,9 +4,6 @@ var Product = require('../models/product');
 var Repair = require('../models/repair');
 var Return = require('../models/return');
 var Invoice = require('../models/invoice');
-var Counter = require('../models/counter');
-var LogItem = require('../models/logitem');
-//var LogItem = require('../models/logItem');
 const checkJwt = require('./jwt-helper').checkJwt;
 var format = require('date-format');
 
@@ -147,9 +144,8 @@ router.route('/reports/log-items/:year/:month/:day')
         var results = {
             "data": []
         };
-        LogItem.find({
-
-            "date": {
+        Product.find({
+            "received": {
                 $gte: new Date(year, month - 1, day),
                 $lt: new Date(year, month - 1, day + 1)
             }
@@ -175,7 +171,7 @@ router.route('/reports/log-items/:year/:month/:day')
             date: -1
         }).select({
             _id: 1,
-            date: 1,
+            received: 1,
             comments: 1,
             title: 1,
             receivedBy: 1,
@@ -189,7 +185,6 @@ router.route('/reports/log-items/:year/:month/:day')
 
 router.route('/reports/returns-summary/:year/:month')
     .get(function (req, res) {
-
 
         var year = parseInt(req.params.year);
         var month = parseInt(req.params.month);

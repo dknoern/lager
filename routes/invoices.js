@@ -1,16 +1,12 @@
 var express = require('express');
 var router = express.Router();
 var Invoice = require('../models/invoice');
-var Product = require('../models/product');
 var Customer = require('../models/customer');
-var mongoose = require('mongoose');
 var history = require('./history');
 var format = require('date-format');
 var Counter = require('../models/counter');
 
 const checkJwt = require('./jwt-helper').checkJwt;
-
-
 
 function upsertInvoice(req,res,invoice){
 

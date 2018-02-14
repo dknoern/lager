@@ -1,5 +1,9 @@
+var scopeHolder;
+
 (function() {
     'use strict';
+
+
 
     angular.module('singApp.invoice')
         .controller('InvoiceCtrl', InvoiceCtrl);
@@ -10,14 +14,23 @@
 
         var vm = this;
 
+        scopeHolder = $scope;
+
+
+        //$scope.selectProduct = function(id){
+        //    console.log("=======>>>> selected product "+ id);
+        //}
+
         $scope.addItem = function(itemId) {
+
+            console.log('addItem, itemId = ' + itemId);
             $http.get("api/products/" + itemId)
                 .then(function(response) {
 
                     var lineItem = {
                         name: response.data.title,
                         productId: response.data._id,
-                        itemNo: response.data.itemNo,
+                        itemNumber: response.data.itemNumber,
                         amount: response.data.listPrice,
                         serialNo: response.data.serialNo,
                         modelNumber: response.data.modelNumber,
@@ -39,6 +52,8 @@
                     }
                     */
                 });
+
+            $('#productModal').modal('hide');
         }
 
         $scope.removeItem = function(index) {
@@ -208,10 +223,6 @@
         })
 
         jQuery('#datetimepicker2').datetimepicker();
-
-
-
-
 
 
     }

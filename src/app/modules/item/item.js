@@ -90,11 +90,12 @@
 
         $scope.deleteItem = function(){
 
-          var itemNumber = document.getElementById('itemNumber').value;
+            var itemId = document.getElementById('itemId').value;
+            var itemNumber = document.getElementById('itemNumber').value;
 
           $http({
               method: "DELETE",
-              url: "api/products/"+itemNumber,
+              url: "api/products/"+itemId,
               headers: {
                   'Content-Type': 'application/json'
               }
@@ -118,6 +119,12 @@
           });
         }
 
+        $scope.imagesAdded = function(){
+            $http.get('api/upload/'+$scope.itemId).
+            success(function(images) {
+                $scope.images = images;
+            });
+        }
 
         $scope.uploadFile = function(){
           alert('uploading file');
