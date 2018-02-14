@@ -17,9 +17,13 @@
                         $scope.images = images;
                     });
 
-            $scope.data = $resource('api/logitems/:id').get({
+            $scope.data = $resource('api/products/:id').get({
                 id: $scope.itemId
             });
+        }else{
+            $scope.data = {
+                receivedBy: 'Janet'
+            };
         }
 
 
@@ -28,7 +32,7 @@
 
             $http({
                 method: "POST",
-                url: "api/logitems/",
+                url: "api/products/",
                 data: angular.toJson($scope.data),
                 headers: {
                     'Content-Type': 'application/json'
@@ -38,6 +42,13 @@
                 $state.go('app.reports9');
             }, function errorCallback(response) {
                 console.log(response.statusText);
+            });
+        }
+
+        $scope.imagesAdded = function(){
+            $http.get('api/upload/'+$scope.itemId).
+            success(function(images) {
+                $scope.images = images;
             });
         }
 

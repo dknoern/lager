@@ -43,12 +43,6 @@
 
 
       $stateProvider
-        .state('app.new', {
-          url: '/new',
-          templateUrl: 'app/modules/item/new.html'
-        })
-
-      $stateProvider
         .state('app.newitem', {
           url: '/item',
           templateUrl: 'app/modules/item/item.html'

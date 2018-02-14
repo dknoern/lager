@@ -14,9 +14,11 @@
   jQuery('#example').DataTable( {
           "processing": true,
           "serverSide": true,
-          "ordering": false,
+          "ordering": true,
           "pageLength": 50,
-          "ajax": "/api/products"
+          "ajax": "/api/products",
+          "order": [[ 5, 'desc' ]]
+          //"order": []
       } );
   }
 

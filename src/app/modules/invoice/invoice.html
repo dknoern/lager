@@ -8,9 +8,21 @@
 </style>
 
 
+
+
 <h1 class="page-title"><span class="fw-semi-bold">Invoice</span></h1>
 
 <div id="AngularInvoiceCtrl" data-ng-controller="InvoiceCtrl">
+
+
+    <script>
+        function selectProduct(id){
+            scopeHolder.addItem(id);
+        }
+    </script>
+
+
+
 
     <div class="row">
         <div class="col-md-12">
@@ -292,7 +304,7 @@
                                         <tbody>
                                             <tr data-ng-repeat="lineItem in data.lineItems">
                                                 <td>{{lineItem.longDesc}}</td>
-                                                <td>{{lineItem.productId}}</td>
+                                                <td>{{lineItem.itemNumber}}</td>
                                                 <td>{{lineItem.serialNo}}</td>
                                                 <td>${{lineItem.amount}}</td>
                                                 <td>

@@ -89,14 +89,14 @@
                           </header>
                           <div class="widget-body">
                               <form class="dropzone" action="/api/upload" data-dropzone action="#" id="myDropzone">
-                                  <input type="hidden" name="itemId" value="{{itemId}}" />
+                                  <input type="hidden" id="itemId" name="itemId" value="{{itemId}}" />
                               </form>
                           </div>
                       </section>
 
                   </div>
                   <div class="modal-footer">
-                      <button type="button" class="btn btn-success btn-sm" ng-click="deleteItem()" data-dismiss="modal">OK</button>
+                      <button type="button" class="btn btn-success btn-sm" ng-click="imagesAdded()" data-dismiss="modal">OK</button>
                   </div>
               </div>
           </div>
@@ -108,7 +108,7 @@
           <div class="modal-dialog modal-sm" role="document">
               <div class="modal-content">
                   <div class="modal-body">
-                    Are you sure you want to delete item <b>{{data._id}} - {{data.title}}</b>?
+                    Are you sure you want to delete item <b>{{data.itemNumber}} - {{data.title}}</b>?
                   </div>
                   <div class="modal-footer">
                       <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancel</button>
@@ -163,6 +163,7 @@
             <section class="widget">
                 <div class="widget-body">
                     <form name="productForm" class="form-horizontal" role="form" data-ui-jq="parsley" data-parsley-priority-enabled="false" novalidate="novalidate">
+                        <input type="hidden" id="id" class="form-control" ng-model="data._id">
                         <div class="row">
                             <div class="col-sm-7">
                                 <fieldset>
@@ -234,7 +235,7 @@
                                     <div class="form-group">
                                         <label for="itemNumber" class="col-sm-3 control-label">Item No</label>
                                         <div class="col-sm-8">
-                                            <input type="text" id="itemNumber" class="form-control" ng-model="data._id" readonly="readonly">
+                                            <input type="text" id="itemNumber" class="form-control" ng-model="data.itemNumber" readonly="readonly">
                                         </div>
                                     </div>
 
@@ -490,26 +491,6 @@
                     </form>
                 </div>
             </section>
-        </div>
-    </div>
-
-
-    <div class="row">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="col-md-6">
-                    <section class="widget">
-                        <header>
-                            <h5><strong>Image Upload</strong></h5>
-                        </header>
-                        <div class="widget-body">
-                            <form class="dropzone" action="/api/upload" data-dropzone action="#" id="myDropzone">
-                                <input type="hidden" name="itemId" value="{{itemId}}" />
-                            </form>
-                        </div>
-                    </section>
-                </div>
-            </div>
         </div>
     </div>
 

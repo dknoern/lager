@@ -21,7 +21,7 @@ function sleep(ms) {
 
 //mongoose.connect('mongodb://lager:wntNJy5DqatKcvdYWCDrwAxYr67JC32D@ds123698.mlab.com:23698/lager');
 
-mongoose.connect('mongodb://localhost:27017/lager');
+mongoose.connect('mongodb://localhost:27018/lager');
 
 function load(modelName, fileName, functionName) {
 
@@ -73,14 +73,15 @@ function loadCsvFile(file, functionRef) {
                 }
                 id = line[0];
                 var line = output[i];
-                line[0] = dedupeValue(ids, id);
+                // following only needed for old product
+                // line[0] = dedupeValue(ids, id);
                 promises.push(functionRef(line));
             }
         });
 
         Promise.all(promises).then(async function () {
             console.log(promises.length + ' records loaded from ' + file);
-            await sleep(2000);
+            await sleep(10000);
             mongoose.disconnect();
         });
     });
@@ -213,7 +214,6 @@ function loadProduct(line) {
     gender[4] = "Midsize";
     gender[5] = "Men's or Ladies";
 
-
     // PRODUCT FIELDS
     //itemNo,productType,manufacturer,title,style,model,condition,gender,features,case,
     //size,dial,bracelet,comments,serialNo,modelYear,longDesc,supplier,mfgr,lastUpdated,userId,cost,listPrice,sellingPrice,totalRepairCost,
@@ -221,7 +221,9 @@ function loadProduct(line) {
 
     var product = new Product();
 
-    product._id = line[0];
+    //product._id = line[0];
+    // _id will be GUID
+    product.itemNumber = line[0];
     var productTypeId = line[1];
     product.productType = productTypes[productTypeId];
     var manufacturerId = line[2];
@@ -259,17 +261,32 @@ function loadProduct(line) {
     product.listPrice = cleanMoney(line[22]);
     product.sellingPrice = cleanMoney(line[23]);
     product.totalRepairCost = cleanMoney(line[24]);
-    product.photo = line[25];
-    product.saleDate = line[26];
-    product.received = line[27];
+    var photo = line[25]; // never used
+    var saleDate = line[26]; //never used
+
+    product.received = parseDate(line[27]);
     var statusId = line[28];
     product.status = statuses[statusId];
+    if(product.status== null) product.status = statuses[8]; // if undefined, set to Unavailable
     product.notes = line[29];
-    product.history = [{
+
+    product.search = product.itemNumber + " " + product.title + " " + product.serialNo + " " + product.modelNumber;
+
+    product.history = new Array();
+
+    if(product.received!=null) {
+        product.history.push({
+            user: "system",
+            date: product.received,
+            action: "item received"
+        });
+    }
+
+    product.history.push({
         user: "system",
-        date: Date.now(),
-        action: "item created"
-    }];
+        date: new Date(),
+        action: "item imported from access"
+    });
 
     var promise = product.save(function (err, doc) {
         if (err) {
@@ -286,6 +303,17 @@ function cleanMoney(s) {
     } else {
         return s;
     }
+}
+
+function parseDate(s){
+
+    if(s==null)return null;
+    if(s=="")return null;
+    var d =  new Date(s);
+    //if (d == undefined) {
+    //     d = new Date();
+    //}
+    return d;
 }
 
 function loadInvoice(line) {
@@ -305,10 +333,10 @@ function loadInvoice(line) {
     invoice.paidBy = line[5];
     invoice.paymemtId = line[6];
     invoice.taxable = line[7];
-    invoice.subtotal = line[8];
+    invoice.subtotal = cleanMoney(line[8]);
     invoice.shipping = cleanMoney(line[9]);
-    invoice.salesTax = line[10];
-    invoice.total = line[11];
+    invoice.tax = cleanMoney(line[10]);
+    invoice.total = cleanMoney(line[11]);
     invoice.salesPerson = line[12];
     invoice.shipToName = line[13];
     invoice.shipAddress1 = line[14];

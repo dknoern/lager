@@ -1,82 +1,135 @@
 var express = require('express');
 var router = express.Router();
 var Product = require('../models/product');
-var Counter = require('../models/counter');
 const checkJwt = require('./jwt-helper').checkJwt;
+var format = require('date-format');
 
 router.use(function(req, res, next) {
     next();
 });
-
-
-var getNextSequence = function() {
-    Counter.findByIdAndUpdate({
-        _id: 'productId'
-    }, {
-        $inc: {
-            seq: 1
-        }
-    }, function(error, counter) {
-        return counter.seq;
-    });
-}
 
 var upsertProduct = function(req, res, productId, action) {
     var paymentAmount = req.body.paymentAmount || 0;
     var totalRepairCost = req.body.totalRepairCost || 0;
     var cost = paymentAmount + totalRepairCost;
 
-    Product.findOneAndUpdate({
-        _id: productId
-    }, {
+    if(productId!=null) {
 
-        "$push": {
-            "history": {
-                user: req.user['http://mynamespace/name'],
-                date: Date.now(),
-                action: action
-            }
-        },
-        "$set": {
-            "_id": productId,
-            "title": req.body.title,
-            "productType": req.body.productType,
-            "manufacturer": req.body.manufacturer,
-            "paymentAmount": paymentAmount,
-            "paymentMethod": req.body.paymentMethod,
-            "paymentDetails": req.body.paymentDetails,
-            "model": req.body.model,
-            "modelNumber": req.body.modelNumber,
-            "condition": req.body.condition,
-            "gender": req.body.gender,
-            "features": req.body.features,
-            "case": req.body.case,
-            "size": req.body.size,
-            "dial": req.body.dial,
-            "bracelet": req.body.bracelet,
-            "comments": req.body.comments,
-            "serialNo": req.body.serialNo,
-            "longDesc": req.body.longDesc,
-            "supplier": req.body.supplier,
-            "cost": cost,
-            "listPrice": req.body.listPrice || 0,
-            "totalRepairCost": totalRepairCost,
-            "notes": req.body.notes,
-            "ebayNoReserve": req.body.ebayNoReserve,
-            "inventoryItem": req.body.inventoryItem,
-            "seller": req.body.seller,
-            "sellerType": req.body.sellerType,
-            "lastUpdated": Date.now(),
-            "status": req.body.status
-        }
-    }, {
-        upsert: true
-    }, function(err, doc) {
-        if (err) return res.send(500, {
-            error: err
+        Product.findOneAndUpdate({
+            _id: productId
+        }, {
+
+            "$push": {
+                "history": {
+                    user: req.user['http://mynamespace/name'],
+                    date: Date.now(),
+                    action: action
+                }
+            },
+            "$set": {
+                "_id": productId,
+                "itemNumber": req.body.itemNumber,
+                "title": req.body.title,
+                "productType": req.body.productType,
+                "manufacturer": req.body.manufacturer,
+                "paymentAmount": paymentAmount,
+                "paymentMethod": req.body.paymentMethod,
+                "paymentDetails": req.body.paymentDetails,
+                "model": req.body.model,
+                "modelNumber": req.body.modelNumber,
+                "condition": req.body.condition,
+                "gender": req.body.gender,
+                "features": req.body.features,
+                "case": req.body.case,
+                "size": req.body.size,
+                "dial": req.body.dial,
+                "bracelet": req.body.bracelet,
+                "comments": req.body.comments,
+                "serialNo": req.body.serialNo,
+                "longDesc": req.body.longDesc,
+                "supplier": req.body.supplier,
+                "cost": cost,
+                "listPrice": req.body.listPrice || 0,
+                "totalRepairCost": totalRepairCost,
+                "notes": req.body.notes,
+                "ebayNoReserve": req.body.ebayNoReserve,
+                "inventoryItem": req.body.inventoryItem,
+                "seller": req.body.seller,
+                "sellerType": req.body.sellerType,
+                "receivedBy": req.body.receivedBy,
+                "receivedFrom": req.body.receivedFrom,
+                "customerName": req.body.customerName,
+                "lastUpdated": Date.now(),
+                "status": req.body.status,
+                "search": req.body.itemNumbe + " " + req.body.title + " " + req.body.serialNo + " " + req.body.modelNumber
+
+    }
+        }, {
+            upsert: true
+        }, function (err, doc) {
+            if (err) return res.send(500, {
+                error: err
+            });
+            return res.send("successfully saved");
         });
-        return res.send("succesfully saved");
-    });
+    }else{
+        var product = new Product();
+        product.itemNumber = req.body.itemNumber;
+        product.title = req.body.title;
+        product.productType = req.body.productType;
+        product.manufacturer = req.body.manufacturer;
+        product.paymentAmount = paymentAmount;
+        product.paymentMethod = req.body.paymentMethod;
+        product.paymentDetails = req.body.paymentDetails;
+        product.model = req.body.model;
+        product.modelNumber = req.body.modelNumber;
+        product.condition = req.body.condition;
+        product.gender = req.body.gender;
+        product.features = req.body.features;
+        product.case = req.body.case;
+        product.size = req.body.size;
+        product.dial = req.body.dial;
+        product.bracelet = req.body.bracelet;
+        product.comments = req.body.comments;
+        product.serialNo = req.body.serialNo;
+        product.longDesc = req.body.longDesc;
+        if(product.longDesc == null) product.longDesc = product.title;
+        product.supplier = req.body.supplier;
+        product.cost = cost;
+        product.listPrice = req.body.listPrice || 0;
+        product.totalRepairCost = totalRepairCost;
+        product.notes = req.body.notes;
+        product.ebayNoReserve = req.body.ebayNoReserve;
+        product.inventoryItem = req.body.inventoryItem;
+        product.seller = req.body.seller;
+        product.sellerType = req.body.sellerType;
+        product.lastUpdated =Date.now();
+        product.status = req.body.status;
+        product.received = new Date();
+        product.receivedBy = req.body.receivedBy;
+        product.receivedFrom = req.body.receivedFrom;
+        product.customerName = req.body.customerName;
+        product.search = product.itemNumber + " " + product.title + " " + product.serialNo + " " + product.modelNumber;
+
+
+        product.history =
+        {
+            user:req.body.receivedBy,
+                date: Date.now(),
+                action: "received"
+        };
+
+        product.save(function(err) {
+            if (err) {
+                console.log('error saving product: ' + err);
+                res.send(err);
+            } else {
+                res.json({
+                    message: 'product saved'
+                });
+            }
+        });
+    }
 }
 
 router.route('/instock')
@@ -102,7 +155,6 @@ router.route('/instock')
                 res.json(products);
             });
         }
-        console.log("looking for products with status=" + status);
     });
 
 router.route('/products')
@@ -114,21 +166,9 @@ router.route('/products')
             } else {
                 req.body.status = 'In Stock';
             }
-            Counter.findByIdAndUpdate({
-                _id: 'productNumber'
-            }, {
-                $inc: {
-                    seq: 1
-                }
-            }, function(err, counter) {
-                if (err) {
-                    console.log(err);
-                    return res.send(500, {
-                        error: err
-                    });
-                }
-                return upsertProduct(req, res, counter.seq, "product created");
-            });
+
+            return upsertProduct(req, res, null, "product created");
+
         } else {
             return upsertProduct(req, res, req.body._id, "product updated");
         }
@@ -146,6 +186,7 @@ router.route('/products')
 
         if (req.query.start) start = req.query.start;
         if (req.query.length) length = req.query.length;
+
 
         var search = req.query.search.value;
         var results = {
@@ -166,25 +207,37 @@ router.route('/products')
           };
         }
 
+        var sortOrder = -1;
+
+        var sortColumn = req.query.order[0]['column'];
 
 
+        if("asc" == req.query.order[0]['dir'])
+            sortOrder = 1;
 
+        var sortClause = {lastUpdated: sortOrder};
 
-            //Product.find({'title': new RegExp(search, 'i') }, function(err, products) {
+        if("0" == sortColumn)
+            sortClause = {itemNumber: sortOrder};
+        else if("1"==sortColumn)
+            sortClause = {title: sortOrder};
+        else if("2"==sortColumn)
+            sortClause = {serialNo: sortOrder};
+        else if("3"==sortColumn)
+            sortClause = {modelNumber: sortOrder};
+        else if("4"==sortColumn)
+            sortClause = {status: sortOrder};
+
             Product.find({
                 $and: [{
                     status: statusFilter
-                }, {
-                    $or: [{
-                            'title': new RegExp(search, 'i')
-                        },
-                        {
-                            'serialNo': new RegExp(search, 'i')
-                        },
-                        {
-                            'model': new RegExp(search, 'i')
-                        }
-                    ]
+                },
+                    {
+                       itemNumber: {$ne:null}
+                    }
+
+                , {
+                    'search': new RegExp(search, 'i')
                 }]
             }, function(err, products) {
 
@@ -206,13 +259,13 @@ router.route('/products')
                     results.data.push(
                         [
 
-
-                            '<a href=\"#\" onclick=\"selectProduct(\'' + products[i]._id + '\');return false;\">' + products[i]._id + '</a>',
+                            '<a href=\"#\" onclick=\"selectProduct(\'' + products[i]._id + '\');return false;\">' + products[i].itemNumber + '</a>',
                             //'<a href=\"/#/app/item/' + products[i]._id + '\">' + products[i]._id,
                             products[i].title,
                             products[i].serialNo,
                             products[i].modelNumber,
-                            "<span class=\"badge bg-" + badgeStyle + "\">" + products[i].status + "</span>"
+                            "<span class=\"badge bg-" + badgeStyle + "\">" + products[i].status + "</span>",
+                            format('yyyy-MM-dd', products[i].lastUpdated),
                         ]
                     );
                 }
@@ -233,16 +286,7 @@ router.route('/products')
                                     $ne: "Deleted"
                                 }
                             }, {
-                                $or: [{
-                                        'title': new RegExp(search, 'i')
-                                    },
-                                    {
-                                        'serialNo': new RegExp(search, 'i')
-                                    },
-                                    {
-                                        'model': new RegExp(search, 'i')
-                                    }
-                                ]
+                                'search': new RegExp(search, 'i')
                             }]
 
                         }, function(err, count) {
@@ -252,19 +296,15 @@ router.route('/products')
                     }
                 });
 
-            }).sort({
-                lastUpdated: -1
-            }).skip(parseInt(start)).limit(parseInt(length)).select({
+            }).sort(sortClause).skip(parseInt(start)).limit(parseInt(length)).select({
+                itemNumber: 1,
                 title: 1,
                 serialNo: 1,
                 modelNumber: 1,
                 status: 1,
-                productType: 1
+                productType: 1,
+                lastUpdated: 1
             });
-
-        console.log("looking for products with status=" + status);
-
-
     });
 
 
@@ -284,7 +324,7 @@ router.route('/products/:product_id')
         Product.findById(req.params.product_id, function(err, product) {
             if (err)
                 res.send(err);
-            product.itemNo = req.body.itemNo;
+            product.itemNumber = req.body.itemNumber;
             product.serialNo = req.body.serialNo;
             product.title = req.body.title;
             product.sellingPrice = req.body.sellingPrice;
@@ -312,18 +352,6 @@ router.route('/products/:product_id')
                 });
             });
         });
-
-        /*
-          Product.remove({
-              _id: req.params.product_id
-          }, function(err, product) {
-              if (err)
-                  res.send(err);
-              res.json({
-                  message: 'Successfully deleted'
-              });
-          });
-          */
 
     });
 
@@ -371,21 +399,5 @@ router.route('/products/:product_id/status')
 
 
     });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 module.exports = router;
