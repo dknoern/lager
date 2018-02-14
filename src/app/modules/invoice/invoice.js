@@ -210,13 +210,14 @@ var scopeHolder;
                 jQuery('#productTable').dataTable({
                     "processing": true,
                     "serverSide": true,
-                    "ordering": false,
+                    "ordering": true,
                     "ajax": {
                         "url": "/api/products",
                         "data": {
                             "status": "In Stock"
                         }
-                      }
+                      },
+                    "order": [[ 5, 'desc' ]]
                 });
                 productTableShown = true;
             }
