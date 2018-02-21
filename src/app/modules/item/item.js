@@ -70,6 +70,41 @@
 
       }
 
+        $scope.addNote = function() {
+            var itemId = document.getElementById('itemId').value;
+            var noteText = document.getElementById('noteText').value;
+
+            $http({
+                method: "POST",
+                url: "api/products/"+itemId+"/notes",
+                data: {
+                    noteText: noteText
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(function successCallback(response) {
+                console.log(response.statusText);
+
+                $scope.data.history =  $resource('api/products/:id/notes').query({
+                    id: $scope.itemId
+                });
+
+
+            }, function errorCallback(response) {
+                console.log(response.statusText);
+            });
+
+            Messenger().post({
+                message: "Note added.",
+                type: "success"
+            });
+
+
+
+
+
+        }
 
         $scope.go = function() {
 
