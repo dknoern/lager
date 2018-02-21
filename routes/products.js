@@ -400,4 +400,49 @@ router.route('/products/:product_id/status')
 
     });
 
+
+
+
+router.route('/products/:product_id/notes')
+    .post(checkJwt, function(req, res) {
+
+        Product.findOneAndUpdate({
+            _id: req.params.product_id
+        }, {
+
+            "$push": {
+                "history": {
+                    user: req.user['http://mynamespace/name'],
+                    date: Date.now(),
+                    action: req.body.noteText
+                }
+            },
+            "$set": {
+                "lastUpdated": Date.now()
+            }
+        }, {
+            upsert: true
+        }, function(err, doc) {
+            if (err)
+                res.send(err);
+            else
+                res.send('note successfully added');
+        });
+
+    })
+    .get(checkJwt, function(req, res) {
+
+        Product.findById(req.params.product_id, function(err, product) {
+            if (err) {
+                res.send(err);
+            }else {
+                res.json(product.history);
+            }
+        });
+
+    });
+
+
+
+
 module.exports = router;
