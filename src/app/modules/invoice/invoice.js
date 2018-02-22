@@ -29,10 +29,9 @@ var scopeHolder;
 
                     var lineItem = {
                         name: response.data.title,
-                        productId: response.data._id,
-                        itemNumber: response.data.itemNumber,
+                        productId: response.data.itemNumber,  // note intentional mismatch
                         amount: response.data.listPrice,
-                        serialNo: response.data.serialNo,
+                        serialNumber: response.data.serialNo,
                         modelNumber: response.data.modelNumber,
                         longDesc: response.data.longDesc
                     }
@@ -177,9 +176,10 @@ var scopeHolder;
                     $scope.data.lineItems.push({
                         name: product.title,
                         longDesc: product.longDesc,
-                        serialNo: product.serialNo,
+                        serialNumber: product.serialNo,
                         modelNumber: product.modelNumber,
-                        amount: invoiceAmount
+                        amount: invoiceAmount,
+                        productId: product.itemNumber  // note intensional mismatch
                     });
 
                 });
