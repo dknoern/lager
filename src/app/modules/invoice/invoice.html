@@ -149,10 +149,10 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group required">
+                                        <div class="form-group">
                                             <label for="hint-field" class="col-sm-3 control-label">Ship Address 1</label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="address1-field" class="form-control" ng-model="data.shipAddress1" required>
+                                                <input type="text" id="address1-field" class="form-control" ng-model="data.shipAddress1">
                                             </div>
                                         </div>
 
@@ -170,17 +170,17 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group required">
+                                        <div class="form-group">
                                             <label for="hint-field" class="col-sm-3 control-label">Ship City</label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="address1-field" class="form-control" ng-model="data.shipCity" required>
+                                                <input type="text" id="address1-field" class="form-control" ng-model="data.shipCity">
                                             </div>
                                         </div>
 
-                                        <div class="form-group required">
+                                        <div class="form-group">
                                             <label for="hint-field" class="col-sm-3 control-label">Ship State</label>
                                             <div class="col-sm-8">
-                                                <select id="shipState" class="selectpicker" data-selectpicker data-width="auto" ng-model="data.shipState" ng-change="computeTotals()" required>
+                                                <select id="shipState" class="selectpicker" data-selectpicker data-width="auto" ng-model="data.shipState" ng-change="computeTotals()">
                                                   <option></option>
                                                 	<option value="AL">Alabama</option>
                                                 	<option value="AK">Alaska</option>
@@ -238,10 +238,10 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group required">
+                                        <div class="form-group">
                                             <label for="hint-field" class="col-sm-3 control-label">Ship Zip</label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="address1-field" class="form-control" ng-model="data.shipZip" required>
+                                                <input type="text" id="address1-field" class="form-control" ng-model="data.shipZip">
                                             </div>
                                         </div>
 
@@ -307,7 +307,18 @@
                                                 <td>{{lineItem.longDesc}}</td>
                                                 <td>{{lineItem.productId}}</td>
                                                 <td>{{lineItem.serialNumber}}</td>
-                                                <td>${{lineItem.amount}}</td>
+                                                <!--td>${{lineItem.amount}}</td-->
+
+                                                <td>
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">$</span>
+                                                    <input type="number" min="0" step="0.01"  id="lineItemAmount" ng-model="lineItem.amount" ng-change="computeTotals()">
+                                                    </div></td>
+
+
+
+
+
                                                 <td>
                                                     <button type="button" class="btn btn-danger btn-sm" ng-click="removeItem($index)">
                                                   <span class="glyphicon glyphicon-minus" ></span> Remove

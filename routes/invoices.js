@@ -7,7 +7,7 @@ var format = require('date-format');
 var Counter = require('../models/counter');
 
 const checkJwt = require('./jwt-helper').checkJwt;
-
+const formatCurrency = require('format-currency');
 function upsertInvoice(req,res,invoice){
 
           var itemStatus = "Sold";
@@ -126,12 +126,6 @@ router.route('/invoices')
               });
           });
 
-
-
-
-
-
-
         }else{
           upsertInvoice(req,res,invoice);
           console.log("customer id is NOT null, will use existing customer");
@@ -147,7 +141,7 @@ router.route('/invoices')
         if (req.query.start) start = req.query.start;
         if (req.query.length) length = req.query.length;
         var search = req.query.search.value;
-        console.log('search string is ' + search);
+        var opts = { format: '%s%v', symbol: '$' };
 
         var results = {
             "draw": draw,
@@ -157,15 +151,15 @@ router.route('/invoices')
         };
 
         Invoice.find({
-            /*      'customer': new RegExp(search, 'i')
+
 
             $or: [{
-                    'customer': new RegExp(search, 'i')
+                    'customerLastName': new RegExp(search, 'i')
                 },
                 {
-                    'lastName': new RegExp(search, 'i')
+                    'customerFirstName': new RegExp(search, 'i')
                 }
-            ]*/
+            ]
         }, function(err, invoices) {
             if (err)
                 res.send(err);
@@ -185,7 +179,7 @@ router.route('/invoices')
                         format('yyyy-MM-dd', invoices[i].date),
                         itemNo,
                         itemName,
-                        invoices[i].total
+                        formatCurrency(invoices[i].total,opts)
                     ]
                 );
             }

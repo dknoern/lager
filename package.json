@@ -20,7 +20,8 @@
     "csv-parse": "1.2.3",
     "date-format": "1.1.0",
     "express-force-ssl": "0.3.2",
-    "aws-sdk": "latest"
+    "aws-sdk": "latest",
+    "format-currency": "1.0.0"
   },
   "scripts": {
     "test": "gulp test"
