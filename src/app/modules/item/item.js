@@ -23,7 +23,6 @@
         }
 
 
-
         $scope.cloneItem = function() {
           $scope.data.paymentAmount = 0.0;
           $scope.data._id=null;
@@ -100,6 +99,7 @@
                 type: "success"
             });
 
+            document.getElementById('noteText').value = "";
 
 
 
@@ -118,7 +118,23 @@
             }).then(function successCallback(response) {
                 console.log(response.statusText);
                 $state.go('app.inventory');
+
+
+                Messenger().post({
+                    message: 'item saved',
+                    type: "success",
+                });
+
             }, function errorCallback(response) {
+
+
+                Messenger().post({
+                    message: response.data.error,
+                    type: "success",
+                });
+
+
+
                 console.log(response.statusText);
             });
         }

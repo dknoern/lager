@@ -4,7 +4,10 @@
 function selectProduct(id){
    document.location.href = "/#/app/log-item/"+id;
 }
+
+
 </script>
+
 
 <h1 class="page-title"><span class="fw-semi-bold">Log-In Record</span></h1>
 
@@ -50,20 +53,44 @@ function selectProduct(id){
 
       <div class="mt">
 
-    <p>
+    <!--p>
       <a href="/#/app/log-item"><button type="button" class="btn btn-primary">
         <span class="icon">
           <i class="fa fa-plus-circle"></i>
         </span>
 New Item</button></a>
-    </p>
+    </p-->
+
+
+
+          <div class="btn-toolbar mt-lg hidden-print">
+
+
+
+              <a href="/#/app/log-item"><button type="button" class="btn btn-primary">
+        <span class="icon">
+          <i class="fa fa-plus-circle"></i>
+        </span>
+                  New Item</button></a>
+
+              <button data-ng-click="print()" class="btn btn-inverse">
+                  <i class="fa fa-print"></i>
+                  &nbsp;&nbsp;
+                  Print
+              </button>
+
+          </div>
+
+
+
 
 
     <table id="example" class="display" cellspacing="0" width="100%">
         <thead>
             <tr>
-                <th>Date</th>
+                <th style="white-space: nowrap;">Date</th>
                 <th style="white-space: nowrap;">Received From</th>
+                <th style="white-space: nowrap;">Customer</th>
                 <th>Item Received</th>
                 <th>By</th>
                 <th>Comments</th>

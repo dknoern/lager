@@ -37,13 +37,17 @@ router.route('/repairs')
         repair.customerId = req.body.customerId;
         repair.hasPapers = req.body.hasPapers;
 
+
+        repair.search = repair._id + " " + repair.description + " " + formatDate(repair.dateOut)
+            + " " + formatDate(repair.expectedReturnDate) + " " + formatDate(repair.returnDate)
+            + " " + repair.customerFirstName + " " + repair.customerLastName + " " + repair.vendor;
+
         console.log("calling updateProductHistory")
 
         var lineItems = new Array();
         lineItems[0] = {
             productId: repair.itemNumber
         }
-
 
 
         if (repair._id == null) {
@@ -113,6 +117,8 @@ router.route('/repairs')
         };
 
         Repair.find({
+
+            'search': new RegExp(search, 'i')
             /*      'customer': new RegExp(search, 'i')
 
             $or: [{

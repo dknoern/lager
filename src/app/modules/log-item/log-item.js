@@ -4,29 +4,45 @@
     angular.module('singApp.logitem')
         .controller('LogItemCtrl', LogItemCtrl);
 
-    LogItemCtrl.$inject = ['$scope', '$rootScope','$sce','$resource', '$http', '$window', '$location', '$state', 'jQuery'];
+    LogItemCtrl.$inject = ['$scope', '$rootScope','$sce','$resource', '$http', '$window', '$location', '$state', 'jQuery', 'authService'];
 
-    function LogItemCtrl($scope, $rootScope, $sce, $resource, $http, $window, $location, $state, jQuery,$upload) {
+    function LogItemCtrl($scope, $rootScope, $sce, $resource, $http, $window, $location, $state, jQuery,$upload,authService) {
         $scope.dtChanged = function(dt) {
             $window.alert('Angular model changed to: ' + dt);
         };
 
-        if ($scope.itemId) {
-                    $http.get('api/upload/'+$scope.itemId).
-                    success(function(images) {
-                        $scope.images = images;
-                    });
 
-            $scope.data = $resource('api/products/:id').get({
-                id: $scope.itemId
-            });
+
+
+        var receivedBy = "Janet";
+
+        if (authService && authService.getCachedProfile()) {
+            receivedBy = authService.getCachedProfile().nickname;
+        }
+
+        if ($scope.itemId) {
+
+            $resource('api/logitems/:id').get({
+                 id: $scope.itemId
+             }).$promise.then(function(thedata){
+                 $scope.data = thedata;
+                 $http.get('api/upload/'+thedata._id).
+                 success(function(images) {
+                     $scope.images = images;
+                 });
+             })
+
         }else{
             $scope.data = {
-                receivedBy: 'Janet'
+                history:{
+                    receivedBy: receivedBy
+                }
             };
         }
 
-
+        $scope.addToInventory = function(){
+            alert('adding to inventory ' + data._id);
+        }
 
         $scope.go = function() {
 
@@ -39,7 +55,7 @@
                 }
             }).then(function successCallback(response) {
                 console.log(response.statusText);
-                $state.go('app.reports9');
+                $state.go('app.log');
             }, function errorCallback(response) {
                 console.log(response.statusText);
             });
@@ -51,8 +67,6 @@
                 $scope.images = images;
             });
         }
-
-
 
         $scope.uploadFile = function(){
           alert('uploading file');

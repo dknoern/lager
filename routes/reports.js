@@ -64,7 +64,7 @@ router.route('/reports/products-memo')
 
                 results.data.push(
                     [
-                        products[i]._id,
+                        products[i].itemNumber,
                         products[i].title,
                         products[i].seller,
                         format('yyyy-MM-dd', products[i].lastUpdated)
@@ -75,7 +75,8 @@ router.route('/reports/products-memo')
         }).sort({
             lastUpdated: -1
         }).select({
-            _id: 1,
+            //_id: 1,
+            itemNumber: 1,
             title: 1,
             seller: 1,
             lastUpdated: 1

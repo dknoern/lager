@@ -22,7 +22,8 @@
         $stateProvider
             .state('app.mewlogitem', {
                 url: '/log-item',
-                templateUrl: 'app/modules/log-item/log-new.html'
+                templateUrl: 'app/modules/log-item/log-new.html',
+                controllerAs: 'vm'
             });
 
         $stateProvider

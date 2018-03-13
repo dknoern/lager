@@ -34,6 +34,8 @@ var upsertCustomer = function(req, res, customerId) {
     customer.billingCountry = req.body.billingCountry;
     customer.lastUpdated = Date.now();
 
+    customer.search = customer._id + " " + customer.firstName + " " + customer.lastName + " " +customer.city + " " + customer.email + " " + customer.phone + " " + customer.country;
+
     var query = {
         _id: customer._id
     };
@@ -91,28 +93,9 @@ router.route('/customers')
         };
 
         Customer.find({
-            $or: [{
-                    'firstName': new RegExp(search, 'i')
-                },
-                {
-                    'lastName': new RegExp(search, 'i')
-                },
-                {
-                    'city': new RegExp(search, 'i')
-                },
-                {
-                    'state': new RegExp(search, 'i')
-                },
-                {
-                    'phone': new RegExp(search, 'i')
-                },
-                {
-                    'email': new RegExp(search, 'i')
-                },
-                {
-                    'company': new RegExp(search, 'i')
-                }
-            ]
+
+            'search': new RegExp(search, 'i')
+
         }, function(err, customers) {
             if (err)
                 res.send(err);

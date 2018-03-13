@@ -12,3 +12,4 @@ aws-credentials.js
 uploads
 nohup.out
 .idea
+.DS_Store

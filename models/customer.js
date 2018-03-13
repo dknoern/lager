@@ -22,7 +22,8 @@ var CustomerSchema   = new mongoose.Schema({
 		billingState: String,
 		billingZip: String,
 		billingCountry: String,
-		lastUpdated: Date
+		lastUpdated: Date,
+	    search: String
 });
 
 
