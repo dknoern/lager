@@ -5,9 +5,9 @@
         .controller('LogCtrl', LogCtrl)
     ;
 
-    LogCtrl.$inject = ['$scope', '$resource', 'DTOptionsBuilder', 'jQuery', 'authService'];
+    LogCtrl.$inject = ['$scope', '$resource', 'DTOptionsBuilder', 'jQuery', 'authService', '$window'];
 
-    function LogCtrl($scope, $resource, DTOptionsBuilder, jQuery, authService) {
+    function LogCtrl($scope, $resource, DTOptionsBuilder, jQuery, authService, $window) {
 
         var vm = this;
         vm.auth = authService;
@@ -17,15 +17,20 @@
         $scope.month = d.getMonth() + 1;
         $scope.day = d.getDate();
 
-        /*
+
         jQuery('#example').DataTable({
             "processing": true,
             "serverSide": true,
             "ordering": false,
             "pageLength": 50,
-            "ajax": "/api/items"
+            "ajax": "/api/logitems"
         });
-        */
+
+
+
+        $scope.print = function() {
+            $window.print();
+        };
     }
 
 })();

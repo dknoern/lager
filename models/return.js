@@ -30,7 +30,8 @@ var ReturnSchema = new mongoose.Schema({
         itemNo: String,
         longDesc: String,
         included: Boolean
-    }]
+    }],
+    search: String
 });
 /*
 ReturnSchema.pre('save', function (next) {

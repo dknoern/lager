@@ -33,15 +33,16 @@ var ProductSchema = new mongoose.Schema({
     inventoryItem: Boolean,
     sellerType: String,
     seller: String,
-    receivedFrom: String,
-    customerName: String,
-    receivedBy: String,
-    customerName: String,
     search: String,
     history: [{
         user: String,
         date: Date,
-        action: String
+        action: String,
+        itemReceived: String,
+        receivedFrom: String,
+        customerName: String,
+        comments: String,
+        search: String
     }]
 });
 

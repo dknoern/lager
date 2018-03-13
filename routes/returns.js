@@ -23,7 +23,9 @@ router.route('/returns')
         ret.subtotal = req.body.subtotal;
         ret.tax = req.body.tax;
         ret.shipping = req.body.shipping;
-        ret.total = req.body.total;
+        ret.totalReturnAmount = req.body.total;
+
+        ret.search = retrn._id + " " + retrn.invoiceId + " " + formatDate(retrn.date) + " " + retrn.customerName + " " + retrn.salesPerson + " " + retrn.totalReturnAmount;
 
         // use save for updates, findOne and update for inserts for now until we
         // figure out the problem with the "pre" in mongoose.
@@ -69,7 +71,6 @@ router.route('/returns')
 
     .get(function(req, res) {
 
-        var query = "";
         var draw = req.query.draw;
         var start = 0;
         var length = 10;
@@ -86,8 +87,8 @@ router.route('/returns')
         };
 
         Return.find({
-            /*      'customer': new RegExp(search, 'i')
-
+                 'search': new RegExp(search, 'i')
+/*
             $or: [{
                     'customer': new RegExp(search, 'i')
                 },

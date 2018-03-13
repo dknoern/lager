@@ -10,7 +10,7 @@ var Return = require('./models/return');
 var Repair = require('./models/repair');
 
 var mongoose = require('mongoose');
-
+var format = require('date-format');
 mongoose.Promise = require('bluebird');
 
 var promises = null;
@@ -19,14 +19,15 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-//mongoose.connect('mongodb://lager:wntNJy5DqatKcvdYWCDrwAxYr67JC32D@ds123698.mlab.com:23698/lager');
+mongoose.connect('mongodb://lager:wntNJy5DqatKcvdYWCDrwAxYr67JC32D@ds123698.mlab.com:23698/lager');
 
 mongoose.connect('mongodb://localhost:27018/lager');
 
 function load(modelName, fileName, functionName) {
 
     promises = new Array();
-    var datadir = process.env.HOME + "/Dropbox/demesy";
+    //var datadir = process.env.HOME + "/Dropbox/demesy";
+    var datadir = process.env.HOME + "/Drive/demesy";
 
     var drops = new Array();
 
@@ -74,7 +75,7 @@ function loadCsvFile(file, functionRef) {
                 id = line[0];
                 var line = output[i];
                 // following only needed for old product
-                // line[0] = dedupeValue(ids, id);
+                 line[0] = dedupeValue(ids, id);
                 promises.push(functionRef(line));
             }
         });
@@ -131,6 +132,8 @@ function loadCustomer(line) {
     customer.lastUpdated = line[20];
     //customer.country = req.body.country;
 
+    customer.search = customer._id + " " + customer.firstName + " " + customer.lastName + " " +customer.city + " " + customer.email + " " + customer.phone + " " + customer.country;
+
     Customer.findOneAndUpdate({
         "_id": customer.id
     }, customer, {
@@ -141,7 +144,6 @@ function loadCustomer(line) {
         }
     });
 }
-
 
 function loadProduct(line) {
 
@@ -274,18 +276,22 @@ function loadProduct(line) {
 
     product.history = new Array();
 
+    var receivedDate = new Date();
+
     if(product.received!=null) {
         product.history.push({
             user: "system",
             date: product.received,
-            action: "item received"
+            action: "item received",
+            search: product.search + " " + formatDate(product.received)
         });
     }
 
     product.history.push({
         user: "system",
         date: new Date(),
-        action: "item imported from access"
+        action: "item imported from access",
+        search: product.search + " " + formatDate(new Date)
     });
 
     var promise = product.save(function (err, doc) {
@@ -389,6 +395,7 @@ function loadReturn(line) {
     retrn.customerId = line[9];
     retrn.processed = line[10];
 
+
     if (retrn.customerId != null) {
         Customer.findById(retrn.customerId, function (err, customer) {
             if (err) {
@@ -438,6 +445,10 @@ function loadRepair(line) {
     repair.repairNotes = line[11];
     repair.cost = line[12];
     repair.hasPapers = line[13];
+
+    repair.search = repair._id + " " + repair.description + " " + formatDate(repair.dateOut)
+        + " " + formatDate(repair.expectedReturnDate) + " " + formatDate(repair.returnDate)
+        + " " + repair.customerFirstName + " " + repair.customerLastName + " " + repair.vendor;
 
     Repair.findOneAndUpdate({
         "_id": repair._id
@@ -502,6 +513,11 @@ function loadInvoiceDetail(line) {
 
 
 function saveReturn(retrn) {
+
+
+    retrn.search = retrn._id + " "  + retrn.invoiceId + " " + formatDate(retrn.date) + " " + retrn.customerName + " " + retrn.salesPerson + " " + retrn.totalReturnAmount;
+
+
     Return.findOneAndUpdate({
         "_id": retrn.id
     }, retrn, {
@@ -566,4 +582,13 @@ function loadReturnDetail(line) {
     });
 
     return Promise.resolve(true);
+}
+
+
+
+function formatDate(date) {
+    if (date == null) return "";
+    else {
+        return format('yyyy-MM-dd', date);
+    }
 }

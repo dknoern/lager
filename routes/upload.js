@@ -38,7 +38,7 @@ router.route('/upload')
 });
 
 router.route('/upload/:product_id')
-.get(checkJwt,function (req, res){
+.get(function (req, res){
 
   var path = 'uploads';
 
