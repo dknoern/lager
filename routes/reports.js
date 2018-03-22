@@ -11,14 +11,55 @@ router.use(function (req, res, next) {
     next();
 });
 
-router.route('/reports/outstanding-repairs')
+
+
+router.route('/reports/vendors-with-outstanding-repairs')
     .get(function (req, res) {
+
+        var vendorList = new Array();
+
+        vendorList.push("All");
+
+        Repair.find({
+            'returnDate': null
+
+        }, function (err, vendors) {
+            if (err)
+                res.send(err);
+
+            for (var i = 0; i < vendors.length; i++) {
+
+                if(!vendorList.includes(vendors[i].vendor))
+                vendorList.push(vendors[i].vendor);
+            }
+
+            res.json(vendorList);
+
+        }).sort({
+            vendor: 1
+        }).select({
+            vendor: 1
+        });
+    });
+
+
+
+
+
+router.route('/reports/outstanding-repairs/:vendor')
+    .get(function (req, res) {
+
+        var vendor = req.params.vendor.toLowerCase();
+
+        if(vendor=="all") vendor="";
+
         var results = {
             "data": []
         };
 
         Repair.find({
-            'returnDate': null
+            'returnDate': null,
+            'search': new RegExp(vendor, 'i')
 
         }, function (err, repairs) {
             if (err)
@@ -133,7 +174,6 @@ router.route('/reports/daily-sales/:year/:month/:day')
             methodOfSale: 1
         });
     });
-
 
 
 router.route('/reports/log-items/:year/:month/:day')

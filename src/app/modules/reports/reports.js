@@ -10,6 +10,13 @@
 
     function ReportsCtrl($scope, $resource, $http, $window, DTOptionsBuilder, jQuery) {
 
+        $scope.vendorSelected = function(){
+            var reportUri= '/reports/outstanding-repairs/'+$scope.vendor;
+            theDataTable.ajax.url('/api/reports/outstanding-repairs/'+$scope.vendor).load();
+        }
+
+
+
         function isDailyReport(reportId) {
             return "daily-sales" == reportId || "log-items" == reportId;
         }
@@ -18,11 +25,9 @@
             return "returns-summary" == reportId || "monthly-sales" == reportId;
         }
 
-
         // check date string to see if format is mm/dd/yyyy
         function isValidMMDDYYYY(dateString) {
             var isValid = true;
-        console.log('checking MMDDYYYY');
             var fields = dateString.split("/");
             var month = parseInt(fields[0]);
             var day = parseInt(fields[1]);
@@ -109,6 +114,18 @@
                 $scope.selectedDate = $scope.month + "/" + $scope.year;
                 reportUrl += "/" + $scope.year + "/" + $scope.month;
             }
+            else if ("outstanding-repairs" == reportId) {
+                reportUrl += "/" + $scope.vendor;
+
+                $http.get('api/reports/vendors-with-outstanding-repairs').
+                success(function(vendors) {
+                    $scope.vendors = vendors;
+                });
+            }
+
+            //var reportTitle = reportId.replace("-"," ");
+
+            var reportTitle = reportId.replace("-"," ").replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 
             theDataTable = jQuery('#example').DataTable({
                 "processing": true,
@@ -118,7 +135,24 @@
                 "searching": false,
                 "info": false,
                 "pageLength": 200,
-                "ajax": reportUrl
+                "ajax": reportUrl,
+                "dom": 'Bfrtip',
+                "buttons": [
+                    {
+                        extend: 'excel',
+                        title: reportTitle,
+                        text: 'Excel <i class="fa fa-file-excel-o"></i>'
+                    }
+                    , {
+                        extend: 'pdf',
+                        title: reportTitle,
+                        text: 'PDF <i class="fa fa-file-pdf-o"></i>'
+                    }, {
+                        extend: 'print',
+                        title: reportTitle,
+                        text: 'Print <i class="fa fa-print"></i>'
+                    }
+                ]
             });
         }
     }

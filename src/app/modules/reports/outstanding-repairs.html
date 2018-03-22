@@ -6,6 +6,19 @@
     <div class="mt">
 
 
+        <div class="hidden-prin">
+                <select id="vendor" class="selectpicker" data-selectpicker data-width="auto" ng-model="vendor" ng-change="vendorSelected()">
+                    <option ng-repeat="vendorx in vendors">{{ vendorx }}</option>
+                </select>
+        </div>
+
+        <p/>
+
+
+
+
+
+
       <table id="example" class="display" cellspacing="0" width="100%">
           <thead>
               <tr>
@@ -21,15 +34,13 @@
     </div>
 
 
-    <div class="btn-toolbar mt-lg text-align-right hidden-print">
+    <!--div class="btn-toolbar mt-lg text-align-right hidden-print">
       <button data-ng-click="print()" class="btn btn-inverse">
         <i class="fa fa-print"></i>
         &nbsp;&nbsp;
         Print
       </button>
-    </div>
-
-
+    </div-->
 
   </div>
 </section>

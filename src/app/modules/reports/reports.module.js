@@ -19,6 +19,7 @@
                     templateUrl: 'app/modules/reports/outstanding-repairs.html',
                     controller: function($scope, $stateParams) {
                         $scope.reportId = "outstanding-repairs";
+                        $scope.vendor= "all";
                     }
                 });
 
@@ -83,7 +84,6 @@
                     }
                 });
 
-
             $stateProvider
                 .state('app.reports8', {
                     url: '/reports/8',
@@ -92,8 +92,6 @@
                         $scope.reportId = "show-report";
                     }
                 });
-
-
 
             $stateProvider
                 .state('app.reports9', {
@@ -106,10 +104,5 @@
                         $scope.year = 0;
                     }
                 });
-
-
-
-
-
         }
 })();

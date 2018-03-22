@@ -5,6 +5,17 @@ var Product = require('../models/product');
 const checkJwt = require('./jwt-helper').checkJwt;
 var format = require('date-format');
 
+// works better, date=format gives error in some cases when using new Date() or Date.now()
+var dateFormat = require('dateformat');
+
+function formatDate(date) {
+    console.log('formatting date, yo: ' + date);
+    if (date == null) return "";
+    else {
+        return format('yyyy-MM-dd', date);
+    }
+}
+
 router.use(function (req, res, next) {
     next();
 });
@@ -18,7 +29,7 @@ var upsertProduct = function (req, res, productId, action) {
     var history;
 
     if(req.body.history!=null && req.body.history.itemReceived!=null){
-        var search = formatDate(Date.now) + " " + req.body.history.receivedFrom + " " + req.body.history.customerName
+        var search = formatDate(Date.now()) + " " + req.body.history.receivedFrom + " " + req.body.history.customerName
             + " " + req.body.history.itemReceived + req.body.history.receivedBy +  " " + req.body.history.comments;
 
         history = {
@@ -333,7 +344,6 @@ router.route('/products')
 
                 results.data.push(
                     [
-
                         '<a href=\"#\" onclick=\"selectProduct(\'' + products[i]._id + '\');return false;\">' + products[i].itemNumber + '</a>',
                         //'<a href=\"/#/app/item/' + products[i]._id + '\">' + products[i]._id,
                         products[i].title,
@@ -545,9 +555,9 @@ router.route('/logitems')
 
         Product.
         aggregate([{ $match: {$and: [
-                    {status: statusFilter},
-                    //{itemNumber: {$ne: null}},
-                    {'history.search': new RegExp(search, 'i')}
+            {status: statusFilter},
+            {'history.action': 'received'},
+            {'history.search': new RegExp(search, 'i')}
                 ]}   }]).
         unwind('history').sort(sortClause).skip(parseInt(start)).limit(parseInt(length))
             .exec(function (err, products) {

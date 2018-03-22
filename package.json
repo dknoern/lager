@@ -4,7 +4,7 @@
   "description": "Lager Inventory App",
   "dependencies": {
     "express": "~4.15.3",
-    "mongoose": "~5.0.4",
+    "mongoose": "4.10.6",
     "body-parser": "~1.0.1",
     "mongoose-increment": "0.8.0",
     "mongodb-autoincrement": "~1.0.0",
@@ -18,10 +18,11 @@
     "jwks-rsa": "1.2.0",
     "express-jwt-authz": "1.0.0",
     "csv-parse": "1.2.3",
-    "date-format": "1.1.0",
+    "date-format": "1.2.0",
     "express-force-ssl": "0.3.2",
     "aws-sdk": "latest",
-    "format-currency": "1.0.0"
+    "format-currency": "1.0.0",
+    "dateformat": "3.0.3"
   },
   "scripts": {
     "test": "gulp test"
