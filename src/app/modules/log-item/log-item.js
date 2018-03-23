@@ -35,13 +35,13 @@
         }else{
             $scope.data = {
                 history:{
-                    receivedBy: receivedBy
+                    user: receivedBy
                 }
             };
         }
 
         $scope.addToInventory = function(){
-            alert('adding to inventory ' + data._id);
+            document.location.href = "/#/app/item/"+$scope.data._id;
         }
 
         $scope.go = function() {
@@ -62,7 +62,7 @@
         }
 
         $scope.imagesAdded = function(){
-            $http.get('api/upload/'+$scope.itemId).
+            $http.get('api/upload/'+$scope.data._id).
             success(function(images) {
                 $scope.images = images;
             });
@@ -93,6 +93,24 @@
         }
 
         jQuery('#datetimepicker2').datetimepicker();
+
+
+        $scope.rotate = function(url, direction){
+
+            var filename = url.split("/")[2];
+            if(filename.indexOf("?")>0){
+                filename = filename.split("?")[0];
+            }
+
+            $http.get('api/upload/rotate/'+filename +'/'+direction).
+            success(function(images) {
+
+                $http.get('api/upload/'+$scope.data._id).
+                success(function(images) {
+                    $scope.images = images;
+                });
+            });
+        }
 
         var customerTableShown = false;
 

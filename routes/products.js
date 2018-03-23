@@ -29,11 +29,11 @@ var upsertProduct = function (req, res, productId, action) {
     var history;
 
     if(req.body.history!=null && req.body.history.itemReceived!=null){
-        var search = formatDate(Date.now()) + " " + req.body.history.receivedFrom + " " + req.body.history.customerName
-            + " " + req.body.history.itemReceived + req.body.history.receivedBy +  " " + req.body.history.comments;
+        var search = formatDate(new Date()) + " " + req.body.history.receivedFrom + " " + req.body.history.customerName
+            + " " + req.body.history.itemReceived + req.body.history.user +  " " + req.body.history.comments;
 
         history = {
-            user: req.body.history.receivedBy,
+            user: req.body.history.user,
             date: Date.now(),
             action: "received",
             itemReceived: req.body.history.itemReceived,
@@ -45,7 +45,7 @@ var upsertProduct = function (req, res, productId, action) {
 
     }else {
 
-        var search = formatDate(Date.now) + " " + req.user['http://mynamespace/name'];
+        var search = formatDate(new Date()) + " " + req.user['http://mynamespace/name'];
 
         history = {
             user: req.user['http://mynamespace/name'],
@@ -210,7 +210,7 @@ router.route('/products')
             }
 
 
-            if(req.body.itemNumber == null){ // new
+            if(req.body.itemNumber == null || req.body.itemNumber == ""){ // new
                 console.log('no item number, creating new log item');
                 return upsertProduct(req, res, null, "product created");
             }
@@ -521,10 +521,6 @@ router.route('/products/:product_id/notes')
 router.route('/logitems')
     .get(function (req, res) {
 
-        console.log('getting log items');
-
-        var status = req.query.status;
-
         var draw = req.query.draw;
         var start = 0;
         var length = 10;
@@ -540,22 +536,10 @@ router.route('/logitems')
             "data": []
         };
 
-        var statusFilter;
-        if (status != null) {
-            statusFilter = {
-                $eq: status
-            };
-        } else {
-            statusFilter = {
-                $ne: "Deleted"
-            };
-        }
-
         var sortClause = {"history.date": -1};
 
         Product.
         aggregate([{ $match: {$and: [
-            {status: statusFilter},
             {'history.action': 'received'},
             {'history.search': new RegExp(search, 'i')}
                 ]}   }]).
@@ -564,40 +548,30 @@ router.route('/logitems')
 
             for (var i = 0; i < products.length; i++) {
 
-                var badgeStyle = "default"; // grey
-                if (products[i].status == 'In Stock' || products[i].status == 'Partnership' || products[i].status == 'Problem')
-                    badgeStyle = "success"; // green
-                else if (products[i].status == 'Repair' || products[i].status == 'Memo' || products[i].status == 'At Show')
-                    badgeStyle = "warning" // yellow
-                else if (products[i].status == 'Sale Pending')
-                    badgeStyle = "danger" // red
+                if(products[i].history.action =="received") {
 
-                var itemReceived = "";
 
-                if(products[i].itemNumber!=null){
-                    itemReceived += products[i].itemNumber +": ";
-                }
-
-                if(products[i].history.itemReceived!=null) {
+                    var itemReceived = "";
+                    if(products[i].itemNumber!=null&& products[i].itemNumber!=""){
+                        itemReceived  += products[i].itemNumber + ": ";
+                    }
                     itemReceived += products[i].history.itemReceived;
-                }else{
-                    itemReceived += products[i].title;
-                }
 
-                results.data.push(
-                    [
-                        '<a href=\"#\" onclick=\"selectProduct(\'' + products[i].history._id + '\');return false;\">' + format('yyyy-MM-dd', products[i].history.date) + '</a>',
-                        products[i].history.receivedFrom,
-                        products[i].history.customerName,
-                        itemReceived,
-                        products[i].history.user,
-                        products[i].history.comments
-                    ]
-                );
+                    results.data.push(
+                        [
+                            '<a href=\"#\" onclick=\"selectProduct(\'' + products[i].history._id + '\');return false;\">' + format('yyyy-MM-dd', products[i].history.date) + '</a>',
+                            products[i].history.receivedFrom,
+                            products[i].history.customerName,
+                            itemReceived,
+                            products[i].history.user,
+                            products[i].history.comments
+                        ]
+                    );
+                }
             }
 
             Product.count({
-                status: statusFilter
+                'history.action': 'received'
             }, function (err, count) {
                 results.recordsTotal = count;
 
@@ -606,15 +580,7 @@ router.route('/logitems')
                     res.json(results);
                 } else {
                     Product.count({
-
-                        $and: [{
-                            status: {
-                                $ne: "Deleted"
-                            }
-                        }, {
-                            'search': new RegExp(search, 'i')
-                        }]
-
+                        'history.action': 'received'
                     }, function (err, count) {
                         results.recordsFiltered = count;
                         res.json(results);

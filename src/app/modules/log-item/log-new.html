@@ -28,7 +28,7 @@
       <ul class="dropdown-menu">
         <li ng-disabled="true"><a href="#" data-toggle="modal" data-toggle="modal" data-target="#addImagesModal">Add Images</a></li>
 
-        <li ng-if="data.itemNumber==null"><a ng-click="addToInventory()">Add to Inventory</a></li>
+        <li ng-if='data.itemNumber==null || data.itemNumber==""'><a ng-click="addToInventory()">Add to Inventory</a></li>
 
       </ul>
     </div>
@@ -81,7 +81,7 @@
                 <div class="col-sm-8">
 
                   <select id="receivedFrom" class="selectpicker" data-selectpicker
-                          data-width="auto" required  ng-model="data.history.receivedFrom" ng-readonly="data._id!=null">
+                          data-width="auto" required  ng-model="data.history.receivedFrom" ng-readonly="data._id!=null" ng-disabled="data._id!=null">
                     <option></option>
                     <option>FexEx</option>
                     <option>UPS</option>
@@ -116,7 +116,7 @@
               <div class="form-group">
                 <label for="receivedBy" class="col-sm-3 control-label">Received By</label>
                 <div class="col-sm-8">
-                  <input type="text" id="receivedBy" class="form-control" ng-model="data.history.receivedBy" ng-readonly="data._id!=null">
+                  <input type="text" id="receivedBy" class="form-control" ng-model="data.history.user" ng-readonly="data._id!=null">
                 </div>
               </div>
 
@@ -137,9 +137,12 @@
 
             <div class="form-actions">
               <div class="row">
-                <div class="col-sm-offset-4 col-sm-7">
+                <div ng-if="data.history._id==null" class="col-sm-offset-4 col-sm-7">
                   <button type="submit" class="btn btn-primary" ng-click="go()" ng-disabled="logItemForm.$invalid">Save</button>
                   <a href="/#/app/log"><button type="button" class="btn btn-inverse"> Cancel</button></a>
+                </div>
+                <div ng-if="data.history._id!=null" class="col-sm-offset-4 col-sm-7">
+                  <a href="/#/app/log"><button type="button" class="btn btn-inverse"> Close</button></a>
                 </div>
               </div>
             </div>
@@ -151,16 +154,25 @@
 
 
 
+  <!-- IMAGE GALLERY -->
+  <div class="row gallery" data-ui-jq="magnificPopup"
+       data-sn-gallery data-options="{ itemSelector: '.gallery-item'}"
+       data-ui-options="{ delegate: '.thumbnail > a',  type: 'image', gallery: { enabled: true  } }">
+    <div data-ng-repeat="item in images"
+         class="col-sm-6 col-md-3 gallery-item" data-groups='{{item.groups}}' data-title="{{item.name}}">
+      <div class="thumbnail">
+        <a href="{{item.src}}"><img data-ng-src="{{item.src}}" alt="..."></a>
+        <div class="caption">
+          <h5 class="mt-0 mb-xs">{{item.name}}</h5>
+          <ul class="post-links">
+            <li><a href="#" ng-click="rotate(item.src,'left')"><span><i class="fa fa-rotate-left"></i> Rotate Left</span></a></li>
+            <li><a href="#" ng-click="rotate(item.src,'left')"><span><i class="fa fa-rotate-right"></i> Rotate Right</span></a></li>
 
-
-  <div>
-    <table>
-      <tr>
-        <td data-ng-repeat="image in images">
-          <img ng-src="{{image}}" width=70%>
-        </td>
-      </tr>
-    </table>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-md-3 js-shuffle-sizer"></div>
   </div>
 
 
