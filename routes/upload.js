@@ -2,6 +2,7 @@ var express = require('express');
 var multer = require( 'multer' );
 var router = express.Router();
 var fs = require('fs');
+var Jimp = require("jimp");
 
 const checkJwt = require('./jwt-helper').checkJwt;
 
@@ -49,12 +50,52 @@ router.route('/upload/:product_id')
       for (var i=0; items!=null && i<items.length; i++) {
           if(items[i].startsWith(req.params.product_id))
           {
-            urls.push("/uploads/"+items[i]);
+              var upload = {
+                  "src":"/uploads/"+items[i] + "?t=" + new Date().getTime()
+              }
+
+              //urls.push("/uploads/"+items[i]);
+              urls.push(upload);
           }
       }
       res.json(urls);
   });
 
 });
+
+
+
+
+router.route('/upload/rotate/:image/:direction')
+    .get(function (req, res){
+
+        var path = 'uploads';
+
+        var image = req.params.image;
+        var direction = req.params.direction;
+
+        var angle = 90;
+
+        if(direction=='left'){
+            angle = -90;
+        }
+
+
+        Jimp.read('uploads/'+image).then(function (img) {
+
+            img.rotate(angle)
+                .write('uploads/'+image);
+
+            res.send('image rotated');
+
+        }).catch(function (err) {
+            console.error(err);
+        });
+
+
+    });
+
+
+
 
 module.exports = router;

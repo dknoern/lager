@@ -201,6 +201,28 @@
             return 'this is a long description';
         }
 
+
+        $scope.rotate = function(url, direction){
+
+            var filename = url.split("/")[2];
+
+            if(filename.indexOf("?")>0){
+                filename = filename.split("?")[0];
+            }
+
+            $http.get('api/upload/rotate/'+filename +'/'+direction).
+            success(function(images) {
+
+                $http.get('api/upload/'+$scope.itemId).
+                success(function(images) {
+                    $scope.images = images;
+                });
+            });
+        }
+
+
+
+
         jQuery('#datetimepicker2').datetimepicker();
 
         var customerTableShown = false;

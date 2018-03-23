@@ -142,6 +142,7 @@
                         extend: 'excel',
                         title: reportTitle,
                         text: 'Excel <i class="fa fa-file-excel-o"></i>'
+                        //,className: "btn btn-inverse"
                     }
                     , {
                         extend: 'pdf',
