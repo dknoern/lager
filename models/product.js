@@ -42,7 +42,8 @@ var ProductSchema = new mongoose.Schema({
         receivedFrom: String,
         customerName: String,
         comments: String,
-        search: String
+        search: String,
+        repairNumber: String
     }]
 });
 

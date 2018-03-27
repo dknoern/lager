@@ -39,6 +39,7 @@ var InvoiceSchema = new mongoose.Schema({
 
     lineItems: [{
         productId: String,
+        itemNumber: String,
         name: String,
         amount: Number,
         serialNumber: String,

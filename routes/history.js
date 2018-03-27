@@ -36,7 +36,8 @@ module.exports.updateProductHistory = function(lineItems,status,action,user) {
                         "history": historyEntry
                     },
                     "$set": {
-                        "status": status
+                        "status": status,
+                        "lastUpdated": new Date()
                     }
                 }, {
                     upsert: true

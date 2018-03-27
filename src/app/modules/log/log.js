@@ -23,7 +23,26 @@
             "serverSide": true,
             "ordering": false,
             "pageLength": 50,
-            "ajax": "/api/logitems"
+            "ajax": "/api/logitems",
+            "dom": 'Bfrtip',
+            "buttons": [
+                {
+                    extend: 'excel',
+                    title: 'Log-In Record',
+                    text: 'Excel <i class="fa fa-file-excel-o"></i>'
+                    //,className: "btn btn-inverse"
+                }
+                , {
+                    extend: 'pdf',
+                    title: 'Log-In Record',
+                    text: 'PDF <i class="fa fa-file-pdf-o"></i>'
+                }, {
+                    extend: 'print',
+                    title: 'Log-In Record',
+                    text: 'Print <i class="fa fa-print"></i>'
+                }
+            ]
+
         });
 
 

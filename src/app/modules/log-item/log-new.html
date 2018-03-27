@@ -1,180 +1,224 @@
-
 <style>
-  .form-group.required .control-label:after {
-    content: " *";
-    color: darkred;
-  }
+    .form-group.required .control-label:after {
+        content: " *";
+        color: darkred;
+    }
 </style>
-
 
 
 <div data-ng-controller="LogItemCtrl">
 
 
+    <div class="row">
+        <div class="col-md-10">
+            <h1 class="page-title"><span class="fw-semi-bold">Log Item</span></h1>
+        </div>
+        <div class="col-md-2">
 
-<div class="row">
-  <div class="col-md-10">
-    <h1 class="page-title"><span class="fw-semi-bold">Log Item</span></h1>
-  </div>
-  <div class="col-md-2">
+            <div ng-if="data._id">
+                <div class="btn-group hidden-print" data-dropdown>
+                    <button class="btn btn-success dropdown-toggle" data-dropdown-toggle
+                            data-original-title="" title="">
+                        &nbsp; Action &nbsp;
+                        <i class="fa fa-caret-down"></i>
+                    </button>
 
-    <div ng-if="data._id">
-      <div class="btn-group" data-dropdown>
-      <button class="btn btn-success dropdown-toggle" data-dropdown-toggle data-original-title="" title="">
-        &nbsp; Action &nbsp;
-        <i class="fa fa-caret-down"></i>
-      </button>
+                    <ul class="dropdown-menu">
+                        <li ng-disabled="true"><a href="#" data-toggle="modal" data-toggle="modal"
+                                                  data-target="#addImagesModal">Add Images</a></li>
 
-      <ul class="dropdown-menu">
-        <li ng-disabled="true"><a href="#" data-toggle="modal" data-toggle="modal" data-target="#addImagesModal">Add Images</a></li>
+                        <li ng-if='data.itemNumber==null || data.itemNumber==""'><a
+                                ng-click="addToInventory()">Add to Inventory</a></li>
+                        <li><a ng-click="print()"><i class="fa fa-print"></i> Print</a></li>
 
-        <li ng-if='data.itemNumber==null || data.itemNumber==""'><a ng-click="addToInventory()">Add to Inventory</a></li>
-
-      </ul>
-    </div>
-    </div>
-
-  </div>
-</div>
-
-
-  <!-- Add image modal -->
-  <div class="modal fade" id="addImagesModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-body">
-
-          <section class="widget">
-            <header>
-              <h5><strong>Image Upload</strong></h5>
-            </header>
-            <div class="widget-body">
-              <form class="dropzone" action="/api/upload" data-dropzone action="#" id="myDropzone">
-                <input type="hidden" name="itemId" value="{{data._id}}" />
-              </form>
+                    </ul>
+                </div>
             </div>
-          </section>
-
         </div>
-
-        <div class="modal-footer">
-          <button type="button" class="btn btn-success btn-sm" ng-click="imagesAdded()" data-dismiss="modal">OK</button>
-        </div>
-
-      </div>
     </div>
-  </div>
 
 
-  <div class="row">
-    <div class="col-md-12">
+    <!-- Add image modal -->
+    <div class="modal fade" id="addImagesModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
 
-      <section class="widget">
-        <div class="widget-body">
-          <form class="form-horizontal" role="form" name="logItemForm">
-            <div class="row">
-              <div class="col-sm-12">
-            <fieldset>
+                    <section class="widget">
+                        <header>
+                            <h5><strong>Image Upload</strong></h5>
+                        </header>
+                        <div class="widget-body">
+                            <form class="dropzone" action="/api/upload" data-dropzone action="#"
+                                  id="myDropzone">
+                                <input type="hidden" name="itemId" value="{{data._id}}"/>
+                            </form>
+                        </div>
+                    </section>
 
-              <div class="form-group required">
-                <label for="receivedFrom" class="col-sm-3 control-label">Received From</label>
-                <div class="col-sm-8">
-
-                  <select id="receivedFrom" class="selectpicker" data-selectpicker
-                          data-width="auto" required  ng-model="data.history.receivedFrom" ng-readonly="data._id!=null" ng-disabled="data._id!=null">
-                    <option></option>
-                    <option>FexEx</option>
-                    <option>UPS</option>
-                    <option>USPS</option>
-                    <option>Courier</option>
-                    <option>Other</option>
-                  </select>
                 </div>
-              </div>
 
-              <div class="form-group">
-                <label for="itemNumber" class="col-sm-3 control-label">Item Number</label>
-                <div class="col-sm-8">
-                  <input type="text" id="itemNumber" class="form-control"  ng-model="data.itemNumber" ng-readonly="data._id!=null">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success btn-sm" ng-click="imagesAdded()"
+                            data-dismiss="modal">OK
+                    </button>
                 </div>
-              </div>
 
-              <div class="form-group required">
-                <label for="title" class="col-sm-3 control-label">Item Received</label>
-                <div class="col-sm-8">
-                  <input type="text" id="title" class="form-control"  ng-model="data.history.itemReceived" required ng-readonly="data._id!=null">
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="customerName" class="col-sm-3 control-label">Customer Name</label>
-                <div class="col-sm-8">
-                  <input type="text" id="customerName" class="form-control"  ng-model="data.history.customerName" ng-readonly="data._id!=null">
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="receivedBy" class="col-sm-3 control-label">Received By</label>
-                <div class="col-sm-8">
-                  <input type="text" id="receivedBy" class="form-control" ng-model="data.history.user" ng-readonly="data._id!=null">
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="comments" class="col-sm-3 control-label">Comments</label>
-                <div class="col-sm-8">
-                  <textarea id="comments" rows=6 cols="40"  ng-model="data.history.comments" ng-readonly="data._id!=null"></textarea>
-                </div>
-              </div>
-
-              <div>
-
-            </fieldset>
-
-          </div>
-
-          </div>
-
-            <div class="form-actions">
-              <div class="row">
-                <div ng-if="data.history._id==null" class="col-sm-offset-4 col-sm-7">
-                  <button type="submit" class="btn btn-primary" ng-click="go()" ng-disabled="logItemForm.$invalid">Save</button>
-                  <a href="/#/app/log"><button type="button" class="btn btn-inverse"> Cancel</button></a>
-                </div>
-                <div ng-if="data.history._id!=null" class="col-sm-offset-4 col-sm-7">
-                  <a href="/#/app/log"><button type="button" class="btn btn-inverse"> Close</button></a>
-                </div>
-              </div>
             </div>
-          </form>
         </div>
-      </section>
     </div>
-  </div>
 
 
+    <div class="row">
+        <div class="col-md-12">
 
-  <!-- IMAGE GALLERY -->
-  <div class="row gallery" data-ui-jq="magnificPopup"
-       data-sn-gallery data-options="{ itemSelector: '.gallery-item'}"
-       data-ui-options="{ delegate: '.thumbnail > a',  type: 'image', gallery: { enabled: true  } }">
-    <div data-ng-repeat="item in images"
-         class="col-sm-6 col-md-3 gallery-item" data-groups='{{item.groups}}' data-title="{{item.name}}">
-      <div class="thumbnail">
-        <a href="{{item.src}}"><img data-ng-src="{{item.src}}" alt="..."></a>
-        <div class="caption">
-          <h5 class="mt-0 mb-xs">{{item.name}}</h5>
-          <ul class="post-links">
-            <li><a href="#" ng-click="rotate(item.src,'left')"><span><i class="fa fa-rotate-left"></i> Rotate Left</span></a></li>
-            <li><a href="#" ng-click="rotate(item.src,'left')"><span><i class="fa fa-rotate-right"></i> Rotate Right</span></a></li>
+            <section class="widget">
+                <div class="widget-body">
+                    <form class="form-horizontal" role="form" name="logItemForm">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <fieldset>
 
-          </ul>
+                                    <div class="form-group required">
+                                        <label for="receivedFrom" class="col-sm-3 control-label">Received
+                                            From</label>
+                                        <div class="col-sm-8">
+
+                                            <select id="receivedFrom" class="selectpicker"
+                                                    data-selectpicker
+                                                    data-width="auto" required
+                                                    ng-model="data.history.receivedFrom"
+                                                    ng-readonly="data._id!=null"
+                                                    ng-disabled="data._id!=null">
+                                                <option></option>
+                                                <option>FexEx</option>
+                                                <option>UPS</option>
+                                                <option>USPS</option>
+                                                <option>Courier</option>
+                                                <option>Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="itemNumber" class="col-sm-3 control-label">Item
+                                            Number</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="itemNumber" class="form-control"
+                                                   ng-model="data.itemNumber"
+                                                   ng-readonly="data._id!=null">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group required">
+                                        <label for="title" class="col-sm-3 control-label">Item
+                                            Received</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="title" class="form-control"
+                                                   ng-model="data.history.itemReceived" required
+                                                   ng-readonly="data._id!=null">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group required">
+                                        <label for="title" class="col-sm-3 control-label">Item
+                                            Received</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="title" class="form-control"
+                                                   ng-model="data.history.itemReceived" required
+                                                   ng-readonly="data._id!=null">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="customerName" class="col-sm-3 control-label">Customer
+                                            Name</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="customerName"
+                                                   class="form-control"
+                                                   ng-model="data.history.customerName"
+                                                   ng-readonly="data._id!=null">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="receivedBy" class="col-sm-3 control-label">Received
+                                            By</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="receivedBy" class="form-control"
+                                                   ng-model="data.history.user"
+                                                   ng-readonly="data._id!=null">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="comments" class="col-sm-3 control-label">Comments</label>
+                                        <div class="col-sm-8">
+                                            <textarea id="comments" rows=6 cols="40"
+                                                      ng-model="data.history.comments"
+                                                      ng-readonly="data._id!=null"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div>
+
+                                </fieldset>
+
+                            </div>
+
+                        </div>
+
+                        <div class="form-actions hidden-print">
+                            <div class="row">
+                                <div ng-if="data.history._id==null"
+                                     class="col-sm-offset-4 col-sm-7">
+                                    <button type="submit" class="btn btn-primary" ng-click="go()"
+                                            ng-disabled="logItemForm.$invalid">Save
+                                    </button>
+                                    <a href="/#/app/log">
+                                        <button type="button" class="btn btn-inverse"> Cancel
+                                        </button>
+                                    </a>
+                                </div>
+                                <div ng-if="data.history._id!=null"
+                                     class="col-sm-offset-4 col-sm-7">
+                                    <a href="/#/app/log">
+                                        <button type="button" class="btn btn-inverse"> Close
+                                        </button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </section>
         </div>
-      </div>
     </div>
-    <div class="col-sm-6 col-md-3 js-shuffle-sizer"></div>
-  </div>
 
+
+    <!-- IMAGE GALLERY -->
+    <div class="row gallery" data-ui-jq="magnificPopup"
+         data-sn-gallery data-options="{ itemSelector: '.gallery-item'}"
+         data-ui-options="{ delegate: '.thumbnail > a',  type: 'image', gallery: { enabled: true  } }">
+        <div data-ng-repeat="item in images"
+             class="col-sm-6 col-md-3 gallery-item" data-groups='{{item.groups}}'
+             data-title="{{item.name}}">
+            <div class="thumbnail">
+                <a href="{{item.src}}"><img data-ng-src="{{item.src}}" alt="..."></a>
+                <div class="caption hidden-print">
+                    <h5 class="mt-0 mb-xs">{{item.name}}</h5>
+                    <ul class="post-links">
+                        <li><a href="#" ng-click="rotate(item.src,'left')"><span><i
+                                class="fa fa-rotate-left"></i></span></a></li>
+                        <li><a href="#" ng-click="rotate(item.src,'left')"><span><i
+                                class="fa fa-rotate-right"></i></span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-3 js-shuffle-sizer"></div>
+    </div>
 
 
 </div>
