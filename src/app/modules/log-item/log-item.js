@@ -11,8 +11,9 @@
             $window.alert('Angular model changed to: ' + dt);
         };
 
-
-
+        $scope.print = function() {
+            $window.print();
+        };
 
         var receivedBy = "Janet";
 
@@ -48,7 +49,7 @@
 
             $http({
                 method: "POST",
-                url: "api/products/",
+                url: "api/logitems/",
                 data: angular.toJson($scope.data),
                 headers: {
                     'Content-Type': 'application/json'

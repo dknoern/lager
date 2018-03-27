@@ -52,6 +52,7 @@
         <div class="col-md-2">
 
             <div ng-if="data._id">
+
                 <div class="btn-group" data-dropdown>
                     <button class="btn btn-success dropdown-toggle" data-dropdown-toggle
                             data-original-title="" title="">
@@ -62,10 +63,7 @@
                     <ul class="dropdown-menu">
                         <li><a href="#" data-toggle="modal" data-toggle="modal"
                                data-target="#addImagesModal">Add Images</a></li>
-                        <!--li><a href="/#/app/item/{{data._id}}/edit">Edit</a></li>
-                        <li>Add photos</li>
-                        <li>Sell</li>
-                        <li>Out to show</li-->
+
                         <li ng-if="'In Stock' == data.status || 'Memo' == data.status"><a href="#"
                                                                                           data-toggle="modal"
                                                                                           data-target="#customerModal">Create
@@ -631,8 +629,8 @@
                 <div class="caption">
                     <h5 class="mt-0 mb-xs">{{item.name}}</h5>
                     <ul class="post-links">
-                        <li><a href="#" ng-click="rotate(item.src,'left')"><span><i class="fa fa-rotate-left"></i> Rotate Left</span></a></li>
-                        <li><a href="#" ng-click="rotate(item.src,'left')"><span><i class="fa fa-rotate-right"></i> Rotate Right</span></a></li>
+                        <li><a href="#" ng-click="rotate(item.src,'left')"><span><i class="fa fa-rotate-left"></i></span></a></li>
+                        <li><a href="#" ng-click="rotate(item.src,'left')"><span><i class="fa fa-rotate-right"></i></span></a></li>
 
                     </ul>
                 </div>

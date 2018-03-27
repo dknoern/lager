@@ -169,14 +169,14 @@ router.route('/invoices')
                 var itemNo = "";
                 var itemName = "";
                 if (invoices[i].lineItems != null && invoices[i].lineItems.length > 0) {
-                    itemNo = invoices[i].lineItems[0].productId;
+                    itemNo = invoices[i].lineItems[0].itemNumber;
                     itemName = invoices[i].lineItems[0].name;
                 }
                 results.data.push(
                     [
                         '<a href=\"/#/app/invoice/' + invoices[i]._id + '\">' + invoices[i]._id + '</a>',
                         invoices[i].customerFirstName + " " + invoices[i].customerLastName,
-                        format('yyyy-MM-dd', invoices[i].date),
+                        '<div style="white-space: nowrap;">' + format('yyyy-MM-dd', invoices[i].date)+'</div>',
                         itemNo,
                         itemName,
                         formatCurrency(invoices[i].total,opts)

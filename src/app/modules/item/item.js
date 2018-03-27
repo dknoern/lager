@@ -178,7 +178,7 @@
         }
 
         $scope.uploadFile = function(){
-          alert('uploading file');
+
           console.log('uploading file');
 
          $scope.fileSelected = function(files) {

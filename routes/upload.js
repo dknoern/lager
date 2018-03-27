@@ -3,6 +3,7 @@ var multer = require( 'multer' );
 var router = express.Router();
 var fs = require('fs');
 var Jimp = require("jimp");
+var Product = require('../models/product');
 
 const checkJwt = require('./jwt-helper').checkJwt;
 
@@ -35,6 +36,8 @@ router.route('/upload')
   return res.send("put...");
 })
 .get(function (req, res) {
+
+    var itemNumber = req.query.itemNumber;
   return res.send("get...");
 });
 
@@ -53,8 +56,6 @@ router.route('/upload/:product_id')
               var upload = {
                   "src":"/uploads/"+items[i] + "?t=" + new Date().getTime()
               }
-
-              //urls.push("/uploads/"+items[i]);
               urls.push(upload);
           }
       }
@@ -79,8 +80,6 @@ router.route('/upload/rotate/:image/:direction')
         if(direction=='left'){
             angle = -90;
         }
-
-
         Jimp.read('uploads/'+image).then(function (img) {
 
             img.rotate(angle)

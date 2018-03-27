@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Repair = require('../models/repair');
+var Product = require('../models/product');
 var mongoose = require('mongoose');
 var Counter = require('../models/counter');
 var history = require('./history');
@@ -18,13 +19,25 @@ function formatDate(date) {
 
 router.route('/repairs')
     .post(checkJwt, function(req, res) {
+    //.post( function(req, res) {
         var repair = new Repair();
 
+        console.log("setting repair_id from body: " + req.body._id);
+        console.log("existing id is : " + repair._id);
+
         repair._id = req.body._id;
+
+
+        console.log("after setting, repair._id = " + repair._id);
+
+
+
         repair.dateOut = req.body.dateOut;
         repair.expectedReturnDate = req.body.expectedReturnDate;
         repair.returnDate = req.body.returnDate;
         repair.itemNumber = req.body.itemNumber;
+        repair.repairNumber = req.body.repairNumber;
+        repair.itemId = req.body.itemId;
         repair.description = req.body.description;
         repair.repairIssues = req.body.repairIssues;
         repair.repairNotes = req.body.repairNotes;
@@ -33,54 +46,70 @@ router.route('/repairs')
         repair.customerLastName = req.body.customerLastName;
         repair.phone = req.body.phone;
         repair.email = req.body.email;
-        repair.productId = req.body.productId;
         repair.customerId = req.body.customerId;
         repair.hasPapers = req.body.hasPapers;
 
 
-        repair.search = repair._id + " " + repair.description + " " + formatDate(repair.dateOut)
+        repair.search = repair.repairNumber + " " + repair.itemNumber + " " + repair.description + " " + formatDate(repair.dateOut)
             + " " + formatDate(repair.expectedReturnDate) + " " + formatDate(repair.returnDate)
             + " " + repair.customerFirstName + " " + repair.customerLastName + " " + repair.vendor;
 
-        console.log("calling updateProductHistory")
-
-        var lineItems = new Array();
-        lineItems[0] = {
-            productId: repair.itemNumber
-        }
 
 
-        if (repair._id == null) {
+//-----------
 
-            history.updateProductHistory(lineItems, "Repair", "in repair", req.user['http://mynamespace/name']);
+        /*
 
-            Counter.findByIdAndUpdate({
-                _id: 'repairNumber'
+        if(repair.itemNumber!=null && repair.itemNumber!="") {
+            Product.findOneAndUpdate({
+                itemNumber: repair.itemNumber
             }, {
-                $inc: {
-                    seq: 1
+                "$push": {
+                    "history": {
+                        user: req.user['http://mynamespace/name'],
+                        date: Date.now(),
+                        action: 'out for repair'
+                    }
+                },
+                "$set": {
+                    "lastUpdated": Date.now(),
+                    "status": "In Stock"
                 }
-            }, function(err, counter) {
-                if (err) {
-                    console.log(err);
-                    return res.send(500, {
-                        error: err
-                    });
-                } else {
-                    repair._id = counter.seq;
-                    repair.save(function(err) {
-                        if (err) {
-                            res.send(err);
-                        }
-                        return res.send("repair saved");
-                    });
-                }
+            }, {
+                upsert: true
+            }, function (err, doc) {
+                if (err) console.log('error updating product');
+                else console.log('successfully updated product');
             });
+        }
+        */
+
+
+//-----------
+
+
+        if(req.body._id ==null) {
+
+            //var lineItems = new Array();
+            //lineItems[0] = {
+            //    productId: repair.itemId
+            //}
+
+            //history.updateProductHistory(lineItems, "Repair", "in repair", req.user['http://mynamespace/name']);
+            history.updateProductHistory([{productId: repair.itemId}], "Repair", "in repair", req.user['http://mynamespace/name']);
+
+            repair.save(function(err) {
+                if (err) {
+                    res.send(err);
+                }
+                return res.send("repair saved");
+            });
+
+
         } else {
 
-            if (repair.returnDate != null) {
-                history.updateProductHistory(lineItems, "In Stock", "back from repair", req.user['http://mynamespace/name']);
-            }
+            console.log("repair_.id is NOT null");
+
 
             Repair.findOneAndUpdate({
                 _id: repair._id
@@ -93,7 +122,6 @@ router.route('/repairs')
                 return res.send("repair saved");
             });
         }
-
 
 
     })
@@ -119,15 +147,7 @@ router.route('/repairs')
         Repair.find({
 
             'search': new RegExp(search, 'i')
-            /*      'customer': new RegExp(search, 'i')
 
-            $or: [{
-                    'customer': new RegExp(search, 'i')
-                },
-                {
-                    'lastName': new RegExp(search, 'i')
-                }
-            ]*/
         }, function(err, repairs) {
             if (err)
                 res.send(err);
@@ -142,11 +162,12 @@ router.route('/repairs')
 
                 results.data.push(
                     [
-                        '<a href=\"/#/app/repair/' + repairs[i]._id + '\">' + repairs[i]._id + '</a>',
+                        '<a href=\"/#/app/repair/' + repairs[i]._id + '\">' + repairs[i].repairNumber + '</a>',
+                        repairs[i].itemNumber,
                         repairs[i].description,
-                        formatDate(repairs[i].dateOut),
-                        formatDate(repairs[i].expectedReturnDate),
-                        formatDate(repairs[i].returnDate),
+                        '<div style="white-space: nowrap;">' + formatDate(repairs[i].dateOut)+'</div>',
+                        '<div style="white-space: nowrap;">' + formatDate(repairs[i].expectedReturnDate)+'</div>',
+                        '<div style="white-space: nowrap;">' + formatDate(repairs[i].returnDate)+'</div>',
                         customerName,
                         repairs[i].vendor
                     ]
@@ -161,29 +182,7 @@ router.route('/repairs')
                     res.json(results);
                 } else {
                     Repair.count({
-                        'customer': new RegExp(search, 'i')
-                        /*$or: [{
-                                'firstName': new RegExp(search, 'i')
-                            },
-                            {
-                                'lastName': new RegExp(search, 'i')
-                            },
-                            {
-                                'city': new RegExp(search, 'i')
-                            },
-                            {
-                                'state': new RegExp(search, 'i')
-                            },
-                            {
-                                'phone': new RegExp(search, 'i')
-                            },
-                            {
-                                'email': new RegExp(search, 'i')
-                            },
-                            {
-                                'company': new RegExp(search, 'i')
-                            }
-                        ]*/
+                        'search': new RegExp(search, 'i')
                     }, function(err, count) {
 
                         results.recordsFiltered = count;
@@ -201,38 +200,50 @@ router.route('/repairs')
             returnDate: 1,
             customerFirstName: 1,
             customerLastName: 1,
+            repairNumber: 1,
+            itemNumber: 1,
             vendor: 1
         });
     });
 
 
 router.route('/repairs/:repair_id')
-    .get(checkJwt, function(req, res) {
+// .get(checkJwt, function(req, res) {
+    .get(function(req, res) {
         Repair.findById(req.params.repair_id, function(err, ret) {
             if (err)
                 res.send(err);
             res.json(ret);
         });
-    })
+    });
 
+
+router.route('/repairs/:repair_id/return')
     .put(checkJwt, function(req, res) {
         Repair.findById(req.params.repair_id, function(err, repair) {
             if (err)
                 res.send(err);
 
-            repair.customer = req.body.customer;
-            repair.returnNumber = req.body.returnNumber;
+            if(repair.returnDate==null){
+                console.log('return date was null, setting to now');
+                repair.returnDate = new Date();
+                repair.save(function(err) {
+                    if (err)
+                        res.send(err);
 
-            repair.save(function(err) {
-                if (err)
-                    res.send(err);
+                    history.updateProductHistory([{productId: repair.itemId}], "In Stock", "back from repair", req.user['http://mynamespace/name']);
 
-                res.json({
-                    message: 'Repair updated!'
+
+                    res.json({
+                        message: 'Repair updated!'
+                    });
                 });
-            });
+            }else{
+                res.json({
+                    message: 'Repair was already returned'
+                });
+            }
         });
-    })
-
+    });
 
 module.exports = router;

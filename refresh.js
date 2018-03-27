@@ -19,15 +19,15 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-mongoose.connect('mongodb://lager:wntNJy5DqatKcvdYWCDrwAxYr67JC32D@ds123698.mlab.com:23698/lager');
+//mongoose.connect('mongodb://lager:wntNJy5DqatKcvdYWCDrwAxYr67JC32D@ds123698.mlab.com:23698/lager');
 
 mongoose.connect('mongodb://localhost:27018/lager');
 
 function load(modelName, fileName, functionName) {
 
     promises = new Array();
-    //var datadir = process.env.HOME + "/Dropbox/demesy";
-    var datadir = process.env.HOME + "/Drive/demesy";
+    var datadir = process.env.HOME + "/Dropbox/demesy";
+    //var datadir = process.env.HOME + "/Google\ Drive/demesy";
 
     var drops = new Array();
 
@@ -75,8 +75,16 @@ function loadCsvFile(file, functionRef) {
                 id = line[0];
                 var line = output[i];
                 // following only needed for old product
-                 line[0] = dedupeValue(ids, id);
-                promises.push(functionRef(line));
+
+                //if(file.endsWith(""))
+
+                if(!ids.includes(line[0])){
+                    promises.push(functionRef(line));
+                    ids.push(line[0]);
+                }
+
+               // line[0] = dedupeValue(ids, id);
+              //  promises.push(functionRef(line));
             }
         });
 
@@ -91,7 +99,9 @@ function loadCsvFile(file, functionRef) {
 
 function dedupeValue(array, value) {
     if (array.includes(value)) {
-        value = dedupeValue(array, value + "_a");
+
+        console.log('duplicate value ' + value);
+        //value = dedupeValue(array, value + "_a");
     } else {
         array.push(value);
     }
@@ -423,11 +433,14 @@ function loadRepair(line) {
 
     var repair = new Repair();
 
-    repair._id = line[0];
+    //retrn._id = line[0];
+    //id is guid
+
+    repair.repairNumber =line[0];
     repair.dateOut = line[1];
     repair.expectedReturnDate = line[2];
     repair.returnDate = line[3];
-    repair.itemId = line[4];
+    repair.itemNumber = line[4];
     repair.description = line[5];
     repair.repairIssues = line[6];
     repair.vendor = line[7];
@@ -446,21 +459,47 @@ function loadRepair(line) {
     repair.cost = line[12];
     repair.hasPapers = line[13];
 
-    repair.search = repair._id + " " + repair.description + " " + formatDate(repair.dateOut)
+    repair.search = repair.repairNumber + " " + repair.itemNumber + " " + repair.description + " " + formatDate(repair.dateOut)
         + " " + formatDate(repair.expectedReturnDate) + " " + formatDate(repair.returnDate)
         + " " + repair.customerFirstName + " " + repair.customerLastName + " " + repair.vendor;
 
-    Repair.findOneAndUpdate({
-        "_id": repair._id
-    }, repair, {
-        upsert: true
-    }, function (err, doc) {
-        if (err) {
-            console.log("error" + err);
-        } else {
 
-        }
-    });
+
+
+    if (repair.itemNumber != null&&repair.itemNumber!="") {
+
+        Product.findOne({
+            "itemNumber":repair.itemNumber}, function (err, product) {
+                if (err) {
+                    console.log(err);
+                }
+                if (product!=null &&product._id != null) {
+                    repair.itemId = product._id;
+                }
+            Repair.findOneAndUpdate({
+                "_id": repair._id
+            }, repair, {
+                upsert: true
+            }, function (err, doc) {
+                if (err) {
+                    console.log("error" + err);
+                }
+            });
+            });
+        }else{
+        Repair.findOneAndUpdate({
+            "_id": repair._id
+        }, repair, {
+            upsert: true
+        }, function (err, doc) {
+            if (err) {
+                console.log("error" + err);
+            }
+        });
+
+    }
+
+
 
     return Promise.resolve(true);
 }
@@ -487,7 +526,7 @@ function loadInvoiceDetail(line) {
     //}]
 
     var lineItem = {
-        "productId": itemNumber,
+        "itemNumber": itemNumber,
         "name": description,
         "amount": amount,
         "serialNumber": '12344566',

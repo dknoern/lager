@@ -68,7 +68,8 @@ router.route('/reports/outstanding-repairs/:vendor')
             for (var i = 0; i < repairs.length; i++) {
                 results.data.push(
                     [
-                        repairs[i].itemId,
+                        repairs[i].repairNumber,
+                        repairs[i].itemNumber,
                         repairs[i].vendor,
                         repairs[i].description,
                         format('yyyy-MM-dd', repairs[i].dateOut)
@@ -80,7 +81,8 @@ router.route('/reports/outstanding-repairs/:vendor')
         }).sort({
             dateOut: -1
         }).select({
-            itemId: 1,
+            itemNumber: 1,
+            repairNumber: 1,
             vendor: 1,
             description: 1,
             dateOut: 1
@@ -150,7 +152,7 @@ router.route('/reports/daily-sales/:year/:month/:day')
                 var title = "";
 
                 if (invoices[i].lineItems != null && invoices[i].lineItems.length > 0) {
-                    itemNo = invoices[i].lineItems[0].productId;
+                    itemNo = invoices[i].lineItems[0].itemNumber;
                     title = invoices[i].lineItems[0].name
                 }
 
@@ -332,7 +334,7 @@ router.route('/reports/monthly-sales/:year/:month')
                 var itemId = "";
                 var description = "";
                 if (invoices[i].lineItems != null && invoices[i].lineItems.length > 0) {
-                    itemId = invoices[i].lineItems[0].productId;
+                    itemId = invoices[i].lineItems[0].itemNumber;
                     description = invoices[i].lineItems[0].name;
                 }
 
@@ -379,7 +381,7 @@ router.route('/reports/out-at-show')
 
                 results.data.push(
                     [
-                        products[i]._id,
+                        products[i].itemNumber,
                         products[i].title,
                         '',
                         format('yyyy-MM-dd', products[i].lastUpdated)
@@ -392,7 +394,8 @@ router.route('/reports/out-at-show')
         }).select({
             _id: 1,
             title: 1,
-            lastUpdated: 1
+            lastUpdated: 1,
+            itemNumber:1
         });
     });
 
@@ -414,8 +417,10 @@ router.route('/reports/show-report')
 
                 results.data.push(
                     [
-                        products[i]._id,
+                        products[i].itemNumber,
                         products[i].title,
+                        products[i].cost,
+                        '',
                         '',
                         format('yyyy-MM-dd', products[i].lastUpdated)
                     ]
@@ -427,7 +432,9 @@ router.route('/reports/show-report')
         }).select({
             _id: 1,
             title: 1,
-            lastUpdated: 1
+            lastUpdated: 1,
+            itemNumber: 1,
+            cost: 1
         });
     });
 
