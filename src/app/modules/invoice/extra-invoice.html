@@ -39,7 +39,7 @@
             <td colspan="2" class="fine-print">{{lineItem.name  | uppercase}}
               <div class="fine-print">{{lineItem.longDesc}}</div>
 
-              <div class="row">
+              <div class="row" ng-if="lineItem.itemNumber!=''">
                   <div class="col-sm-6 col-print-6">Serial # - {{lineItem.serialNumber}}</div>
                   <div class="col-sm-6 col-print-6">SKU: {{lineItem.itemNumber}}{{data.date.substr(0,2)}}</div>
               </div>

@@ -57,7 +57,8 @@ else if (collection == 'invoices') load(Invoice, 'Invoice.txt', loadInvoice);
 else if (collection == 'returns') load(Return, 'Returns.txt', loadReturn);
 else if (collection == 'repairs') load(Repair, 'Repairs.txt', loadRepair);
 else if (collection == 'returndetails') load(null, 'Returns_Detail.txt', loadReturnDetail);
-else if (collection == 'invoicedetails') load(null, 'Invoice_Detail.txt', loadInvoiceDetail);
+else if (collection == 'invoicedetails1') load(null, 'Invoice_Detail_1.txt', loadInvoiceDetail);
+else if (collection == 'invoicedetails2') load(null, 'Invoice_Detail_2.txt', loadInvoiceDetail);
 else console.log('invalid collection, specify customers | products | invoices | returns | repairs | returndetails | invoicedetails');
 
 function loadCsvFile(file, functionRef) {
