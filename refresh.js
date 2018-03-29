@@ -19,9 +19,17 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+
+const option = {
+    socketTimeoutMS: 90000,
+    keepAlive: true,
+    reconnectTries: 90000
+};
+
+
 //mongoose.connect('mongodb://lager:wntNJy5DqatKcvdYWCDrwAxYr67JC32D@ds123698.mlab.com:23698/lager');
 
-mongoose.connect('mongodb://localhost:27018/lager');
+mongoose.connect('mongodb://localhost:27018/lager', option);
 
 function load(modelName, fileName, functionName) {
 
