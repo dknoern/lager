@@ -5,6 +5,7 @@ var Repair = require('../models/repair');
 var Return = require('../models/return');
 var Invoice = require('../models/invoice');
 const checkJwt = require('./jwt-helper').checkJwt;
+var fs = require('fs');
 var format = require('date-format');
 
 router.use(function (req, res, next) {

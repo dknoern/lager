@@ -304,7 +304,11 @@
                                         </thead>
                                         <tbody>
                                             <tr data-ng-repeat="lineItem in data.lineItems">
-                                                <td>{{lineItem.longDesc}}</td>
+                                                <td>
+                                                    <textarea id="name" ng-model="lineItem.name"/>
+                                                </td>
+
+                                                </td>
                                                 <td>{{lineItem.itemNumber}}</td>
                                                 <td>{{lineItem.serialNumber}}</td>
                                                 <!--td>${{lineItem.amount}}</td-->

@@ -17,6 +17,34 @@ function formatDate(date) {
     }
 }
 
+function upcertRepair(req,res, repair){
+    if(req.body._id ==null) {
+        history.updateProductHistory([{productId: repair.itemId}], "Repair", "in repair", req.user['http://mynamespace/name']);
+
+        repair.save(function(err) {
+            if (err) {
+                res.send(err);
+            }
+            return res.send("repair saved");
+        });
+
+    } else {
+
+        console.log("repair_.id is NOT null");
+
+        Repair.findOneAndUpdate({
+            _id: repair._id
+        }, repair, {
+            upsert: true
+        }, function(err, doc) {
+            if (err) return res.send(500, {
+                error: err
+            });
+            return res.send("repair saved");
+        });
+    }
+}
+
 router.route('/repairs')
     .post(checkJwt, function(req, res) {
     //.post( function(req, res) {
@@ -29,8 +57,6 @@ router.route('/repairs')
 
 
         console.log("after setting, repair._id = " + repair._id);
-
-
 
         repair.dateOut = req.body.dateOut;
         repair.expectedReturnDate = req.body.expectedReturnDate;
@@ -48,6 +74,7 @@ router.route('/repairs')
         repair.email = req.body.email;
         repair.customerId = req.body.customerId;
         repair.hasPapers = req.body.hasPapers;
+        repair.repairCost = req.body.repairCost;
 
 
         repair.search = repair.repairNumber + " " + repair.itemNumber + " " + repair.description + " " + formatDate(repair.dateOut)
@@ -55,71 +82,46 @@ router.route('/repairs')
             + " " + repair.customerFirstName + " " + repair.customerLastName + " " + repair.vendor;
 
 
-
-//-----------
-
-        /*
-
-        if(repair.itemNumber!=null && repair.itemNumber!="") {
-            Product.findOneAndUpdate({
-                itemNumber: repair.itemNumber
+        if(repair.itemNumber==null){
+            // increment repairNumber
+            Counter.findByIdAndUpdate({
+                _id: 'repairNumber'
             }, {
-                "$push": {
-                    "history": {
-                        user: req.user['http://mynamespace/name'],
-                        date: Date.now(),
-                        action: 'out for repair'
-                    }
-                },
-                "$set": {
-                    "lastUpdated": Date.now(),
-                    "status": "In Stock"
+                $inc: {
+                    seq: 1
                 }
-            }, {
-                upsert: true
-            }, function (err, doc) {
-                if (err) console.log('error updating product');
-                else console.log('successfully updated product');
-            });
-        }
-        */
-
-
-//-----------
-
-
-        if(req.body._id ==null) {
-
-            //var lineItems = new Array();
-            //lineItems[0] = {
-            //    productId: repair.itemId
-            //}
-
-            //history.updateProductHistory(lineItems, "Repair", "in repair", req.user['http://mynamespace/name']);
-            history.updateProductHistory([{productId: repair.itemId}], "Repair", "in repair", req.user['http://mynamespace/name']);
-
-            repair.save(function(err) {
+            }, function(err, counter) {
                 if (err) {
-                    res.send(err);
+                    console.log(err);
+                    return res.send(500, {
+                        error: err
+                    });
                 }
-                return res.send("repair saved");
-            });
 
+                repair.repairNumber=counter.seq;
+                upcertRepair(req,res,repair);
+            });
 
         } else {
+            //use itemNumber as repair number
+            repair.repairNumber = repair.itemNumber;
+            upcertRepair(req,res,repair);
+        }
 
-            console.log("repair_.id is NOT null");
 
-
-            Repair.findOneAndUpdate({
-                _id: repair._id
-            }, repair, {
+        // update repair cost in item
+        if(repair.itemNumber!=null){
+            Product.findOneAndUpdate({
+                _id: repair.itemId
+            }, {"$set": {
+                    "totalRepairCost": repair.repairCost
+            }}, {
                 upsert: true
             }, function(err, doc) {
-                if (err) return res.send(500, {
-                    error: err
-                });
-                return res.send("repair saved");
+                if (err)
+                    console.log(err);
+                else
+                    console.log("repair cost updated");
             });
         }
 
@@ -201,6 +203,7 @@ router.route('/repairs')
             customerFirstName: 1,
             customerLastName: 1,
             repairNumber: 1,
+            repairCost: 1,
             itemNumber: 1,
             vendor: 1
         });

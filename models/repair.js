@@ -19,7 +19,8 @@ var RepairSchema = new mongoose.Schema({
     phone: String,
     repairNotes: String,
     hasPapers: Boolean,
-    search: String
+    search: String,
+    repairCost: Number
 });
 
 module.exports = mongoose.model('Repair', RepairSchema);

@@ -5,233 +5,278 @@
     }
 </style>
 
-<div  id="AngularRepairCtrl" data-ng-controller="RepairCtrl">
+<div id="AngularRepairCtrl" data-ng-controller="RepairCtrl">
 
-  <script>
-  function selectProduct(id){
-    $('#productModal').modal('hide');
-    angular.element(document.getElementById('AngularRepairCtrl')).scope().addItem(id);
-  }
-  </script>
+    <script>
+        function selectProduct(id) {
+            $('#productModal').modal('hide');
+            angular.element(document.getElementById('AngularRepairCtrl')).scope().addItem(id);
+        }
+    </script>
 
-  <div class="col-md-10">
-      <h1 class="page-title"><span class="fw-semi-bold">Repair</span></h1>
-  </div>
-  <div class="col-md-2">
+    <div class="col-md-10">
+        <h1 class="page-title"><span class="fw-semi-bold">Repair</span></h1>
+    </div>
+    <div class="col-md-2">
 
-      ID: {{data._id}}
+        <div class="btn-group" data-dropdown ng-if="null == data.returnDate && null != data._id">
+            <button class="btn btn-success dropdown-toggle" data-dropdown-toggle
+                    data-original-title="" title="">
+                &nbsp; Action &nbsp;
+                <i class="fa fa-caret-down"></i>
+            </button>
 
-      <div class="btn-group" data-dropdown ng-if="null == data.returnDate && null != data._id">
-          <button class="btn btn-success dropdown-toggle" data-dropdown-toggle data-original-title="" title="">
-      &nbsp; Action &nbsp;
-      <i class="fa fa-caret-down"></i>
-    </button>
+            <ul class="dropdown-menu">
+                <li><a ng-click="toggleOutForRepair()" href="#">Return from Repair</a></li>
+            </ul>
+        </div>
+    </div>
 
-          <ul class="dropdown-menu">
-              <li><a ng-click="toggleOutForRepair()" href="#">Return from Repair</a></li>
-          </ul>
-      </div>
-  </div>
-
-        <div class="col-md-12">
-            <section class="widget">
-                <div class="widget-body">
-                    <form name="repairForm" class="form-horizontal" role="form" data-ui-jq="parsley" data-parsley-priority-enabled="false" novalidate="novalidate">
-                        <fieldset>
-                            <div class="row">
-                                <div class="col-sm-9">
-                                    <fieldset>
-                                        <input type="hidden" id="customerId" class="form-control" ng-model="data.customerId" readonly="readonly">
-                                        <input type="hidden" id="repairId" class="form-control" ng-model="data._id" readonly="readonly">
-                                        <input type="hidden" id="itemId" class="form-control" ng-model="data.itemId" readonly="readonly">
-                                        <div class="form-group">
-                                            <label for="hint-field" class="col-sm-3 control-label">Repair No</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="returnNo-field" class="form-control" ng-model="data.repairNumber" readonly="readonly">
-                                            </div>
-                                        </div>
-
-                                        <input type="hidden" id="address1-field" class="form-control" ng-model="data.invoiceNumber" readonly="readonly">
-
-                                        <div class="form-group">
-                                            <label for="hint-field" class="col-sm-3 control-label">Date Out</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="date-field" class="form-control"  readonly="readonly" value="{{data.dateOut | date: 'MM/dd/y'}}">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="hint-field" class="col-sm-3 control-label">Expected Return</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="date-field" class="form-control"  readonly="readonly" value="{{data.expectedReturnDate | date: 'MM/dd/y'}}">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="hint-field" class="col-sm-3 control-label">Return Date</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="date-field" class="form-control"  readonly="readonly" value="{{data.returnDate | date: 'MM/dd/y'}}">
-                                            </div>
-                                        </div>
+    <div class="col-md-12">
+        <section class="widget">
+            <div class="widget-body">
+                <form name="repairForm" class="form-horizontal" role="form" data-ui-jq="parsley"
+                      data-parsley-priority-enabled="false" novalidate="novalidate">
 
 
-                                        <div class="form-group">
-                                            <div class="col-sm-3"></div>
-                                            <div class="col-sm-8">
-                                                <div class="form-group checkbox checkbox-primary">
-                                                    <input type="checkbox" id="ebay" ng-model="data.hasPapers">
-                                                    <label for="ebay">Has papers</label>
-                                                </div>
-                                            </div>
-                                        </div>
+                    <fieldset>
+                        <input type="hidden" id="customerId" class="form-control"
+                               ng-model="data.customerId" readonly="readonly">
+                        <input type="hidden" id="repairId" class="form-control" ng-model="data._id"
+                               readonly="readonly">
+                        <input type="hidden" id="itemId" class="form-control" ng-model="data.itemId"
+                               readonly="readonly">
+                        <div class="form-group">
+                            <label for="hint-field" class="col-sm-3 control-label">Repair No</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="returnNo-field" class="form-control"
+                                       ng-model="data.repairNumber" readonly="readonly">
+                            </div>
+                        </div>
+
+                        <input type="hidden" id="address1-field" class="form-control"
+                               ng-model="data.invoiceNumber" readonly="readonly">
+
+                        <div class="form-group">
+                            <label for="hint-field" class="col-sm-3 control-label">Date Out</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="date-field" class="form-control"
+                                       readonly="readonly"
+                                       value="{{data.dateOut | date: 'MM/dd/y'}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="hint-field" class="col-sm-3 control-label">Expected
+                                Return</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="date-field" class="form-control"
+                                       readonly="readonly"
+                                       value="{{data.expectedReturnDate | date: 'MM/dd/y'}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="hint-field" class="col-sm-3 control-label">Return
+                                Date</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="date-field" class="form-control"
+                                       readonly="readonly"
+                                       value="{{data.returnDate | date: 'MM/dd/y'}}">
+                            </div>
+                        </div>
 
 
-                                        <div class="form-group">
-                                            <label for="normal-field" class="col-sm-3 control-label">Repair Issues</label>
-                                            <div class="col-sm-8">
-                                                <textarea id="comments" rows=6 cols="40" class="form-control" ng-model="data.repairIssues">{{data.repairIssues}}</textarea>
-                                            </div>
-                                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-8">
+                                <div class="form-group checkbox checkbox-primary">
+                                    <input type="checkbox" id="ebay" ng-model="data.hasPapers">
+                                    <label for="ebay">Has papers</label>
+                                </div>
+                            </div>
+                        </div>
 
-                                        <div class="form-group">
-                                          <label for="hint-field" class="col-sm-3 control-label">Item No</label>
-                                          <div class="col-sm-8">
 
-                                            <div class="input-group">
-                                               <input type="text" id="itemNumber" name="itemNumber" class="form-control" ng-model="data.itemNumber" readonly="readonly">
-                                               <span class="input-group-btn">
-                                                    <button class="btn btn-success" type="button"  data-toggle="modal" data-target="#productModal">Select</button>
+                        <div class="form-group">
+                            <label for="normal-field" class="col-sm-3 control-label">Repair
+                                Issues</label>
+                            <div class="col-sm-8">
+                                <textarea id="comments" rows=6 cols="40" class="form-control"
+                                          ng-model="data.repairIssues">{{data.repairIssues}}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="hint-field" class="col-sm-3 control-label">Item No</label>
+                            <div class="col-sm-8">
+
+                                <div class="input-group">
+                                    <input type="text" id="itemNumber" name="itemNumber"
+                                           class="form-control" ng-model="data.itemNumber"
+                                           readonly="readonly">
+                                    <span class="input-group-btn">
+                                                    <button class="btn btn-success" type="button"
+                                                            data-toggle="modal"
+                                                            data-target="#productModal">Select</button>
                                                </span>
-                                            </div>
-
-                                          </div>
-                                        </div>
-
-                                        <div class="form-group required">
-                                          <label for="hint-field" class="col-sm-3 control-label">Description</label>
-                                          <div class="col-sm-8">
-                                            <input type="text" id="returnNo-field" class="form-control" ng-model="data.description" required>
-                                          </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="normal-field" class="col-sm-3 control-label">Repair Notes</label>
-                                            <div class="col-sm-8">
-                                                <textarea id="comments" rows=6 cols="40" class="form-control" ng-model="data.repairNotes">{{data.repairNotes}}</textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group required">
-                                          <label for="hint-field" class="col-sm-3 control-label">Customer First Name</label>
-                                          <div class="col-sm-8">
-                                            <input type="text" id="returnNo-field" class="form-control" ng-model="data.customerFirstName" required>
-                                          </div>
-                                        </div>
-
-                                        <div class="form-group required">
-                                          <label for="hint-field" class="col-sm-3 control-label">Customer Last Name</label>
-                                          <div class="col-sm-8">
-                                            <input type="text" id="returnNo-field" class="form-control" ng-model="data.customerLastName" required>
-                                          </div>
-                                        </div>
-
-
-                                        <div class="form-group required">
-                                          <label for="hint-field" class="col-sm-3 control-label">Customer Phone</label>
-                                          <div class="col-sm-8">
-                                            <input type="text" id="returnNo-field" class="form-control" ng-model="data.phone" required>
-                                          </div>
-                                        </div>
-                                        <div class="form-group">
-                                          <label for="hint-field" class="col-sm-3 control-label">Customer Email</label>
-                                          <div class="col-sm-8">
-                                            <input type="text" id="returnNo-field" class="form-control" ng-model="data.email">
-                                          </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                          <label for="hint-field" class="col-sm-3 control-label">Vendor</label>
-                                          <div class="col-sm-8">
-                                            <input type="text" id="returnNo-field" class="form-control" ng-model="data.vendor">
-                                          </div>
-                                        </div>
-
-                                    </fieldset>
                                 </div>
 
                             </div>
-                        </fieldset>
+                        </div>
 
-                        <!-- Modal -->
-                        <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                            <div class="modal-dialog modal-lg" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-                                    </div>
-                                    <div class="modal-body">
+                        <div class="form-group required">
+                            <label for="hint-field"
+                                   class="col-sm-3 control-label">Description</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="returnNo-field" class="form-control"
+                                       ng-model="data.description" required>
+                            </div>
+                        </div>
 
-                                      <table id="productTable" class="display" cellspacing="0" width="100%">
-                                          <thead>
-                                              <tr>
-                                                  <th style="white-space: nowrap;">Item No</th>
-                                                  <th>Title</th>
-                                                  <th>Serial No</th>
-                                                  <th>Model No</th>
-                                                  <th>Status</th>
-                                              </tr>
-                                          </thead>
-                                      </table>
+                        <div class="form-group">
+                            <label for="normal-field" class="col-sm-3 control-label">Repair
+                                Notes</label>
+                            <div class="col-sm-8">
+                                <textarea id="comments" rows=6 cols="40" class="form-control"
+                                          ng-model="data.repairNotes">{{data.repairNotes}}</textarea>
+                            </div>
+                        </div>
 
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancel</button>
-                                    </div>
+                        <div class="form-group required">
+                            <label for="hint-field" class="col-sm-3 control-label">Customer First
+                                Name</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="returnNo-field" class="form-control"
+                                       ng-model="data.customerFirstName" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group required">
+                            <label for="hint-field" class="col-sm-3 control-label">Customer Last
+                                Name</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="returnNo-field" class="form-control"
+                                       ng-model="data.customerLastName" required>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group required">
+                            <label for="hint-field" class="col-sm-3 control-label">Customer
+                                Phone</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="returnNo-field" class="form-control"
+                                       ng-model="data.phone" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="hint-field" class="col-sm-3 control-label">Customer
+                                Email</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="returnNo-field" class="form-control"
+                                       ng-model="data.email">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="hint-field" class="col-sm-3 control-label">Vendor</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="returnNo-field" class="form-control"
+                                       ng-model="data.vendor">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="repairCost"
+                                   class="col-sm-3 control-label">Repair
+                                Cost</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <span class="input-group-addon">$</span>
+                                    <input type="number" min="0" step="0.01"
+                                           data-number-to-fixed="2"
+                                           data-number-stepfactor="100"
+                                           class="form-control currency"
+                                           id="totalRepairCost"
+                                           ng-model="data.repairCost">
                                 </div>
                             </div>
                         </div>
 
-                        <div class="form-actions">
-                            <div class="row">
-                                <div class="col-sm-offset-4 col-sm-7">
+                    </fieldset>
 
-                                    <button type="submit" class="btn btn-primary" ng-click="go()" ng-disabled="repairForm.$invalid">Save</button>
-                                    <a href="/#/app/inventory"><button type="button" class="btn btn-inverse"> Cancel</button></a>
+                    <!-- Modal -->
+                    <div class="modal fade" id="productModal" tabindex="-1" role="dialog"
+                         aria-labelledby="myModalLabel">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal"
+                                            aria-label="Close"><span
+                                            aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                                </div>
+                                <div class="modal-body">
+
+                                    <table id="productTable" class="display" cellspacing="0"
+                                           width="100%">
+                                        <thead>
+                                        <tr>
+                                            <th style="white-space: nowrap;">Item No</th>
+                                            <th>Title</th>
+                                            <th>Serial No</th>
+                                            <th>Model No</th>
+                                            <th>Status</th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default btn-sm"
+                                            data-dismiss="modal">Cancel
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                    </form>
-                </div>
-            </section>
+                    </div>
 
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-sm-offset-4 col-sm-7">
 
-
-    <!-- IMAGE GALLERY -->
-    <div class="row gallery" data-ui-jq="magnificPopup"
-         data-sn-gallery data-options="{ itemSelector: '.gallery-item'}"
-         data-ui-options="{ delegate: '.thumbnail > a',  type: 'image', gallery: { enabled: true  } }">
-        <div data-ng-repeat="item in images"
-             class="col-sm-6 col-md-3 gallery-item" data-groups='{{item.groups}}' data-title="{{item.name}}">
-            <div class="thumbnail">
-                <a href="{{item.src}}"><img data-ng-src="{{item.src}}" alt="..."></a>
-                <!--div class="caption">
-                    <h5 class="mt-0 mb-xs">{{item.name}}</h5>
-                    <ul class="post-links">
-                        <li><a href="#" ng-click="rotate(item.src,'left')"><span><i class="fa fa-rotate-left"></i></span></a></li>
-                        <li><a href="#" ng-click="rotate(item.src,'left')"><span><i class="fa fa-rotate-right"></i></span></a></li>
-
-                    </ul>
-                </div-->
+                                <button type="submit" class="btn btn-primary" ng-click="go()"
+                                        ng-disabled="repairForm.$invalid">Save
+                                </button>
+                                <a href="/#/app/inventory">
+                                    <button type="button" class="btn btn-inverse"> Cancel</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
+        </section>
+
+
+        <!-- IMAGE GALLERY -->
+        <div class="row gallery" data-ui-jq="magnificPopup"
+             data-sn-gallery data-options="{ itemSelector: '.gallery-item'}"
+             data-ui-options="{ delegate: '.thumbnail > a',  type: 'image', gallery: { enabled: true  } }">
+            <div data-ng-repeat="item in images"
+                 class="col-sm-6 col-md-3 gallery-item" data-groups='{{item.groups}}'
+                 data-title="{{item.name}}">
+                <div class="thumbnail">
+                    <a href="{{item.src}}"><img data-ng-src="{{item.src}}" alt="..."></a>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3 js-shuffle-sizer"></div>
         </div>
-        <div class="col-sm-6 col-md-3 js-shuffle-sizer"></div>
+
+
     </div>
-
-
-        </div>
-    </div>
-
+</div>
 
 
 </div>

@@ -168,17 +168,19 @@ var upsertLogItem = function (req, res, productId, action) {
     if (req.body.history.repairNumber != null){
 
         console.log('looking for repairNumber ' + req.body.history.repairNumber);
+        console.log('repair cost is ' + req.body.totalRepairCost );
         Repair.findOneAndUpdate({
             repairNumber: req.body.history.repairNumber
         }, {
             "$set": {
-                "returnDate": Date.now()
+                "returnDate": Date.now(),
+                "repairCost": req.body.totalRepairCost
             }
         }, {
             upsert: true
         }, function (err, doc) {
             if (err)
-                console.log('repair could not be makred as returned');
+                console.log('repair could not be makred as returned ' + err);
             else
                 console.log('repair returned')
         });
@@ -188,6 +190,15 @@ var upsertLogItem = function (req, res, productId, action) {
 
     if (productId != null) { // update existing product
 
+        var updates = {
+            "lastUpdated": Date.now(),
+            "status": "In Stock"
+        };
+
+        if(req.body.history.repairNumber!=null){
+            updates.totalRepairCost = req.body.totalRepairCost;
+        }
+
         Product.findOneAndUpdate({
             _id: productId
         }, {
@@ -195,10 +206,7 @@ var upsertLogItem = function (req, res, productId, action) {
             "$push": {
                 "history": history
             },
-            "$set": {
-                "lastUpdated": Date.now(),
-                "status": "In Stock",
-            }
+            "$set": updates
         }, {
             upsert: true
         }, function (err, doc) {
@@ -219,6 +227,7 @@ var upsertLogItem = function (req, res, productId, action) {
         product.lastUpdated = Date.now();
         product.status = "In Stock";
         product.history = history;
+        product.totalRepairCost = req.body.repairCost;
 
         product.save(function (err) {
             if (err) {
@@ -559,7 +568,8 @@ router.route('/logitems')
                 repairNumber: req.params.repairNumber
             }, {
                 "$set": {
-                    "returnDate": Date.now()
+                    "returnDate": Date.now(),
+                    "repairCost": req.params.totalRepairCost
                 }
             }, {
                 upsert: true
