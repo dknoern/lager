@@ -4,3 +4,5 @@ var AUTH0_DOMAIN='seattleweb.auth0.com';
 
 
 var AUTH0_CALLBACK_URL='http://localhost:3000/app/inventory';
+
+var AUTH0_AUDIENCE='https://demesyinventory/api';
