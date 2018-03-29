@@ -56,6 +56,27 @@ var scopeHolder;
             $('#productModal').modal('hide');
         }
 
+
+        $scope.addMisc = function() {
+
+                    var lineItem = {
+                        name: '',
+                        productId: '',
+                        itemNumber: '',
+                        amount: 0.0,
+                        serialNumber: '',
+                        modelNumber: '',
+                        longDesc: ''
+                    }
+
+                    if ($scope.data.lineItems == null) {
+                        $scope.data.lineItems = new Array();
+                    }
+                    $scope.data.lineItems.push(lineItem);
+
+            $('#productModal').modal('hide');
+        }
+
         $scope.removeItem = function(index) {
             var arr = $scope.data.lineItems;
             $scope.data.lineItems.splice(index, 1);
