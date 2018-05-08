@@ -29,12 +29,14 @@ const option = {
 
 //mongoose.connect('mongodb://lager:wntNJy5DqatKcvdYWCDrwAxYr67JC32D@ds123698.mlab.com:23698/lager');
 
+//mongoose.connect('mongodb://localhost:27017/lager', option);
 mongoose.connect('mongodb://localhost:27018/lager', option);
 
 function load(modelName, fileName, functionName) {
 
     promises = new Array();
-    var datadir = process.env.HOME + "/Dropbox/demesy";
+    var datadir = process.env.HOME + "/Desktop/demesy";
+    //var datadir = process.env.HOME + "/Dropbox/demesy";
     //var datadir = process.env.HOME + "/Google\ Drive/demesy";
 
     var drops = new Array();
