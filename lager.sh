@@ -1,5 +1,5 @@
 while true
 do
 	echo starting lager
-	node server.js
+	PORT=80 node server.js
 done
