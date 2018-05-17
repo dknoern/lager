@@ -68,11 +68,17 @@
                                                                                           data-toggle="modal"
                                                                                           data-target="#customerModal">Create
                             Invoice</a></li>
-                        <li><a ng-click="cloneItem()">Clone Item</a></li-->
-                        <li ng-if="'In Stock' == data.status"><a ng-click="toggleOutToShow()">Out to
-                            Show</a></li-->
-                        <li ng-if="'At Show' == data.status"><a ng-click="toggleOutToShow()">Back
-                            from Show</a></li-->
+                        <li><a ng-click="cloneItem()">Clone Item</a></li>
+
+                        <li ng-if="'In Stock' == data.status"><a ng-click="toggleStatus('In Stock','At Show')">Out to
+                            Show</a></li>
+                        <li ng-if="'At Show' == data.status"><a ng-click="toggleStatus('In Stock','At Show')">Back
+                            from Show</a></li>
+
+                        <li ng-if="'In Stock' == data.status"><a ng-click="toggleStatus('In Stock','Sale Pending')">Hold for Sale Pending</a></li>
+                        <li ng-if="'Sale Pending' == data.status"><a ng-click="toggleStatus('In Stock','Sale Pending')">Release from Sale Pending</a></li>
+
+
                         <li class="divider"></li>
                         <li><a href="#" data-toggle="modal" data-target="#deleteModal">Delete</a>
                         </li>
@@ -277,7 +283,7 @@
 
 
                                     <div class="form-group">
-                                        <label for=model" class="col-sm-3 control-label">Model
+                                        <label for="model" class="col-sm-3 control-label">Model
                                             Name</label>
                                         <div class="col-sm-8">
                                             <input type="text" id="model" class="form-control"

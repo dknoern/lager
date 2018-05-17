@@ -22,13 +22,16 @@
             });
         }
 
-
         $scope.cloneItem = function() {
           $scope.data.paymentAmount = 0.0;
           $scope.data._id=null;
           $scope.data.seller=null;
           $scope.data.status="In Stock";
+          $scope.data.itemNumber=null;
           $scope.data.history = null;
+          $scope.data.serialNo = null;
+          $scope.data.cost = null;
+          $scope.data.totalRepairCost = null;
 
           Messenger().post({
             message: "Item cloned. Enter new seller, serial number, and cost then save.",
@@ -36,36 +39,42 @@
           });
         }
 
-
-
-        $scope.toggleOutToShow = function() {
+        $scope.toggleStatus = function(status1, status2) {
 
           var newStatus = "";
 
-          if($scope.data.status == "At Show"){
-            newStatus = "In Stock";
-          }
-          else if($scope.data.status == "In Stock"){
-            newStatus = "At Show";
-          }
+          var statusChanged = false;
 
-          var statusData = {
-            "status": newStatus
+          if($scope.data.status == status1){
+            newStatus =status2;
+            statusChanged = true;
           }
 
-          $http.put('api/products/'+$scope.itemId + '/status',statusData).
-          success(function(freshData) {
-              //$scope.images = images;
-          });
+          else if($scope.data.status == status2){
+            newStatus = status1;
+              statusChanged = true;
+          }
 
-          Messenger().post({
-            message: "setting item status to <i>" + newStatus + "</i>",
-            type: "success"
-          });
 
-          $scope.data = $resource('api/products/:id').get({
-              id: $scope.itemId
-          });
+          if(statusChanged) {
+
+              var statusData = {
+                  "status": newStatus
+              }
+
+              $http.put('api/products/' + $scope.itemId + '/status', statusData).success(function (freshData) {
+
+              });
+
+              Messenger().post({
+                  message: "setting item status to <i>" + newStatus + "</i>",
+                  type: "success"
+              });
+
+              $scope.data = $resource('api/products/:id').get({
+                  id: $scope.itemId
+              });
+          }
 
       }
 
@@ -101,9 +110,6 @@
 
             document.getElementById('noteText').value = "";
 
-
-
-
         }
 
         $scope.go = function() {
@@ -119,7 +125,6 @@
                 console.log(response.statusText);
                 $state.go('app.inventory');
 
-
                 Messenger().post({
                     message: 'item saved',
                     type: "success",
@@ -133,9 +138,6 @@
                     type: "success",
                 });
 
-
-
-                console.log(response.statusText);
             });
         }
 

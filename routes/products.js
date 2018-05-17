@@ -22,11 +22,9 @@ router.use(function (req, res, next) {
 });
 
 var upsertProduct = function (req, res, productId, action) {
-    var paymentAmount = req.body.paymentAmount || 0;
     var totalRepairCost = req.body.totalRepairCost || 0;
-    var cost = paymentAmount + totalRepairCost;
     var title =  req.body.title;
-    if(title==null && req.body.history!=null) title = req.body.history.itemReceived;  // if new log item, use first 'itemReceived' for title
+    if(title==null && req.body.history!=null) title = rq.body.history.itemReceived;  // if new log item, use first 'itemReceived' for title
 
     var search = formatDate(new Date()) + " " + req.user['http://mynamespace/name'];
 
@@ -52,7 +50,6 @@ var upsertProduct = function (req, res, productId, action) {
                 "title": title,
                 "productType": req.body.productType,
                 "manufacturer": req.body.manufacturer,
-                "paymentAmount": paymentAmount,
                 "paymentMethod": req.body.paymentMethod,
                 "paymentDetails": req.body.paymentDetails,
                 "model": req.body.model,
@@ -68,7 +65,8 @@ var upsertProduct = function (req, res, productId, action) {
                 "serialNo": req.body.serialNo,
                 "longDesc": req.body.longDesc,
                 "supplier": req.body.supplier,
-                "cost": cost,
+                "cost": req.body.cost,
+                "sellingPrice": req.body.sellingPrice,
                 "listPrice": req.body.listPrice || 0,
                 "totalRepairCost": totalRepairCost,
                 "notes": req.body.notes,
@@ -98,7 +96,6 @@ var upsertProduct = function (req, res, productId, action) {
         product.title = title;
         product.productType = req.body.productType;
         product.manufacturer = req.body.manufacturer;
-        product.paymentAmount = paymentAmount;
         product.paymentMethod = req.body.paymentMethod;
         product.paymentDetails = req.body.paymentDetails;
         product.model = req.body.model;
@@ -115,7 +112,8 @@ var upsertProduct = function (req, res, productId, action) {
         product.longDesc = req.body.longDesc;
         if (product.longDesc == null) product.longDesc = title;
         product.supplier = req.body.supplier;
-        product.cost = cost;
+        product.cost = req.body.cost;
+        product.sellingPrice = req.body.sellingPrice;
         product.listPrice = req.body.listPrice || 0;
         product.totalRepairCost = totalRepairCost;
         product.notes = req.body.notes;
@@ -446,6 +444,7 @@ router.route('/products/:product_id')
         }
     })
 
+    // TODO: is this block dead code?
     .put(checkJwt, function (req, res) {
         Product.findById(req.params.product_id, function (err, product) {
             if (err)
