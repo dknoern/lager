@@ -19,7 +19,11 @@ function formatDate(date) {
 
 function upcertRepair(req,res, repair){
     if(req.body._id ==null) {
-        history.updateProductHistory([{productId: repair.itemId}], "Repair", "in repair", req.user['http://mynamespace/name']);
+        var action = "in repair";
+        if(repair.vendor != null){
+            action += " - " + repair.vendor;
+        }
+        history.updateProductHistory([{productId: repair.itemId}], "Repair", action, req.user['http://mynamespace/name']);
 
         repair.save(function(err) {
             if (err) {
