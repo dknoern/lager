@@ -158,6 +158,13 @@ router.route('/invoices')
                 },
                 {
                     'customerFirstName': new RegExp(search, 'i')
+                },
+                {
+                    'lineItems.itemNumber': new RegExp(search, 'i')
+                }
+                ,
+                {
+                    'lineItems.name': new RegExp(search, 'i')
                 }
             ]
         }, function(err, invoices) {

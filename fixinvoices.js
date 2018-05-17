@@ -29,7 +29,8 @@ const option = {
 
 //mongoose.connect('mongodb://lager:wntNJy5DqatKcvdYWCDrwAxYr67JC32D@ds123698.mlab.com:23698/lager');
 
-mongoose.connect('mongodb://localhost:27017/lager', option);
+//mongoose.connect('mongodb://localhost:27017/lager', option);
+mongoose.connect('mongodb://localhost:27018/lager', option);
 
 function load(modelName, fileName, functionName) {
 
@@ -52,15 +53,72 @@ function load(modelName, fileName, functionName) {
 
 var collection = process.argv[2];
 
-if (collection == 'customers') load(Customer, 'Customers.txt', loadCustomer);
-else if (collection == 'products') load(Product, 'Inventory.txt', loadProduct);
-else if (collection == 'invoices') load(Invoice, 'Invoice.txt', loadInvoice);
-else if (collection == 'returns') load(Return, 'Returns.txt', loadReturn);
-else if (collection == 'repairs') load(Repair, 'Repairs.txt', loadRepair);
-else if (collection == 'returndetails') load(null, 'Returns_Detail.txt', loadReturnDetail);
-else if (collection == 'invoicedetails1') load(null, 'Invoice_Detail_1.txt', loadInvoiceDetail);
-else if (collection == 'invoicedetails2') load(null, 'Invoice_Detail_2.txt', loadInvoiceDetail);
-else console.log('invalid collection, specify customers | products | invoices | returns | repairs | returndetails | invoicedetails');
+fixInvoices();
+
+
+
+function fixInvoices(){
+    console.log("fix invoices");
+
+
+    Invoice.find({} , (err, invoices) => {
+
+            invoices.map(invoice => {
+                console.log("id is " + invoice._id);
+                if(invoice.lineItems!=null&& invoice.lineItems[0]!=null) {
+                    console.log("product id is " + invoice.lineItems[0].itemNumber + "  serial is " + invoice.lineItems[0].serialNumber);
+
+                    var name = invoice.lineItems[0].name;
+                    var longDesc = invoice.lineItems[0].longDesc;
+
+
+
+
+                        Product.findOne({ 'itemNumber': invoice.lineItems[0].itemNumber }, '_id lastUpdated serialNo title longDesc', function (err, product) {
+                         var serialNumber = "";
+                            if(product!=null && product.serialNo != null) {
+                                serialNumber = product.serialNo;
+                            }
+
+                            if(product!=null && product.title != null) {
+                                name = product.title;
+                            }
+                            if(product!=null && product.longDesc != null) {
+                                longDesc = product.longDesc;
+                            }
+
+
+                                console.log("serial no is " + serialNumber);
+
+
+                                Invoice.findOneAndUpdate({
+                                    _id: invoice._id
+                                }, {
+                                    "$set": {
+                                        "lineItems.0.serialNumber": serialNumber,
+                                        "lineItems.0.name": name,
+                                        "lineItems.0.longDesc": longDesc
+                                    }
+                                }, {
+                                    upsert: true
+                                }, function (err, doc) {
+                                    if (err) {
+                                        console.log("ERROR adding line item " + err);
+                                    }
+                                });
+
+
+
+
+
+
+                        });
+                    }
+            })
+    });
+}
+
+
 
 function loadCsvFile(file, functionRef) {
 

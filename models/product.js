@@ -1,12 +1,10 @@
 var mongoose = require('mongoose');
 
 var ProductSchema = new mongoose.Schema({
-    //_id: String,
     itemNumber: String,
     productType: String,
     manufacturer: String,
     title: String,
-    paymentAmount: Number,
     paymentMethod: String,
     paymentDetails: String,
     modelNumber: String,

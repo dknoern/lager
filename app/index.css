@@ -1585,7 +1585,7 @@ input[type=search], input.search {
   .widget-invoice > header .invoice-logo {
     max-height: 200px; }
   .widget-invoice > header + .widget-body {
-    margin-top: 70px; }
+    margin-top: 10px; }
 
 /***********************************/
 /**             LOGIN             **/
