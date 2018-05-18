@@ -437,9 +437,11 @@ router.route('/products/:product_id')
 
         if (req.params.product_id) {
             Product.findById(req.params.product_id, function (err, product) {
-                if (err)
+                if (err) {
                     res.send(err);
-                res.json(product);
+                }else {
+                    res.json(product);
+                }
             });
         }
     })
