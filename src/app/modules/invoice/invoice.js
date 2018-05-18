@@ -31,7 +31,7 @@ var scopeHolder;
                         name: response.data.title,
                         productId: response.data._id,
                         itemNumber: response.data.itemNumber,
-                        amount: response.data.listPrice,
+                        amount: response.data.sellingPrice,
                         serialNumber: response.data.serialNo,
                         modelNumber: response.data.modelNumber,
                         longDesc: response.data.longDesc
@@ -127,7 +127,7 @@ var scopeHolder;
                 $scope.data = {
                     salesPerson: salesPerson,
                     date: Date.now(),
-                    shipping: 5.95,
+                    shipping: 45.00,
                     lineItems: new Array()
                 }
 

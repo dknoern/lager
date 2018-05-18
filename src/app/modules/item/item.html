@@ -39,7 +39,7 @@
 
     function selectCustomer(id) {
         $('#customerModal').modal('hide')
-        document.location.href = "/#/app/invoice/edit/new?customerId=" + id + "&productId=" + document.getElementById('itemNumber').value;
+        document.location.href = "/#/app/invoice/edit/new?customerId=" + id + "&productId=" + document.getElementById('itemId').value;
     }
 </script>
 
@@ -194,6 +194,7 @@
                     <form name="productForm" class="form-horizontal" role="form"
                           data-ui-jq="parsley" data-parsley-priority-enabled="false"
                           novalidate="novalidate">
+
                         <input type="hidden" id="id" class="form-control" ng-model="data._id">
                         <div class="row">
                             <div class="col-sm-7">
@@ -258,7 +259,6 @@
                                                 <option>Panerai</option>
                                                 <option>Parmigiani</option>
                                                 <option>Patek Philippe & Co</option>
-                                                .
                                                 <option>Piaget</option>
                                                 <option>Roger Dubuis</option>
                                                 <option>Rolex</option>
@@ -407,6 +407,7 @@
                                             <option>Individual</option>
                                             <option>Partner</option>
                                             <option>Consignment</option>
+                                            <option>Dealer</option>
                                         </select>
                                     </div>
                                 </div>

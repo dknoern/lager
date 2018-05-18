@@ -51,29 +51,22 @@
       </div>
     </form-->
     <ul class="nav navbar-nav navbar-right">
-      <li class="dropdown" dropdown>
-        <a dropdown-toggle class="dropdown-toggle dropdown-toggle-notifications"
-           id="notifications-dropdown-toggle">
-                <span class="thumb-sm avatar pull-left">
-                    <img class="img-circle" ng-src="{{ vm.profile.picture }}" class="avatar" alt="Welcome">
-                </span>
-          &nbsp;
-          <strong>{{vm.profile.name}}</strong>
-        </a>
-        <!-- ready to use notifications dropdown. inspired by smartadmin template.
-             consists of three components:
-             notifications, messages, progress. leave or add what's important for you.
-             uses Sing's ajax-load plugin for async content loading. See #load-notifications-btn -->
-        <div class="dropdown-menu animated animated-fast fadeInUp"
-             sn-notifications-menu></div>
-      </li>
+
 
       <li>
       </li>
 
       <li class="dropdown" data-dropdown>
         <a href class="dropdown-toggle" data-dropdown-toggle>
-          <i class="fa fa-cog fa-lg"></i>
+
+          <span class="thumb-sm avatar pull-left">
+            <img class="img-circle" ng-src="{{ vm.profile.picture }}" class="avatar" alt="Welcome">
+          </span>
+          &nbsp;
+          <strong>{{vm.profile.name}}</strong>
+
+
+          <!--i class="fa fa-cog fa-lg"></i-->
         </a>
         <ul class="dropdown-menu">
           <li><a ng-click="vm.auth.logout()"><i class="fa fa-sign-out"></i> &nbsp; Log Out</a></li>

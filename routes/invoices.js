@@ -97,8 +97,7 @@ router.route('/invoices')
           customer.zip = req.body.shipZip;
           customer.lastUpdated = Date.now();
 
-
-          Counter.findByIdAndUpdate({
+            Counter.findByIdAndUpdate({
               _id: 'customerNumber'
           }, {
               $inc: {
@@ -113,6 +112,10 @@ router.route('/invoices')
               }
 
               customer._id=counter.seq;
+              customer.search = customer._id + " " + customer.firstName + " " + customer.lastName + " " +customer.city + " " + customer.state;
+
+
+
               customer.save(function(err) {
                   if (err) {
                       console.log('xxx-error saving customer: ' + err);
