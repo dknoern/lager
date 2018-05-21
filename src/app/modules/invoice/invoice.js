@@ -93,7 +93,7 @@ var scopeHolder;
             $scope.data.subtotal = total;
 
             var taxRate = 0.00;
-            if ($scope.data.shipState == "TX")
+            if ($scope.data.shipState == "TX" && $scope.data.taxExempt == false)
                 taxRate = 0.0825;
             $scope.data.tax = taxRate * total;
             $scope.data.total = $scope.data.subtotal + $scope.data.tax + $scope.data.shipping;
@@ -120,9 +120,16 @@ var scopeHolder;
                 if (salesPerson != null && salesPerson.length > 0 && salesPerson.indexOf("@") > 0) {
                     salesPerson = salesPerson.substring(0, salesPerson.indexOf("@"));
                 }
-              }
 
-                console.log("new invoice, setting base data");
+                    if("ryan" == salesPerson)  salesPerson = "Ryan Ables";
+                    else if("marijo" == salesPerson) salesPerson = "Mari Jo Bueno";
+                    else if("colby" == salesPerson) salesPerson = "Colby Vick";
+                    else if("janet" == salesPerson) salesPerson = "Janet Gary";
+                    else if("david" == salesPerson) salesPerson = "David Knoernschild";
+
+                }
+
+                console.log("new invoice, setting base data....");
 
                 $scope.data = {
                     salesPerson: salesPerson,

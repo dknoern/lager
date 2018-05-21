@@ -53,22 +53,22 @@
                                         <div class="form-group required">
                                             <label for="customerFirstName" class="col-sm-3 control-label">First Name</label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="customerName" class="form-control" ng-model="data.customerFirstName" required>
+                                                <input type="text" id="customerFirstName" class="form-control" ng-model="data.customerFirstName" required>
                                             </div>
                                         </div>
 
                                         <div class="form-group required">
                                             <label for="customerLastName" class="col-sm-3 control-label">Last Name</label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="customerName" class="form-control" ng-model="data.customerLastName" required>
+                                                <input type="text" id="customerLastName" class="form-control" ng-model="data.customerLastName" required>
                                             </div>
                                         </div>
 
 
                                         <div class="form-group">
-                                            <label for="hint-field" class="col-sm-3 control-label">Sales Person</label>
+                                            <label for="salesPerson" class="col-sm-3 control-label">Sales Person</label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="address1-field" class="form-control" ng-model="data.salesPerson" readonly="readonly" >
+                                                <input type="text" id="salesPerson" class="form-control" ng-model="data.salesPerson" >
                                             </div>
                                         </div>
 
@@ -164,21 +164,21 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="hint-field" class="col-sm-3 control-label">Ship Address 3</label>
+                                            <label for="shipAddress3" class="col-sm-3 control-label">Ship Address 3</label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="address1-field" class="form-control" ng-model="data.shipAddress3">
+                                                <input type="text" id="shipAddress3" class="form-control" ng-model="data.shipAddress3">
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="hint-field" class="col-sm-3 control-label">Ship City</label>
+                                            <label for="shipCity" class="col-sm-3 control-label">Ship City</label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="address1-field" class="form-control" ng-model="data.shipCity">
+                                                <input type="text" id="shipCity" class="form-control" ng-model="data.shipCity">
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="hint-field" class="col-sm-3 control-label">Ship State</label>
+                                            <label for="shipState" class="col-sm-3 control-label">Ship State</label>
                                             <div class="col-sm-8">
                                                 <select id="shipState" class="selectpicker" data-selectpicker data-width="auto" ng-model="data.shipState" ng-change="computeTotals()">
                                                   <option></option>
@@ -239,11 +239,29 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="hint-field" class="col-sm-3 control-label">Ship Zip</label>
+                                            <label for="shipZip" class="col-sm-3 control-label">Ship Zip</label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="address1-field" class="form-control" ng-model="data.shipZip">
+                                                <input type="text" id="shipZip" class="form-control" ng-model="data.shipZip">
                                             </div>
                                         </div>
+
+
+
+                                        <div class="form-group">
+                                            <div class="col-sm-3"></div>
+                                            <div class="col-sm-8">
+                                                <div class="form-group checkbox checkbox-primary">
+                                                    <input type="checkbox" id="taxExempt"
+                                                           ng-model="data.taxExempt" ng-change="computeTotals()">
+                                                    <label for="taxExempt">Tax Exempt</label>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+
+
+
 
                                     </fieldset>
                                 </div>

@@ -58,6 +58,24 @@
                                                     <input type="number" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency" id="shipping" ng-model="data.shipping" ng-change="computeTotals()">
                                                 </div>
                                             </div>
+
+
+                                            <div class="form-group">
+                                                <div class="col-sm-2"></div>
+                                                <div class="col-sm-9">
+                                                    <div class="form-group checkbox checkbox-primary">
+                                                        <input type="checkbox" id="taxable"
+                                                               ng-model="data.taxable" ng-change="computeTotals()">
+                                                        <label for="taxable">Taxable</label>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+
+
+
+
                                         </div>
                                     </fieldset>
                                 </div>
@@ -118,7 +136,7 @@
                                             </tr>
                                             <tr>
                                                 <td><b>Subtotal</b></td>
-                                                <td><b><span id="currency-default">{{data.subtotal | currency}}</span></b></td>
+                                                <td><b><span id="currency-default">{{data.subTotal | currency}}</span></b></td>
                                                 <td></td>
                                             </tr>
                                             <tr>
@@ -128,12 +146,12 @@
 
                                                 <tr>
                                                     <td><b>Tax (TX)</b></td>
-                                                    <td><b><span id="currency-default">{{data.tax | currency}}</span></b></td>
+                                                    <td><b><span id="currency-default">{{data.salesTax | currency}}</span></b></td>
                                                     <td></td>
                                                 </tr>
                                                 <tr>
                                                     <td><b>Total</b></td>
-                                                    <td><b><span id="currency-default">{{data.total | currency}}</span></b></td>
+                                                    <td><b><span id="currency-default">{{data.totalReturnAmount | currency}}</span></b></td>
                                                     <td></td>
                                                 </tr>
 

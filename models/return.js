@@ -33,16 +33,16 @@ var ReturnSchema = new mongoose.Schema({
     }],
     search: String
 });
-/*
+
 ReturnSchema.pre('save', function (next) {
     var doc = this;
 
-    if (doc.rerturnNumber==null) {
+    if (doc._id==null) {
         Counter.findByIdAndUpdate({_id: 'returnNumber'}, {$inc: {seq: 1}}, function (error, counter) {
             if (error)
                 return next(error);
-            doc.returnNumber = counter.seq;
-            console.log("--------- returnNumberIs " + doc.returnNumber);
+            doc._id = counter.seq;
+            console.log("returnNumber: " + doc._id);
 
             next();
         });
@@ -50,7 +50,7 @@ ReturnSchema.pre('save', function (next) {
         next();
     }
 });
-*/
+
 
 
 

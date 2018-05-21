@@ -7,6 +7,8 @@
 
 <script>
 
+    var customerSelectMode = "repair"; // invoice
+
     function buildLongDesc() {
         var title = document.getElementById('title').value;
         var modelName = document.getElementById('model').value;
@@ -38,9 +40,25 @@
     }
 
     function selectCustomer(id) {
-        $('#customerModal').modal('hide')
-        document.location.href = "/#/app/invoice/edit/new?customerId=" + id + "&productId=" + document.getElementById('itemId').value;
+        $('#customerModal').modal('hide');
+
+
+        var nextPage =  "/#";
+
+        if(customerSelectMode=="repair")
+            nextPage =  "/#/app/"+customerSelectMode+"/new?customerId=" + id + "&productId=" + document.getElementById('itemId').value;
+
+        else
+            nextPage =  "/#/app/"+customerSelectMode+"/edit/new?customerId=" + id + "&productId=" + document.getElementById('itemId').value;
+
+        console.log("going to " + nextPage);
+
+
+        document.location.href = nextPage;
     }
+
+
+
 </script>
 
 <div data-ng-controller="ItemCtrl">
@@ -66,8 +84,15 @@
 
                         <li ng-if="'In Stock' == data.status || 'Memo' == data.status"><a href="#"
                                                                                           data-toggle="modal"
-                                                                                          data-target="#customerModal">Create
+                                                                                          data-target="#customerModal" onclick="customerSelectMode='invoice';">Create
                             Invoice</a></li>
+
+                        <li ng-if="'In Stock' == data.status || 'Memo' == data.status"><a href="#"
+                                                                                          data-toggle="modal"
+                                                                                          data-target="#customerModal" onclick="customerSelectMode='repair';">Repair</a></li>
+
+
+
                         <li><a ng-click="cloneItem()">Clone Item</a></li>
 
                         <li ng-if="'In Stock' == data.status"><a ng-click="toggleStatus('In Stock','At Show')">Out to
@@ -141,7 +166,7 @@
         </div>
 
 
-        <!-- Invoice Modal -->
+        <!-- Customer select modal -->
         <div class="modal fade" id="customerModal" tabindex="-1" role="dialog"
              aria-labelledby="myModalLabel">
             <div class="modal-dialog modal-lg" role="document">
@@ -149,20 +174,17 @@
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel">Select customer for invoice</h4>
+                        <h4 class="modal-title" id="myModalLabel">Select customer</h4>
                     </div>
                     <div class="modal-body">
-
                         <p>
-
                             <a href="#" onclick="selectCustomer('new')">
                                 <button type="button" class="btn btn-primary"><span class="icon">
-                        <i class="fa fa-plus-circle"></i>
-                      </span>New Customer
+                                    <i class="fa fa-plus-circle"></i>
+                                </span>New Customer
                                 </button>
                             </a>
                         </p>
-
                         <table id="customerTable" class="display" cellspacing="0" width="100%">
                             <thead>
                             <tr>
@@ -184,6 +206,10 @@
                 </div>
             </div>
         </div>
+
+
+
+
 
     </div>
 

@@ -6,41 +6,69 @@ var history = require('./history');
 const checkJwt = require('./jwt-helper').checkJwt;
 var format = require('date-format');
 
+
+function formatDate(date) {
+    console.log('formatting date, yo: ' + date);
+    if (date == null) return "";
+    else {
+        return format('yyyy-MM-dd', date);
+    }
+}
+
+
+function buildCustomerName(firstName, lastName){
+    var customerName = "";
+    if(firstName!=null) {
+        customerName += firstName;
+        if(lastName!=null) customerName += " ";
+    }
+    if(lastName!=null){
+        customerName += lastName;
+    }
+    return customerName;
+}
+
 router.route('/returns')
     .post(checkJwt, function(req, res) {
         var ret = new Return();
 
         ret._id = req.body._id;
-        ret.returnNumber = req.body.invoiceNumber;
         ret.invoiceId = req.body.invoiceId;
-        ret.invoiceNumber = req.body.invoiceNumber;
         ret.customerName = req.body.customerName;
         ret.customerId = req.body.customerId;
-        ret.date = new Date(req.body.date);
+        ret.returnDate = new Date(req.body.returnDate);
         ret.total = req.body.total;
         ret.salesPerson = req.body.salesPerson;
         ret.lineItems = req.body.lineItems;
-        ret.subtotal = req.body.subtotal;
-        ret.tax = req.body.tax;
+        ret.subTotal = req.body.subTotal;
+        ret.salesTax = req.body.salesTax;
+        ret.taxable = req.body.taxable;
         ret.shipping = req.body.shipping;
-        ret.totalReturnAmount = req.body.total;
+        ret.totalReturnAmount = req.body.totalReturnAmount;
 
-        ret.search = retrn._id + " " + retrn.invoiceId + " " + formatDate(retrn.date) + " " + retrn.customerName + " " + retrn.salesPerson + " " + retrn.totalReturnAmount;
+        ret.search = ret._id + " " + ret.invoiceId + " " + formatDate(ret.date) + " " + ret.customerName + " " + ret.salesPerson + " " + ret.totalReturnAmount;
 
         // use save for updates, findOne and update for inserts for now until we
+
+        console.log('return id is ' + ret._id);
         // figure out the problem with the "pre" in mongoose.
-        if (ret.returnNumber == null || ret._id == "") {
+        if (ret._id == null || ret._id == "") {
+
+
+            console.log("creating new return");
+
             ret.save(function(err) {
                 if (err)
                 {
                     res.send(err);
                   }else{
                 res.json({
-                    message: 'return updated'
+                    message: 'return saved'
                 });
               }
             });
         } else {
+            console.log("updating exisiting return... taxable: " + ret.taxable);
             var query = {
                 _id: ret._id
             };
@@ -65,7 +93,7 @@ router.route('/returns')
             }
         }
 
-        history.updateProductHistory(includedLineItems, "AVAILABLE", "item returned", req.user['http://mynamespace/name']);
+        history.updateProductHistory(includedLineItems, "In Stock", "item returned", req.user['http://mynamespace/name']);
 
     })
 
@@ -179,15 +207,17 @@ router.route('/returns/:return_id')
                 res.send(err);
 
             ret.customerName = req.body.customerName;
-            ret.returnNumber = req.body.returnNumber;
+            ret.shipping = req.body.shipping;
 
             ret.save(function(err) {
-                if (err)
+                if (err) {
                     res.send(err);
 
-                res.json({
-                    message: 'Return updated!'
-                });
+                }else {
+                    res.json({
+                        message: 'Return updated!'
+                    });
+                }
             });
         });
     })
