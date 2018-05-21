@@ -65,8 +65,8 @@ var upsertProduct = function (req, res, productId, action) {
                 "serialNo": req.body.serialNo,
                 "longDesc": req.body.longDesc,
                 "supplier": req.body.supplier,
-                "cost": req.body.cost,
-                "sellingPrice": req.body.sellingPrice,
+                "cost": req.body.cost || 0,
+                "sellingPrice": req.body.sellingPrice || 0,
                 "listPrice": req.body.listPrice || 0,
                 "totalRepairCost": totalRepairCost,
                 "notes": req.body.notes,
@@ -647,7 +647,7 @@ router.route('/logitems')
 
                     results.data.push(
                         [
-                            '<a href=\"#\" onclick=\"selectProduct(\'' + products[i].history._id + '\');return false;\">' + format('yyyy-MM-dd', products[i].history.date) + '</a>',
+                            '<a href=\"#\" onclick=\"selectProduct(\'' + products[i].history._id + '\');return false;\"><div style="white-space: nowrap;">' + format('yyyy-MM-dd', products[i].history.date) + '</div></a>',
                             products[i].history.receivedFrom,
                             products[i].history.customerName,
                             itemReceived,

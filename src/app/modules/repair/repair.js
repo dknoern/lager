@@ -11,6 +11,30 @@
             $window.alert('Angular model changed to: ' + dt);
         };
 
+        $scope.addItem = function(itemId) {
+            console.log('setting item id to ' + itemId);
+
+            $http.get("api/products/" + itemId)
+                .then(function(response) {
+                    $scope.data.itemId = itemId;
+                    $scope.data.itemNumber = response.data.itemNumber;
+                    $scope.data.repairNumber = response.data.itemNumber;
+                    $scope.data.description = response.data.title;
+
+                    $http.get('api/upload/' + $scope.data.itemId).
+                    success(function(images) {
+                        $scope.images = images;
+                    });
+
+
+
+
+                });
+        }
+
+
+
+
         if ($scope.repairId) {
 
             if ("new" == $scope.repairId) {
@@ -55,28 +79,19 @@
 
                 });
             }
+
+
+            var productId = $location.search().productId;
+            if (productId != null) {
+                $scope.addItem(productId);
+            }
+
+
+
+
         }
 
-        $scope.addItem = function(itemId) {
-            console.log('setting item id to ' + itemId);
 
-            $http.get("api/products/" + itemId)
-                .then(function(response) {
-                    $scope.data.itemId = itemId;
-                    $scope.data.itemNumber = response.data.itemNumber;
-                    $scope.data.repairNumber = response.data.itemNumber;
-                    $scope.data.description = response.data.title;
-
-                    $http.get('api/upload/' + $scope.data.itemId).
-                    success(function(images) {
-                        $scope.images = images;
-                    });
-
-
-
-
-                });
-        }
 
         $scope.go = function() {
 

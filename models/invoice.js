@@ -37,6 +37,7 @@ var InvoiceSchema = new mongoose.Schema({
     shipState: String,
     shipZip: String,
     search: String,
+    taxExempt: Boolean,
 
     lineItems: [{
         productId: String,

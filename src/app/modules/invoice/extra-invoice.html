@@ -19,7 +19,7 @@
             <div class="fine-print">
             Invoice # {{data._id}}<br/>
             Invoice Date {{data.date | date: 'MM/dd/y'}}<br/>
-            Sold By {{data.salesPerson}}
+            Sold By {{data.salesPerson}}  {{salesPersonFullName}}
             </div>
           </div>
         </div>
@@ -49,15 +49,15 @@
           </tr>
 
           <tr><td></td><td align="right">SUB TOTAL:</td><td>{{data.subtotal | currency}}</td></tr>
-          <tr><td></td><td align="right">TAX 8.5%:</td><td>{{data.tax | currency}}</td></tr>
-          <tr><td></td><td align="right">SHIPPING:</td><td>{{data.shipping | currency}}</td></tr>
+          <tr><td style="border-top:0;"></td><td align="right" style="border-top:0;">TAX 8.5%:</td><td style="border-top:0;">{{data.tax | currency}}</td></tr>
+          <tr><td style="border-top:0;"></td><td align="right" style="border-top:0;">SHIPPING:</td><td style="border-top:0;">{{data.shipping | currency}}</td></tr>
 
           <tr>
-            <td></td>
-            <td align="right" bgcolor="#C3AA63"><font color="white">TOTAL DUE:</font></td>
+            <td style="border-top:0;"></td>
+            <td align="right" bgcolor="#C3AA63" style="border-top:0;"><font color="white">TOTAL DUE:</font></td>
           </font></td>
 
-          <td bgcolor="#C3AA63"><font color="white">{{data.total | currency}}</font></td>
+          <td bgcolor="#C3AA63" style="border-top:0;"><font color="white">{{data.total | currency}}</font></td>
 
         </tr>
 
@@ -75,7 +75,7 @@
           <b>Warranty:</b><br/>
           DeMesy Fine Watches warranties all watches for one full year from date of invoice, unless otherwise indicated in the listing or on the invoice and with
           the exception of vintage wristwatch, pocket watches. This warranty does not cover accessories, boxes, bands, batteries, or cracked or broken crystals.
-          Custom work, alterations and/or repairs done without written acknowledgement by DeMesy Fine Watches, rampering by unauthorized technicians, damage
+          Custom work, alterations and/or repairs done without written acknowledgement by DeMesy Fine Watches, tampering by unauthorized technicians, damage
           from abuse or misuse, negligence, accidents (knocks, dents, crushing), or water damage due to improperly tightened crown, will render this warranty null and void.
 
           <br/><br/>

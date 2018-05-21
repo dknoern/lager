@@ -8,6 +8,18 @@ var Counter = require('../models/counter');
 
 const checkJwt = require('./jwt-helper').checkJwt;
 const formatCurrency = require('format-currency');
+
+
+function getFullName(name){
+    var fullName = name;
+    if("david"==name)fullName = "David Knoernschild";
+    else if("ryan"==name) fullName = "Ryan Ables";
+    else if("marijo"==name) fullName = "Mari Jo Bueno";
+    else if("colby"==name) fullName = "Colby Vick";
+    else if("janet"==name) fullName = "Janet Gary";
+}
+
+
 function upsertInvoice(req,res,invoice){
 
           var itemStatus = "Sold";
@@ -17,6 +29,7 @@ function upsertInvoice(req,res,invoice){
               itemStatus = "Memo";
               itemAction = "item memo"
           }
+
 
           history.updateProductHistory(req.body.lineItems, itemStatus, itemAction, req.user['http://mynamespace/name']);
 
@@ -75,6 +88,7 @@ router.route('/invoices')
         invoice.shipCity = req.body.shipCity;
         invoice.shipState = req.body.shipState;
         invoice.shipZip = req.body.shipZip;
+        invoice.taxExempt = req.body.taxExempt;
         invoice.lineItems = req.body.lineItems;
         invoice.subtotal = req.body.subtotal;
         invoice.tax = req.body.tax;

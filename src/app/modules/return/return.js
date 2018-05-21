@@ -39,13 +39,19 @@
               returnItems.push(returnItem);
             }
 
+
             $scope.data = {
-              invoiceNumber: invoice.invoiceNumber,
-              customer: invoice.customer,
-              customerId: invoice.customerId,
-              salesPerson: invoice.salesPerson,
-              date: Date.now(),
-              lineItems: returnItems
+                invoiceId: invoice._id,
+                customerName: invoice.customerFirstName + " " + invoice.customerLastName,
+                customerId: invoice.customerId,
+                salesPerson: invoice.salesPerson,
+                returnDate: Date.now(),
+                shipping: 0,
+                subTotal: invoice.subtotal,
+                totalReturnAmount: invoice.total,
+                taxable: "TX" == invoice.shipState && !invoice.taxExempt,
+                salesTax: invoice.tax,
+                lineItems: returnItems
             }
           });
 
@@ -75,13 +81,18 @@
         }
        });
 
-      $scope.data.subtotal = total;
+      $scope.data.subTotal = total;
+
+
+
 
       var taxRate = 0.00;
-      if($scope.data.shipState == "TX")
+      if($scope.data.taxable)
         taxRate = 0.0825;
-      $scope.data.tax = taxRate * total;
-      $scope.data.total = $scope.data.subtotal + $scope.data.tax + $scope.data.shipping;
+      $scope.data.salesTax = taxRate * total;
+
+        $scope.data.totalReturnAmount = $scope.data.subTotal + $scope.data.salesTax + $scope.data.shipping;
+       // $scope.data.totalReturnAmount = $scope.data.subTotal + $scope.data.shipping;
     }
 
     $scope.go = function() {
