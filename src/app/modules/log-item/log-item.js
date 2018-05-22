@@ -1,3 +1,5 @@
+var scopeHolder;
+
 (function() {
     'use strict';
 
@@ -11,9 +13,23 @@
             $window.alert('Angular model changed to: ' + dt);
         };
 
+
+        scopeHolder = $scope;
+
         $scope.print = function() {
             $window.print();
         };
+
+
+        $scope.lookupItemByNumber = function(){
+
+            $http.get("api/products?itemNumber=" + $scope.data.itemNumber)
+                .then(function(response) {
+                    if(response!=null&& response.data!=null)
+                        $scope.data.history.itemReceived = response.data.title;
+                });
+
+        }
 
         var receivedBy = "Janet";
 

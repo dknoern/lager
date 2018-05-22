@@ -10,11 +10,18 @@
 
     function ReportsCtrl($scope, $resource, $http, $window, DTOptionsBuilder, jQuery) {
 
+
+        $scope.processBulkEntry = function(){
+
+            console.log('processBulkEntry');
+            var itemNumbers = document.getElementById("itemNumbers").value;
+        }
+
+
         $scope.vendorSelected = function(){
             var reportUri= '/reports/outstanding-repairs/'+$scope.vendor;
             theDataTable.ajax.url('/api/reports/outstanding-repairs/'+$scope.vendor).load();
         }
-
 
 
         function isDailyReport(reportId) {

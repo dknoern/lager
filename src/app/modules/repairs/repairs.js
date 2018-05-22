@@ -1,3 +1,5 @@
+var scopeHolder;
+
 (function() {
     'use strict';
 
@@ -8,13 +10,19 @@
 
     function RepairsCtrl($scope, $resource, DTOptionsBuilder, jQuery) {
 
-        jQuery('#example').DataTable({
+        scopeHolder = $scope;
+
+        var theDataTable = jQuery('#example').DataTable({
             "processing": true,
             "serverSide": true,
             "ordering": false,
-            "ajax": "/api/repairs"
+            "ajax": "/api/repairs?filter=outstanding"
         });
 
+        $scope.toggleRepairFilter = function() {
+            var repairFilter = document.getElementById("repairFilter");
+            theDataTable.ajax.url("/api/repairs?filter="+ repairFilter.value).load();
+        };
 
         var customerTableShown = false;
         $('#customerModal').on('show.bs.modal', function (e) {

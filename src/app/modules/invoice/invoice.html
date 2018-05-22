@@ -1,5 +1,4 @@
 
-
 <style>
     .form-group.required .control-label:after {
         content: " *";
@@ -7,22 +6,14 @@
     }
 </style>
 
-
-
-
 <h1 class="page-title"><span class="fw-semi-bold">Invoice</span></h1>
-
 <div id="AngularInvoiceCtrl" data-ng-controller="InvoiceCtrl">
-
 
     <script>
         function selectProduct(id){
             scopeHolder.addItem(id);
         }
     </script>
-
-
-
 
     <div class="row">
         <div class="col-md-12">
@@ -35,16 +26,15 @@
                                     <fieldset>
                                         <input type="hidden" id="customerId" class="form-control" ng-model="data.customerId" readonly="readonly">
 
-
                                         <div class="form-group">
-                                            <label for="hint-field" class="col-sm-3 control-label">Invoice No</label>
+                                            <label for="invoiceId" class="col-sm-3 control-label">Invoice No</label>
                                             <div class="col-sm-8">
                                                 <input type="text" id="invoiceId" class="form-control" ng-model="data._id" readonly="readonly">
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="hint-field" class="col-sm-3 control-label">Date</label>
+                                            <label for="date-field" class="col-sm-3 control-label">Date</label>
                                             <div class="col-sm-8">
                                                 <input type="text" id="date-field" class="form-control"  readonly="readonly" value="{{data.date | date: 'MM/dd/y'}}">
                                             </div>
@@ -74,7 +64,7 @@
 
 
                                         <div class="form-group">
-                                            <label for="hint-field" class="col-sm-3 control-label">Method of Sale</label>
+                                            <label for="paidBy" class="col-sm-3 control-label">Method of Sale</label>
                                             <div class="col-sm-8">
                                                 <select id="paidBy" class="selectpicker" data-selectpicker data-width="auto" ng-model="data.methodOfSale">
                                               <option></option>
@@ -88,7 +78,7 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="hint-field" class="col-sm-3 control-label">Invoice Type</label>
+                                            <label for="invoiceType" class="col-sm-3 control-label">Invoice Type</label>
                                             <div class="col-sm-8">
                                                 <select id="invoiceType" class="selectpicker" data-selectpicker data-width="auto" ng-model="data.invoiceType">
                                                   <option></option>
@@ -99,7 +89,7 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="hint-field" class="col-sm-3 control-label">Paid By</label>
+                                            <label for="paidBy" class="col-sm-3 control-label">Paid By</label>
                                             <div class="col-sm-8">
 
                                                 <select id="paidBy" class="selectpicker" data-selectpicker data-width="auto" ng-model="data.paidBy">
@@ -150,16 +140,16 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="hint-field" class="col-sm-3 control-label">Ship Address 1</label>
+                                            <label for="address1-field" class="col-sm-3 control-label">Ship Address 1</label>
                                             <div class="col-sm-8">
                                                 <input type="text" id="address1-field" class="form-control" ng-model="data.shipAddress1">
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="hint-field" class="col-sm-3 control-label">Ship Address 2</label>
+                                            <label for="address2-field" class="col-sm-3 control-label">Ship Address 2</label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="address1-field" class="form-control" ng-model="data.shipAddress2">
+                                                <input type="text" id="address2-field" class="form-control" ng-model="data.shipAddress2">
                                             </div>
                                         </div>
 
@@ -340,10 +330,6 @@
                                                         <span class="input-group-addon">$</span>
                                                     <input type="number" min="0" step="0.01"  id="lineItemAmount" ng-model="lineItem.amount" ng-change="computeTotals()">
                                                     </div></td>
-
-
-
-
 
                                                 <td>
                                                     <button type="button" class="btn btn-danger btn-sm" ng-click="removeItem($index)">
