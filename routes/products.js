@@ -26,6 +26,9 @@ var upsertProduct = function (req, res, productId, action) {
     var title =  req.body.title;
     if(title==null && req.body.history!=null) title = rq.body.history.itemReceived;  // if new log item, use first 'itemReceived' for title
 
+
+    console.log('in upsert product');
+
     var search = formatDate(new Date()) + " " + req.user['http://mynamespace/name'];
 
     var history = {
@@ -36,6 +39,8 @@ var upsertProduct = function (req, res, productId, action) {
     }
 
     if (productId != null) { // update existing product
+
+        console.log('updating existing product');
 
         Product.findOneAndUpdate({
             _id: productId
@@ -90,6 +95,9 @@ var upsertProduct = function (req, res, productId, action) {
 
     } else {  // create new product
 
+
+
+        console.log('creating new product');
 
         var product = new Product();
         product.itemNumber = req.body.itemNumber;
@@ -281,7 +289,12 @@ router.route('/products')
     .post(checkJwt, function (req, res) {
     //.post(function (req, res) {
 
+
+        console.log("in post product");
         if (req.body._id == null) {
+
+            console.log("id not null");
+
             if (req.body.sellerType == 'Partner') {
                 req.body.status = 'Partnership';
             } else {
@@ -329,7 +342,7 @@ router.route('/products')
 
         } else { // update existing item
             // 5/21/18 --- don't log updates
-           // return upsertProduct(req, res, req.body._id, "product updated");
+            return upsertProduct(req, res, req.body._id, "product updated");
         }
     })
 
