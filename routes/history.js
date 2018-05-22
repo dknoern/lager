@@ -3,6 +3,15 @@ var Product = require('../models/product');
 module.exports.updateProductHistory = function(lineItems,status,action,user) {
 
 
+    // don't log product updates (edits)
+    if("product updated"==action){
+        console.log("action is "+ action + " will NOT log history");
+
+        return;
+    }else{
+        console.log("action is "+ action + " will log history");
+    }
+
     for (var i = 0; lineItems !=null &&i < lineItems.length; i++) {
         var lineItem = lineItems[i];
 
