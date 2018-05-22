@@ -24,15 +24,66 @@
     </div>
 
 
-    <!--div class="btn-toolbar mt-lg text-align-right hidden-print">
-      <button data-ng-click="print()" class="btn btn-inverse">
-        <i class="fa fa-print"></i>
+    <div class="btn-toolbar mt-lg text-align-right hidden-print">
+      <button data-ng-click="bulkLoad()" class="btn btn-inverse" data-toggle="modal" data-target="#bulkEntryModal">
+        <i class="fa fa-upload"></i>
         &nbsp;&nbsp;
-        Print
+        Bulk Entry
       </button>
-    </div-->
+    </div>
+
+
+
+
+
+
+      <!-- Add image modal -->
+      <div class="modal fade" id="bulkEntryModal" tabindex="-1" role="dialog"
+           aria-labelledby="myModalLabel">
+          <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                  <div class="modal-body">
+
+                      <section class="widget">
+                          <header>
+                              <h5><strong>Enter Item Numbers</strong></h5>
+                          </header>
+                          <div class="widget-body">
+
+                              Enter item numbers for items to send to show.  Enter numbers space or tab-delimited.
+
+                              <form>
+                                  <textarea id="itemNumbers"  class="form-control"  rows="10"></textarea>
+                              </form>
+
+                          </div>
+                      </section>
+
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-success btn-sm"
+                              ng-click="processBulkEntry()" data-dismiss="modal">OK
+                      </button>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+
+
+
+
+
+
 
 
 
   </div>
+
+
+
 </section>
+
+
+
+

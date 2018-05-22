@@ -1,10 +1,12 @@
-
-
 <script>
 
 function selectCustomer(id){
   $('#customerModal').modal('hide')
    document.location.href = "/#/app/repair/new?customerId="+id;
+}
+
+function toggleRepairFilter(){
+    scopeHolder.toggleRepairFilter();
 }
 </script>
 
@@ -22,6 +24,11 @@ function selectCustomer(id){
           </span>New Repair</button></a>
       </p>
 
+        <select onchange="toggleRepairFilter()" id="repairFilter">
+            <option value="outstanding">Outsandind Repairs</option>
+            <option value="all">All Repairs</option>
+        </select>
+        <p></p>
 
       <table id="example" class="display" cellspacing="0" width="100%">
           <thead>

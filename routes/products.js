@@ -172,7 +172,7 @@ var upsertLogItem = function (req, res, productId, action) {
         }, {
             "$set": {
                 "returnDate": Date.now(),
-                "repairCost": req.body.totalRepairCost
+                "repairCost": req.body.totalRepairCost || 0
             }
         }, {
             upsert: true
@@ -186,7 +186,42 @@ var upsertLogItem = function (req, res, productId, action) {
         console.log('not looking for repair');
     }
 
-    if (productId != null) { // update existing product
+
+
+    // update existing history item
+    if(req.body.history._id !=null){
+
+        console.log("updating existing history itemn " +req.body.history._id );
+
+        Product.findOneAndUpdate({
+            'history._id': req.body.history._id
+        }, {
+
+            "$set": {
+                'history.$.date': Date.now(),
+                    'history.$.action': "received",
+                    'history.$.user': req.body.history.user,
+                    'history.$.itemReceived': req.body.history.itemReceived,
+                    'history.$.receivedFrom': req.body.history.receivedFrom,
+                    'history.$.repairNumber': req.body.history.repairNumber,
+                    'history.$. customerName': req.body.history.customerName,
+                    'history.$.comments': req.body.history.comments,
+                    'history.$.search': search,
+                    totalRepairCost: req.body.repairCost || 0,
+                    itemNumber: req.body.itemNumber
+            }
+        }, {
+            upsert: true
+        }, function (err, doc) {
+            if (err) return res.send(500, {
+                error: err
+            });
+            return res.send("successfully saved");
+        });
+    }
+
+
+    else if (productId != null) { // update existing product
 
         var updates = {
             "lastUpdated": Date.now(),
@@ -293,12 +328,24 @@ router.route('/products')
             }
 
         } else { // update existing item
-            return upsertProduct(req, res, req.body._id, "product updated");
+            // 5/21/18 --- don't log updates
+           // return upsertProduct(req, res, req.body._id, "product updated");
         }
     })
 
     //.get(checkJwt, function(req, res) {
     .get(function (req, res) {
+
+
+        var itemNumber = req.query.itemNumber;
+
+        if(itemNumber != null)
+        {
+            Product.findOne({'itemNumber': itemNumber}, '_id title', function (err, product) {
+                res.json(product);
+            });
+            return;
+        }
 
         var query = "";
         var status = req.query.status;

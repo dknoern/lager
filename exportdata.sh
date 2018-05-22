@@ -1,5 +1,7 @@
-export WORKDIR=/tmp/demesycollections
-export DB=mongodb://localhost:27018
+DATE=`date "+%Y-%M-%d"`
+WORKDIR=~/Dropbox/demesy/backups/${DATE}
+DB=mongodb://localhost:27018
+
 rm -fr $WORKDIR
 mkdir $WORKDIR
 mongoexport --uri=$DB/lager -c counters -o $WORKDIR/counters.json

@@ -52,6 +52,7 @@ function upcertRepair(req,res, repair){
 router.route('/repairs')
     .post(checkJwt, function(req, res) {
     //.post( function(req, res) {
+
         var repair = new Repair();
 
         console.log("setting repair_id from body: " + req.body._id);
@@ -134,14 +135,20 @@ router.route('/repairs')
 
     .get(function(req, res) {
 
-        var query = "";
+
         var draw = req.query.draw;
         var start = 0;
         var length = 10;
         if (req.query.start) start = req.query.start;
         if (req.query.length) length = req.query.length;
         var search = req.query.search.value;
-        console.log('search string is ' + search);
+
+        var query = { $and: [{'search': new RegExp(search, 'i')}] };
+       // var query = {'search': new RegExp(search, 'i')};
+
+       if("outstanding"==req.query.filter){
+            query.$and.push({returnDate:{$eq:null}});
+       }
 
         var results = {
             "draw": draw,
@@ -150,11 +157,9 @@ router.route('/repairs')
             "data": []
         };
 
-        Repair.find({
-
-            'search': new RegExp(search, 'i')
-
-        }, function(err, repairs) {
+        Repair.find(
+            query
+        , function(err, repairs) {
             if (err)
                 res.send(err);
 
@@ -187,9 +192,9 @@ router.route('/repairs')
                     results.recordsFiltered = count;
                     res.json(results);
                 } else {
-                    Repair.count({
-                        'search': new RegExp(search, 'i')
-                    }, function(err, count) {
+                    Repair.count(
+                        query
+                    , function(err, count) {
 
                         results.recordsFiltered = count;
                         res.json(results);

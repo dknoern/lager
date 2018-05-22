@@ -6,6 +6,13 @@
 </style>
 
 
+<script>
+    function lookupItemByNumber(){
+        scopeHolder.lookupItemByNumber();
+    }
+</script>
+
+
 <div data-ng-controller="LogItemCtrl">
 
 
@@ -88,9 +95,7 @@
                                             <select id="receivedFrom" class="selectpicker"
                                                     data-selectpicker
                                                     data-width="auto" required
-                                                    ng-model="data.history.receivedFrom"
-                                                    ng-readonly="data._id!=null"
-                                                    ng-disabled="data._id!=null">
+                                                    ng-model="data.history.receivedFrom">
                                                 <option></option>
                                                 <option>FexEx</option>
                                                 <option>UPS</option>
@@ -107,7 +112,9 @@
                                         <div class="col-sm-8">
                                             <input type="text" id="itemNumber" class="form-control"
                                                    ng-model="data.itemNumber"
-                                                   ng-readonly="data._id!=null">
+                                                   ng-readonly="data._id!=null"
+
+                                            onchange="lookupItemByNumber();">
                                         </div>
                                     </div>
 
@@ -128,8 +135,7 @@
                                                    data-number-stepfactor="100"
                                                    class="form-control currency"
                                                    id="repairCost"
-                                                   ng-model="data.totalRepairCost"
-                                                   ng-readonly="data._id!=null">
+                                                   ng-model="data.totalRepairCost">
                                         </div>
                                     </div>
 
@@ -149,8 +155,7 @@
                                         <div class="col-sm-8">
                                             <input type="text" id="customerName"
                                                    class="form-control"
-                                                   ng-model="data.history.customerName"
-                                                   ng-readonly="data._id!=null">
+                                                   ng-model="data.history.customerName">
                                         </div>
                                     </div>
 
@@ -159,8 +164,7 @@
                                             By</label>
                                         <div class="col-sm-8">
                                             <input type="text" id="receivedBy" class="form-control"
-                                                   ng-model="data.history.user"
-                                                   ng-readonly="data._id!=null">
+                                                   ng-model="data.history.user">
                                         </div>
                                     </div>
 
@@ -168,8 +172,7 @@
                                         <label for="comments" class="col-sm-3 control-label">Comments</label>
                                         <div class="col-sm-8">
                                             <textarea id="comments" rows=6 cols="40"
-                                                      ng-model="data.history.comments"
-                                                      ng-readonly="data._id!=null"></textarea>
+                                                      ng-model="data.history.comments"></textarea>
                                         </div>
                                     </div>
 
@@ -183,7 +186,7 @@
 
                         <div class="form-actions hidden-print">
                             <div class="row">
-                                <div ng-if="data.history._id==null"
+                                <div
                                      class="col-sm-offset-4 col-sm-7">
                                     <button type="submit" class="btn btn-primary" ng-click="go()"
                                             ng-disabled="logItemForm.$invalid">Save
@@ -193,13 +196,7 @@
                                         </button>
                                     </a>
                                 </div>
-                                <div ng-if="data.history._id!=null"
-                                     class="col-sm-offset-4 col-sm-7">
-                                    <a href="/#/app/log">
-                                        <button type="button" class="btn btn-inverse"> Close
-                                        </button>
-                                    </a>
-                                </div>
+
                             </div>
                         </div>
                     </form>
