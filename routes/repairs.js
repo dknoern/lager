@@ -188,7 +188,7 @@ router.route('/repairs')
             Repair.count({}, function(err, count) {
                 results.recordsTotal = count;
 
-                if (search == '' || search == null) {
+                if ((search == '' || search == null)&&"all"==req.query.filter) {
                     results.recordsFiltered = count;
                     res.json(results);
                 } else {
