@@ -26,17 +26,17 @@
             for(var i=0;i<invoice.lineItems.length;i++)
             {
               var returnItem = {
-                lineItemId: invoice.lineItems[i].lineItemId,
+                itemNumber: invoice.lineItems[i].itemNumber,
                 productId: invoice.lineItems[i].productId,
                 name: invoice.lineItems[i].name,
                 amount: invoice.lineItems[i].amount,
                 itemNo: invoice.lineItems[i].itemNo,
-                serialNo: invoice.lineItems[i].serialNo,
-                modelNumber: invoice.lineItems[i].modelNumber,
+                serialNo: invoice.lineItems[i].serialNumber,
                 longDesc: invoice.lineItems[i].longDesc,
                 included: true
               }
               returnItems.push(returnItem);
+
             }
 
 
@@ -59,7 +59,6 @@
       $scope.data = $resource('api/returns/:id').get({id: $scope.returnId});
 
       }
-
 
     }
 

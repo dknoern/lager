@@ -6,15 +6,65 @@
     angular.module('singApp.reports')
         .controller('ReportsCtrl', ReportsCtrl);
 
-    ReportsCtrl.$inject = ['$scope', '$resource', '$http', '$window', 'DTOptionsBuilder', 'jQuery'];
+    ReportsCtrl.$inject = ['$scope', '$resource', '$http', '$window', 'DTOptionsBuilder', 'jQuery', '$state'];
 
-    function ReportsCtrl($scope, $resource, $http, $window, DTOptionsBuilder, jQuery) {
+    function ReportsCtrl($scope, $resource, $http, $window, DTOptionsBuilder, jQuery, $state) {
 
 
+
+        $scope.hideButton = function(){
+            console.log('hide the button');
+            $scope.hide();
+        }
+
+
+        /**
+         * handle submission of bulk load for show
+         */
         $scope.processBulkEntry = function(){
-
             console.log('processBulkEntry');
             var itemNumbers = document.getElementById("itemNumbers").value;
+            var data = itemNumbers.split(/[ ,\n]+/);
+            console.log("itemNumbers are " + JSON.stringify(data));
+            $http.post('api/products/outtoshow', data).
+            success(function(response) {
+                console.log("response is " + response);
+                document.getElementById("itemNumbers").value = "";
+                document.getElementById("bulkEntryResults").innerHTML = response;
+                theDataTable.ajax.url("/api/reports/show-report").load();
+
+
+                Messenger().post({
+                    message: response,
+                    type: "success",
+                    showCloseButton: true
+                });
+
+            }).error(function(err) {
+                console.log("error"+ err);
+            });
+        }
+
+
+        /**
+         * handle submission of bulk release from show
+         */
+        $scope.processBulkRelease = function(){
+            console.log('processBulkRelease');
+            $http.post('api/products/backfromshow').
+            success(function(response) {
+                document.getElementById("bulkReleaseResults").innerHTML = response;
+                theDataTable.ajax.url("/api/reports/show-report").load();
+
+
+                Messenger().post({
+                    message: response,
+                    type: "success",
+                    showCloseButton: true
+                });
+            }).error(function(err) {
+                console.log("error"+ err);
+            });
         }
 
 
