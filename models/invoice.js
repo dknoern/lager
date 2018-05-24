@@ -47,11 +47,6 @@ var InvoiceSchema = new mongoose.Schema({
         serialNumber: String,
         longDesc: String
     }]
-    //,history: [{
-    //  user: String,
-    //  date: String,
-    //  action: String
-    //}]
 });
 
 InvoiceSchema.pre('save', function (next) {

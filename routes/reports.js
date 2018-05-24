@@ -7,6 +7,14 @@ var Invoice = require('../models/invoice');
 const checkJwt = require('./jwt-helper').checkJwt;
 var fs = require('fs');
 var format = require('date-format');
+var formatCurrency = require('format-currency');
+
+
+function formatMoney(value){
+    if(value==null || value=="") return "";
+    else return formatCurrency(value,  { format: '%s%v', code: "", symbol: '$' });
+}
+
 
 router.use(function (req, res, next) {
     next();
@@ -42,8 +50,6 @@ router.route('/reports/vendors-with-outstanding-repairs')
             vendor: 1
         });
     });
-
-
 
 
 
@@ -403,6 +409,9 @@ router.route('/reports/out-at-show')
 
 router.route('/reports/show-report')
     .get(function (req, res) {
+
+
+
         var results = {
             "data": []
         };
@@ -420,10 +429,10 @@ router.route('/reports/show-report')
                     [
                         products[i].itemNumber,
                         products[i].title,
-                        products[i].cost,
-                        '',
-                        '',
-                        format('yyyy-MM-dd', products[i].lastUpdated)
+                        formatMoney(products[i].cost),
+                        formatMoney(products[i].listPrice),
+                        formatMoney(products[i].sellingPrice),
+                        products[i].serialNo
                     ]
                 );
             }
@@ -435,7 +444,10 @@ router.route('/reports/show-report')
             title: 1,
             lastUpdated: 1,
             itemNumber: 1,
-            cost: 1
+            cost: 1,
+            listPrice: 1,
+            sellingPrice: 1,
+            serialNo: 1
         });
     });
 

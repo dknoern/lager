@@ -24,10 +24,10 @@ var ReturnSchema = new mongoose.Schema({
     salesPerson: String,
     lineItems: [{
         productId: String,
+        itemNumber: String,
         name: String,
         amount: Number,
         serialNo: String,
-        itemNo: String,
         longDesc: String,
         included: Boolean
     }],

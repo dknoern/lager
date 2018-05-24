@@ -16,6 +16,39 @@ function formatDate(date) {
 }
 
 
+function buildItemNumberList(lineItems){
+    var itemNumber = "";
+
+    var foundFirst = false;
+
+    if(lineItems!=null && lineItems.length>0){
+
+        console.log('line items length = '+ lineItems.length);
+
+        for(var i=0;i<lineItems.length;i++){
+
+            console.log(JSON.stringify(lineItems[i]));
+
+            console.log("itemNumber: "+ lineItems[i].itemNumber);
+            console.log("productId: "+ lineItems[i].productId);
+
+            if(lineItems[i]!=null&&lineItems[i].itemNumber!=null && lineItems[i].itemNumber!="") {
+                if(foundFirst) itemNumber += ", ";
+                itemNumber += lineItems[i].itemNumber;
+                foundFirst = true
+            }
+
+            else if(lineItems[i]!=null&&lineItems[i].productId!=null) {
+                if(foundFirst) itemNumber += ", ";
+                itemNumber += lineItems[i].productId;
+                foundFirst = true
+            }
+        }
+    }
+    return itemNumber;
+}
+
+
 function buildCustomerName(firstName, lastName){
     var customerName = "";
     if(firstName!=null) {
@@ -129,10 +162,12 @@ router.route('/returns')
                 res.send(err);
 
             for (var i = 0; i < returns.length; i++) {
+
                 results.data.push(
                     [
                         '<a href=\"/#/app/return/' + returns[i]._id + '\">' + returns[i]._id + '</a>',
                         returns[i].invoiceId,
+                        buildItemNumberList(returns[i].lineItems),
                         format('yyyy-MM-dd', returns[i].returnDate),
                         returns[i].customerName,
                         returns[i].salesPerson,
@@ -187,6 +222,7 @@ router.route('/returns')
             returnDate: 1,
             customerName: 1,
             salesPerson: 1,
+            lineItems:1,
             totalReturnAmount: 1
         });
 

@@ -284,6 +284,80 @@ var upsertLogItem = function (req, res, productId, action) {
 }
 
 
+router.route('/products/outtoshow')
+    .post(checkJwt, function (req, res) {
+            var itemNumbers = req.body;
+            var enteredCount = 0;
+            var query;
+            var ors = {$or: []};
+
+            for (var i = 0; i < itemNumbers.length; i++) {
+                if (itemNumbers[i] != null && itemNumbers[i].length > 0) {
+                    enteredCount++;
+                    ors.$or.push({'itemNumber': itemNumbers[i]})
+                }
+            }
+
+            if (enteredCount > 0) {
+                query = {$and: [{'status': "In Stock"}, ors]};
+                console.log("query is " + JSON.stringify(query));
+                Product.update(query, {
+                        "$push": {
+                            "history": {
+                                user: req.user['http://mynamespace/name'],
+                                date: Date.now(),
+                                action: "sent to show"
+                            }
+                        },
+                        "$set": {"lastUpdated": Date.now(), "status": "At Show"}
+                    }, {multi: true},
+                    function (err, obj) {
+                        if (err) {
+                            console.log('error: ' + err);
+                            return res.send("unable to set anything to At Show: " + err);
+                        } else {
+                            console.log("done: " + JSON.stringify(obj));
+
+                            var nModified = obj.nModified;
+
+                            console.log("data is " + JSON.stringify(req.body));
+                            return res.send("Entered a total of " + enteredCount + " products.  Updated total of " + nModified + " from \"In Stock\" to \"At Show\"");
+                        }
+                    });
+            }
+        }
+    );
+
+
+
+
+
+router.route('/products/backfromshow')
+    .post(checkJwt, function (req, res) {
+            Product.update({'status': "At Show"},
+                {
+                    "$push": {
+                        "history": {
+                            user: req.user['http://mynamespace/name'],
+                            date: Date.now(),
+                            action: "returned from show"
+                        }
+                        },
+                    "$set": {"lastUpdated": Date.now(), "status": "In Stock"}
+                    }, {multi: true},
+                function (err, obj) {
+                    if (err) {
+                        console.log('error: ' + err);
+                        return res.send("unable to set anything to At Show: " + err);
+                    } else {
+                        console.log("done: " + JSON.stringify(obj));
+                        var nModified = obj.nModified;
+                        return res.send("Updated total of " + nModified + " from \"At Show\" to \"In Stock\"");
+                    }
+                });
+        }
+    );
+
 
 router.route('/products')
     .post(checkJwt, function (req, res) {
@@ -301,11 +375,11 @@ router.route('/products')
                 req.body.status = 'In Stock';
             }
 
-
             if(req.body.itemNumber == null || req.body.itemNumber == ""){ // new
                 console.log('no item number, creating new log item');
                 return upsertProduct(req, res, null, "product created");
             }
+
 
             else{
                 console.log('item  specified, looking for existing item');

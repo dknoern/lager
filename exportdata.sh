@@ -1,4 +1,4 @@
-DATE=`date "+%Y-%M-%d"`
+DATE=`date "+%Y-%MM-%d"`
 WORKDIR=~/Dropbox/demesy/backups/${DATE}
 DB=mongodb://localhost:27018
 
