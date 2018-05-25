@@ -24,7 +24,7 @@ router.use(function (req, res, next) {
 var upsertProduct = function (req, res, productId, action) {
     var totalRepairCost = req.body.totalRepairCost || 0;
     var title =  req.body.title;
-    if(title==null && req.body.history!=null) title = rq.body.history.itemReceived;  // if new log item, use first 'itemReceived' for title
+    if(title==null && req.body.history!=null) title = req.body.history.itemReceived;  // if new log item, use first 'itemReceived' for title
 
 
     console.log('in upsert product');
@@ -212,7 +212,7 @@ var upsertLogItem = function (req, res, productId, action) {
                     'history.$.itemReceived': req.body.history.itemReceived,
                     'history.$.receivedFrom': req.body.history.receivedFrom,
                     'history.$.repairNumber': req.body.history.repairNumber,
-                    'history.$. customerName': req.body.history.customerName,
+                    'history.$.customerName': req.body.history.customerName,
                     'history.$.comments': req.body.history.comments,
                     'history.$.search': search,
                     totalRepairCost: req.body.repairCost || 0,
@@ -329,9 +329,6 @@ router.route('/products/outtoshow')
     );
 
 
-
-
-
 router.route('/products/backfromshow')
     .post(checkJwt, function (req, res) {
             Product.update({'status': "At Show"},
@@ -361,62 +358,108 @@ router.route('/products/backfromshow')
 
 router.route('/products')
     .post(checkJwt, function (req, res) {
-    //.post(function (req, res) {
+
+        // validate
+        if (!req.body.itemNumber) {
+            return res.send(400, {error: "item number is required"});
+        }
+
+        if (req.body.sellerType == 'Partner') {
+            req.body.status = 'Partnership';
+        } else {
+            req.body.status = 'In Stock';
+        }
+
+        var longDesc = req.body.longDesc;
+        if (!longDesc) longDesc = req.body.title;
+
+        var product = {
+            "itemNumber": req.body.itemNumber,
+            "title": req.body.title,
+            "productType": req.body.productType,
+            "manufacturer": req.body.manufacturer,
+            "paymentMethod": req.body.paymentMethod,
+            "paymentDetails": req.body.paymentDetails,
+            "model": req.body.model,
+            "modelNumber": req.body.modelNumber,
+            "condition": req.body.condition,
+            "gender": req.body.gender,
+            "features": req.body.features,
+            "case": req.body.case,
+            "size": req.body.size,
+            "dial": req.body.dial,
+            "bracelet": req.body.bracelet,
+            "comments": req.body.comments,
+            "serialNo": req.body.serialNo,
+            "longDesc": longDesc,
+            "supplier": req.body.supplier,
+            "cost": req.body.cost || 0,
+            "sellingPrice": req.body.sellingPrice || 0,
+            "listPrice": req.body.listPrice || 0,
+            "totalRepairCost": req.body.totalRepairCost || 0,
+            "notes": req.body.notes,
+            "ebayNoReserve": req.body.ebayNoReserve,
+            "inventoryItem": req.body.inventoryItem,
+            "seller": req.body.seller,
+            "sellerType": req.body.sellerType,
+            "lastUpdated": Date.now(),
+            "status": req.body.status,
+            "search": req.body.itemNumber + " " + req.body.title + " " + req.body.serialNo + " " + req.body.modelNumber
+        }
 
 
-        console.log("in post product");
+        // is existing item?
         if (req.body._id == null) {
 
-            console.log("id not null");
+            console.log('item  specified, looking for existing item');
 
-            if (req.body.sellerType == 'Partner') {
-                req.body.status = 'Partnership';
-            } else {
-                req.body.status = 'In Stock';
-            }
+            Product.findOne({'itemNumber': req.body.itemNumber}, '_id lastUpdated', function (err, dupeProduct) {
+                if (err) return res.send(500, {error: err});
 
-            if(req.body.itemNumber == null || req.body.itemNumber == ""){ // new
-                console.log('no item number, creating new log item');
-                return upsertProduct(req, res, null, "product created");
-            }
+                else if (dupeProduct != null) {
+                    console.log('found existing product with itemNumber ' + req.body.itemNumber);
 
+                    return res.send(409, {error: 'error: item number ' + req.body.itemNumber + ' already exists'});
 
-            else{
-                console.log('item  specified, looking for existing item');
+                } else {
+                    console.log('didnt find existing product with itemNumber ' + req.body.itemNumber);
 
-                Product.findOne({ 'itemNumber': req.body.itemNumber }, '_id lastUpdated', function (err, product) {
-                    if (err)  return res.send(500, {
-                        error: err
-                    });
+                    console.log('creating new product');
 
-                    else if(product!=null) {
-                        console.log('found existing product with itemNumber ' + req.body.itemNumber);
+                    product.history = {
+                        user: req.user['http://mynamespace/name'],
+                        date: Date.now(),
+                        action: "entered",
+                        search: formatDate(new Date()) + " " + req.user['http://mynamespace/name']
+                    };
 
-                        if(req.body.history == null || req.body.history.itemReceived == null) {
-
-                            var errorMessage = 'error: item numner ' + req.body.itemNumber +' already exists';
-                            console.log(errorMessage);
-
-                            // return conflict response
-                            return res.send(409, {
-                                error: errorMessage
+                    Product.create(product, function (err) {
+                        if (err) {
+                            console.log('error saving product: ' + err);
+                            return res.send(err);
+                        } else {
+                            return res.json({
+                                message: 'product created'
                             });
                         }
-                        else {
-                            console.log("creating new log item for existing item");
-                            return upsertProduct(req, res, product._id, "updating product " + product._id);
-                        }
+                    });
+                }
+            });
 
-                    }else{
-                        console.log('didnt find existing product with itemNumber ' + req.body.itemNumber);
-                        return upsertProduct(req, res, null, "entered");
-                    }
+        } else {
+
+            console.log('updating existing product');
+
+            Product.findByIdAndUpdate(
+                req.body._id,
+                product, {
+                    upsert: true
+                }, function (err, doc) {
+                    if (err) return res.send(500, {
+                        error: err
+                    });
+                    return res.send("product updated");
                 });
-            }
-
-        } else { // update existing item
-            // 5/21/18 --- don't log updates
-            return upsertProduct(req, res, req.body._id, "product updated");
         }
     })
 
@@ -426,8 +469,7 @@ router.route('/products')
 
         var itemNumber = req.query.itemNumber;
 
-        if(itemNumber != null)
-        {
+        if (itemNumber != null) {
             Product.findOne({'itemNumber': itemNumber}, '_id title', function (err, product) {
                 res.json(product);
             });
@@ -466,7 +508,7 @@ router.route('/products')
 
         var sortOrder = -1;
 
-        if(req.query.order!=null) {
+        if (req.query.order != null) {
             var sortColumn = req.query.order[0]['column'];
 
 
@@ -823,7 +865,6 @@ router.route('/logitems/:id')
                 $match: {
                     'history._id': mongoose.Types.ObjectId(req.params.id)
                 }
-
             }
         ]).unwind('history').limit(50)
             .exec(function (err, products) {
