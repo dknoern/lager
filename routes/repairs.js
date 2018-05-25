@@ -144,7 +144,7 @@ router.route('/repairs')
         var search = req.query.search.value;
 
         var query = { $and: [{'search': new RegExp(search, 'i')}] };
-       // var query = {'search': new RegExp(search, 'i')};
+
 
        if("outstanding"==req.query.filter){
             query.$and.push({returnDate:{$eq:null}});
@@ -228,6 +228,19 @@ router.route('/repairs/:repair_id')
             res.json(ret);
         });
     });
+
+
+router.route('/repairs/products/:item_id')
+// .get(checkJwt, function(req, res) {
+    .get(function(req, res) {
+        Repair.find({itemId:req.params.item_id}, function(err, ret) {
+            if (err)
+                res.send(err);
+            res.json(ret);
+        });
+    });
+
+
 
 
 router.route('/repairs/:repair_id/return')

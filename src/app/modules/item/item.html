@@ -497,6 +497,8 @@
                                         </li>
                                         <li class=""><a data-target="#tab2" data-toggle="tab">History</a>
                                         </li>
+                                        <li class=""><a data-target="#tab3" data-toggle="tab">Repairs</a>
+                                        </li>
                                     </ul>
                                 </div>
 
@@ -612,7 +614,7 @@
 
                                         <div ng-if ="data._id!=null">
                                         <div class="form-group">
-                                            <label for="search-input">Add note</label>
+                                            <label for="noteText">Add note</label>
                                             <div class="input-group">
                                                 <input type="input" class="form-control"
                                                        id="noteText">
@@ -622,9 +624,51 @@
                                             </div>
                                         </div>
                                         </div>
+                                    </div>
+
+
+
+
+
+
+
+
+
+
+
+                                    <div class="tab-pane" id="tab3">
+                                        <table class="table table-striped table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th>Date Out</th>
+                                                <th>Issues</th>
+                                                <th>Notes</th>
+                                                <th>Vendor</th>
+                                                <th>Cost</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr data-ng-repeat="repair in repairs">
+                                                <td>{{repair.dateOut | date : "MM/dd/y"}}</td>
+                                                <td>{{repair.repairIssues}}</td>
+                                                <td>{{repair.repairNotes}}</td>
+                                                <td>{{repair.vendor}}</td>
+                                                <td>{{repair.repairCost}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
 
 
                                     </div>
+
+
+
+
+
+
+
+
                                 </div>
 
                             </div>

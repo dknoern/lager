@@ -20,6 +20,13 @@
             $scope.data = $resource('api/products/:id').get({
                 id: $scope.itemId
             });
+
+
+            $http.get('api/repairs/products/'+$scope.itemId).
+            success(function(images) {
+                $scope.repairs = images;
+            });
+
         }
 
         $scope.cloneItem = function() {
@@ -62,17 +69,24 @@
                   "status": newStatus
               }
 
-              $http.put('api/products/' + $scope.itemId + '/status', statusData).success(function (freshData) {
+              $http.put('api/products/' + $scope.itemId + '/status', statusData).then(function successCallback(response) {
+                  console.log(response.statusText);
 
+                  $scope.data = $resource('api/products/:id').get({
+                      id: $scope.itemId
+                  });
+
+
+              }, function errorCallback(response) {
+                  console.log(response.statusText);
               });
+
+
+
 
               Messenger().post({
                   message: "setting item status to <i>" + newStatus + "</i>",
                   type: "success"
-              });
-
-              $scope.data = $resource('api/products/:id').get({
-                  id: $scope.itemId
               });
           }
 
@@ -135,7 +149,7 @@
 
                 Messenger().post({
                     message: response.data.error,
-                    type: "success",
+                    type: "error",
                 });
 
             });
