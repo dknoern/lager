@@ -237,6 +237,39 @@
         }
 
 
+        $scope.delete = function(url){
+            $scope.selectedImage = url;
+        }
+
+        $scope.conFirmDelete = function() {
+
+            var filenameFull = $scope.selectedImage;
+
+            var filename = filenameFull.split("/")[2];
+
+
+            if (filename.indexOf("?") > 0) {
+                filename = filename.split("?")[0];
+            }
+
+            $http.delete('api/upload/delete/' + filename).success(function () {
+
+                $http.get('api/upload/' + $scope.itemId).success(function (images) {
+                    $scope.images = images;
+                });
+
+
+                Messenger().post({
+                    message: "Image deleted.",
+                    type: "success"
+                });
+
+
+            });
+
+        }
+
+
 
 
         jQuery('#datetimepicker2').datetimepicker();
