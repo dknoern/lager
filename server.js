@@ -20,7 +20,6 @@ app.use('/assets', express.static('./src/assets'));
 app.use('/uploads', express.static('./uploads'));
 
 var port = process.env.PORT || 8080;
-//var port = 80;
 
 var customers = require('./routes/customers');
 app.use('/api', customers);

@@ -1,8 +1,10 @@
-DATE=`date "+%Y-%MM-%d"`
-WORKDIR=~/Dropbox/demesy/backups/${DATE}
+DATE=`date "+%Y-%m-%d"`
+
+BACKUPSDIR=~/Dropbox/demesy/backups
+WORKDIR=${BACKUPSDIR}/${DATE}
+ln -s $WORKDIR ${BACKUPSDIR}/latest
 DB=mongodb://localhost:27018
 
-rm -fr $WORKDIR
 mkdir $WORKDIR
 mongoexport --uri=$DB/lager -c counters -o $WORKDIR/counters.json
 mongoexport --uri=$DB/lager -c customers -o $WORKDIR/customers.json
