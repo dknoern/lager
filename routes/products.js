@@ -805,35 +805,44 @@ router.route('/logitems')
         Product.
         aggregate([{ $match: {$and: [
             {'history.action': 'received'},
-            {'history.search': new RegExp(search, 'i')}
+           // {'history.search': new RegExp(search, 'i')}
                 ]}   }]).
         unwind('history').sort(sortClause).skip(parseInt(start)).limit(parseInt(length))
             .exec(function (err, products) {
 
-            for (var i = 0; i < products.length; i++) {
+            if(products==null){
+                console.log("no log items found");
+            }
 
-                if(products[i].history.action =="received") {
+            else {
+
+                for (var i = 0; i < products.length; i++) {
+
+                    if (products[i].history.action == "received") {
 
 
-                    var itemReceived = "";
-                    if(products[i].itemNumber!=null&& products[i].itemNumber!=""){
-                        itemReceived  += products[i].itemNumber + ": ";
+                        var itemReceived = "";
+                        if (products[i].itemNumber != null && products[i].itemNumber != "") {
+                            itemReceived += products[i].itemNumber + ": ";
+                        }
+                        itemReceived += products[i].history.itemReceived;
+
+                        results.data.push(
+                            [
+                                '<a href=\"#\" onclick=\"selectProduct(\'' + products[i].history._id + '\');return false;\"><div style="white-space: nowrap;">' + format('yyyy-MM-dd', products[i].history.date) + '</div></a>',
+                                products[i].history.receivedFrom,
+                                products[i].history.customerName,
+                                itemReceived,
+                                products[i].history.repairNumber,
+                                products[i].history.user,
+                                products[i].history.comments
+                            ]
+                        );
                     }
-                    itemReceived += products[i].history.itemReceived;
-
-                    results.data.push(
-                        [
-                            '<a href=\"#\" onclick=\"selectProduct(\'' + products[i].history._id + '\');return false;\"><div style="white-space: nowrap;">' + format('yyyy-MM-dd', products[i].history.date) + '</div></a>',
-                            products[i].history.receivedFrom,
-                            products[i].history.customerName,
-                            itemReceived,
-                            products[i].history.repairNumber,
-                            products[i].history.user,
-                            products[i].history.comments
-                        ]
-                    );
                 }
             }
+
+
 
             Product.count({
                 'history.action': 'received'
