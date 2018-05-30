@@ -111,7 +111,6 @@
 
         <hr/>
 
-
         <div class="btn-toolbar mt-lg text-align-right hidden-print">
           <button data-ng-click="print()" class="btn btn-inverse">
             <i class="fa fa-print"></i>
@@ -120,14 +119,70 @@
           </button>
           <a href="/#/app/invoice/edit/{{data._id}}"  ng-if="'Partner' !=invoiceType" >
           <button class="btn btn-success">
-            Edit Invoice
+            Edit
             &nbsp;
                                 <span class="circle bg-white">
                                     <i class="fa fa-edit text-success"></i>
                                 </span>
           </button></a>
+
+
+            <!--button data-ng-click="email(data._id)" class="btn btn-primary" data-toggle="modal" data-target="#emailModal">
+              EMail
+              &nbsp;
+              <span class="circle bg-white">
+                                    <i class="fa fa-envelope text-primary"></i>
+                                </span>
+            </button-->
+
         </div>
       </div>
     </section>
   </div>
 </div>
+
+
+
+
+
+<!-- email modal -->
+
+<!-- bulk entry modal -->
+<div class="modal fade" id="emailModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+
+        <section class="widget">
+          <header>
+            <h5><strong>Enter Item Numbers</strong></h5>
+          </header>
+          <div class="widget-body">
+
+            <form>
+              <p>Enter one or more email addresses, comma delimited.</p>
+              <p>
+              <textarea id="emailAddresses"  class="form-control" rows="3">{{data.customerEmail}}</textarea>
+              </p>
+              <p>Enter optional note to include in email.</p>
+              <p>
+              <textarea id="note"  class="form-control" rows="3"></textarea>
+              </p>
+            </form>
+
+          </div>
+        </section>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success btn-sm"
+                ng-click="processBulkEntry()" data-dismiss="modal">Send
+        </button>
+        <button type="button" class="btn btn-info btn-sm" data-dismiss="modal">Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

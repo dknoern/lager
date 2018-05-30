@@ -46,11 +46,11 @@
                                readonly="readonly">
                         <input type="hidden" id="itemId" class="form-control" ng-model="data.itemId"
                                readonly="readonly">
-                        <div class="form-group">
-                            <label for="hint-field" class="col-sm-3 control-label">Repair No</label>
+                        <div class="form-group required">
+                            <label for="repairNumber" class="col-sm-3 control-label">Repair No</label>
                             <div class="col-sm-8">
-                                <input type="text" id="returnNo-field" class="form-control"
-                                       ng-model="data.repairNumber" readonly="readonly">
+                                <input type="text" id="repairNumber" class="form-control"
+                                       ng-model="data.repairNumber" required>
                             </div>
                         </div>
 
@@ -58,29 +58,29 @@
                                ng-model="data.invoiceNumber" readonly="readonly">
 
                         <div class="form-group">
-                            <label for="hint-field" class="col-sm-3 control-label">Date Out</label>
+                            <label for="dateOut" class="col-sm-3 control-label">Date Out</label>
                             <div class="col-sm-8">
-                                <input type="text" id="date-field" class="form-control"
+                                <input type="text" id="dateOut" class="form-control"
                                        readonly="readonly"
                                        value="{{data.dateOut | date: 'MM/dd/y'}}">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="hint-field" class="col-sm-3 control-label">Expected
+                            <label for="expectedReturnDate" class="col-sm-3 control-label">Expected
                                 Return</label>
                             <div class="col-sm-8">
-                                <input type="text" id="date-field" class="form-control"
+                                <input type="text" id="expectedReturnDate" class="form-control"
                                        readonly="readonly"
                                        value="{{data.expectedReturnDate | date: 'MM/dd/y'}}">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="hint-field" class="col-sm-3 control-label">Return
+                            <label for="returnDate" class="col-sm-3 control-label">Return
                                 Date</label>
                             <div class="col-sm-8">
-                                <input type="text" id="date-field" class="form-control"
+                                <input type="text" id="returnDate" class="form-control"
                                        readonly="readonly"
                                        value="{{data.returnDate | date: 'MM/dd/y'}}">
                             </div>
@@ -99,16 +99,16 @@
 
 
                         <div class="form-group">
-                            <label for="normal-field" class="col-sm-3 control-label">Repair
+                            <label for="repairIssues" class="col-sm-3 control-label">Repair
                                 Issues</label>
                             <div class="col-sm-8">
-                                <textarea id="comments" rows=6 cols="40" class="form-control"
+                                <textarea id="repairIssues" rows=6 cols="40" class="form-control"
                                           ng-model="data.repairIssues">{{data.repairIssues}}</textarea>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="hint-field" class="col-sm-3 control-label">Item No</label>
+                            <label for="itemNumber" class="col-sm-3 control-label">Item No</label>
                             <div class="col-sm-8">
 
                                 <div class="input-group">
@@ -126,69 +126,69 @@
                         </div>
 
                         <div class="form-group required">
-                            <label for="hint-field"
+                            <label for="description"
                                    class="col-sm-3 control-label">Description</label>
                             <div class="col-sm-8">
-                                <input type="text" id="returnNo-field" class="form-control"
+                                <input type="text" id="description" class="form-control"
                                        ng-model="data.description" required>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="normal-field" class="col-sm-3 control-label">Repair
+                            <label for="repairNotes" class="col-sm-3 control-label">Repair
                                 Notes</label>
                             <div class="col-sm-8">
-                                <textarea id="comments" rows=6 cols="40" class="form-control"
+                                <textarea id="repairNotes" rows=6 cols="40" class="form-control"
                                           ng-model="data.repairNotes">{{data.repairNotes}}</textarea>
                             </div>
                         </div>
 
                         <div class="form-group required">
-                            <label for="hint-field" class="col-sm-3 control-label">Customer First
+                            <label for="customerFirstName" class="col-sm-3 control-label">Customer First
                                 Name</label>
                             <div class="col-sm-8">
-                                <input type="text" id="returnNo-field" class="form-control"
+                                <input type="text" id="customerFirstName" class="form-control"
                                        ng-model="data.customerFirstName" required>
                             </div>
                         </div>
 
                         <div class="form-group required">
-                            <label for="hint-field" class="col-sm-3 control-label">Customer Last
+                            <label for="customerLastName" class="col-sm-3 control-label">Customer Last
                                 Name</label>
                             <div class="col-sm-8">
-                                <input type="text" id="returnNo-field" class="form-control"
+                                <input type="text" id="customerLastName" class="form-control"
                                        ng-model="data.customerLastName" required>
                             </div>
                         </div>
 
 
-                        <div class="form-group required">
-                            <label for="hint-field" class="col-sm-3 control-label">Customer
+                        <div class="form-group">
+                            <label for="phone" class="col-sm-3 control-label">Customer
                                 Phone</label>
                             <div class="col-sm-8">
-                                <input type="text" id="returnNo-field" class="form-control"
-                                       ng-model="data.phone" required>
+                                <input type="text" id="phone" class="form-control"
+                                       ng-model="data.phone">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="hint-field" class="col-sm-3 control-label">Customer
+                            <label for="email" class="col-sm-3 control-label">Customer
                                 Email</label>
                             <div class="col-sm-8">
-                                <input type="text" id="returnNo-field" class="form-control"
+                                <input type="text" id="email" class="form-control"
                                        ng-model="data.email">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="hint-field" class="col-sm-3 control-label">Vendor</label>
+                            <label for="vendor" class="col-sm-3 control-label">Vendor</label>
                             <div class="col-sm-8">
-                                <input type="text" id="returnNo-field" class="form-control"
+                                <input type="text" id="vendor" class="form-control"
                                        ng-model="data.vendor">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="repairCost"
+                            <label for="totalRepairCost"
                                    class="col-sm-3 control-label">Repair
                                 Cost</label>
                             <div class="col-sm-8">
