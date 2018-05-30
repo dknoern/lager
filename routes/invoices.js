@@ -72,6 +72,7 @@ router.route('/invoices')
         invoice.invoiceNumber = req.body.invoiceNumber;
         invoice.customerFirstName = req.body.customerFirstName;
         invoice.customerLastName = req.body.customerLastName;
+        invoice.customerEmail = req.body.customerEmail;
         invoice.customerId = req.body.customerId;
         invoice.project = req.body.project;
         invoice.date = new Date(req.body.date);
@@ -105,6 +106,7 @@ router.route('/invoices')
 
           customer.firstName = req.body.customerFirstName;
           customer.lastName = req.body.customerLastName;
+          customer.email = req.body.customerEmail;
           customer.address1 = req.body.shipAddress1;
           customer.city = req.body.shipCity;
           customer.state = req.body.shipState;

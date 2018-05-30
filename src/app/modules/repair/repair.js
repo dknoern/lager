@@ -14,6 +14,8 @@
         $scope.addItem = function(itemId) {
             console.log('setting item id to ' + itemId);
 
+            
+
             $http.get("api/products/" + itemId)
                 .then(function(response) {
                     $scope.data.itemId = itemId;

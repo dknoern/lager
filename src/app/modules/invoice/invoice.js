@@ -17,6 +17,14 @@ var scopeHolder;
         scopeHolder = $scope;
 
 
+        $scope.email = function(itemId) {
+
+           // alert("emailing " + itemId);
+        }
+
+
+
+
         //$scope.selectProduct = function(id){
         //    console.log("=======>>>> selected product "+ id);
         //}
@@ -158,6 +166,7 @@ var scopeHolder;
                     $scope.data.shipCity = customer.city;
                     $scope.data.shipState = customer.state;
                     $scope.data.shipZip = customer.zip;
+                    $scope.data.customerEmail = customer.email;
                 });
               }
 

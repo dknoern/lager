@@ -79,14 +79,15 @@ router.route('/repairs')
         repair.email = req.body.email;
         repair.customerId = req.body.customerId;
         repair.hasPapers = req.body.hasPapers;
-        repair.repairCost = req.body.repairCost;
+        repair.repairCost = req.body.repairCost ||0;
 
 
+        console.log('saving repair ' + repair.repairNumber);
         repair.search = repair.repairNumber + " " + repair.itemNumber + " " + repair.description + " " + formatDate(repair.dateOut)
             + " " + formatDate(repair.expectedReturnDate) + " " + formatDate(repair.returnDate)
             + " " + repair.customerFirstName + " " + repair.customerLastName + " " + repair.vendor;
 
-
+/*
         if(repair.itemNumber==null){
             // increment repairNumber
             Counter.findByIdAndUpdate({
@@ -108,10 +109,11 @@ router.route('/repairs')
             });
 
         } else {
+        */
             //use itemNumber as repair number
-            repair.repairNumber = repair.itemNumber;
+            //repair.repairNumber = repair.itemNumber;
             upcertRepair(req,res,repair);
-        }
+    /*    }*/
 
 
         // update repair cost in item
