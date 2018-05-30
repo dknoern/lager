@@ -2,6 +2,9 @@ DATE=`date "+%Y-%M-%d"`
 WORKDIR=~/Dropbox/demesy/backups/latest
 DB=mongodb://localhost:27017
 
+
+mongo lager --eval "db.dropDatabase()"
+
 mongoimport --uri=$DB/lager -c counters --file $WORKDIR/counters.json
 mongoimport --uri=$DB/lager -c customers --file $WORKDIR/customers.json
 mongoimport --uri=$DB/lager -c products --file $WORKDIR/products.json

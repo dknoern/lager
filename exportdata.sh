@@ -2,6 +2,7 @@ DATE=`date "+%Y-%m-%d"`
 
 BACKUPSDIR=~/Dropbox/demesy/backups
 WORKDIR=${BACKUPSDIR}/${DATE}
+rm ${BACKUPSDIR}/latest
 ln -s $WORKDIR ${BACKUPSDIR}/latest
 DB=mongodb://localhost:27018
 
@@ -12,4 +13,7 @@ mongoexport --uri=$DB/lager -c products -o $WORKDIR/products.json
 mongoexport --uri=$DB/lager -c invoices -o $WORKDIR/invoices.json
 mongoexport --uri=$DB/lager -c repairs -o $WORKDIR/repairs.json
 mongoexport --uri=$DB/lager -c returns -o $WORKDIR/returns.json
+
+
+rsync -azv ubuntu@demesyinventory.com:lager/uploads $BACKUPSDIR
 
