@@ -5,6 +5,7 @@ var Customer = require('../models/customer');
 var history = require('./history');
 var format = require('date-format');
 var Counter = require('../models/counter');
+var Product = require('../models/product');
 
 const checkJwt = require('./jwt-helper').checkJwt;
 const formatCurrency = require('format-currency');
@@ -22,16 +23,19 @@ function getFullName(name){
 
 function upsertInvoice(req,res,invoice){
 
-          var itemStatus = "Sold";
-          var itemAction = "sold item";
 
-          if ("Memo" == invoice.invoiceType) {
-              itemStatus = "Memo";
-              itemAction = "item memo"
-          }
+    // update item status to sold, but only if NOT Partner
+    if(invoice.invoiceType!="Partner"){
+        var itemStatus = "Sold";
+        var itemAction = "sold item";
 
+        if ("Memo" == invoice.invoiceType) {
+            itemStatus = "Memo";
+            itemAction = "item memo"
+        }
+        history.updateProductHistory(req.body.lineItems, itemStatus, itemAction, req.user['http://mynamespace/name']);
+    }
 
-          history.updateProductHistory(req.body.lineItems, itemStatus, itemAction, req.user['http://mynamespace/name']);
 
           // use save for updates, findOne and update for inserts for now until we
           // figure out the problem with the "pre" in mongoose.
@@ -172,20 +176,29 @@ router.route('/invoices')
         Invoice.find({
 
 
-            $or: [{
-                    'customerLastName': new RegExp(search, 'i')
-                },
+            $and: [{invoiceType:{$ne:'Partner'}},
                 {
-                    'customerFirstName': new RegExp(search, 'i')
-                },
-                {
-                    'lineItems.itemNumber': new RegExp(search, 'i')
+                    $or: [{
+                        'customerLastName': new RegExp(search, 'i')
+                    },
+                        {
+                            'customerFirstName': new RegExp(search, 'i')
+                        },
+                        {
+                            'lineItems.itemNumber': new RegExp(search, 'i')
+                        }
+                        ,
+                        {
+                            'lineItems.name': new RegExp(search, 'i')
+                        }
+                    ]
+
                 }
-                ,
-                {
-                    'lineItems.name': new RegExp(search, 'i')
-                }
-            ]
+                ]
+
+
+
+
         }, function(err, invoices) {
             if (err)
                 res.send(err);
@@ -282,6 +295,77 @@ router.route('/invoices/:invoice_id')
         });
     });
 
+router.route('/invoices/partner/:product_id')
+    .get(checkJwt, function (req, res) {
+
+
+        Invoice.findOne({
+                type: 'Partner',
+                'lineItems.productId': req.params.product_id
+            },
+            function (err, invoice) {
+                if (err) {
+                    console.log("error getting partner invoice");
+                    res.send(err);
+                } else {
+                    if(invoice == null){
+                        console.log("got partner invoice but it is null, creating partner invoice");
+
+                        // create partner invoice
+
+                        invoice = new Invoice();
+                        invoice.invoiceType = "Partner";
+
+
+                        console.log("lookng up product: "+ req.params.product_id);
+
+                        Product.findById(req.params.product_id,function(err,product){
+                            if(err){
+                                console.log("error getting partner product " + err);
+                                res.send(err);
+                            }
+                            else{
+
+
+                                invoice.customerFirstName = product.seller;
+                                invoice.customerLastName = "";
+                                invoice.date = new Date();
+                                invoice.lineItems.push(
+                                    {
+                                        name: product.title,
+                                        longDesc: product.longDesc,
+                                        serialNumber: product.serialNo,
+                                        modelNumber: product.modelNumber,
+                                        amount: product.sellingPrice/2.0,
+                                        productId: product._id,
+                                        itemNumber: product.itemNumber
+                                    }
+                                );
+
+                                invoice.save(function(err) {
+                                    if (err) {
+                                        res.send(err);
+                                    }else {
+                                        res.json(invoice);
+                                    }
+                                });
+                            }
+                        });
+
+
+                    }else{
+                        console.log("got partner invoice, not null");
+                        res.json(invoice);
+                    }
+
+
+
+                }
+            });
+
+    });
+
+
 // find invoices for a particular customer
 router.route('/customers/:customer_id/invoices')
     .get(function(req, res) {
@@ -290,9 +374,11 @@ router.route('/customers/:customer_id/invoices')
          var query = Invoice.find({ 'customerId': customerId });
           query.select('customer date invoiceNumber customerId total');
           query.exec(function (err, invoices) {
-          if (err)
-            res.send(err);
-            res.json(invoices);
+          if (err) {
+              res.send(err);
+          }else {
+              res.json(invoices);
+          }
           })
         });
 

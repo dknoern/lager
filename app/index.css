@@ -3274,11 +3274,14 @@ a.text-bg-sidebar:hover {
   .content {
     margin: 0;
     padding: 0; }
+  /* remove following so invoice lines on subtotal, tax, etc do not show when printing
+  /*
   .table, .table td, .table th {
     background: #fff !important;
     border: none !important; }
   .table td {
     border-top: 1px solid #999999 !important; }
+    */
   .hidden-print {
     display: none !important; }
   .col-print-1,
