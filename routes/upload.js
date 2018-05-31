@@ -20,7 +20,7 @@ var storage = imageStorage({
     },
     filename: function (req, file, cb) {
         var itemId = req.param('itemId');
-        var newfilename = itemId + "_" + file.originalname;
+        var newfilename = itemId + "-" + Math.floor(Date.now() / 1000) + "-" + file.originalname;
         cb(null, newfilename); //Appending .ext
     }
 })
