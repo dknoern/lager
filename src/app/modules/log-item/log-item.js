@@ -27,6 +27,8 @@ var scopeHolder;
                 .then(function(response) {
                     if(response!=null&& response.data!=null)
                         $scope.data.history.itemReceived = response.data.title;
+                    else
+                        $scope.data.history.itemReceived = "";
                 });
 
         }
