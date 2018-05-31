@@ -26,7 +26,11 @@
             success(function(images) {
                 $scope.repairs = images;
             });
+        }
 
+        $scope.getPartnerInvoice = function() {
+            alert('gettingh partner invpoice');
+            $window.location = "/#/app/partnerinvoice/" + $scope.data._id;
         }
 
         $scope.cloneItem = function() {
@@ -46,10 +50,17 @@
           });
         }
 
+        $scope.changeSellerType = function(){
+            console.log("change seller type...");
+            if($scope.data.sellerType == "Partner" && ($scope.data.status=="In Stock" || $scope.data.status==null))
+                $scope.data.status = "Partnership";
+            else if($scope.data.sellerType != "Partner" && $scope.data.status=="Partnership" || $scope.data.status==null)
+                $scope.data.status = "In Stock";
+        }
+
         $scope.toggleStatus = function(status1, status2) {
 
           var newStatus = "";
-
           var statusChanged = false;
 
           if($scope.data.status == status1){
@@ -61,7 +72,6 @@
             newStatus = status1;
               statusChanged = true;
           }
-
 
           if(statusChanged) {
 

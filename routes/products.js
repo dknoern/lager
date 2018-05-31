@@ -6,9 +6,6 @@ var Repair = require('../models/repair');
 const checkJwt = require('./jwt-helper').checkJwt;
 var format = require('date-format');
 
-// works better, date=format gives error in some cases when using new Date() or Date.now()
-var dateFormat = require('dateformat');
-
 function formatDate(date) {
     console.log('formatting date, yo: ' + date);
     if (date == null) return "";
@@ -20,138 +17,6 @@ function formatDate(date) {
 router.use(function (req, res, next) {
     next();
 });
-
-var upsertProduct = function (req, res, productId, action) {
-    var totalRepairCost = req.body.totalRepairCost || 0;
-    var title =  req.body.title;
-    if(title==null && req.body.history!=null) title = req.body.history.itemReceived;  // if new log item, use first 'itemReceived' for title
-
-
-    console.log('in upsert product');
-
-    var search = formatDate(new Date()) + " " + req.user['http://mynamespace/name'];
-
-    var history = {
-        user: req.user['http://mynamespace/name'],
-        date: Date.now(),
-        action: action,
-        search: search
-    }
-
-    if (productId != null) { // update existing product
-
-        console.log('updating existing product');
-
-        Product.findOneAndUpdate({
-            _id: productId
-        }, {
-
-            "$push": {
-                "history": history
-            },
-            "$set": {
-                "_id": productId,
-                "itemNumber": req.body.itemNumber,
-                "title": title,
-                "productType": req.body.productType,
-                "manufacturer": req.body.manufacturer,
-                "paymentMethod": req.body.paymentMethod,
-                "paymentDetails": req.body.paymentDetails,
-                "model": req.body.model,
-                "modelNumber": req.body.modelNumber,
-                "condition": req.body.condition,
-                "gender": req.body.gender,
-                "features": req.body.features,
-                "case": req.body.case,
-                "size": req.body.size,
-                "dial": req.body.dial,
-                "bracelet": req.body.bracelet,
-                "comments": req.body.comments,
-                "serialNo": req.body.serialNo,
-                "longDesc": req.body.longDesc,
-                "supplier": req.body.supplier,
-                "cost": req.body.cost || 0,
-                "sellingPrice": req.body.sellingPrice || 0,
-                "listPrice": req.body.listPrice || 0,
-                "totalRepairCost": totalRepairCost,
-                "notes": req.body.notes,
-                "ebayNoReserve": req.body.ebayNoReserve,
-                "inventoryItem": req.body.inventoryItem,
-                "seller": req.body.seller,
-                "sellerType": req.body.sellerType,
-                "lastUpdated": Date.now(),
-                "status": req.body.status,
-                "search": req.body.itemNumber + " " + req.body.title + " " + req.body.serialNo + " " + req.body.modelNumber
-
-            }
-        }, {
-            upsert: true
-        }, function (err, doc) {
-            if (err) return res.send(500, {
-                error: err
-            });
-            return res.send("successfully saved");
-        });
-
-    } else {  // create new product
-
-
-
-        console.log('creating new product');
-
-        var product = new Product();
-        product.itemNumber = req.body.itemNumber;
-        product.title = title;
-        product.productType = req.body.productType;
-        product.manufacturer = req.body.manufacturer;
-        product.paymentMethod = req.body.paymentMethod;
-        product.paymentDetails = req.body.paymentDetails;
-        product.model = req.body.model;
-        product.modelNumber = req.body.modelNumber;
-        product.condition = req.body.condition;
-        product.gender = req.body.gender;
-        product.features = req.body.features;
-        product.case = req.body.case;
-        product.size = req.body.size;
-        product.dial = req.body.dial;
-        product.bracelet = req.body.bracelet;
-        product.comments = req.body.comments;
-        product.serialNo = req.body.serialNo;
-        product.longDesc = req.body.longDesc;
-        if (product.longDesc == null) product.longDesc = title;
-        product.supplier = req.body.supplier;
-        product.cost = req.body.cost;
-        product.sellingPrice = req.body.sellingPrice;
-        product.listPrice = req.body.listPrice || 0;
-        product.totalRepairCost = totalRepairCost;
-        product.notes = req.body.notes;
-        product.ebayNoReserve = req.body.ebayNoReserve;
-        product.inventoryItem = req.body.inventoryItem;
-        product.seller = req.body.seller;
-        product.sellerType = req.body.sellerType;
-        product.lastUpdated = Date.now();
-        product.status = req.body.status;
-        product.received = new Date();
-        product.receivedBy = req.body.receivedBy;
-        product.receivedFrom = req.body.receivedFrom;
-        product.customerName = req.body.customerName;
-        product.search = product.itemNumber + " " + product.title + " " + product.serialNo + " " + product.modelNumber;
-        product.history = history;
-
-        product.save(function (err) {
-            if (err) {
-                console.log('error saving product: ' + err);
-                return res.send(err);
-            } else {
-                return res.json({
-                    message: 'product saved'
-                });
-            }
-        });
-    }
-}
-
-
 
 var upsertLogItem = function (req, res, productId, action) {
 
@@ -170,9 +35,7 @@ var upsertLogItem = function (req, res, productId, action) {
         search: search
     };
 
-
     if (req.body.history.repairNumber != null){
-
         console.log('looking for repairNumber ' + req.body.history.repairNumber);
         console.log('repair cost is ' + req.body.totalRepairCost );
         Repair.findOneAndUpdate({
@@ -193,8 +56,6 @@ var upsertLogItem = function (req, res, productId, action) {
     }else{
         console.log('not looking for repair');
     }
-
-
 
     // update existing history item
     if(req.body.history._id !=null){
@@ -232,8 +93,7 @@ var upsertLogItem = function (req, res, productId, action) {
     else if (productId != null) { // update existing product
 
         var updates = {
-            "lastUpdated": Date.now(),
-            "status": "In Stock"
+            "lastUpdated": Date.now()
         };
 
         if(req.body.history.repairNumber!=null){
@@ -364,12 +224,6 @@ router.route('/products')
             return res.send(400, {error: "item number is required"});
         }
 
-        if (req.body.sellerType == 'Partner') {
-            req.body.status = 'Partnership';
-        } else {
-            req.body.status = 'In Stock';
-        }
-
         var longDesc = req.body.longDesc;
         if (!longDesc) longDesc = req.body.title;
 
@@ -407,7 +261,6 @@ router.route('/products')
             "search": req.body.itemNumber + " " + req.body.title + " " + req.body.serialNo + " " + req.body.modelNumber
         }
 
-
         // is existing item?
         if (req.body._id == null) {
 
@@ -433,11 +286,13 @@ router.route('/products')
                         search: formatDate(new Date()) + " " + req.user['http://mynamespace/name']
                     };
 
-                    Product.create(product, function (err) {
+                    Product.create(product, function (err,createdProduct) {
                         if (err) {
                             console.log('error saving product: ' + err);
                             return res.send(err);
                         } else {
+
+                            console.log("created product, id = " + createdProduct._id + " item number is " + createdProduct.itemNumber);
                             return res.json({
                                 message: 'product created'
                             });
@@ -447,6 +302,7 @@ router.route('/products')
             });
 
         } else {
+
 
             console.log('updating existing product');
 
@@ -546,8 +402,6 @@ router.route('/products')
 
             for (var i = 0; i < products.length; i++) {
 
-                var statusBadge = "";
-
                 var badgeStyle = "default"; // grey
                 if (products[i].status == 'In Stock' || products[i].status == 'Partnership' || products[i].status == 'Problem')
                     badgeStyle = "success"; // green
@@ -608,8 +462,7 @@ router.route('/products')
 
 
 router.route('/products/:product_id')
-   // .get(checkJwt, function (req, res) {
-    .get(function (req, res) {
+    .get(checkJwt, function (req, res) {
 
         if (req.params.product_id) {
             Product.findById(req.params.product_id, function (err, product) {
@@ -805,7 +658,7 @@ router.route('/logitems')
         Product.
         aggregate([{ $match: {$and: [
             {'history.action': 'received'},
-           // {'history.search': new RegExp(search, 'i')}
+            {'history.search': new RegExp(search, 'i')}
                 ]}   }]).
         unwind('history').sort(sortClause).skip(parseInt(start)).limit(parseInt(length))
             .exec(function (err, products) {
@@ -841,8 +694,6 @@ router.route('/logitems')
                     }
                 }
             }
-
-
 
             Product.count({
                 'history.action': 'received'
@@ -890,6 +741,5 @@ router.route('/logitems/:id')
                 res.json(logitem);
             });
     });
-
 
 module.exports = router;

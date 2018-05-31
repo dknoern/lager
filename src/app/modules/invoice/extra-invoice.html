@@ -6,25 +6,39 @@
           <div class="col-sm-6 col-print-6">
             <img src="assets/images/logo/invoice-logo.png" alt="Logo" class="invoice-logo"/>
           </div>
+
           <div class="col-sm-3 col-print-3">
-            <div class="fine-print">
-            {{data.customerFirstName}} {{data.customerLastName}}<br/>
-            {{data.shipAddress1}}<br/>
-            {{data.shipCity}}, {{data.shipState}} {{data.shipZip}}<br/>
-            {{data.phone}}
-            </div>
           </div>
 
           <div class="col-sm-3 col-print-3">
             <div class="fine-print">
             Invoice # {{data._id}}<br/>
             Invoice Date {{data.date | date: 'MM/dd/y'}}<br/>
-            Sold By {{data.salesPerson}}  {{salesPersonFullName}}
+              <span ng-if="data.salesPerson!=null">Sold By {{data.salesPerson}}<br/></span>
+              <span ng-if="data.methodOfSale!=null">Method of Sale: {{data.methodOfSale}}</span>
             </div>
           </div>
         </div>
+
+
+
+
       </header>
       <div class="widget-body">
+
+          <table class="table">
+            <thead>
+            <tr><th style="border:0;">
+              {{data.customerFirstName}} {{data.customerLastName}}<br/>
+              {{data.shipAddress1}}<br/>
+              {{data.shipCity}}<span ng-if="data.shipCity!=null&&data.shipState!=null">,</span> {{data.shipState}} {{data.shipZip}}<br/>
+              {{data.phone}}
+            </th></tr>
+            </thead>
+          </table>
+
+
+
 
         <table class="table">
           <thead>

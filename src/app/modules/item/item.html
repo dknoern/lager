@@ -82,12 +82,15 @@
                         <li><a href="#" data-toggle="modal" data-toggle="modal"
                                data-target="#addImagesModal">Add Images</a></li>
 
-                        <li ng-if="'In Stock' == data.status || 'Memo' == data.status"><a href="#"
+                        <li ng-if="'In Stock' == data.status || 'Memo' == data.status || 'Partnership' == data.status"><a href="#"
                                                                                           data-toggle="modal"
                                                                                           data-target="#customerModal" onclick="customerSelectMode='invoice';">Create
                             Invoice</a></li>
 
-                        <li ng-if="'In Stock' == data.status || 'Memo' == data.status"><a href="#"
+                        <!--li ng-if="'Partner' == data.sellerType"><a href="#" ng-click="getPartnerInvoice()">Partner Invoice</a></li-->
+
+
+                        <li ng-if="'In Stock' == data.status || 'Memo' == data.status || 'Partnership' == data.status"><a href="#"
                                                                                           data-toggle="modal"
                                                                                           data-target="#customerModal" onclick="customerSelectMode='repair';">Repair</a></li>
 
@@ -428,7 +431,7 @@
                                     <div class="col-sm-8">
                                         <select id="sellerType" class="selectpicker"
                                                 data-selectpicker data-width="auto"
-                                                ng-model="data.sellerType" required>
+                                                ng-model="data.sellerType" required ng-change="changeSellerType()">
                                             <option></option>
                                             <option>Individual</option>
                                             <option>Partner</option>
@@ -448,7 +451,7 @@
                                 </div>
 
 
-                                <div ng-if="'Partner' == data.sellerType">
+                                <div ng-if="data._id!=null && 'Partner' == data.sellerType">
                                     <a href="/#/app/partnerinvoice/{{data._id}}">Partner invoice</a>
                                 </div>
 

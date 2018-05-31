@@ -16,18 +16,10 @@ var scopeHolder;
 
         scopeHolder = $scope;
 
-
         $scope.email = function(itemId) {
-
-           // alert("emailing " + itemId);
         }
 
 
-
-
-        //$scope.selectProduct = function(id){
-        //    console.log("=======>>>> selected product "+ id);
-        //}
 
         $scope.addItem = function(itemId) {
 
@@ -117,6 +109,8 @@ var scopeHolder;
             $window.print();
         };
 
+
+
         if ($scope.invoiceId) {
 
             if ("new" == $scope.invoiceId) {
@@ -183,10 +177,26 @@ var scopeHolder;
 
         } else if ($scope.productId) {
 
+
+            // partner invoice... find invoice by type and lineItem productID;
+
+            $http.get('api/invoices/partner/'+$scope.productId).
+            success(function(invoice) {
+                $scope.data = invoice;
+            });
+
+
+
+            /* old stuff
+
+
+
+
+
+
+
             $scope.invoiceType = "Partner";
 
-            //var product = $resource('api/products/:id').get({id: $scope.productId});
-            //alert('product is ' + JSON.stringify(product));
             $scope.data = {
                 date: Date.now(),
                 shipping: 0.00,
@@ -211,8 +221,6 @@ var scopeHolder;
                     $scope.data.subtotal = invoiceAmount;
                     $scope.data.total = invoiceAmount;
 
-                    alert('pushing product to array- id is '+ product._id);
-
                     $scope.data.lineItems.push({
                         name: product.title,
                         longDesc: product.longDesc,
@@ -224,6 +232,11 @@ var scopeHolder;
                     });
 
                 });
+
+            */
+
+
+
         }
 
         $scope.go = function() {

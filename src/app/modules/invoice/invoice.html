@@ -75,24 +75,32 @@
                                             <div class="col-sm-8">
                                                 <select id="paidBy" class="selectpicker" data-selectpicker data-width="auto" ng-model="data.methodOfSale">
                                               <option></option>
-                                              <option>In-Person</option>
-                                              <option>Catalog</option>
+                                              <option>Show</option>
+                                              <option>Ebay</option>
+                                              <option>Chrono24</option>
+                                              <option>In Person</option>
                                               <option>Online</option>
-                                              <option>Phone</option>
-                                              <option>Jewelry Show</option>
+                                              <option>First Dibs</option>
                                               </select>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="invoiceType" class="col-sm-3 control-label">Invoice Type</label>
+
+
+
                                             <div class="col-sm-8">
-                                                <select id="invoiceType" class="selectpicker" data-selectpicker data-width="auto" ng-model="data.invoiceType">
-                                                  <option></option>
-                                                  <option>Invoice</option>
-                                                  <option>Memo</option>
+
+                                                <select id="invoiceType" class="selectpicker" data-selectpicker data-width="auto" ng-model="data.invoiceType" ng-readonly="'Partner' == data.invoiceType">
+                                                    <option></option>
+                                                    <option>Invoice</option>
+                                                    <option>Memo</option>
+                                                    <option ng-if="'Partner' == data.invoiceType">Partner</option>
                                                 </select>
                                             </div>
+
+
                                         </div>
 
                                         <div class="form-group">
@@ -106,6 +114,7 @@
                           <option>Card</option>
                           <option>Paypal</option>
                           <option>Bank Wire</option>
+                          <option>Other</option>
                         </select>
                                             </div>
                                         </div>
