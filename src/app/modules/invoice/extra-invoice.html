@@ -4,7 +4,8 @@
       <header>
         <div class="row">
           <div class="col-sm-6 col-print-6">
-            <img src="assets/images/logo/invoice-logo.png" alt="Logo" class="invoice-logo"/>
+            <img ng-if="data.invoiceType =='Memo'" src="assets/images/logo/memo-logo.png" alt="Logo" class="invoice-logo"/>
+            <img ng-if="data.invoiceType !='Memo'"  src="assets/images/logo/invoice-logo.png" alt="Logo" class="invoice-logo"/>
           </div>
 
           <div class="col-sm-3 col-print-3">
@@ -12,8 +13,8 @@
 
           <div class="col-sm-3 col-print-3">
             <div class="fine-print">
-            Invoice # {{data._id}}<br/>
-            Invoice Date {{data.date | date: 'MM/dd/y'}}<br/>
+            {{data.invoiceType || "Invoice"}} # {{data._id}}<br/>
+            {{data.invoiceType || "Invoice"}} Date {{data.date | date: 'MM/dd/y'}}<br/>
               <span ng-if="data.salesPerson!=null">Sold By {{data.salesPerson}}<br/></span>
               <span ng-if="data.methodOfSale!=null">Method of Sale: {{data.methodOfSale}}</span>
             </div>
