@@ -49,7 +49,7 @@ var upsertLogItem = function (req, res, productId, action) {
             upsert: true
         }, function (err, doc) {
             if (err)
-                console.log('repair could not be makred as returned ' + err);
+                console.log('repair could not be marked as returned ' + err);
             else
                 console.log('repair returned')
         });
@@ -93,7 +93,8 @@ var upsertLogItem = function (req, res, productId, action) {
     else if (productId != null) { // update existing product
 
         var updates = {
-            "lastUpdated": Date.now()
+            "lastUpdated": Date.now(),
+            "status": "In Stock"
         };
 
         if(req.body.history.repairNumber!=null){
