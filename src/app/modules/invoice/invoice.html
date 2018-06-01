@@ -265,10 +265,6 @@
                                             </div>
                                         </div>
 
-
-
-
-
                                     </fieldset>
                                 </div>
                             </div>
@@ -281,7 +277,7 @@
                                     <h2>Line Items</h2>
 
                                     <!-- New line item modal -->
-                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#productModal">
+                                    <button ng-if="data.invoiceType != 'Partner'" button type="button" class="btn btn-success" data-toggle="modal" data-target="#productModal">
                                       Add line item
                                     </button>
 
@@ -298,7 +294,7 @@
                                                     <h4 class="modal-title" id="myModalLabel">Select item</h4>
                                                 </div>
                                                 <div class="modal-body">
-
+                                                    ng-if="data.invoiceType != 'Partner'"
                                                   <table id="productTable" class="display" cellspacing="0" width="100%">
                                                       <thead>
                                                           <tr>
@@ -339,7 +335,6 @@
                                                 </td>
                                                 <td>{{lineItem.itemNumber}}</td>
                                                 <td>{{lineItem.serialNumber}}</td>
-                                                <!--td>${{lineItem.amount}}</td-->
 
                                                 <td>
                                                     <div class="input-group">
@@ -348,29 +343,29 @@
                                                     </div></td>
 
                                                 <td>
-                                                    <button type="button" class="btn btn-danger btn-sm" ng-click="removeItem($index)">
+                                                    <button ng-if="$index>0 || data.invoiceType != 'Partner'" type="button" class="btn btn-danger btn-sm" ng-click="removeItem($index)">
                                                   <span class="glyphicon glyphicon-minus" ></span> Remove
                                                 </button>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td colspan="3"><b>Subtotal</b></td>
-                                                <td><b><span id="currency-default">{{data.subtotal | currency}}</span></b></td>
+                                                <td><b><span id="subtotal">{{data.subtotal | currency}}</span></b></td>
                                                 <td></td>
                                             </tr>
                                             <tr>
                                                 <td colspan="3"><b>Shipping</b></td>
-                                                <td><b><span id="currency-default">{{data.shipping | currency}}</span></b></td>
+                                                <td><b><span id="shippingAmount">{{data.shipping | currency}}</span></b></td>
                                                 <td></td>
 
                                                 <tr>
                                                     <td colspan="3"><b>Tax (TX)</b></td>
-                                                    <td><b><span id="currency-default">{{data.tax | currency}}</span></b></td>
+                                                    <td><b><span id="tax">{{data.tax | currency}}</span></b></td>
                                                     <td></td>
                                                 </tr>
                                                 <tr>
                                                     <td colspan="3"><b>Total</b></td>
-                                                    <td><b><span id="currency-default">{{data.total | currency}}</span></b></td>
+                                                    <td><b><span id="total">{{data.total | currency}}</span></b></td>
                                                     <td></td>
                                                 </tr>
                                         </tbody>
@@ -379,10 +374,10 @@
                             </div>
                         </div>
 
-                        <div  ng-if="data._id" class="form-actions">
+                        <div  ng-if="data.invoiceType != 'Partner'" ng-if="data._id" class="form-actions">
                             <div class="row">
                                 <div class="col-sm-offset-4 col-sm-7">
-                                  <a href="/#/app/return/new?invoiceId={{data._id}}"<button type="button" class="btn btn-danger">Return item(s)</button></a>
+                                  <a href="/#/app/return/new?invoiceId={{data._id}}"><button type="button" class="btn btn-danger">Return item(s)</button></a>
                                 </div>
                             </div>
                         </div>
