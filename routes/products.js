@@ -92,31 +92,50 @@ var upsertLogItem = function (req, res, productId, action) {
 
     else if (productId != null) { // update existing product
 
-        var updates = {
-            "lastUpdated": Date.now(),
-            "status": "In Stock"
-        };
+        // determine if product was sellerType Partner
 
-        if(req.body.history.repairNumber!=null){
-            updates.totalRepairCost = req.body.totalRepairCost;
-        }
+        var newStatus = "In Stock";
 
-        Product.findOneAndUpdate({
-            _id: productId
-        }, {
+        Product.findById(productId,'sellerType', function(err,product){
 
-            "$push": {
-                "history": history
-            },
-            "$set": updates
-        }, {
-            upsert: true
-        }, function (err, doc) {
-            if (err) return res.send(500, {
-                error: err
+
+            console.log("found product... sellerType is " + product.sellerType);
+            if("Partner"==product.sellerType){
+                newStatus = "Partnership"
+            }
+
+            console.log("checking existing product in, setting status to " + newStatus);
+            var updates = {
+                "lastUpdated": Date.now(),
+                "status": newStatus
+            };
+
+            if(req.body.history.repairNumber!=null){
+                updates.totalRepairCost = req.body.totalRepairCost;
+            }
+
+            Product.findOneAndUpdate({
+                _id: productId
+            }, {
+
+                "$push": {
+                    "history": history
+                },
+                "$set": updates
+            }, {
+                upsert: true
+            }, function (err, doc) {
+                if (err) return res.send(500, {
+                    error: err
+                });
+                return res.send("successfully saved");
             });
-            return res.send("successfully saved");
+
+
         });
+
+
+
 
     } else {  // create new product
 
@@ -354,9 +373,15 @@ router.route('/products')
 
         var statusFilter;
         if (status != null) {
-            statusFilter = {
-                $eq: status
-            };
+
+
+
+
+            // value of "Available" maps to "In Stock" and "Partnership"
+
+            statusFilter = { $in: ["In Stock","Partnership"] }
+
+
         } else {
             statusFilter = {
                 $ne: "Deleted"

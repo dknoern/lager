@@ -185,58 +185,6 @@ var scopeHolder;
                 $scope.data = invoice;
             });
 
-
-
-            /* old stuff
-
-
-
-
-
-
-
-            $scope.invoiceType = "Partner";
-
-            $scope.data = {
-                date: Date.now(),
-                shipping: 0.00,
-                tax: 0.00,
-                lineItems: []
-            }
-
-            var product = $resource('api/products/:id', {
-                id: '@id'
-            });
-            product.get({
-                    id: $scope.productId
-                })
-                .$promise.then(function(product) {
-
-                    $scope.data.customer = product.seller;
-                    $scope.data.shipToName = product.seller;
-                    $scope.data.invoiceNumber = product._id;
-
-                    var invoiceAmount = product.cost / 2.0;
-
-                    $scope.data.subtotal = invoiceAmount;
-                    $scope.data.total = invoiceAmount;
-
-                    $scope.data.lineItems.push({
-                        name: product.title,
-                        longDesc: product.longDesc,
-                        serialNumber: product.serialNo,
-                        modelNumber: product.modelNumber,
-                        amount: invoiceAmount,
-                        productId: product._id,
-                        itemNumber: product.itemNumber
-                    });
-
-                });
-
-            */
-
-
-
         }
 
         $scope.go = function() {
@@ -268,7 +216,7 @@ var scopeHolder;
                     "ajax": {
                         "url": "/api/products",
                         "data": {
-                            "status": "In Stock"
+                            "status": "Available" // will trigger backend query for In Stock and Partnership
                         }
                       },
                     "order": [[ 5, 'desc' ]]

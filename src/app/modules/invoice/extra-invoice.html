@@ -17,6 +17,7 @@
             {{data.invoiceType || "Invoice"}} Date {{data.date | date: 'MM/dd/y'}}<br/>
               <span ng-if="data.salesPerson!=null">Sold By {{data.salesPerson}}<br/></span>
               <span ng-if="data.methodOfSale!=null">Method of Sale: {{data.methodOfSale}}</span>
+              <span ng-if="data.paymentMethod!=null">Payment Method: {{data.methodOfSale}}</span>
             </div>
           </div>
         </div>
