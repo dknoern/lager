@@ -14,10 +14,10 @@
           <div class="col-sm-3 col-print-3">
             <div class="fine-print">
             {{data.invoiceType || "Invoice"}} # {{data._id}}<br/>
-            {{data.invoiceType || "Invoice"}} Date {{data.date | date: 'MM/dd/y'}}<br/>
-              <span ng-if="data.salesPerson!=null">Sold By {{data.salesPerson}}<br/></span>
-              <span ng-if="data.methodOfSale!=null">Method of Sale: {{data.methodOfSale}}</span>
-              <span ng-if="data.paymentMethod!=null">Payment Method: {{data.methodOfSale}}</span>
+            {{data.invoiceType || "Invoice"}} Date: {{data.date | date: 'MM/dd/y'}}<br/>
+              <span ng-if="data.salesPerson!=null">Sold By: {{data.salesPerson}}<br/></span>
+              <span ng-if="data.methodOfSale!=null">Method of Sale: {{data.methodOfSale}}<br/></span>
+              <span ng-if="data.paidBy!=null">Paid By: {{data.paidBy}}</span>
             </div>
           </div>
         </div>
