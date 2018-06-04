@@ -23,17 +23,9 @@ var upsertLogItem = function (req, res, productId, action) {
     var search = formatDate(new Date()) + " " + req.body.history.receivedFrom + " " + req.body.history.customerName
         + " " + req.body.history.repairNumber + " " + req.body.history.itemReceived + req.body.history.user + " " + req.body.history.comments;
 
-    var history = {
-        user: req.body.history.user,
-        date: Date.now(),
-        action: "received",
-        itemReceived: req.body.history.itemReceived,
-        receivedFrom: req.body.history.receivedFrom,
-        repairNumber: req.body.history.repairNumber,
-        customerName: req.body.history.customerName,
-        comments: req.body.history.comments,
-        search: search
-    };
+    var action = req.body.history.action || "received";
+
+
 
     if (req.body.history.repairNumber != null){
         console.log('looking for repairNumber ' + req.body.history.repairNumber);
@@ -68,7 +60,7 @@ var upsertLogItem = function (req, res, productId, action) {
 
             "$set": {
                 'history.$.date': Date.now(),
-                    'history.$.action': "received",
+                    'history.$.action': action,
                     'history.$.user': req.body.history.user,
                     'history.$.itemReceived': req.body.history.itemReceived,
                     'history.$.receivedFrom': req.body.history.receivedFrom,
@@ -114,12 +106,25 @@ var upsertLogItem = function (req, res, productId, action) {
                 updates.totalRepairCost = req.body.totalRepairCost;
             }
 
+
+
+
             Product.findOneAndUpdate({
                 _id: productId
             }, {
 
                 "$push": {
-                    "history": history
+                    "history": {
+                        user: req.body.history.user,
+                        date: Date.now(),
+                        action: "received",
+                        itemReceived: req.body.history.itemReceived,
+                        receivedFrom: req.body.history.receivedFrom,
+                        repairNumber: req.body.history.repairNumber,
+                        customerName: req.body.history.customerName,
+                        comments: req.body.history.comments,
+                        search: search
+                    }
                 },
                 "$set": updates
             }, {
@@ -373,14 +378,8 @@ router.route('/products')
 
         var statusFilter;
         if (status != null) {
-
-
-
-
             // value of "Available" maps to "In Stock" and "Partnership"
-
             statusFilter = { $in: ["In Stock","Partnership"] }
-
 
         } else {
             statusFilter = {
@@ -639,7 +638,7 @@ router.route('/logitems')
 
         if (req.body.itemNumber == null || req.body.itemNumber == "") {
             console.log('no item number, creating new log item');
-            return upsertLogItem(req, res, null, "product created");
+            return upsertLogItem(req, res, null);
         }
 
         else {
@@ -653,10 +652,10 @@ router.route('/logitems')
                 else if (product != null) {
                     console.log('found existing product with itemNumber ' + req.body.itemNumber);
                     console.log("creating new log item for existing item");
-                    return upsertLogItem(req, res, product._id, "updating product " + product._id);
+                    return upsertLogItem(req, res, product._id,);
                 } else {
                     console.log('didnt find existing product with itemNumber ' + req.body.itemNumber);
-                    return upsertLogItem(req, res, null, "entered");
+                    return upsertLogItem(req, res, null);
                 }
             });
         }
@@ -767,5 +766,7 @@ router.route('/logitems/:id')
                 res.json(logitem);
             });
     });
+
+
 
 module.exports = router;

@@ -165,36 +165,34 @@
             });
         }
 
-        $scope.deleteItem = function(){
+        $scope.deleteItem = function () {
 
             var itemId = document.getElementById('itemId').value;
             var itemNumber = document.getElementById('itemNumber').value;
 
-          $http({
-              method: "DELETE",
-              url: "api/products/"+itemId,
-              headers: {
-                  'Content-Type': 'application/json'
-              }
-          }).then(function successCallback(response) {
-              console.log(response.statusText);
-              $state.go('app.inventory');
+            $http({
+                method: "DELETE",
+                url: "api/products/" + itemId,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(function successCallback(response) {
+                console.log(response.statusText);
+                $state.go('app.inventory');
 
-              var theMessage = 'Deleted item ' + itemNumber;
+                Messenger().post({
+                        message: 'Deleted item ' + itemNumber,
+                        type: "success",
+                        showCloseButton: true
+                    }
+                );
 
-              Messenger().post({
-                message: theMessage,
-                type: "success",
-                showCloseButton: true
-              }
-              );
-
-
-
-          }, function errorCallback(response) {
-              console.log(response.statusText);
-          });
+            }, function errorCallback(response) {
+                console.log(response.statusText);
+            });
         }
+
+
 
         $scope.imagesAdded = function(){
             $http.get('api/upload/'+$scope.itemId).
