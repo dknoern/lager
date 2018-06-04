@@ -164,6 +164,81 @@ var scopeHolder;
 
         }
 
+        $scope.deleteLogItem = function () {
+
+            console.log("deleting log item");
+
+            $scope.data.history.action = "received-deleted";
+
+            $http({
+                method: "POST",
+                url: "api/logitems/",
+                data: angular.toJson($scope.data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(function successCallback(response) {
+
+
+
+
+                console.log(response.statusText);
+                $state.go('app.log');
+
+
+                Messenger().post({
+                        message: 'Deleted log item',
+                        type: "success",
+                        showCloseButton: true
+                    }
+                );
+            }, function errorCallback(response) {
+                console.log(response.statusText);
+            });
+
+
+            /*
+
+
+            $http({
+                method: "DELETE",
+                url: "api/logitems/" + $scope.data.history._id,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(function successCallback(response) {
+
+                console.log("successful delete");
+
+
+                console.log(response.statusText);
+                $state.go('app.log');
+
+                Messenger().post({
+                        message: 'Deleted log item',
+                        type: "success",
+                        showCloseButton: true
+                    }
+                );
+
+            }, function errorCallback(response) {
+
+                console.log("failed delete");
+                console.log(response.statusText);
+                Messenger().post({
+                        message: 'Failed to delete log item: ' +response.statusText,
+                        type: "error",
+                        showCloseButton: true
+                    }
+                );
+            });
+            */
+
+
+
+
+        }
+
 
 
         var customerTableShown = false;

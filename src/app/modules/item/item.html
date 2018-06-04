@@ -606,7 +606,7 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr data-ng-repeat="historyEntry in data.history">
+                                            <tr data-ng-repeat="historyEntry in data.history" ng-if="historyEntry.action!='received-deleted'">
                                                 <td>{{historyEntry.date | date : "MM/dd/y"}}</td>
                                                 <td>{{historyEntry.user}}</td>
                                                 <td>{{historyEntry.action}}</td>
