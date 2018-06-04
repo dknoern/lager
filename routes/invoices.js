@@ -300,7 +300,7 @@ router.route('/invoices/partner/:product_id')
 
 
         Invoice.findOne({
-                type: 'Partner',
+                invoiceType: 'Partner',
                 'lineItems.productId': req.params.product_id
             },
             function (err, invoice) {
