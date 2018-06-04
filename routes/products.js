@@ -135,15 +135,9 @@ var upsertLogItem = function (req, res, productId, action) {
                 });
                 return res.send("successfully saved");
             });
-
-
         });
-
-
-
-
+        
     } else {  // create new product
-
 
         var product = new Product();
         product.itemNumber = req.body.itemNumber;
@@ -152,7 +146,17 @@ var upsertLogItem = function (req, res, productId, action) {
         product.search = req.body.itemNumber + " " + req.body.history.itemReceived;
         product.lastUpdated = Date.now();
         product.status = "In Stock";
-        product.history = history;
+        product.history = {
+            user: req.body.history.user,
+            date: Date.now(),
+            action: "received",
+            itemReceived: req.body.history.itemReceived,
+            receivedFrom: req.body.history.receivedFrom,
+            repairNumber: req.body.history.repairNumber,
+            customerName: req.body.history.customerName,
+            comments: req.body.history.comments,
+            search: search
+        }
         product.totalRepairCost = req.body.repairCost;
 
         product.save(function (err) {
