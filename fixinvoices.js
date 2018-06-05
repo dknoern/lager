@@ -2,6 +2,7 @@ var Product = require('./models/product');
 var Invoice = require('./models/invoice');
 var mongoose = require('mongoose');
 
+var format = require('date-format');
 mongoose.Promise = require('bluebird');
 
 const option = {
@@ -10,7 +11,7 @@ const option = {
     reconnectTries: 90000
 };
 
-mongoose.connect('mongodb://localhost:27017/lager', option);
+mongoose.connect('mongodb://localhost:27018/lager', option);
 
 fixInvoices();
 
@@ -21,12 +22,25 @@ function fixInvoices() {
 
         invoices.map(invoice => {
 
+
+            console.log("fixing invoice" + invoice._id);
+
+            // fix search
+            invoice.search = invoice._id + " " + invoice.customerFirstName + " " + invoice.customerLastName + " " + format('yyyy-MM-dd', invoice.date) + " ";
+
+            if (invoice.lineItems != null && invoice.lineItems.length > 0 && invoice.lineItems[0] != null) {
+
+                invoice.search += invoice.lineItems[0].itemNumber + " " + invoice.lineItems[0].name;
+            }
+
+            invoice.save();
+
+            //fix product ID and serial
+            /*
+
             invoice.lineItems.map(lineItem => {
-
                 var itemNumber = lineItem.itemNumber;
-
                 if (itemNumber) {
-
                     Product.findOne({'itemNumber': itemNumber}, '_id serialNo', function (err, product) {
 
                         if (product != null) {
@@ -49,11 +63,10 @@ function fixInvoices() {
                                 function (err, output) {
                                 });
                         }
-
                     });
                 }
-
             });
+            */
         })
     });
 }

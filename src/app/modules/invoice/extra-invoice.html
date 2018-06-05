@@ -23,8 +23,6 @@
         </div>
 
 
-
-
       </header>
       <div class="widget-body">
 
@@ -143,7 +141,7 @@
           </button></a>
 
 
-            <!--button data-ng-click="email(data._id)" class="btn btn-primary" data-toggle="modal" data-target="#emailModal">
+            <!--button class="btn btn-primary" data-toggle="modal" data-target="#emailModal">
               EMail
               &nbsp;
               <span class="circle bg-white">
@@ -155,15 +153,12 @@
       </div>
     </section>
   </div>
-</div>
 
 
 
 
 
 <!-- email modal -->
-
-<!-- bulk entry modal -->
 <div class="modal fade" id="emailModal" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel">
   <div class="modal-dialog modal-md" role="document">
@@ -178,6 +173,8 @@
 
             <form>
               <p>Enter one or more email addresses, comma delimited.</p>
+
+              email: {{data.customerEmail}}
               <p>
               <textarea id="emailAddresses"  class="form-control" rows="3">{{data.customerEmail}}</textarea>
               </p>
@@ -193,7 +190,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-success btn-sm"
-                ng-click="processBulkEntry()" data-dismiss="modal">Send
+                ng-click="email()" data-dismiss="modal">Send
         </button>
         <button type="button" class="btn btn-info btn-sm" data-dismiss="modal">Cancel
         </button>
@@ -201,4 +198,7 @@
     </div>
   </div>
 </div>
+
+</div>
+
 

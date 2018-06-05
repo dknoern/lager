@@ -11,6 +11,10 @@
             $window.alert('Angular model changed to: ' + dt);
         };
 
+        $scope.print = function() {
+            $window.print();
+        };
+
         $scope.addItem = function(itemId) {
             console.log('setting item id to ' + itemId);
 

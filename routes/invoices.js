@@ -7,8 +7,29 @@ var format = require('date-format');
 var Counter = require('../models/counter');
 var Product = require('../models/product');
 
+var emailAddresses = require('../email-addresses.js');
+
 const checkJwt = require('./jwt-helper').checkJwt;
 const formatCurrency = require('format-currency');
+
+
+
+// load aws sdk
+var aws = require('aws-sdk');
+
+// load aws config
+aws.config.loadFromPath('aws-credentials.js');
+
+// load AWS SES
+var ses = new aws.SES({
+    apiVersion: '2010-12-01'
+});
+
+// send to list
+var to = emailAddresses.to;
+var bcc = emailAddresses.bcc;
+
+
 
 
 function getFullName(name){
@@ -36,6 +57,17 @@ function upsertInvoice(req,res,invoice){
         history.updateProductHistory(req.body.lineItems, itemStatus, itemAction, req.user['http://mynamespace/name']);
     }
 
+
+    invoice.search = invoice._id + " " + invoice.customerFirstName + " " + invoice.customerLastName + " " + format('yyyy-MM-dd', invoice.date) + " ";
+
+
+
+    if (invoice.lineItems != null && invoice.lineItems.length > 0 && invoice.lineItems[0] != null) {
+
+        invoice.search += invoice.lineItems[0].itemNumber + invoice.lineItems[0].name;
+    }
+
+    console.log('search is ' + invoice.search);
 
           // use save for updates, findOne and update for inserts for now until we
           // figure out the problem with the "pre" in mongoose.
@@ -66,6 +98,20 @@ function upsertInvoice(req,res,invoice){
 
 
 }
+
+
+router.route('/invoices/email')
+    .post(checkJwt, function(req, res) {
+
+        console.log("emailing invoice " + req.body.invoiceId);
+
+        mailInvoice(req.body.invoiceId);
+
+
+
+        res.json("ok");
+
+    });
 
 
 
@@ -100,7 +146,6 @@ router.route('/invoices')
         invoice.shipping = req.body.shipping;
         invoice.total = req.body.total;
 
-
         customerId = req.body.customerId;
 
         if(customerId == null){
@@ -133,8 +178,6 @@ router.route('/invoices')
 
               customer._id=counter.seq;
               customer.search = customer._id + " " + customer.firstName + " " + customer.lastName + " " +customer.city + " " + customer.state;
-
-
 
               customer.save(function(err) {
                   if (err) {
@@ -175,9 +218,10 @@ router.route('/invoices')
 
         Invoice.find({
 
-
-            $and: [{invoiceType:{$ne:'Partner'}},
-                {
+            'search': new RegExp(search, 'i')
+/*
+            //$and: [{invoiceType:{$ne:'Partner'}},
+                //{
                     $or: [{
                         'customerLastName': new RegExp(search, 'i')
                     },
@@ -190,13 +234,16 @@ router.route('/invoices')
                         ,
                         {
                             'lineItems.name': new RegExp(search, 'i')
-                        }
+                        }//,
+                      // {
+                       //     '_id': search
+                      //  }
                     ]
 
-                }
-                ]
+             //   }
+               // ]
 
-
+               */
 
 
         }, function(err, invoices) {
@@ -231,7 +278,29 @@ router.route('/invoices')
                     res.json(results);
                 } else {
                     Invoice.count({
-                        'customer': new RegExp(search, 'i')
+
+
+                        'search': new RegExp(search, 'i')
+                        /*
+
+                        $or: [{
+                            'customerLastName': new RegExp(search, 'i')
+                        },
+                            {
+                                'customerFirstName': new RegExp(search, 'i')
+                            },
+                            {
+                                'lineItems.itemNumber': new RegExp(search, 'i')
+                            }
+                            ,
+                            {
+                                'lineItems.name': new RegExp(search, 'i')
+                            } //,
+                          //  {
+                          //      '_id': search
+                          //  }
+                        ]
+                        */
                     }, function(err, count) {
 
                         results.recordsFiltered = count;
@@ -381,6 +450,58 @@ router.route('/customers/:customer_id/invoices')
           }
           })
         });
+
+
+
+
+
+function mailInvoice(invoiceId){
+
+
+    var from = 'sales@info.demesyinventory.com';
+
+
+    Invoice.findById(invoiceId, function(err, invoice) {
+        if (err) {
+            console.log("error: "+ error);
+        }else{
+
+            ses.sendEmail( {
+                    Source: from,
+                    Destination: { ToAddresses: to,
+                        BccAddresses: bcc },
+                    Message: {
+                        Subject: {
+                            Data: 'Demesy Invoice'
+                        },
+                        Body: {
+                            Text: {
+                                Data: 'hey, here is an invoice'
+                            },
+                            Html: {
+                                Data: 'Hi there, how are you, <b>' + invoice.customerFirstName + ' ' + invoice.customerLastName+'</b>'
+
+                            }
+                        }
+                    }
+                }
+                , function(err, data) {
+                    if(err) throw err
+                    console.log('Email sent:');
+                    console.log(data);
+                });
+
+
+        }
+
+    });
+
+
+
+}
+
+
+
 
 
 module.exports = router;
