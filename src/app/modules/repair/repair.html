@@ -19,7 +19,7 @@
     </div>
     <div class="col-md-2">
 
-        <div class="btn-group" data-dropdown ng-if="null == data.returnDate && null != data._id">
+        <div class="btn-group hidden-print" data-dropdown ng-if="null == data.returnDate && null != data._id">
             <button class="btn btn-success dropdown-toggle" data-dropdown-toggle
                     data-original-title="" title="">
                 &nbsp; Action &nbsp;
@@ -28,6 +28,8 @@
 
             <ul class="dropdown-menu">
                 <li><a ng-click="toggleOutForRepair()" href="#">Return from Repair</a></li>
+                <li><a ng-click="print()"><i class="fa fa-print"></i> Print</a></li>
+
             </ul>
         </div>
     </div>
@@ -116,7 +118,7 @@
                                            class="form-control" ng-model="data.itemNumber"
                                            readonly="readonly">
                                     <span class="input-group-btn">
-                                                    <button class="btn btn-success" type="button"
+                                                    <button class="btn btn-success  hidden-print" type="button"
                                                             data-toggle="modal"
                                                             data-target="#productModal">Select</button>
                                                </span>
@@ -242,7 +244,7 @@
                         </div>
                     </div>
 
-                    <div class="form-actions">
+                    <div class="form-actions hidden-print">
                         <div class="row">
                             <div class="col-sm-offset-4 col-sm-7">
 

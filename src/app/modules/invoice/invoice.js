@@ -16,7 +16,37 @@ var scopeHolder;
 
         scopeHolder = $scope;
 
-        $scope.email = function(itemId) {
+        $scope.email = function() {
+
+
+            $http({
+                method: "POST",
+                url: "api/invoices/email",
+                data: {
+                    emailAddresses: document.getElementById('emailAddresses').value,
+                    invoiceId: $scope.data._id
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(function successCallback(response) {
+                console.log(response.statusText);
+
+                Messenger().post({
+                    message: 'invoice emailed to '+ document.getElementById('emailAddresses').value,
+                    type: "success",
+                });
+
+            }, function errorCallback(response) {
+
+
+                Messenger().post({
+                    message: "unable to email invoice: " + response.data.error,
+                    type: "error",
+                });
+
+            });
+
         }
 
 
