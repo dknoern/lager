@@ -30,15 +30,17 @@ var upsertLogItem = function (req, res, productId, action) {
     if (req.body.history.repairNumber != null){
         console.log('looking for repairNumber ' + req.body.history.repairNumber);
         console.log('repair cost is ' + req.body.totalRepairCost );
-        Repair.findOneAndUpdate({
-            repairNumber: req.body.history.repairNumber
+        Repair.update({
+            repairNumber: req.body.history.repairNumber,
+            returnDate: null
         }, {
             "$set": {
                 "returnDate": Date.now(),
-                "repairCost": req.body.totalRepairCost || 0
+                "repairCost": req.body.totalRepairCost || 0,
+                "repairNotes": req.body.history.comments
             }
         }, {
-            upsert: true
+            upsert: true, multi: true
         }, function (err, doc) {
             if (err)
                 console.log('repair could not be marked as returned ' + err);
@@ -621,24 +623,6 @@ router.route('/logitems')
 
     .post(checkJwt, function (req, res) {
 
-
-        if(req.body.history.reparNumber!=null) {
-            Repair.findOneAndUpdate({
-                repairNumber: req.params.repairNumber
-            }, {
-                "$set": {
-                    "returnDate": Date.now(),
-                    "repairCost": req.params.totalRepairCost
-                }
-            }, {
-                upsert: true
-            }, function (err, doc) {
-                if (err)
-                    console.log('repair could not be makred as returned');
-                else
-                    console.log('repair returned')
-            });
-        }
 
         if (req.body.itemNumber == null || req.body.itemNumber == "") {
             console.log('no item number, creating new log item');
