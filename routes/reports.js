@@ -349,10 +349,11 @@ router.route('/reports/monthly-sales/:year/:month')
                     [
                         invoices[i].customerFirstName + " " + invoices[i].customerLastName,
                         invoices[i].customerEmail,
-                        format('yyyy-MM-dd', invoices[i].date),
-                        invoices[i].total,
+                        '<div style="white-space: nowrap;">' + format('yyyy-MM-dd', invoices[i].date) + '</div>',
+                        formatCurrency(invoices[i].total),
                         itemId,
-                        description
+                        description,
+                        '<div style="white-space: nowrap;">' + invoices[i].salesPerson + '</div>'
                     ]
                 );
             }
@@ -366,7 +367,8 @@ router.route('/reports/monthly-sales/:year/:month')
             customerEmail: 1,
             _id: 1,
             total: 1,
-            lineItems: 1
+            lineItems: 1,
+            salesPerson: 1
         });
     });
 
