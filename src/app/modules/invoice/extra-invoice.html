@@ -30,8 +30,10 @@
             <thead>
             <tr><th style="border:0;">
               {{data.customerFirstName}} {{data.customerLastName}}<br/>
-              {{data.shipAddress1}}<br/>
-              {{data.shipCity}}<span ng-if="data.shipCity!=null&&data.shipState!=null">,</span> {{data.shipState}} {{data.shipZip}}<br/>
+              <div ng-if="data.shipAddress1!=null">{{data.shipAddress1}}</div>
+              <div ng-if="data.shipAddress2!=null">{{data.shipAddress2}}</div>
+              <div ng-if="data.shipAddress3!=null">{{data.shipAddress3}}</div>
+              {{data.shipCity}}<span ng-if="data.shipCity!=null && data.shipState!=null">,</span> {{data.shipState}} {{data.shipZip}}<br/>
               {{data.phone}}
             </th></tr>
             </thead>
@@ -93,7 +95,7 @@
           from abuse or misuse, negligence, accidents (knocks, dents, crushing), or water damage due to improperly tightened crown, will render this warranty null and void.
 
           <br/><br/>
-          All warranty work must by sent to our Dallas, TX orrice for repairs.<br/>
+          All warranty work must by sent to our Dallas, TX office for repairs.<br/>
           The warranty does not cover wholesale/dealer orders.<br/><br/>
 
           <b>Return Privilege:</b><br/>
