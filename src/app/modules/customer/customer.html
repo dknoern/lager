@@ -9,21 +9,16 @@
         <div class="widget-body">
           <form class="form-horizontal" role="form">
             <fieldset>
-              <!--div class="form-group">
-                <label for="normal-field" class="col-sm-3 control-label">Cust No</label>
-                <div class="col-sm-8">
-                  <input type="text" id="normal-field" class="form-control" disabled="disabled" ng-model="data.customerNumber" >
-                </div>
-              </div-->
+
               <div class="form-group">
-                <label for="hint-field" class="col-sm-3 control-label">First Name</label>
+                <label for="first-name-field" class="col-sm-3 control-label">First Name</label>
                 <div class="col-sm-8">
                   <input type="text" id="first-name-field" class="form-control" ng-model="data.firstName" >
                 </div>
               </div>
 
               <div class="form-group">
-                <label for="hint-field" class="col-sm-3 control-label">Last Name</label>
+                <label for="last-name-field" class="col-sm-3 control-label">Last Name</label>
                 <div class="col-sm-8">
                   <input type="text" id="last-name-field" class="form-control" ng-model="data.lastName">
                 </div>
@@ -31,7 +26,7 @@
 
 
               <div class="form-group">
-                <label for="hint-field" class="col-sm-3 control-label">Company</label>
+                <label for="company-field" class="col-sm-3 control-label">Company</label>
                 <div class="col-sm-8">
                   <input type="text" id="company-field" class="form-control" ng-model="data.company">
                 </div>
@@ -39,14 +34,14 @@
 
 
               <div class="form-group">
-                <label for="hint-field" class="col-sm-3 control-label">Phone</label>
+                <label for="phone-field" class="col-sm-3 control-label">Phone</label>
                 <div class="col-sm-8">
                   <input type="text" id="phone-field" class="form-control" ng-model="data.phone">
                 </div>
               </div>
 
               <div class="form-group">
-                <label for="hint-field" class="col-sm-3 control-label">EMail</label>
+                <label for="email-field" class="col-sm-3 control-label">EMail</label>
                 <div class="col-sm-8">
                   <input type="text" id="email-field" class="form-control" ng-model="data.email"">
                 </div>
@@ -60,35 +55,35 @@
 
 
                     <div class="form-group">
-                      <label for="hint-field" class="col-sm-3 control-label">Address 1</label>
+                      <label for="address1-field" class="col-sm-3 control-label">Address 1</label>
                       <div class="col-sm-8">
                         <input type="text" id="address1-field" class="form-control" ng-model="data.address1">
                       </div>
                     </div>
 
                     <div class="form-group">
-                      <label for="hint-field" class="col-sm-3 control-label">Address 2</label>
+                      <label for="address2-field" class="col-sm-3 control-label">Address 2</label>
                       <div class="col-sm-8">
-                        <input type="text" id="address1-field" class="form-control" ng-model="data.address2">
+                        <input type="text" id="address2-field" class="form-control" ng-model="data.address2">
                       </div>
                     </div>
 
                     <div class="form-group">
-                      <label for="hint-field" class="col-sm-3 control-label">Address 3</label>
+                      <label for="address3-field" class="col-sm-3 control-label">Address 3</label>
                       <div class="col-sm-8">
-                        <input type="text" id="address1-field" class="form-control" ng-model="data.address3">
+                        <input type="text" id="address3-field" class="form-control" ng-model="data.address3">
                       </div>
                     </div>
 
                     <div class="form-group">
-                      <label for="hint-field" class="col-sm-3 control-label">City</label>
+                      <label for="city-field" class="col-sm-3 control-label">City</label>
                       <div class="col-sm-8">
-                        <input type="text" id="address1-field" class="form-control" ng-model="data.city">
+                        <input type="text" id="city-field" class="form-control" ng-model="data.city">
                       </div>
                     </div>
 
                     <div class="form-group">
-                      <label for="hint-field" class="col-sm-3 control-label">State</label>
+                      <label for="state" class="col-sm-3 control-label">State</label>
                       <div class="col-sm-8">
 
                                 <select id="state" class="selectpicker" data-selectpicker data-width="auto" ng-model="data.state">
@@ -156,14 +151,14 @@
                     </div>
 
                     <div class="form-group">
-                      <label for="hint-field" class="col-sm-3 control-label">Zip</label>
+                      <label for="zip-field" class="col-sm-3 control-label">Zip</label>
                       <div class="col-sm-8">
-                        <input type="text" id="address1-field" class="form-control" ng-model="data.zip">
+                        <input type="text" id="zip-field" class="form-control" ng-model="data.zip">
                       </div>
                     </div>
 
                     <div class="form-group">
-                      <label for="hint-field" class="col-sm-3 control-label">Country</label>
+                      <label for="country-field" class="col-sm-3 control-label">Country</label>
                       <div class="col-sm-8">
                         <input type="text" id="country-field" class="form-control" ng-model="data.country">
                       </div>
@@ -178,25 +173,28 @@
                   <fieldset>
                     <legend>Ship Address</legend>
 
+                    <!--
+                    <legend>Ship Address &nbsp (&nbsp;<input id="copyAddress" ng-click="copyAddress()" type="checkbox"/> &nbsp; Use Billing&nbsp;)</legend>
+                    -->
 
                     <div class="form-group">
-                      <label for="hint-field" class="col-sm-3 control-label">Address 1</label>
+                      <label for="billingAddress1" class="col-sm-3 control-label">Address 1</label>
                       <div class="col-sm-8">
-                        <input type="text" id="address1-field" class="form-control" ng-model="data.billingAddress1">
+                        <input type="text" id="billingAddress1" class="form-control" ng-model="data.billingAddress1">
                       </div>
                     </div>
 
                     <div class="form-group">
-                      <label for="hint-field" class="col-sm-3 control-label">Address 2</label>
+                      <label for="billingAddress2" class="col-sm-3 control-label">Address 2</label>
                       <div class="col-sm-8">
-                        <input type="text" id="address1-field" class="form-control" ng-model="data.billingAddress2">
+                        <input type="text" id="billingAddress2" class="form-control" ng-model="data.billingAddress2">
                       </div>
                     </div>
 
                     <div class="form-group">
-                      <label for="hint-field" class="col-sm-3 control-label">Address 3</label>
+                      <label for="billingAddress3" class="col-sm-3 control-label">Address 3</label>
                       <div class="col-sm-8">
-                        <input type="text" id="address1-field" class="form-control" ng-model="data.billingAddress3">
+                        <input type="text" id="billingAddress3" class="form-control" ng-model="data.billingAddress3">
                       </div>
                     </div>
 

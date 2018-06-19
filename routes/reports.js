@@ -169,7 +169,8 @@ router.route('/reports/daily-sales/:year/:month/:day')
                         format('yyyy-MM-dd', invoices[i].date),
                         title,
                         invoices[i].salesPerson,
-                        invoices[i].methodOfSale
+                        invoices[i].methodOfSale,
+                        invoices[i].invoiceType
                     ]
                 );
             }
@@ -180,7 +181,8 @@ router.route('/reports/daily-sales/:year/:month/:day')
             date: 1,
             lineItems: 1,
             salesPerson: 1,
-            methodOfSale: 1
+            methodOfSale: 1,
+            invoiceType: 1
         });
     });
 
@@ -407,6 +409,52 @@ router.route('/reports/out-at-show')
             itemNumber:1
         });
     });
+
+
+
+router.route('/reports/in-stock')
+    .get(function (req, res) {
+        var results = {
+            "data": []
+        };
+
+        Product.find({
+            $or: [{status:'In Stock'},{status:'Partnership'}]
+        }, function (err, products) {
+
+            if (err)
+                res.send(err);
+
+            for (var i = 0; i < products.length; i++) {
+
+
+                results.data.push(
+                    [
+                        products[i].itemNumber,
+                        products[i].title,
+                        "<span class=\"badge bg-success\">" + products[i].status + "</span>",
+                        format('yyyy-MM-dd', products[i].lastUpdated),
+                        products[i].seller
+                    ]
+                );
+            }
+            res.json(results);
+        }).sort({
+            lastUpdated: -1
+        }).select({
+            _id: 1,
+            title: 1,
+            lastUpdated: 1,
+            itemNumber:1,
+            seller: 1,
+            status: 1
+        });
+
+
+
+    });
+
+
 
 
 router.route('/reports/show-report')

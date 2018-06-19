@@ -28,7 +28,14 @@
             });
         }
 
-        $scope.go = function() {
+
+
+        $scope.copyAddress = function() {
+           var copying = document.getElementById('copyAddress').checked;
+          alert('copy address ' + copying);
+        }
+
+            $scope.go = function() {
 
             $http({
                 method: "POST",
