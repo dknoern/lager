@@ -414,12 +414,17 @@ router.route('/reports/out-at-show')
 
 router.route('/reports/in-stock')
     .get(function (req, res) {
+
         var results = {
             "data": []
         };
 
         Product.find({
-            $or: [{status:'In Stock'},{status:'Partnership'}]
+            $and: [{
+                status: { $in: ["In Stock","Partnership"] }
+            },
+                { itemNumber: {$ne: null} }
+                ]
         }, function (err, products) {
 
             if (err)
@@ -432,6 +437,7 @@ router.route('/reports/in-stock')
                     [
                         products[i].itemNumber,
                         products[i].title,
+                        products[i].productType,
                         "<span class=\"badge bg-success\">" + products[i].status + "</span>",
                         format('yyyy-MM-dd', products[i].lastUpdated),
                         products[i].seller
@@ -447,7 +453,8 @@ router.route('/reports/in-stock')
             lastUpdated: 1,
             itemNumber:1,
             seller: 1,
-            status: 1
+            status: 1,
+            productType: 1
         });
 
 
