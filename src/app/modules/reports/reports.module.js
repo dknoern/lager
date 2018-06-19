@@ -96,13 +96,11 @@
             $stateProvider
                 .state('app.reports9', {
                     url: '/reports/9',
-                    templateUrl: 'app/modules/reports/log-items.html',
+                    templateUrl: 'app/modules/reports/in-stock.html',
                     controller: function($scope, $stateParams) {
-                        $scope.reportId = "log-items";
-                        $scope.day =0;
-                        $scope.month=0;
-                        $scope.year = 0;
+                        $scope.reportId = "in-stock";
                     }
                 });
+
         }
 })();
