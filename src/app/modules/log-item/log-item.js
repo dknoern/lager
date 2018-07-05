@@ -23,6 +23,7 @@ var scopeHolder;
 
         $scope.lookupItemByNumber = function(){
 
+
             $http.get("api/products?itemNumber=" + $scope.data.itemNumber)
                 .then(function(response) {
                     if(response!=null&& response.data!=null)
@@ -32,6 +33,10 @@ var scopeHolder;
                 });
 
         }
+
+
+
+
 
         var receivedBy = "Janet";
 
@@ -63,7 +68,8 @@ var scopeHolder;
             document.location.href = "/#/app/item/"+$scope.data._id;
         }
 
-        $scope.go = function() {
+        $scope.go = function(data, form) {
+
 
             $http({
                 method: "POST",

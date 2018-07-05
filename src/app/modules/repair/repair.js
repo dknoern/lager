@@ -31,14 +31,8 @@
                     success(function(images) {
                         $scope.images = images;
                     });
-
-
-
-
                 });
         }
-
-
 
 
         if ($scope.repairId) {
@@ -113,6 +107,10 @@
                 $state.go('app.repairs');
             }, function errorCallback(response) {
                 console.log(response.statusText);
+                Messenger().post({
+                    message: response.data.error,
+                    type: "success"
+                });
             });
         }
 
@@ -145,18 +143,6 @@
                 console.log('return date is ' + $scope.data.returnDate);
             }
         }
-
-        /*
-        $scope.selectItem = function(itemId) {
-            $http.get("api/products/" + itemId)
-                .then(function(response) {
-
-                    $scope.data.productId = response.data._id;
-                    $scope.data.itemNumber = response.data.itemNo;
-                    $scope.data.repairNumber = response.data.itemNumber;
-                    $scope.data.description = response.data.title
-                });
-        }*/
 
 
         var productTableShown = false;

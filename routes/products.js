@@ -20,7 +20,7 @@ router.use(function (req, res, next) {
 
 var upsertLogItem = function (req, res, productId, action) {
 
-    var search = formatDate(new Date()) + " " + req.body.history.receivedFrom + " " + req.body.history.customerName
+    var search = req.body.itemNumber + " " + formatDate(new Date()) + " " + req.body.history.receivedFrom + " " + req.body.history.customerName
         + " " + req.body.history.repairNumber + " " + req.body.history.itemReceived + req.body.history.user + " " + req.body.history.comments;
 
     var action = req.body.history.action || "received";
@@ -29,14 +29,14 @@ var upsertLogItem = function (req, res, productId, action) {
 
     if (req.body.history.repairNumber != null){
         console.log('looking for repairNumber ' + req.body.history.repairNumber);
-        console.log('repair cost is ' + req.body.totalRepairCost );
+        console.log('repair cost is ' + req.body.history.repairCost ||0 );
         Repair.update({
             repairNumber: req.body.history.repairNumber,
             returnDate: null
         }, {
             "$set": {
                 "returnDate": Date.now(),
-                "repairCost": req.body.totalRepairCost || 0,
+                "repairCost": req.body.history.repairCost || 0,
                 "repairNotes": req.body.history.comments
             }
         }, {
@@ -70,7 +70,7 @@ var upsertLogItem = function (req, res, productId, action) {
                     'history.$.customerName': req.body.history.customerName,
                     'history.$.comments': req.body.history.comments,
                     'history.$.search': search,
-                    totalRepairCost: req.body.repairCost || 0,
+                    'history.$.repairCost':  req.body.history.repairCost || 0,
                     itemNumber: req.body.itemNumber
             }
         }, {
@@ -104,11 +104,7 @@ var upsertLogItem = function (req, res, productId, action) {
                 "status": newStatus
             };
 
-            if(req.body.history.repairNumber!=null){
-                updates.totalRepairCost = req.body.totalRepairCost;
-            }
-
-
+            //TODO: update total repair cost maybe?... will now calculate on display only.
 
 
             Product.findOneAndUpdate({

@@ -1,0 +1,185 @@
+
+<style>
+    /* -------------------------------------
+        GLOBAL
+        A very basic CSS reset
+    ------------------------------------- */
+    * {
+        margin: 0;
+        font-family: "Open Sans", sans-serif;
+        box-sizing: border-box;
+        font-color: "#555555";
+    }
+
+    td {
+        padding: 8px;
+        font-size: 11px;
+    }
+    th {
+        padding: 8px;
+        font-size: 11px;
+    }
+
+
+
+</style>
+
+
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+
+
+<body style="font-size:11px;font-family: 'Open Sans', sans-serif; color:#555">
+
+
+
+<div style="background-color: #fff; padding:45px; max-width: 800px;">
+
+
+<table width="100%" style="font-size:11px;font-family: 'Open Sans', sans-serif;">
+    <tr>
+        <td width="75%">
+
+        <img src="{{data.logo}}" alt="Logo" class="invoice-logo" style="max-height:150px;"/>
+        </td>
+        <td valign="top">
+
+            {{data.invoiceType}} # {{data._id}}<br/>
+            {{data.invoiceType}} Date: {{data.dateFMT }}<br/>
+            Sold By: {{data.salesPerson}}<br/>
+            Method of Sale: {{data.methodOfSale}}<br/>
+            Paid By: {{data.paidBy}}</span>
+        </td>
+
+    </tr>
+</table>
+
+
+<table style="font-size:11px;font-family: 'Open Sans', sans-serif;text-transform:uppercase">
+    <thead>
+    <tr><th style="border:0;" align="left" valign="top">
+        {{data.customerFirstName}} {{data.customerLastName}}<br/>
+        <div ng-if="data.shipAddress1!=null">{{data.shipAddress1}}</div>
+        <div ng-if="data.shipAddress2!=null">{{data.shipAddress2}}</div>
+        <div ng-if="data.shipAddress3!=null">{{data.shipAddress3}}</div>
+        {{data.shipCity}}<span ng-if="data.shipCity!=null && data.shipState!=null">,</span> {{data.shipState}} {{data.shipZip}}<br/>
+        {{data.phone}}
+    </th></tr>
+    </thead>
+</table>
+
+
+
+<table class="table" style="border-spacing:0px;">
+    <thead>
+    <tr style="border-bottom: 2px solid #ddd;">
+        <th align="left" style="border-bottom: 1px solid #aaa;">ITEM DESCRIPTION
+
+        </th>
+        <th width="15%" style="border-bottom: 1px solid #aaa;"></th>
+        <th width="15%" align="left" style="border-bottom: 1px solid #aaa;">TOTAL</th>
+    </tr>
+    </thead>
+    <tbody>
+
+
+    {{#data.lineItems}}
+    <tr>
+
+
+
+        <td colspan="2" style="border-bottom: 1px solid #aaa; padding: 8px;"><span style="text-transform:uppercase;">{{name}}</span>
+            <div class="fine-print">{{longDesc}}</div>
+
+            <table width="60%">
+                <tr>
+                    <td width="50%">Serial # - {{serialNumber}}</td>
+                    <td width="50%">SKU: {{itemNumber}}</td>
+                </tr>
+            </table>
+
+
+
+
+        </td>
+        <td style="border-bottom: 1px solid #aaa; padding: 8px;">{{amountFMT }}</td>
+    </tr>
+    {{/data.lineItems}}
+
+    <tr><td></td><td align="right">SUB TOTAL:</td><td>{{data.subtotalFMT }}</td></tr>
+    <tr><td style="border-top:0;"></td><td align="right" style="border-top:0;">TAX 8.5%:</td><td style="border-top:0;">{{data.taxFMT }}</td></tr>
+    <tr><td style="border-top:0;"></td><td align="right" style="border-top:0;">SHIPPING:</td><td style="border-top:0;">{{data.shippingFMT }}</td></tr>
+
+    <tr>
+        <td style="border-top:0;"></td>
+        <td align="right" cellspacing="0" cellpadding="0" style="border:0; font-size:14px; border-color:#C3AA63; background-color:#C3AA63;color:white;">TOTAL DUE:</td>
+        </font></td>
+
+        <td cellspacing="0" cellpadding="8"  style="border:0; font-size:14px;border-color:#C3AA63;  background-color:#C3AA63;color:white;">{{data.totalFMT}}</td>
+
+    </tr>
+
+    </tbody>
+</table>
+
+
+
+<div align="right" style="padding:8px;font-size:14px">
+    Thank you for your business
+</div>
+
+
+<div style="padding:8px;font-size:11px;">
+    <b>Warranty:</b><br/>
+    DeMesy Fine Watches warranties all watches for one full year from date of invoice, unless otherwise indicated in the listing or on the invoice and with
+    the exception of vintage wristwatch, pocket watches. This warranty does not cover accessories, boxes, bands, batteries, or cracked or broken crystals.
+    Custom work, alterations and/or repairs done without written acknowledgement by DeMesy Fine Watches, tampering by unauthorized technicians, damage
+    from abuse or misuse, negligence, accidents (knocks, dents, crushing), or water damage due to improperly tightened crown, will render this warranty null and void.
+
+</div>
+<div style="padding:8px;font-size:11px;">
+    All warranty work must by sent to our Dallas, TX office for repairs.<br/>
+    The warranty does not cover wholesale/dealer orders.
+</div>
+<div style="padding:8px;font-size:11px;">
+    <b>Return Privilege:</b><br/>
+    Any PRE-OWNED watch purchase from us online may be returned, provided that you notify us of your intention to do so within three (3) days of
+    receipt of the order, request a Return Authorization number, and return the item immediately, in the condition in which it was received, including all
+    boxes, books, papers, hang tags, etc.  The merchandise MUST BE RETURNED VIA UPS AIR EXPRESS (overnight), insured for the full purchase price.
+    Any item returned without a Return Authorization number noted on the outside of the package will not be accepted.  We will not be responsible for lost
+    packages. Upon receipt of the returned item, in the condition in which it was sold, we will refund the purchase price, less shipping.  Local, on-site, sales
+    are final and are not eligible for our return policy.<br/>
+
+    Unfortunately, NIB (New in Box) or UNUSED watches are not eligible for our return policy.
+</div>
+
+    <hr style="border-top:1px solid #eeeeee; margin-top:5px; margin-bottom:5px"/>
+
+
+<table width="100%" style="font-size: 11px;">
+    <tr>
+
+
+    <td width="33%">
+        <div style="float: left;"><img src="http://demesyinventory.com/assets/images/phone.png" width="32px" alt="Phone"/></div>
+        <div style="font-size:8pt;">PHONE<br/>+ 214.855.8777<br/></div>
+    </td>
+        <td width="33%">
+        <div style="float: left;"><img src="http://demesyinventory.com/assets/images/address.png"  width="32px" alt="Phone"/></div>
+        <div style="font-size:8pt;">ADDRESS<br/>4514 Cole Ave. Suite 808<br/>Dallas, TX 75205</div>
+        </td>
+        <td width="33%">
+        <div style="float: left;"><img src="http://demesyinventory.com/assets/images/web.png" width="32px" alt="Web"/></div>
+        <div style="font-size:8pt;">WEB<br/>www.demesy.com<br/></div>
+        </td>
+
+
+    </tr>
+</table>
+
+
+    <hr style="border-top:1px solid #eeeeee; margin-top:5px; margin-bottom:5px"/>
+
+</div>
+
+
+</body>

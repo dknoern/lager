@@ -571,7 +571,7 @@
                                                                data-number-stepfactor="100"
                                                                class="form-control currency"
                                                                id="totalRepairCost"
-                                                               ng-model="data.totalRepairCost">
+                                                               ng-model="totalRepairCost" readonly="true">
                                                     </div>
                                                 </div>
                                             </div>
@@ -588,7 +588,7 @@
                                                                data-number-stepfactor="100"
                                                                class="form-control currency"
                                                                id="paymentAmount"
-                                                               value="{{(data.cost-0) + (data.totalRepairCost-0)}}"
+                                                               value="{{(data.cost-0) + (totalRepairCost-0)}}"
                                                                disabled="disabled">
                                                     </div>
                                                 </div>

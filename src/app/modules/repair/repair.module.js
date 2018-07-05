@@ -18,6 +18,17 @@
     appConfig.$inject = ['$stateProvider'];
 
     function appConfig($stateProvider) {
+
+
+        $stateProvider
+            .state('app.repairnew', {
+                url: '/repair/new',
+                templateUrl: 'app/modules/repair/edit-repair.html',
+                controller: function ($scope, $stateParams) {
+                    $scope.repairId = "new";
+                }
+            });
+
         $stateProvider
             .state('app.repair', {
                 url: '/repair/:repairId',
@@ -25,7 +36,7 @@
                 controller: function ($scope, $stateParams) {
                     $scope.repairId = $stateParams.repairId;
                 }
-            })
+            });
 
         $stateProvider
             .state('app.repairedit', {
@@ -34,7 +45,9 @@
                 controller: function ($scope, $stateParams) {
                     $scope.repairId = $stateParams.repairId;
                 }
-            })
+            });
+
+
 
 
     }

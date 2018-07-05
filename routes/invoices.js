@@ -9,6 +9,11 @@ var Product = require('../models/product');
 
 var emailAddresses = require('../email-addresses.js');
 
+var mustache = require("mustache");
+var fs = require("fs");
+
+
+
 const checkJwt = require('./jwt-helper').checkJwt;
 const formatCurrency = require('format-currency');
 
@@ -99,19 +104,6 @@ function upsertInvoice(req,res,invoice){
 
 }
 
-
-router.route('/invoices/email')
-    .post(checkJwt, function(req, res) {
-
-        console.log("emailing invoice " + req.body.invoiceId);
-
-        mailInvoice(req.body.invoiceId);
-
-
-
-        res.json("ok");
-
-    });
 
 
 
@@ -321,6 +313,64 @@ router.route('/invoices')
 
     });
 
+
+
+
+router.route('/invoices/:invoice_id/print')
+  //  .get(checkJwt, function(req, res) {
+    .get( function(req, res) {
+
+
+        var opts = { format: '%s%v', symbol: '$' };
+
+        Invoice.findById(req.params.invoice_id, function(err, invoice) {
+            if (err) {
+                res.send(err);
+            }
+            else {
+
+                if (invoice.invoiceType == "Memo") invoice.logo = "http://demesyinventory.com/assets/images/logo/memo-logo.png";
+                else invoice.logo = "http://demesyinventory.com/assets/images/logo/invoice-logo.png";
+
+                invoice.subtotalFMT = formatCurrency(invoice.subtotal, opts);
+                invoice.taxFMT = formatCurrency(invoice.tax, opts);
+                invoice.shippingFMT = formatCurrency(invoice.shipping, opts);
+                invoice.totalFMT = formatCurrency(invoice.total, opts);
+                invoice.dateFMT =  format('MM/dd/yyyy', invoice.date);
+
+                console.log("shipping: "+ invoice.shipping + " formatted "+ invoice.shippingFMT);
+
+
+
+
+                for (var i = 0; i < invoice.lineItems.length; i++) {
+
+                    invoice.lineItems[i].nameFMT = invoice.lineItems[i].name.toUpperCase();
+                    invoice.lineItems[i].amountFMT = formatCurrency(invoice.lineItems[i].amount, opts);
+                    invoice.lineItems[i].itemNumberFMT = invoice.lineItems[i].itemNumber+ format('dd', invoice.date);
+                }
+
+
+
+
+                fs.readFile('./src/app/modules/invoice/invoice-content.html', 'utf-8', function (err, template) {
+                    if (err) throw err;
+                    var output = mustache.to_html(template, {data: invoice});
+                    res.send(output);
+                });
+            }
+
+        });
+    });
+
+
+
+
+
+
+
+
+
 router.route('/invoices/:invoice_id')
     .get(checkJwt, function(req, res) {
         Invoice.findById(req.params.invoice_id, function(err, invoice) {
@@ -452,56 +502,68 @@ router.route('/customers/:customer_id/invoices')
         });
 
 
+router.route('/invoices/email')
+    .post(checkJwt, function(req, res) {
+
+        var to = req.body.emailAddresses.split(/[ ,\n]+/);
+
+        console.log("emailing invoice " + req.body.invoiceId + " to " + JSON.stringify(to));
 
 
+        var from = 'sales@info.demesyinventory.com';
 
-function mailInvoice(invoiceId){
+        Invoice.findById(req.body.invoiceId, function (err, invoice) {
+                if (err) {
+                    res.send(err);
 
-
-    var from = 'sales@info.demesyinventory.com';
-
-
-    Invoice.findById(invoiceId, function(err, invoice) {
-        if (err) {
-            console.log("error: "+ error);
-        }else{
-
-            ses.sendEmail( {
-                    Source: from,
-                    Destination: { ToAddresses: to,
-                        BccAddresses: bcc },
-                    Message: {
-                        Subject: {
-                            Data: 'Demesy Invoice'
-                        },
-                        Body: {
-                            Text: {
-                                Data: 'hey, here is an invoice'
-                            },
-                            Html: {
-                                Data: 'Hi there, how are you, <b>' + invoice.customerFirstName + ' ' + invoice.customerLastName+'</b>'
-
-                            }
-                        }
-                    }
+                    return "Error formatting invoice";
                 }
-                , function(err, data) {
-                    if(err) throw err
-                    console.log('Email sent:');
-                    console.log(data);
-                });
+                else {
+                    fs.readFile('./src/app/modules/invoice/invoice-content.html', 'utf-8', function (err, template) {
+                        if (err) throw err;
+                        var output =
+                            "<p>" + req.body.note + " </p>" + mustache.to_html(template, {data: invoice});
+                        ses.sendEmail({
+                                Source: from,
+                                Destination: {
+                                    ToAddresses: to,
+                                    BccAddresses: bcc
+                                },
+                                Message: {
+                                    Subject: {
+                                        Data: 'DeMesy Invoice'
+                                    },
+                                    Body: {
+                                        Text: {
+                                            Data: 'invoice can only be viewed using HTML-capable email browser'
+                                        },
+                                        Html: {
+                                            Data: output
+                                        }
+                                    }
+                                }
+                            }
+                            , function (err, data) {
+                                if (err) throw err
+                                console.log('Email sent:');
+                                console.log(data);
+                            });
+                    });
+                }
+            }
+        );
 
 
-        }
+
+
+        res.json("ok");
 
     });
 
 
+function mailInvoice(invoiceId,invoiceTo) {
+
 
 }
-
-
-
-
 
 module.exports = router;
