@@ -15,6 +15,7 @@
   function authService($state, angularAuth0, $timeout) {
 
     var userProfile;
+    var tokenRenewalTimeout;
 
     function login() {
       angularAuth0.authorize();
@@ -46,6 +47,8 @@
       localStorage.setItem('access_token', authResult.accessToken);
       localStorage.setItem('id_token', authResult.idToken);
       localStorage.setItem('expires_at', expiresAt);
+      console.log("new expires at: "+ expiresAt);
+      scheduleRenewal();
 
     //  alert("access_token="+ authResult.accessToken + ", id_token="+authResult.idToken);
     }
@@ -55,6 +58,7 @@
       localStorage.removeItem('access_token');
       localStorage.removeItem('id_token');
       localStorage.removeItem('expires_at');
+      clearTimeout(tokenRenewalTimeout);
       $state.go('app.inventory');
     }
 
@@ -72,6 +76,7 @@
       // Check whether the current time is past the
       // access token's expiry time
       var expiresAt = JSON.parse(localStorage.getItem('expires_at'));
+
       return new Date().getTime() < expiresAt;
     }
 
@@ -102,6 +107,46 @@
 
       return userProfile;
     }
+
+
+      function renewToken() {
+
+          console.log("SCHEDULING RENEWAL!!!");
+
+
+          angularAuth0.checkSession({},
+              function(err, result) {
+                  if (err) {
+                      alert(
+                          'Could not get a new token. ' +
+                          err.description
+                      );
+                  } else {
+                      setSession(result);
+                      //alert('Successfully renewed auth!');
+                  }
+              }
+          );
+      }
+
+      function scheduleRenewal() {
+         console.log("SCHEDULING RENEWAL!!!");
+
+
+          var expiresAt = JSON.parse(localStorage.getItem('expires_at'));
+
+          var delay = expiresAt - Date.now();
+
+          console.log("expire DELAY IS "+ delay);
+
+          if (delay > 0) {
+              tokenRenewalTimeout = setTimeout(function() {
+                  renewToken();
+              }, delay);
+          }
+      }
+      
+
 
     return {
       login: login,
