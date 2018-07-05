@@ -51,7 +51,15 @@ function upcertRepair(req,res, repair){
 
 router.route('/repairs')
     .post(checkJwt, function(req, res) {
-    //.post( function(req, res) {
+
+
+
+
+
+
+
+
+
 
         var repair = new Repair();
 
@@ -59,7 +67,6 @@ router.route('/repairs')
         console.log("existing id is : " + repair._id);
 
         repair._id = req.body._id;
-
 
         console.log("after setting, repair._id = " + repair._id);
 
@@ -82,54 +89,45 @@ router.route('/repairs')
         repair.repairCost = req.body.repairCost ||0;
 
 
-        console.log('saving repair ' + repair.repairNumber);
-        repair.search = repair.repairNumber + " " + repair.itemNumber + " " + repair.description + " " + formatDate(repair.dateOut)
-            + " " + formatDate(repair.expectedReturnDate) + " " + formatDate(repair.returnDate)
-            + " " + repair.customerFirstName + " " + repair.customerLastName + " " + repair.vendor;
 
-/*
-        if(repair.itemNumber==null){
-            // increment repairNumber
-            Counter.findByIdAndUpdate({
-                _id: 'repairNumber'
-            }, {
-                $inc: {
-                    seq: 1
-                }
-            }, function(err, counter) {
-                if (err) {
-                    console.log(err);
-                    return res.send(500, {
-                        error: err
-                    });
-                }
+        if(repair.itemNumber!=null&&repair.itemNumber!=""&&repair.repairNumber!=null&&repair.repairNumber!="" && repair.repairNumber!=repair.itemNumber){
+            return res.send(500, {
+                error: "for inventory item, repair number must match item number"
+            }
+            );
 
-                repair.repairNumber=counter.seq;
-                upcertRepair(req,res,repair);
-            });
+        }
 
-        } else {
-        */
-            //use itemNumber as repair number
-            //repair.repairNumber = repair.itemNumber;
-            upcertRepair(req,res,repair);
-    /*    }*/
+        else {
 
 
-        // update repair cost in item
-        if(repair.itemNumber!=null){
-            Product.findOneAndUpdate({
-                _id: repair.itemId
-            }, {"$set": {
-                    "totalRepairCost": repair.repairCost
-            }}, {
-                upsert: true
-            }, function(err, doc) {
-                if (err)
-                    console.log(err);
-                else
-                    console.log("repair cost updated");
-            });
+            console.log('saving repair ' + repair.repairNumber);
+            repair.search = repair.repairNumber + " " + repair.itemNumber + " " + repair.description + " " + formatDate(repair.dateOut)
+                + " " + formatDate(repair.expectedReturnDate) + " " + formatDate(repair.returnDate)
+                + " " + repair.customerFirstName + " " + repair.customerLastName + " " + repair.vendor;
+
+
+            upcertRepair(req, res, repair);
+
+
+            // update repair cost in item
+            if (repair.itemNumber != null) {
+                Product.findOneAndUpdate({
+                    _id: repair.itemId
+                }, {
+                    "$set": {
+                        "repairCost": repair.repairCost
+                    }
+                }, {
+                    upsert: true
+                }, function (err, doc) {
+                    if (err)
+                        console.log(err);
+                    else
+                        console.log("repair cost updated");
+                });
+            }
+
         }
 
 
@@ -241,8 +239,6 @@ router.route('/repairs/products/:item_id')
             res.json(ret);
         });
     });
-
-
 
 
 router.route('/repairs/:repair_id/return')

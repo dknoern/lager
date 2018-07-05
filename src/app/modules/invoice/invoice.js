@@ -24,7 +24,8 @@ var scopeHolder;
                 url: "api/invoices/email",
                 data: {
                     emailAddresses: document.getElementById('emailAddresses').value,
-                    invoiceId: $scope.data._id
+                    invoiceId: $scope.data._id,
+                    note: document.getElementById('note').value
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -141,9 +142,14 @@ var scopeHolder;
 
 
 
-        if ($scope.invoiceId) {
 
-            if ("new" == $scope.invoiceId) {
+            if ($scope.invoiceId) {
+
+
+                $scope.printableUrl = '/api/invoices/' + $scope.invoiceId + '/print?t='+ new Date().getTime();
+
+
+                if ("new" == $scope.invoiceId) {
                 var customerId = $location.search().customerId;
 
 

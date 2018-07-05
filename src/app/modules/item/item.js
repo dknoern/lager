@@ -25,6 +25,13 @@
             $http.get('api/repairs/products/'+$scope.itemId).
             success(function(images) {
                 $scope.repairs = images;
+                $scope.totalRepairCost = 0;
+
+                for( var i =0;i<$scope.repairs.length;i++){
+                    $scope.totalRepairCost += $scope.repairs[i].repairCost;
+                }
+
+
             });
         }
 

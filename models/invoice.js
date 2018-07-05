@@ -1,20 +1,27 @@
+var format = require('date-format');
+var formatCurrency = require('format-currency');
 var mongoose = require('mongoose');
-
-var Schema = new mongoose.Schema();
-
 var Counter = require('./counter');
+var opts = { format: '%s%v', symbol: '$' };
 
-//var CounterSchema = new mongoose.Schema({
-//    _id: {type: String, required: true},
-//    seq: {type: Number, default: 0}
-//});
-//var counter = mongoose.model('counter', CounterSchema);
+var LineItemSchema = new mongoose.Schema({
+    productId: String,
+    itemNumber: String,
+    name: String,
+    amount: Number,
+    serialNumber: String,
+    longDesc: String
+});
+
+LineItemSchema.virtual('amountFMT').get(function () {
+    return formatCurrency(this.amount, opts);
+});
 
 var InvoiceSchema = new mongoose.Schema({
   	_id: Number,
     customerId: Number,
     customerFirstName: String,
-    customerLastName: String,    
+    customerLastName: String,
     customerEmail: String,
     project: String,
     returnNumber: String,
@@ -38,15 +45,9 @@ var InvoiceSchema = new mongoose.Schema({
     shipZip: String,
     search: String,
     taxExempt: Boolean,
-
-    lineItems: [{
-        productId: String,
-        itemNumber: String,
-        name: String,
-        amount: Number,
-        serialNumber: String,
-        longDesc: String
-    }]
+    lineItems: {
+  	    type: [LineItemSchema]
+    }
 });
 
 InvoiceSchema.pre('save', function (next) {
@@ -62,6 +63,32 @@ InvoiceSchema.pre('save', function (next) {
     }else{
         next();
     }
+});
+
+InvoiceSchema.virtual('dateFMT').get(function () {
+    return format('MM/dd/yyyy', this.date);
+});
+
+InvoiceSchema.virtual('logo').get(function () {
+    var type =  "invoice";
+    if("memo" == this.invoiceType) type = "memo";
+    return  "http://demesyinventory.com/assets/images/logo/" + type + "-logo.png";
+});
+
+InvoiceSchema.virtual('subtotalFMT').get(function () {
+    return formatCurrency(this.subtotal, opts);
+});
+
+InvoiceSchema.virtual('taxFMT').get(function () {
+    return formatCurrency(this.tax, opts);
+});
+
+InvoiceSchema.virtual('shippingFMT').get(function () {
+    return formatCurrency(this.shipping, opts);
+});
+
+InvoiceSchema.virtual('totalFMT').get(function () {
+    return formatCurrency(this.total, opts);
 });
 
 module.exports = mongoose.model('Invoice', InvoiceSchema);

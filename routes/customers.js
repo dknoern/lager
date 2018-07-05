@@ -182,9 +182,11 @@ router.route('/customers/:customer_id')
     //.get(checkJwt, function(req, res) {
     .get(function(req, res) {
         Customer.findById(req.params.customer_id, function(err, customer) {
-            if (err)
+            if (err) {
                 res.send(err);
-            res.json(customer);
+            }else {
+                res.json(customer);
+            }
         });
     })
 
