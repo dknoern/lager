@@ -12,12 +12,21 @@ var scopeHolder;
 
         scopeHolder = $scope;
 
+        var accessToken = localStorage.getItem('access_token');
+
         var theDataTable = jQuery('#example').DataTable({
             "processing": true,
             "serverSide": true,
             "ordering": false,
-            "ajax": "/api/repairs?filter=outstanding"
-        });
+            "ajax": {
+                url: "/api/repairs?filter=outstanding",
+                headers: {
+                    "Authorization": "Bearer " + accessToken
+                }
+            }
+        }
+
+        );
 
         $scope.toggleRepairFilter = function() {
             var repairFilter = document.getElementById("repairFilter");
@@ -31,7 +40,12 @@ var scopeHolder;
               "processing": true,
               "serverSide": true,
               "ordering": false,
-              "ajax": "/api/customers"
+              "ajax": {
+                  url: "api/customers",
+                  headers: {
+                      "Authorization": "Bearer " + accessToken
+                  }
+              }
             } );
             customerTableShown = true;
           }

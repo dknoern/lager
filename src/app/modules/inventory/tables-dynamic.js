@@ -11,14 +11,20 @@
     var vm = this;
     vm.auth = authService;
 
+    var accessToken = localStorage.getItem('access_token');
+
   jQuery('#example').DataTable( {
           "processing": true,
           "serverSide": true,
           "ordering": true,
           "pageLength": 50,
-          "ajax": "/api/products",
+          "ajax": {
+              url: "/api/products",
+              headers: {
+                  "Authorization": "Bearer " + accessToken
+              }
+              },
           "order": [[ 5, 'desc' ]]
-          //"order": []
       } );
   }
 

@@ -15,10 +15,45 @@
             $window.print();
         };
 
+
+        $scope.email = function() {
+
+
+            $http({
+                method: "POST",
+                url: "api/repairs/email",
+                data: {
+                    emailAddresses: document.getElementById('emailAddresses').value,
+                    repairId: $scope.data._id,
+                    note: document.getElementById('note').value
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(function successCallback(response) {
+                console.log(response.statusText);
+
+                Messenger().post({
+                    message: 'repair emailed to '+ document.getElementById('emailAddresses').value,
+                    type: "success",
+                });
+
+            }, function errorCallback(response) {
+
+
+                Messenger().post({
+                    message: "unable to email repair: " + response.data.error,
+                    type: "error",
+                });
+
+            });
+
+        }
+
+
+
         $scope.addItem = function(itemId) {
             console.log('setting item id to ' + itemId);
-
-
 
             $http.get("api/products/" + itemId)
                 .then(function(response) {
@@ -36,6 +71,9 @@
 
 
         if ($scope.repairId) {
+
+            $scope.printableUrl = '/api/repairs/' + $scope.repairId + '/print?t='+ new Date().getTime();
+
 
             if ("new" == $scope.repairId) {
                 var dateOut = Date.now();

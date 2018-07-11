@@ -33,6 +33,7 @@ var upsertCustomer = function(req, res, customerId) {
     customer.billingZip = req.body.billingZip;
     customer.billingCountry = req.body.billingCountry;
     customer.lastUpdated = Date.now();
+    customer.copyAddress = req.body.copyAddress;
 
     customer.search = customer._id + " " + customer.firstName + " " + customer.lastName + " " +customer.city + " " + customer.email + " " + customer.phone + " " + customer.country;
 
@@ -74,7 +75,7 @@ router.route('/customers')
 
     })
 
-    .get(function(req, res) {
+    .get(checkJwt, function(req, res) {
 
         var query = "";
         var draw = req.query.draw;
@@ -179,8 +180,8 @@ router.route('/customers')
 
 
 router.route('/customers/:customer_id')
-    //.get(checkJwt, function(req, res) {
-    .get(function(req, res) {
+    .get(checkJwt, function(req, res) {
+
         Customer.findById(req.params.customer_id, function(err, customer) {
             if (err) {
                 res.send(err);

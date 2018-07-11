@@ -135,7 +135,9 @@
 
           var expiresAt = JSON.parse(localStorage.getItem('expires_at'));
 
-          var delay = expiresAt - Date.now();
+          //var delay = expiresAt - Date.now();
+
+          var delay = 5000;
 
           console.log("expire DELAY IS "+ delay);
 
@@ -145,7 +147,7 @@
               }, delay);
           }
       }
-      
+
 
 
     return {

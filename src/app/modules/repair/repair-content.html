@@ -1,0 +1,137 @@
+<style>
+    /* -------------------------------------
+        GLOBAL
+        A very basic CSS reset
+    ------------------------------------- */
+    * {
+        margin: 0;
+        font-family: "Open Sans", sans-serif;
+        box-sizing: border-box;
+        font-color: "#555555";
+    }
+
+    td {
+        padding: 8px;
+        font-size: 11px;
+    }
+
+    th {
+        padding: 8px;
+        font-size: 11px;
+    }
+
+
+
+    /* Use a media query to add a break point at 800px: */
+    @media screen and (max-width: 800px) {
+        .left, .right {
+            width: 100%; /* The width is 100%, when the viewport is 800px or smaller */
+        }
+    }
+
+
+</style>
+
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+
+<body style="font-size:11px;font-family: 'Open Sans', sans-serif; color:#555">
+
+<div style="background-color: #fff; padding:45px; max-width: 800px;">
+
+    <div>
+
+        <div>
+
+            <img src="http://demesyinventory.com/assets/images/logo/logo-small.png" alt="Logo" class="invoice-logo" style="max-height:150px;"/>
+
+        </div>
+        <div class="box box30">
+
+        </div>
+    </div>
+
+    <div>
+        <div>
+
+            <p>4514 Cole Avenue - Suite 808<br/>
+                Dallas, TX 75205<br/>
+                Phone 214-855-8777 &nbsp; 800-635-9006<br/>
+                Fax 214-871-6777</p>
+
+
+        </div>
+
+
+
+        <b>Repair #</b> </dv>
+
+        <div>{{data.repairNumber}}</div>
+
+        <br/>
+
+        <div>
+            <b>Repair Date:</b></div>
+        <div>{{data.dateOutFMT}}</div>
+
+        <br/>
+
+        <div>
+            <b>Vendor Name</b>
+
+        </div>
+
+        <div>
+            {{data.vendor}}
+        </div>
+
+        <br/>
+
+        <div>
+
+
+
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th width="10%">Item #</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        {{data.itemNumber}}
+                    </td>
+                    <td>{{data.description}}</td>
+                </tr>
+
+
+
+                </tbody>
+            </table>
+
+        </div>
+
+        <div>
+            <b>
+                Repair Issues
+            </b>
+        </div>
+
+        <div>{{data.repairIssues}}</div>
+
+        <br/>
+
+        <div>
+            <b>
+                Repair Cost
+            </b>
+        </div>
+
+        <div>{{data.repairCostFMT}}</div>
+
+
+
+    </div>
+</body>

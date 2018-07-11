@@ -12,12 +12,8 @@ var emailAddresses = require('../email-addresses.js');
 var mustache = require("mustache");
 var fs = require("fs");
 
-
-
 const checkJwt = require('./jwt-helper').checkJwt;
 const formatCurrency = require('format-currency');
-
-
 
 // load aws sdk
 var aws = require('aws-sdk');
@@ -34,9 +30,6 @@ var ses = new aws.SES({
 var to = emailAddresses.to;
 var bcc = emailAddresses.bcc;
 
-
-
-
 function getFullName(name){
     var fullName = name;
     if("david"==name)fullName = "David Knoernschild";
@@ -46,9 +39,7 @@ function getFullName(name){
     else if("janet"==name) fullName = "Janet Gary";
 }
 
-
 function upsertInvoice(req,res,invoice){
-
 
     // update item status to sold, but only if NOT Partner
     if(invoice.invoiceType!="Partner"){
@@ -62,10 +53,7 @@ function upsertInvoice(req,res,invoice){
         history.updateProductHistory(req.body.lineItems, itemStatus, itemAction, req.user['http://mynamespace/name']);
     }
 
-
     invoice.search = invoice._id + " " + invoice.customerFirstName + " " + invoice.customerLastName + " " + format('yyyy-MM-dd', invoice.date) + " ";
-
-
 
     if (invoice.lineItems != null && invoice.lineItems.length > 0 && invoice.lineItems[0] != null) {
 
@@ -100,11 +88,7 @@ function upsertInvoice(req,res,invoice){
                   return res.send("invoice saved");
               });
           }
-
-
 }
-
-
 
 
 router.route('/invoices')
@@ -131,12 +115,21 @@ router.route('/invoices')
         invoice.shipCity = req.body.shipCity;
         invoice.shipState = req.body.shipState;
         invoice.shipZip = req.body.shipZip;
+        invoice.shipCountry = req.body.shipCountry;
+        invoice.billingAddress1 = req.body.billingAddress1;
+        invoice.billingAddress2 = req.body.billingAddress2;
+        invoice.billingAddress3 = req.body.billingAddress3;
+        invoice.billingCity = req.body.billingCity;
+        invoice.billingState = req.body.billingState;
+        invoice.billingZip = req.body.billingZip;
+        invoice.billingCountry = req.body.billingCountry;
         invoice.taxExempt = req.body.taxExempt;
         invoice.lineItems = req.body.lineItems;
         invoice.subtotal = req.body.subtotal;
         invoice.tax = req.body.tax;
         invoice.shipping = req.body.shipping;
         invoice.total = req.body.total;
+        invoice.copyAddress = req.body.copyAddress;
 
         customerId = req.body.customerId;
 
@@ -152,6 +145,7 @@ router.route('/invoices')
           customer.city = req.body.shipCity;
           customer.state = req.body.shipState;
           customer.zip = req.body.shipZip;
+          customer.country = req.body.shipCountry;
           customer.lastUpdated = Date.now();
 
             Counter.findByIdAndUpdate({
@@ -190,8 +184,7 @@ router.route('/invoices')
         }
     })
 
-    .get(function(req, res) {
-
+    .get(checkJwt, function(req, res) {
         var query = "";
         var draw = req.query.draw;
         var start = 0;
@@ -211,32 +204,6 @@ router.route('/invoices')
         Invoice.find({
 
             'search': new RegExp(search, 'i')
-/*
-            //$and: [{invoiceType:{$ne:'Partner'}},
-                //{
-                    $or: [{
-                        'customerLastName': new RegExp(search, 'i')
-                    },
-                        {
-                            'customerFirstName': new RegExp(search, 'i')
-                        },
-                        {
-                            'lineItems.itemNumber': new RegExp(search, 'i')
-                        }
-                        ,
-                        {
-                            'lineItems.name': new RegExp(search, 'i')
-                        }//,
-                      // {
-                       //     '_id': search
-                      //  }
-                    ]
-
-             //   }
-               // ]
-
-               */
-
 
         }, function(err, invoices) {
             if (err)
@@ -271,28 +238,8 @@ router.route('/invoices')
                 } else {
                     Invoice.count({
 
-
                         'search': new RegExp(search, 'i')
-                        /*
 
-                        $or: [{
-                            'customerLastName': new RegExp(search, 'i')
-                        },
-                            {
-                                'customerFirstName': new RegExp(search, 'i')
-                            },
-                            {
-                                'lineItems.itemNumber': new RegExp(search, 'i')
-                            }
-                            ,
-                            {
-                                'lineItems.name': new RegExp(search, 'i')
-                            } //,
-                          //  {
-                          //      '_id': search
-                          //  }
-                        ]
-                        */
                     }, function(err, count) {
 
                         results.recordsFiltered = count;
@@ -350,9 +297,6 @@ router.route('/invoices/:invoice_id/print')
                     invoice.lineItems[i].itemNumberFMT = invoice.lineItems[i].itemNumber+ format('dd', invoice.date);
                 }
 
-
-
-
                 fs.readFile('./src/app/modules/invoice/invoice-content.html', 'utf-8', function (err, template) {
                     if (err) throw err;
                     var output = mustache.to_html(template, {data: invoice});
@@ -362,13 +306,6 @@ router.route('/invoices/:invoice_id/print')
 
         });
     });
-
-
-
-
-
-
-
 
 
 router.route('/invoices/:invoice_id')
@@ -561,9 +498,6 @@ router.route('/invoices/email')
     });
 
 
-function mailInvoice(invoiceId,invoiceTo) {
 
-
-}
 
 module.exports = router;
