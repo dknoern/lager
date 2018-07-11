@@ -85,11 +85,17 @@
       }
     } );
 
+    var accessToken = localStorage.getItem('access_token');
+
     jQuery('#example').DataTable( {
             "processing": true,
             "serverSide": true,
             "ordering": false,
-            "ajax": "/api/customers"
+            "ajax": {
+              url: "/api/customers",
+                headers: {
+                "Authorization": "Bearer " + accessToken
+              }}
         } );
   }
 

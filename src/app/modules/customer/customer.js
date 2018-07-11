@@ -4,9 +4,12 @@
     angular.module('singApp.customer')
         .controller('CustomerCtrl', CustomerCtrl);
 
-    CustomerCtrl.$inject = ['$scope', '$resource', '$http', '$window', '$location', '$state', 'jQuery'];
+    CustomerCtrl.$inject = ['$scope', '$resource', '$http', '$window', '$location', '$state', 'jQuery', 'refdataService'];
 
-    function CustomerCtrl($scope, $resource, $http, $window, $location, $state, jQuery) {
+    function CustomerCtrl($scope, $resource, $http, $window, $location, $state, jQuery, refdataService) {
+
+        $scope.states = refdataService.states();
+        
         $scope.dtChanged = function(dt) {
             $window.alert('Angular model changed to: ' + dt);
         };
@@ -26,13 +29,26 @@
             success(function(returns) {
                 $scope.returns = returns;
             });
+        }else{
+            $scope.data = {
+                copyAddress: true
+            };
         }
 
 
-
         $scope.copyAddress = function() {
-           var copying = document.getElementById('copyAddress').checked;
-          alert('copy address ' + copying);
+            var copying = document.getElementById('copyAddress').checked;
+
+            if(copying) {
+
+                $scope.data.billingAddress1 = $scope.data.address1;
+                $scope.data.billingAddress2 = $scope.data.address2;
+                $scope.data.billingAddress3 = $scope.data.address3;
+                $scope.data.billingCity = $scope.data.city;
+                $scope.data.billingState = $scope.data.state;
+                $scope.data.billingZip = $scope.data.zip;
+                $scope.data.billingCountry = $scope.data.country;
+            }
         }
 
             $scope.go = function() {

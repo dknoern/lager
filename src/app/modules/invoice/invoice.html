@@ -62,6 +62,97 @@
                                             </div>
                                         </div>
 
+
+
+
+
+                                        <div class="form-group">
+                                            <label for="shipToName-field" class="col-sm-3 control-label">Ship To Name</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="shipToName-field" class="form-control" ng-model="data.shipToName">
+                                            </div>
+                                        </div>
+
+
+                                    </fieldset>
+                                    <fieldset>
+
+                                        <legend>Shipping Address</legend>
+
+                                        <div class="form-group">
+                                            <label for="address1-field" class="col-sm-3 control-label">Ship Address 1</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="address1-field" class="form-control" ng-model="data.shipAddress1" ng-change="copyAddress()">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="address2-field" class="col-sm-3 control-label">Ship Address 2</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="address2-field" class="form-control" ng-model="data.shipAddress2" ng-change="copyAddress()">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="shipAddress3" class="col-sm-3 control-label">Ship Address 3</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="shipAddress3" class="form-control" ng-model="data.shipAddress3" ng-change="copyAddress()">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="shipCity" class="col-sm-3 control-label">Ship City</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="shipCity" class="form-control" ng-model="data.shipCity" ng-change="copyAddress()">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="shipState" class="col-sm-3 control-label">Ship State</label>
+                                            <div class="col-sm-8">
+                                                <select id="shipState" class="selectpicker" data-selectpicker data-width="auto" ng-model="data.shipState" ng-change="computeTotals()" ng-change="copyAddress()">
+                                                    <option ng-repeat="state in states" value="{{state.code}}">{{state.name}}</option>
+
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="shipZip" class="col-sm-3 control-label">Ship Zip</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="shipZip" class="form-control" ng-model="data.shipZip" ng-change="copyAddress()">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="shipCountry" class="col-sm-3 control-label">Ship Country</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="shipCountry" class="form-control" ng-model="data.shipCountry" ng-change="copyAddress()">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-sm-3"></div>
+                                            <div class="col-sm-8">
+                                                <div class="form-group checkbox checkbox-primary">
+                                                    <input type="checkbox" id="taxExempt"
+                                                           ng-model="data.taxExempt" ng-change="computeTotals()">
+                                                    <label for="taxExempt">Tax Exempt</label>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </fieldset>
+                                </div>
+
+
+                                <div class="col-sm-6">
+                                    <fieldset>
+
+
+
+
                                         <div class="form-group">
                                             <label for="salesPerson" class="col-sm-3 control-label">Sales Person</label>
                                             <div class="col-sm-8">
@@ -74,22 +165,20 @@
                                             <label for="paidBy" class="col-sm-3 control-label">Method of Sale</label>
                                             <div class="col-sm-8">
                                                 <select id="paidBy" class="selectpicker" data-selectpicker data-width="auto" ng-model="data.methodOfSale">
-                                              <option></option>
-                                              <option>Show</option>
-                                              <option>Ebay</option>
-                                              <option>Chrono24</option>
-                                              <option>In Person</option>
-                                              <option>Online</option>
-                                              <option>First Dibs</option>
-                                              <option>True Facet</option>
-                                              </select>
+                                                    <option></option>
+                                                    <option>Show</option>
+                                                    <option>Ebay</option>
+                                                    <option>Chrono24</option>
+                                                    <option>In Person</option>
+                                                    <option>Online</option>
+                                                    <option>First Dibs</option>
+                                                    <option>True Facet</option>
+                                                </select>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="invoiceType" class="col-sm-3 control-label">Invoice Type</label>
-
-
 
                                             <div class="col-sm-8">
 
@@ -109,17 +198,18 @@
                                             <div class="col-sm-8">
 
                                                 <select id="paidBy" class="selectpicker" data-selectpicker data-width="auto" ng-model="data.paidBy">
-                          <option></option>
-                          <option>Cash</option>
-                          <option>Check</option>
-                          <option>Card</option>
-                          <option>Paypal</option>
-                          <option>Bank Wire</option>
-                          <option>Warranty</option>
-                          <option>Other</option>
-                        </select>
+                                                    <option></option>
+                                                    <option>Cash</option>
+                                                    <option>Check</option>
+                                                    <option>Card</option>
+                                                    <option>Paypal</option>
+                                                    <option>Bank Wire</option>
+                                                    <option>Warranty</option>
+                                                    <option>Other</option>
+                                                </select>
                                             </div>
                                         </div>
+
 
                                         <div class="form-group">
                                             <label for="shipping" class="col-sm-3 control-label">Shipping</label>
@@ -130,143 +220,82 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </fieldset>
-                                </div>
 
 
-                                <div class="col-sm-6">
-                                    <fieldset>
 
                                         <div class="form-group">
                                             <label for="shipVia" class="col-sm-3 control-label">Ship Via</label>
                                             <div class="col-sm-8">
 
                                                 <select id="shipVia" class="selectpicker" data-selectpicker data-width="auto" ng-model="data.shipVia">
-                          <option></option>
-                          <option>USPS</option>
-                          <option>UPS</option>
-                          <option>FexEx</option>
-                          <option>In-Person pick up</option>
-                        </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="shipToName-field" class="col-sm-3 control-label">Ship To Name</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="shipToName-field" class="form-control" ng-model="data.shipToName">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="address1-field" class="col-sm-3 control-label">Ship Address 1</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="address1-field" class="form-control" ng-model="data.shipAddress1">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="address2-field" class="col-sm-3 control-label">Ship Address 2</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="address2-field" class="form-control" ng-model="data.shipAddress2">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="shipAddress3" class="col-sm-3 control-label">Ship Address 3</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="shipAddress3" class="form-control" ng-model="data.shipAddress3">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="shipCity" class="col-sm-3 control-label">Ship City</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="shipCity" class="form-control" ng-model="data.shipCity">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="shipState" class="col-sm-3 control-label">Ship State</label>
-                                            <div class="col-sm-8">
-                                                <select id="shipState" class="selectpicker" data-selectpicker data-width="auto" ng-model="data.shipState" ng-change="computeTotals()">
-                                                  <option></option>
-                                                	<option value="AL">Alabama</option>
-                                                	<option value="AK">Alaska</option>
-                                                	<option value="AZ">Arizona</option>
-                                                	<option value="AR">Arkansas</option>
-                                                	<option value="CA">California</option>
-                                                	<option value="CO">Colorado</option>
-                                                	<option value="CT">Connecticut</option>
-                                                	<option value="DE">Delaware</option>
-                                                	<option value="DC">District Of Columbia</option>
-                                                	<option value="FL">Florida</option>
-                                                	<option value="GA">Georgia</option>
-                                                	<option value="HI">Hawaii</option>
-                                                	<option value="ID">Idaho</option>
-                                                	<option value="IL">Illinois</option>
-                                                	<option value="IN">Indiana</option>
-                                                	<option value="IA">Iowa</option>
-                                                	<option value="KS">Kansas</option>
-                                                	<option value="KY">Kentucky</option>
-                                                	<option value="LA">Louisiana</option>
-                                                	<option value="ME">Maine</option>
-                                                	<option value="MD">Maryland</option>
-                                                	<option value="MA">Massachusetts</option>
-                                                	<option value="MI">Michigan</option>
-                                                	<option value="MN">Minnesota</option>
-                                                	<option value="MS">Mississippi</option>
-                                                	<option value="MO">Missouri</option>
-                                                	<option value="MT">Montana</option>
-                                                	<option value="NE">Nebraska</option>
-                                                	<option value="NV">Nevada</option>
-                                                	<option value="NH">New Hampshire</option>
-                                                	<option value="NJ">New Jersey</option>
-                                                	<option value="NM">New Mexico</option>
-                                                	<option value="NY">New York</option>
-                                                	<option value="NC">North Carolina</option>
-                                                	<option value="ND">North Dakota</option>
-                                                	<option value="OH">Ohio</option>
-                                                	<option value="OK">Oklahoma</option>
-                                                	<option value="OR">Oregon</option>
-                                                	<option value="PA">Pennsylvania</option>
-                                                	<option value="RI">Rhode Island</option>
-                                                	<option value="SC">South Carolina</option>
-                                                	<option value="SD">South Dakota</option>
-                                                	<option value="TN">Tennessee</option>
-                                                	<option value="TX">Texas</option>
-                                                	<option value="UT">Utah</option>
-                                                	<option value="VT">Vermont</option>
-                                                	<option value="VA">Virginia</option>
-                                                	<option value="WA">Washington</option>
-                                                	<option value="WV">West Virginia</option>
-                                                	<option value="WI">Wisconsin</option>
-                                                	<option value="WY">Wyoming</option>
+                                                    <option></option>
+                                                    <option>USPS</option>
+                                                    <option>UPS</option>
+                                                    <option>FexEx</option>
+                                                    <option>In-Person pick up</option>
                                                 </select>
+                                            </div>
+                                        </div>
 
+
+                                    </fieldset>
+                                    <fieldset>
+
+                                        <legend>Billing Address &nbsp (&nbsp;<input id="copyAddress" ng-click="copyAddress()" type="checkbox" ng-model="data.copyAddress"/> &nbsp; Use Shipping&nbsp;)</legend>
+
+
+                                        <div class="form-group">
+                                            <label for="billingAddress1" class="col-sm-3 control-label">Billing Address 1</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="billingAddress1" class="form-control" ng-model="data.billingAddress1" ng-readonly="data.copyAddress">
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="shipZip" class="col-sm-3 control-label">Ship Zip</label>
+                                            <label for="billingAddress2" class="col-sm-3 control-label">Billing Address 2</label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="shipZip" class="form-control" ng-model="data.shipZip">
+                                                <input type="text" id="billingAddress2" class="form-control" ng-model="data.billingAddress2" ng-readonly="data.copyAddress">
                                             </div>
                                         </div>
-
-
 
                                         <div class="form-group">
-                                            <div class="col-sm-3"></div>
+                                            <label for="billingAddress3" class="col-sm-3 control-label">Billing Address 3</label>
                                             <div class="col-sm-8">
-                                                <div class="form-group checkbox checkbox-primary">
-                                                    <input type="checkbox" id="taxExempt"
-                                                           ng-model="data.taxExempt" ng-change="computeTotals()">
-                                                    <label for="taxExempt">Tax Exempt</label>
-                                                </div>
-
+                                                <input type="text" id="billingAddress3" class="form-control" ng-model="data.billingAddress3" ng-readonly="data.copyAddress">
                                             </div>
                                         </div>
+
+                                        <div class="form-group">
+                                            <label for="billingCity" class="col-sm-3 control-label">Billing City</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="billingCity" class="form-control" ng-model="data.billingCity" ng-readonly="data.copyAddress">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="billingState" class="col-sm-3 control-label">Billing State</label>
+                                            <div class="col-sm-8">
+                                                <select id="billingState" class="selectpicker" data-selectpicker data-width="auto" ng-model="data.billingState" ng-change="computeTotals()" ng-readonly="data.copyAddress">
+                                                    <option ng-repeat="state in states" value="{{state.code}}">{{state.name}}</option>
+
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="billingZip" class="col-sm-3 control-label">Billing Zip</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="billingZip" class="form-control" ng-model="data.billingZip" ng-readonly="data.copyAddress">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="billingCountry" class="col-sm-3 control-label">Billing Country</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="billingCountry" class="form-control" ng-model="data.billingCountry" ng-readonly="data.copyAddress">
+                                            </div>
+                                        </div>
+
 
                                     </fieldset>
                                 </div>

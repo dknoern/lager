@@ -5,25 +5,20 @@ var Repair = require('../models/repair');
 var Return = require('../models/return');
 var Invoice = require('../models/invoice');
 const checkJwt = require('./jwt-helper').checkJwt;
-var fs = require('fs');
 var format = require('date-format');
 var formatCurrency = require('format-currency');
-
 
 function formatMoney(value){
     if(value==null || value=="") return "";
     else return formatCurrency(value,  { format: '%s%v', code: "", symbol: '$' });
 }
 
-
 router.use(function (req, res, next) {
     next();
 });
 
-
-
 router.route('/reports/vendors-with-outstanding-repairs')
-    .get(function (req, res) {
+    .get(checkJwt, function (req, res) {
 
         var vendorList = new Array();
 
@@ -51,10 +46,8 @@ router.route('/reports/vendors-with-outstanding-repairs')
         });
     });
 
-
-
 router.route('/reports/outstanding-repairs/:vendor')
-    .get(function (req, res) {
+    .get(checkJwt, function (req, res) {
 
         var vendor = req.params.vendor.toLowerCase();
 
@@ -96,9 +89,8 @@ router.route('/reports/outstanding-repairs/:vendor')
         });
     });
 
-
 router.route('/reports/products-memo')
-    .get(function (req, res) {
+    .get(checkJwt, function (req, res) {
         var results = {
             "data": []
         };
@@ -134,7 +126,7 @@ router.route('/reports/products-memo')
     });
 
 router.route('/reports/daily-sales/:year/:month/:day')
-    .get(function (req, res) {
+    .get(checkJwt, function (req, res) {
         var year = parseInt(req.params.year);
         var month = parseInt(req.params.month);
         var day = parseInt(req.params.day);
@@ -186,9 +178,8 @@ router.route('/reports/daily-sales/:year/:month/:day')
         });
     });
 
-
 router.route('/reports/log-items/:year/:month/:day')
-    .get(function (req, res) {
+    .get(checkJwt, function (req, res) {
         var year = parseInt(req.params.year);
         var month = parseInt(req.params.month);
         var day = parseInt(req.params.day);
@@ -231,12 +222,8 @@ router.route('/reports/log-items/:year/:month/:day')
         });
     });
 
-
-
-
-
 router.route('/reports/returns-summary/:year/:month')
-    .get(function (req, res) {
+    .get(checkJwt, function (req, res) {
 
         var year = parseInt(req.params.year);
         var month = parseInt(req.params.month);
@@ -278,9 +265,8 @@ router.route('/reports/returns-summary/:year/:month')
         });
     });
 
-
 router.route('/reports/partnership-items')
-    .get(function (req, res) {
+    .get(checkJwt, function (req, res) {
         var results = {
             "data": []
         };
@@ -297,7 +283,7 @@ router.route('/reports/partnership-items')
                     [
                         products[i].seller,
                         format('yyyy-MM-dd', products[i].lastUpdated),
-                        products[i]._id,
+                        products[i].itemNumber,
                         products[i].title,
                         '$' + products[i].cost,
                         '$' + products[i].sellingPrice
@@ -311,15 +297,15 @@ router.route('/reports/partnership-items')
             seller: 1,
             lastUpdated: 1,
             _id: 1,
+            itemNumber: 1,
             title: 1,
             cost: 1,
             sellingPrice: 1
         });
     });
 
-
 router.route('/reports/monthly-sales/:year/:month')
-    .get(function (req, res) {
+    .get(checkJwt, function (req, res) {
 
         var year = parseInt(req.params.year);
         var month = parseInt(req.params.month);
@@ -374,9 +360,8 @@ router.route('/reports/monthly-sales/:year/:month')
         });
     });
 
-
 router.route('/reports/out-at-show')
-    .get(function (req, res) {
+    .get(checkJwt, function (req, res) {
         var results = {
             "data": []
         };
@@ -410,10 +395,8 @@ router.route('/reports/out-at-show')
         });
     });
 
-
-
 router.route('/reports/in-stock')
-    .get(function (req, res) {
+    .get(checkJwt, function (req, res) {
 
         var results = {
             "data": []
@@ -456,18 +439,10 @@ router.route('/reports/in-stock')
             status: 1,
             productType: 1
         });
-
-
-
     });
 
-
-
-
 router.route('/reports/show-report')
-    .get(function (req, res) {
-
-
+    .get(checkJwt, function (req, res) {
 
         var results = {
             "data": []
@@ -508,9 +483,8 @@ router.route('/reports/show-report')
         });
     });
 
-
 router.route('/reports/first-sale-date')
-    .get(function (req, res) {
+    .get(checkJwt, function (req, res) {
 
         Invoice.findOne({}, function (err, invoice) {
 
@@ -527,12 +501,9 @@ router.route('/reports/first-sale-date')
         });
     });
 
-
 router.route('/reports/last-sale-date')
-    .get(function (req, res) {
-
+    .get(checkJwt, function (req, res) {
         Invoice.findOne({}, function (err, invoice) {
-
             if (err)
                 res.send(err);
             var dateString = format('yyyy/MM/dd', invoice.date);

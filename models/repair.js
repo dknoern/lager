@@ -1,3 +1,7 @@
+var format = require('date-format');
+var formatCurrency = require('format-currency');
+var opts = { format: '%s%v', symbol: '$' };
+
 var mongoose = require('mongoose');
 
 var Schema = new mongoose.Schema();
@@ -22,5 +26,16 @@ var RepairSchema = new mongoose.Schema({
     search: String,
     repairCost: Number
 });
+
+
+
+RepairSchema.virtual('dateOutFMT').get(function () {
+    return format('MM/dd/yyyy', this.dateOut);
+});
+
+RepairSchema.virtual('repairCostFMT').get(function () {
+    return formatCurrency(this.repairCost, opts);
+});
+
 
 module.exports = mongoose.model('Repair', RepairSchema);

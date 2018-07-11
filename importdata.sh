@@ -1,7 +1,5 @@
-DATE=`date "+%Y-%M-%d"`
 WORKDIR=~/Dropbox/demesy/backups/latest
 DB=mongodb://localhost:27017
-
 
 mongo lager --eval "db.dropDatabase()"
 

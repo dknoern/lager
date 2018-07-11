@@ -3,18 +3,18 @@ var scopeHolder;
 (function() {
     'use strict';
 
-
-
     angular.module('singApp.invoice')
         .controller('InvoiceCtrl', InvoiceCtrl);
 
-    InvoiceCtrl.$inject = ['$scope', '$resource', '$http', '$window', '$location', '$state', 'jQuery', 'authService'];
+    InvoiceCtrl.$inject = ['$scope', '$resource', '$http', '$window', '$location', '$state', 'jQuery', 'authService', 'refdataService'];
 
-    function InvoiceCtrl($scope, $resource, $http, $window, $location, $state, jQuery, authService) {
+    function InvoiceCtrl($scope, $resource, $http, $window, $location, $state, jQuery, authService, refdataService) {
 
         var vm = this;
 
         scopeHolder = $scope;
+
+        $scope.states = refdataService.states();
 
         $scope.email = function() {
 
@@ -51,6 +51,21 @@ var scopeHolder;
         }
 
 
+
+        $scope.copyAddress = function() {
+
+            var copying = document.getElementById('copyAddress').checked;
+
+            if(copying) {
+                $scope.data.billingAddress1 = $scope.data.shipAddress1;
+                $scope.data.billingAddress2 = $scope.data.shipAddress2;
+                $scope.data.billingAddress3 = $scope.data.shipAddress3;
+                $scope.data.billingCity = $scope.data.shipCity;
+                $scope.data.billingState = $scope.data.shipState;
+                $scope.data.billingZip = $scope.data.shipZip;
+                $scope.data.billingCountry = $scope.data.shipCountry;
+            }
+        }
 
         $scope.addItem = function(itemId) {
 
@@ -196,7 +211,16 @@ var scopeHolder;
                     $scope.data.shipCity = customer.city;
                     $scope.data.shipState = customer.state;
                     $scope.data.shipZip = customer.zip;
+                    $scope.data.shipCountry = customer.country;
                     $scope.data.customerEmail = customer.email;
+                    $scope.data.copyAddress = customer.copyAddress;
+                    $scope.data.billingAddress1 = customer.billingAddress1;
+                    $scope.data.billingAddress2 = customer.billingAddress2;
+                    $scope.data.billingAddress2 = customer.billingAddress3;
+                    $scope.data.billingCity = customer.billingCity;
+                    $scope.data.billingState = customer.billingState;
+                    $scope.data.billingZip = customer.billingZip;
+                    $scope.data.billingCountry = customer.billingCountry;
                 });
               }
 
@@ -245,6 +269,8 @@ var scopeHolder;
         $('#productModal').on('show.bs.modal', function(e) {
             if (productTableShown == false) {
 
+                var accessToken = localStorage.getItem('access_token');
+
                 jQuery('#productTable').dataTable({
                     "processing": true,
                     "serverSide": true,
@@ -253,6 +279,9 @@ var scopeHolder;
                         "url": "/api/products",
                         "data": {
                             "status": "Available" // will trigger backend query for In Stock and Partnership
+                        },
+                        "headers": {
+                            "Authorization": "Bearer " + accessToken
                         }
                       },
                     "order": [[ 5, 'desc' ]]

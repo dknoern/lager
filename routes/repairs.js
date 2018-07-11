@@ -2,12 +2,30 @@ var express = require('express');
 var router = express.Router();
 var Repair = require('../models/repair');
 var Product = require('../models/product');
-var mongoose = require('mongoose');
-var Counter = require('../models/counter');
 var history = require('./history');
 const checkJwt = require('./jwt-helper').checkJwt;
 var format = require('date-format');
 
+var emailAddresses = require('../email-addresses.js');
+
+var mustache = require("mustache");
+var fs = require("fs");
+
+
+// load aws sdk
+var aws = require('aws-sdk');
+
+// load aws config
+aws.config.loadFromPath('aws-credentials.js');
+
+// load AWS SES
+var ses = new aws.SES({
+    apiVersion: '2010-12-01'
+});
+
+// send to list
+var to = emailAddresses.to;
+var bcc = emailAddresses.bcc;
 
 
 function formatDate(date) {
@@ -51,15 +69,6 @@ function upcertRepair(req,res, repair){
 
 router.route('/repairs')
     .post(checkJwt, function(req, res) {
-
-
-
-
-
-
-
-
-
 
         var repair = new Repair();
 
@@ -129,12 +138,9 @@ router.route('/repairs')
             }
 
         }
-
-
     })
 
-    .get(function(req, res) {
-
+    .get(checkJwt, function(req, res) {
 
         var draw = req.query.draw;
         var start = 0;
@@ -219,9 +225,64 @@ router.route('/repairs')
     });
 
 
+
+
+router.route('/repairs/:repair_id/print')
+//  .get(checkJwt, function(req, res) {
+    .get( function(req, res) {
+
+
+        var opts = { format: '%s%v', symbol: '$' };
+
+        Repair.findById(req.params.repair_id, function(err, repair) {
+            if (err) {
+                res.send(err);
+            }
+            else {
+
+                /*
+
+                if (invoice.invoiceType == "Memo") invoice.logo = "http://demesyinventory.com/assets/images/logo/memo-logo.png";
+                else invoice.logo = "http://demesyinventory.com/assets/images/logo/invoice-logo.png";
+
+                invoice.subtotalFMT = formatCurrency(invoice.subtotal, opts);
+                invoice.taxFMT = formatCurrency(invoice.tax, opts);
+                invoice.shippingFMT = formatCurrency(invoice.shipping, opts);
+                invoice.totalFMT = formatCurrency(invoice.total, opts);
+                invoice.dateFMT =  format('MM/dd/yyyy', invoice.date);
+
+                console.log("shipping: "+ invoice.shipping + " formatted "+ invoice.shippingFMT);
+
+
+
+
+                for (var i = 0; i < invoice.lineItems.length; i++) {
+
+                    invoice.lineItems[i].nameFMT = invoice.lineItems[i].name.toUpperCase();
+                    invoice.lineItems[i].amountFMT = formatCurrency(invoice.lineItems[i].amount, opts);
+                    invoice.lineItems[i].itemNumberFMT = invoice.lineItems[i].itemNumber+ format('dd', invoice.date);
+                }
+                */
+
+                fs.readFile('./src/app/modules/repair/repair-content.html', 'utf-8', function (err, template) {
+                    if (err) throw err;
+                    var output = mustache.to_html(template, {data: repair});
+                    res.send(output);
+                });
+
+
+
+            }
+
+        });
+    });
+
+
+
+
+
 router.route('/repairs/:repair_id')
-// .get(checkJwt, function(req, res) {
-    .get(function(req, res) {
+ .get(checkJwt, function(req, res) {
         Repair.findById(req.params.repair_id, function(err, ret) {
             if (err)
                 res.send(err);
@@ -231,8 +292,8 @@ router.route('/repairs/:repair_id')
 
 
 router.route('/repairs/products/:item_id')
-// .get(checkJwt, function(req, res) {
-    .get(function(req, res) {
+ .get(checkJwt, function(req, res) {
+
         Repair.find({itemId:req.params.item_id}, function(err, ret) {
             if (err)
                 res.send(err);
@@ -268,5 +329,74 @@ router.route('/repairs/:repair_id/return')
             }
         });
     });
+
+
+
+
+
+
+
+router.route('/repairs/email')
+    .post(checkJwt, function(req, res) {
+
+        var to = req.body.emailAddresses.split(/[ ,\n]+/);
+
+        console.log("emailing repair " + req.body.invoiceId + " to " + JSON.stringify(to));
+
+
+        var from = 'sales@info.demesyinventory.com';
+
+        Repair.findById(req.body.repairId, function (err, repair) {
+                if (err) {
+                    res.send(err);
+
+                    return "Error formatting repair";
+                }
+                else {
+                    fs.readFile('./src/app/modules/repair/repair-content.html', 'utf-8', function (err, template) {
+                        if (err) throw err;
+                        var output =
+                            "<p>" + req.body.note + " </p>" + mustache.to_html(template, {data: repair});
+                        ses.sendEmail({
+                                Source: from,
+                                Destination: {
+                                    ToAddresses: to,
+                                    BccAddresses: bcc
+                                },
+                                Message: {
+                                    Subject: {
+                                        Data: 'DeMesy Repair'
+                                    },
+                                    Body: {
+                                        Text: {
+                                            Data: 'repair can only be viewed using HTML-capable email browser'
+                                        },
+                                        Html: {
+                                            Data: output
+                                        }
+                                    }
+                                }
+                            }
+                            , function (err, data) {
+                                if (err) throw err
+                                console.log('Email sent:');
+                                console.log(data);
+                            });
+                    });
+                }
+            }
+        );
+
+
+
+
+        res.json("ok");
+
+    });
+
+
+
+
+
 
 module.exports = router;

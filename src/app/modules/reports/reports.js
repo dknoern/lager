@@ -10,13 +10,10 @@
 
     function ReportsCtrl($scope, $resource, $http, $window, DTOptionsBuilder, jQuery, $state) {
 
-
-
         $scope.hideButton = function(){
             console.log('hide the button');
             $scope.hide();
         }
-
 
         /**
          * handle submission of bulk load for show
@@ -45,7 +42,6 @@
             });
         }
 
-
         /**
          * handle submission of bulk release from show
          */
@@ -55,7 +51,6 @@
             success(function(response) {
                 document.getElementById("bulkReleaseResults").innerHTML = response;
                 theDataTable.ajax.url("/api/reports/show-report").load();
-
 
                 Messenger().post({
                     message: response,
@@ -180,7 +175,7 @@
                 });
             }
 
-            //var reportTitle = reportId.replace("-"," ");
+            var accessToken = localStorage.getItem('access_token');
 
             var reportTitle = reportId.replace("-"," ").replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 
@@ -192,14 +187,18 @@
                 "searching": false,
                 "info": false,
                 "pageLength": 200,
-                "ajax": reportUrl,
+                "ajax": {
+                    url: reportUrl,
+                    headers: {
+                        "Authorization": "Bearer " + accessToken
+                    }
+                },
                 "dom": 'Bfrtip',
                 "buttons": [
                     {
                         extend: 'excel',
                         title: reportTitle,
                         text: 'Excel <i class="fa fa-file-excel-o"></i>'
-                        //,className: "btn btn-inverse"
                     }
                     , {
                         extend: 'pdf',

@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var router = express.Router();
 var Product = require('../models/product');
 var Repair = require('../models/repair');
+var Invoice = require('../models/invoice');
 const checkJwt = require('./jwt-helper').checkJwt;
 var format = require('date-format');
 
@@ -24,8 +25,6 @@ var upsertLogItem = function (req, res, productId, action) {
         + " " + req.body.history.repairNumber + " " + req.body.history.itemReceived + req.body.history.user + " " + req.body.history.comments;
 
     var action = req.body.history.action || "received";
-
-
 
     if (req.body.history.repairNumber != null){
         console.log('looking for repairNumber ' + req.body.history.repairNumber);
@@ -341,14 +340,39 @@ router.route('/products')
                     if (err) return res.send(500, {
                         error: err
                     });
-                    return res.send("product updated");
+
+                    // update info inside any invoices
+
+                    
+                        Invoice.update({'lineItems.productId':req.body._id},
+                            {$set: {
+                                'lineItems.0.itemNumber': req.body.itemNumber,
+                                'lineItems.0.name': req.body.title,
+                                'lineItems.0.longDesc': longDesc,
+                                'lineItems.0.serialNumber': req.body.serialNo
+                            }
+                        },{multi: true}, function (err, doc){
+                        if (err){
+                            console.log("ERROR: " + err);
+                        }
+
+                        console.log("updated subdocs for product in invoice " + JSON.stringify(doc));
+
+                            return res.send("product updated");
+                        });
+
+
+
                 });
+
+
+
+
+
         }
     })
 
-    //.get(checkJwt, function(req, res) {
-    .get(function (req, res) {
-
+    .get(checkJwt, function(req, res) {
 
         var itemNumber = req.query.itemNumber;
 

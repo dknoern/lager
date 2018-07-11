@@ -130,7 +130,7 @@ router.route('/returns')
 
     })
 
-    .get(function(req, res) {
+    .get(checkJwt,function(req, res) {
 
         var draw = req.query.draw;
         var start = 0;

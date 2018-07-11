@@ -8,11 +8,19 @@
   InvoicesCtrl.$inject = ['$scope', '$resource', 'DTOptionsBuilder', 'jQuery'];
   function InvoicesCtrl ($scope, $resource, DTOptionsBuilder, jQuery) {
 
+
+      var accessToken = localStorage.getItem('access_token');
+
+
     jQuery('#example').DataTable( {
             "processing": true,
             "serverSide": true,
             "ordering": false,
-            "ajax": "/api/invoices"
+        "ajax": {
+            url: "/api/invoices",
+            headers: {
+                "Authorization": "Bearer " + accessToken
+            }}
         } );
 
 
@@ -26,7 +34,15 @@
                       "processing": true,
                       "serverSide": true,
                       "ordering": false,
-                      "ajax": "/api/customers"
+                  "ajax": {
+                      url: "/api/customers",
+                      headers: {
+                          "Authorization": "Bearer " + accessToken
+                      }}
+
+
+
+
                   } );
                   customerTableShown = true;
                 }
