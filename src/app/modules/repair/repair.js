@@ -187,14 +187,20 @@
 
         $('#productModal').on('show.bs.modal', function(e) {
             if (productTableShown == false) {
+
+                var accessToken = localStorage.getItem('access_token');
+
                 jQuery('#productTable').dataTable({
                     "processing": true,
                     "serverSide": true,
                     "ordering": false,
                     "ajax": {
                         "url": "/api/products",
+                        headers: {
+                            "Authorization": "Bearer " + accessToken
+                        },
                         "data": {
-                            "status": "In Stock"
+                            "status": "In Stock",
                         }
                     }
                 });
