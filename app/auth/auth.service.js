@@ -2,13 +2,9 @@
 
   'use strict';
 
-  angular
-    .module('singApp.inventory')
-    .service('authService', authService);
-
     angular
-      .module('singApp.core')
-      .service('authService', authService);
+        .module('singApp')
+        .service('authService', authService);
 
   authService.$inject = ['$state', 'angularAuth0', '$timeout'];
 
@@ -130,8 +126,7 @@
       }
 
       function scheduleRenewal() {
-         console.log("SCHEDULING RENEWAL!!!");
-
+         console.log("Scheduling token renewal");
 
           var expiresAt = JSON.parse(localStorage.getItem('expires_at'));
 
@@ -149,14 +144,14 @@
       }
 
 
-
     return {
       login: login,
       getProfile: getProfile,
       getCachedProfile: getCachedProfile,
       handleAuthentication: handleAuthentication,
       logout: logout,
-      isAuthenticated: isAuthenticated
+      isAuthenticated: isAuthenticated,
+        scheduleRenewal: scheduleRenewal
     }
   }
 })();
