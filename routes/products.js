@@ -372,7 +372,8 @@ router.route('/products')
         }
     })
 
-    .get(checkJwt, function(req, res) {
+    // no checkJwt for inventory list... makes logout more reliable and inventory list is "public" anyway
+    .get( function(req, res) {
 
         var itemNumber = req.query.itemNumber;
 

@@ -59,9 +59,14 @@
       <li class="dropdown" data-dropdown>
         <a href class="dropdown-toggle" data-dropdown-toggle>
 
-          <span class="thumb-sm avatar pull-left">
+          <span ng-if="vm.profile.picture" class="thumb-sm avatar pull-left">
             <img class="img-circle" ng-src="{{ vm.profile.picture }}" class="avatar" alt="Welcome">
           </span>
+
+          <span ng-if="!vm.profile.picture" class="thumb-sm avatar pull-left">
+            <strong>Welcome</strong>
+          </span>
+
           &nbsp;
           <strong>{{vm.profile.name}}</strong>
 
