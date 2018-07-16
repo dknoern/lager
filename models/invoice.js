@@ -80,7 +80,7 @@ InvoiceSchema.virtual('dateFMT').get(function () {
 
 InvoiceSchema.virtual('logo').get(function () {
     var type =  "invoice";
-    if("memo" == this.invoiceType) type = "memo";
+    if("Memo" == this.invoiceType) type = "memo";
     return  "http://demesyinventory.com/assets/images/logo/" + type + "-logo.png";
 });
 
@@ -99,5 +99,38 @@ InvoiceSchema.virtual('shippingFMT').get(function () {
 InvoiceSchema.virtual('totalFMT').get(function () {
     return formatCurrency(this.total, opts);
 });
+
+InvoiceSchema.virtual('shipCityFMT').get(function () {
+    return formatCity(this.shipCity, this.shipState, this.shipZip);
+});
+
+InvoiceSchema.virtual('billingCityFMT').get(function () {
+    return formatCity(this.billingCity, this.billingState, this.billingZip);
+});
+
+function formatCity(city, state, zip){
+    var cityFMT = "";
+    if(city) {
+        cityFMT += city;
+    }
+
+    if(city && state) {
+        cityFMT += ", ";
+    }
+
+    if(state) {
+        cityFMT += state
+    }
+
+    if(state && zip) {
+        cityFMT += " ";
+    }
+
+    if(zip) {
+        cityFMT += zip;
+    }
+
+    return cityFMT;
+}
 
 module.exports = mongoose.model('Invoice', InvoiceSchema);
