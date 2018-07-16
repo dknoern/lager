@@ -90,8 +90,7 @@
             <div>{{data.shipAddress1}}</div>
             <div>{{data.shipAddress2}}</div>
             <div>{{data.shipAddress3}}</div>
-            {{data.shipCity}}<span ng-if="data.shipCity!=null && data.shipState!=null">,</span> {{data.shipState}}
-            {{data.shipZip}}<br/>
+            {{data.shipCityFMT}}<br/>
             {{data.phone}}
         </div>
 
@@ -101,8 +100,7 @@
             <div>{{data.billingAddress1}}</div>
             <div>{{data.billingAddress2}}</div>
             <div>{{data.billingAddress3}}</div>
-            {{data.billingCity}}<span ng-if="data.billingCity!=null && data.billingState!=null">,</span>
-            {{data.billingState}} {{data.billingZip}}<br/>
+            {{data.billingCityFMT}}<br/>
             {{data.phone}}
         </div>
         {{/data.copyAddress}}
