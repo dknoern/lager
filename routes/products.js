@@ -91,47 +91,71 @@ var upsertLogItem = function (req, res, productId, action) {
 
         Product.findById(productId,'sellerType', function(err,product){
 
+            Invoice.findOne({'lineItems.productId':productId},function (err, doc){
+                    if (err){
+                        console.log("error looking for invoice that contains item : " + productId + ", " + err);
+                    }else{
 
-            console.log("found product... sellerType is " + product.sellerType);
-            if("Partner"==product.sellerType){
-                newStatus = "Partnership"
-            }
-
-            console.log("checking existing product in, setting status to " + newStatus);
-            var updates = {
-                "lastUpdated": Date.now(),
-                "status": newStatus
-            };
-
-            //TODO: update total repair cost maybe?... will now calculate on display only.
+                        if(doc==null){
+                            console.log("found NO invoices that contains item : " + productId);
+                            if("Partner"==product.sellerType){
+                                console.log("item status set to partnership ");
+                                newStatus = "Partnership"
+                            }
+                        }else {
+                            console.log("found at least one invoice that contains item : " + productId);
+                            newStatus = "Sold"
+                        }
 
 
-            Product.findOneAndUpdate({
-                _id: productId
-            }, {
+                        console.log("checking existing product in, setting status to " + newStatus);
+                        var updates = {
+                            "lastUpdated": Date.now(),
+                            "status": newStatus
+                        };
 
-                "$push": {
-                    "history": {
-                        user: req.body.history.user,
-                        date: Date.now(),
-                        action: "received",
-                        itemReceived: req.body.history.itemReceived,
-                        receivedFrom: req.body.history.receivedFrom,
-                        repairNumber: req.body.history.repairNumber,
-                        customerName: req.body.history.customerName,
-                        comments: req.body.history.comments,
-                        search: search
+                        //TODO: update total repair cost maybe?... will now calculate on display only.
+
+
+                        Product.findOneAndUpdate({
+                            _id: productId
+                        }, {
+
+                            "$push": {
+                                "history": {
+                                    user: req.body.history.user,
+                                    date: Date.now(),
+                                    action: "received",
+                                    itemReceived: req.body.history.itemReceived,
+                                    receivedFrom: req.body.history.receivedFrom,
+                                    repairNumber: req.body.history.repairNumber,
+                                    customerName: req.body.history.customerName,
+                                    comments: req.body.history.comments,
+                                    repairCost:  req.body.history.repairCost || 0,
+                                    search: search
+                                }
+                            },
+                            "$set": updates
+                        }, {
+                            upsert: true
+                        }, function (err, doc) {
+                            if (err) return res.send(500, {
+                                error: err
+                            });
+                            return res.send("successfully saved");
+                        });
+
+
+
+
+
                     }
-                },
-                "$set": updates
-            }, {
-                upsert: true
-            }, function (err, doc) {
-                if (err) return res.send(500, {
-                    error: err
-                });
-                return res.send("successfully saved");
             });
+
+
+
+
+
         });
 
     } else {  // create new product
@@ -378,7 +402,7 @@ router.route('/products')
         var itemNumber = req.query.itemNumber;
 
         if (itemNumber != null) {
-            Product.findOne({'itemNumber': itemNumber}, '_id title', function (err, product) {
+            Product.findOne({'itemNumber': itemNumber}, '_id title status', function (err, product) {
                 res.json(product);
             });
             return;
