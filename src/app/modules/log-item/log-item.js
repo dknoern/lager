@@ -26,10 +26,18 @@ var scopeHolder;
 
             $http.get("api/products?itemNumber=" + $scope.data.itemNumber)
                 .then(function(response) {
-                    if(response!=null&& response.data!=null)
+                    if(response!=null&& response.data!=null) {
                         $scope.data.history.itemReceived = response.data.title;
-                    else
+                        if("Repair" == response.data.status){
+                            $scope.data.history.repairNumber = $scope.data.itemNumber;
+                        }else{
+                            $scope.data.history.repairNumber = "";
+                        }
+                    }
+                    else {
                         $scope.data.history.itemReceived = "";
+                        $scope.data.history.repairNumber = "";
+                    }
                 });
 
         }

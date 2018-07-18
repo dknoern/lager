@@ -295,11 +295,16 @@
 
               if(customerTableShown==false){
 
-              jQuery('#customerTable').DataTable( {
+                  jQuery('#customerTable').DataTable( {
                       "processing": true,
                       "serverSide": true,
                       "ordering": false,
-                      "ajax": "/api/customers"
+                      "ajax": {
+                          url: "/api/customers",
+                          headers: {
+                              "Authorization": "Bearer " + localStorage.getItem('access_token')
+                          }
+                      }
                   } );
                   customerTableShown = true;
                 }

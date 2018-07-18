@@ -113,10 +113,7 @@
           angularAuth0.checkSession({},
               function(err, result) {
                   if (err) {
-                      alert(
-                          'Could not get a new token. ' +
-                          err.description
-                      );
+                      console.log( 'Could not get a new token. ' +err.description);
                   } else {
                       setSession(result);
                       //alert('Successfully renewed auth!');
