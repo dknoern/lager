@@ -76,6 +76,7 @@ function getOverdueRepairs() {
         returnDate: 1,
         customerFirstName: 1,
         customerLastName: 1,
+        repairNumber: 1,
         vendor: 1
     });
 }
@@ -93,7 +94,7 @@ function formatResults(repairs)
 
   for (var i = 0; i < repairs.length; i++) {
     s += "\n";
-    s += "Repair " + repairs[i]._id + ": " + repairs[i].description + ", for customer ";
+    s += "Repair " + repairs[i].repairNumber + ": " + repairs[i].description + ", for customer ";
     s += repairs[i].customerFirstName + " " + repairs[i].customerLastName + ", expected return date was "
     s += formatDate(repairs[i].expectedReturnDate) +".";
   }
