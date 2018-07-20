@@ -39,7 +39,9 @@
 
     function setSession(authResult) {
       // Set the time that the access token will expire at
-      var expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
+      //  var expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
+        var expiresAt = JSON.stringify((authResult.expiresIn * 1000)  / 4.0 + new Date().getTime());
+        // if 2 hours, set to 30 min
       localStorage.setItem('access_token', authResult.accessToken);
       localStorage.setItem('id_token', authResult.idToken);
       localStorage.setItem('expires_at', expiresAt);
@@ -99,24 +101,20 @@
 
     function getCachedProfile() {
 
-
-
       return userProfile;
     }
-
 
       function renewToken() {
 
           console.log("SCHEDULING RENEWAL!!!");
 
-
           angularAuth0.checkSession({},
               function(err, result) {
                   if (err) {
-                      console.log( 'Could not get a new token. ' +err.description);
+                      console.log( 'Could not get a new token. ' + JSON.stringify(err));
                   } else {
                       setSession(result);
-                      //alert('Successfully renewed auth!');
+                      console.log( 'Successfully renewed auth!');
                   }
               }
           );
@@ -129,9 +127,7 @@
 
           var delay = expiresAt - Date.now();
 
-          //var delay = 5000;
-
-          console.log("expire DELAY IS "+ delay);
+          console.log("expire DELAY IS "+ delay + ", " + delay/1000/60 + ' minutes');
 
           if (delay > 0) {
               tokenRenewalTimeout = setTimeout(function() {
@@ -139,7 +135,6 @@
               }, delay);
           }
       }
-
 
     return {
       login: login,
