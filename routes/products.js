@@ -6,6 +6,7 @@ var Repair = require('../models/repair');
 var Invoice = require('../models/invoice');
 const checkJwt = require('./jwt-helper').checkJwt;
 var format = require('date-format');
+const formatCurrency = require('format-currency');
 
 function formatDate(date) {
     console.log('formatting date, yo: ' + date);
@@ -408,7 +409,6 @@ router.route('/products')
             return;
         }
 
-        var query = "";
         var status = req.query.status;
 
         var draw = req.query.draw;
@@ -417,7 +417,6 @@ router.route('/products')
 
         if (req.query.start) start = req.query.start;
         if (req.query.length) length = req.query.length;
-
 
         var search = req.query.search.value;
         var results = {
@@ -476,6 +475,9 @@ router.route('/products')
             if (err)
                 res.send(err);
 
+            var opts = { format: '%s%v', symbol: '$' };
+
+
             for (var i = 0; i < products.length; i++) {
 
                 var badgeStyle = "default"; // grey
@@ -486,12 +488,21 @@ router.route('/products')
                 else if (products[i].status == 'Sale Pending')
                     badgeStyle = "danger" // red
 
+
+
+                var titleAndDial = products[i].title;
+                if(products[i].dial!=null && products[i].dial !=""){
+                    titleAndDial += ' - ' + products[i].dial;
+                }
+
+
                 results.data.push(
                     [
                         '<a href=\"#\" onclick=\"selectProduct(\'' + products[i]._id + '\');return false;\">' + products[i].itemNumber + '</a>',
                         //'<a href=\"/#/app/item/' + products[i]._id + '\">' + products[i]._id,
-                        products[i].title,
+                        titleAndDial,
                         products[i].serialNo,
+                        formatCurrency(products[i].sellingPrice,opts),
                         products[i].modelNumber,
                         "<span class=\"badge bg-" + badgeStyle + "\">" + products[i].status + "</span>",
                         format('yyyy-MM-dd', products[i].lastUpdated),
@@ -528,6 +539,8 @@ router.route('/products')
         }).sort(sortClause).skip(parseInt(start)).limit(parseInt(length)).select({
             itemNumber: 1,
             title: 1,
+            dial: 1,
+            sellingPrice: 1,
             serialNo: 1,
             modelNumber: 1,
             status: 1,

@@ -146,25 +146,28 @@ router.route('/reports/daily-sales/:year/:month/:day')
                 res.send(err);
 
             for (var i = 0; i < invoices.length; i++) {
+                for (var j = 0; j < invoices[i].lineItems.length; j++) {
 
-                var itemNo = "";
-                var title = "";
 
-                if (invoices[i].lineItems != null && invoices[i].lineItems.length > 0) {
-                    itemNo = invoices[i].lineItems[0].itemNumber;
-                    title = invoices[i].lineItems[0].name
+                    var itemNo = "";
+                    var title = "";
+
+                    if (invoices[i].lineItems != null && invoices[i].lineItems.length > 0) {
+                        itemNo = invoices[i].lineItems[j].itemNumber;
+                        title = invoices[i].lineItems[j].name
+                    }
+
+                    results.data.push(
+                        [
+                            itemNo,
+                            format('yyyy-MM-dd', invoices[i].date),
+                            title,
+                            invoices[i].salesPerson,
+                            invoices[i].methodOfSale,
+                            invoices[i].invoiceType
+                        ]
+                    );
                 }
-
-                results.data.push(
-                    [
-                        itemNo,
-                        format('yyyy-MM-dd', invoices[i].date),
-                        title,
-                        invoices[i].salesPerson,
-                        invoices[i].methodOfSale,
-                        invoices[i].invoiceType
-                    ]
-                );
             }
             res.json(results);
         }).sort({

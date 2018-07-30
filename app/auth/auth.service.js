@@ -39,8 +39,8 @@
 
     function setSession(authResult) {
       // Set the time that the access token will expire at
-      //  var expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
-        var expiresAt = JSON.stringify((authResult.expiresIn * 1000)  / 4.0 + new Date().getTime());
+        var expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
+        //var expiresAt = JSON.stringify((authResult.expiresIn * 1000)  / 4.0 + new Date().getTime());
         // if 2 hours, set to 30 min
       localStorage.setItem('access_token', authResult.accessToken);
       localStorage.setItem('id_token', authResult.idToken);
