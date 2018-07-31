@@ -204,6 +204,8 @@ var scopeHolder;
                     $scope.data.customerFirstName = customer.firstName;
                     $scope.data.customerLastName = customer.lastName;
                     $scope.data.customerId = customerId;
+                    $scope.data.customerEmail = customer.email;
+                    $scope.data.customerPhone = customer.phone;
                     $scope.data.shipToName = fullName;
                     $scope.data.shipAddress1 = customer.address1;
                     $scope.data.shipAddress2 = customer.address2;
@@ -213,6 +215,7 @@ var scopeHolder;
                     $scope.data.shipZip = customer.zip;
                     $scope.data.shipCountry = customer.country;
                     $scope.data.customerEmail = customer.email;
+                    $scope.data.customerPhone = customer.phone;
                     $scope.data.copyAddress = customer.copyAddress;
                     $scope.data.billingAddress1 = customer.billingAddress1;
                     $scope.data.billingAddress2 = customer.billingAddress2;
@@ -242,7 +245,9 @@ var scopeHolder;
 
             $http.get('api/invoices/partner/'+$scope.productId).
             success(function(invoice) {
+
                 $scope.data = invoice;
+                $scope.printableUrl = '/api/invoices/' + invoice._id + '/print?t='+ new Date().getTime();
             });
 
         }

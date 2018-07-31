@@ -98,6 +98,7 @@ router.route('/invoices')
         invoice.invoiceNumber = req.body.invoiceNumber;
         invoice.customerFirstName = req.body.customerFirstName;
         invoice.customerLastName = req.body.customerLastName;
+        invoice.customerPhone = req.body.customerPhone;
         invoice.customerEmail = req.body.customerEmail;
         invoice.customerId = req.body.customerId;
         invoice.project = req.body.project;
