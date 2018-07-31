@@ -23,6 +23,7 @@ var InvoiceSchema = new mongoose.Schema({
     customerFirstName: String,
     customerLastName: String,
     customerEmail: String,
+    customerPhone: String,
     project: String,
     returnNumber: String,
     documentType: String,
