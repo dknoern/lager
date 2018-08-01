@@ -135,17 +135,20 @@ router.route('/reports/daily-sales/:year/:month/:day')
             "data": []
         };
         Invoice.find({
-            //  "status": "Sold",
             "date": {
                 $gte: new Date(year, month - 1, day),
                 $lt: new Date(year, month - 1, day + 1)
+            },
+            "invoiceType": {
+                $ne: "Partner"
             }
-        }, function (err, invoices) {
+    }, function (err, invoices) {
 
             if (err)
                 res.send(err);
 
             for (var i = 0; i < invoices.length; i++) {
+
                 for (var j = 0; j < invoices[i].lineItems.length; j++) {
 
 

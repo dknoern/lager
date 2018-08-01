@@ -30,6 +30,7 @@ var InvoiceSchema = new mongoose.Schema({
     date: Date,
     shipVia: String,
     paidBy: String,
+    authNumber: String,
     subtotal: Number,
     tax: Number,
     shipping: Number,

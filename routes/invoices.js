@@ -105,6 +105,7 @@ router.route('/invoices')
         invoice.date = new Date(req.body.date);
         invoice.shipVia = req.body.shipVia;
         invoice.paidBy = req.body.paidBy;
+        invoice.authNumber = req.body.authNumber;
         invoice.total = req.body.total;
         invoice.methodOfSale = req.body.methodOfSale;
         invoice.salesPerson = req.body.salesPerson;
@@ -225,7 +226,8 @@ router.route('/invoices')
                         '<div style="white-space: nowrap;">' + format('yyyy-MM-dd', invoices[i].date)+'</div>',
                         itemNo,
                         itemName,
-                        formatCurrency(invoices[i].total,opts)
+                        formatCurrency(invoices[i].total,opts),
+                        invoices[i].invoiceType
                     ]
                 );
             }
@@ -256,7 +258,8 @@ router.route('/invoices')
             customerLastName: 1,
             date: 1,
             lineItems: 1,
-            total: 1
+            total: 1,
+            invoiceType: 1
         });
 
     });
@@ -383,9 +386,12 @@ router.route('/invoices/partner/:product_id')
                             }
                             else{
 
+                                var amount = product.sellingPrice/2.0;
 
                                 invoice.customerFirstName = product.seller;
                                 invoice.customerLastName = "";
+                                invoice.total = amount;
+                                invoice.subtotal = amount;
                                 invoice.date = new Date();
                                 invoice.lineItems.push(
                                     {
@@ -393,7 +399,7 @@ router.route('/invoices/partner/:product_id')
                                         longDesc: product.longDesc,
                                         serialNumber: product.serialNo,
                                         modelNumber: product.modelNumber,
-                                        amount: product.sellingPrice/2.0,
+                                        amount: amount,
                                         productId: product._id,
                                         itemNumber: product.itemNumber
                                     }
