@@ -92,7 +92,8 @@ var upsertLogItem = function (req, res, productId, action) {
 
         Product.findById(productId,'sellerType', function(err,product){
 
-            Invoice.findOne({'lineItems.productId':productId},function (err, doc){
+            Invoice.findOne({'lineItems.productId':productId, 'invoiceType': "Invoice"
+                },function (err, doc){
                     if (err){
                         console.log("error looking for invoice that contains item : " + productId + ", " + err);
                     }else{
