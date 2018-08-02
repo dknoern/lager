@@ -80,7 +80,12 @@
             {{data.invoiceType}} Date: {{data.dateFMT }}<br/>
             Sold By: {{data.salesPerson}}<br/>
             Method of Sale: {{data.methodOfSale}}<br/>
-            Paid By: {{data.paidBy}}</span>
+            Paid By: {{data.paidBy}}
+            {{#data.authNumber}}
+
+            <br/>Auth #: {{data.authNumber}}
+
+            {{/data.authNumber}}
         </div>
     </div>
 
