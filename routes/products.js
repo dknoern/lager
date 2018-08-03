@@ -456,8 +456,10 @@ router.route('/products')
         else if ("2" == sortColumn)
             sortClause = {serialNo: sortOrder};
         else if ("3" == sortColumn)
-            sortClause = {modelNumber: sortOrder};
+            sortClause = {sellingPrice: sortOrder};
         else if ("4" == sortColumn)
+            sortClause = {modelNumber: sortOrder};
+        else if ("5" == sortColumn)
             sortClause = {status: sortOrder};
 
         Product.find({
