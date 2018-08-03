@@ -131,6 +131,17 @@ var scopeHolder;
 
         //function computeTotals()
         $scope.computeTotals = function() {
+
+            // make sure shipping and taxexempt have values
+            if($scope.data.shipping==null){
+                $scope.data.shipping = 0.0;
+            }
+
+            if($scope.data.taxExempt==null){
+                $scope.data.taxExempt = false;
+            }
+
+
             var total = 0.0;
             $scope.data.lineItems.forEach(function(item) {
                 total += item.amount;
@@ -184,11 +195,16 @@ var scopeHolder;
 
                 console.log("new invoice, setting base data....");
 
+                var defaultShipping = 45.0;
                 $scope.data = {
                     salesPerson: salesPerson,
                     date: Date.now(),
-                    shipping: 45.00,
-                    lineItems: new Array()
+                    shipping: defaultShipping,
+                    tax: 0.00,
+                    subtotal: 0.00,
+                    total: defaultShipping,
+                    lineItems: new Array(),
+                    taxExempt: false
                 }
 
                 if(customerId != "new"){
