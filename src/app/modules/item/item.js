@@ -28,10 +28,11 @@
                 $scope.totalRepairCost = 0;
 
                 for( var i =0;i<$scope.repairs.length;i++){
-                    $scope.totalRepairCost += $scope.repairs[i].repairCost;
+                    if( typeof $scope.repairs[i].repairCost== 'number')
+                    {
+                        $scope.totalRepairCost += $scope.repairs[i].repairCost;
+                    }
                 }
-
-
             });
         }
 

@@ -167,6 +167,25 @@ var scopeHolder;
         };
 
 
+        $scope.pdf = function(){
+            html2canvas(document.getElementById('invoice'), {
+                onrendered: function (canvas) {
+                    var data = canvas.toDataURL();
+                    var docDefinition = {
+                        content: [{
+                            image: data
+                        }]
+                    };
+                    pdfMake.createPdf(docDefinition).download("demesy-invoice.pdf");
+                }
+            });
+        }
+
+
+
+
+
+
 
 
             if ($scope.invoiceId) {

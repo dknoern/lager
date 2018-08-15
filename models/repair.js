@@ -34,7 +34,8 @@ RepairSchema.virtual('dateOutFMT').get(function () {
 });
 
 RepairSchema.virtual('repairCostFMT').get(function () {
-    return formatCurrency(this.repairCost, opts);
+    if(isNaN(this.repairCost)) return "";
+    else return formatCurrency(this.repairCost, opts);
 });
 
 

@@ -11,6 +11,7 @@ var emailAddresses = require('../email-addresses.js');
 var mustache = require("mustache");
 var fs = require("fs");
 
+const formatCurrency = require('format-currency');
 
 // load aws sdk
 var aws = require('aws-sdk');
@@ -95,7 +96,7 @@ router.route('/repairs')
         repair.email = req.body.email;
         repair.customerId = req.body.customerId;
         repair.hasPapers = req.body.hasPapers;
-        repair.repairCost = req.body.repairCost ||0;
+        repair.repairCost = req.body.repairCost;
 
 
 
@@ -120,6 +121,7 @@ router.route('/repairs')
 
 
             // update repair cost in item
+            /*
             if (repair.itemNumber != null) {
                 Product.findOneAndUpdate({
                     _id: repair.itemId
@@ -136,6 +138,7 @@ router.route('/repairs')
                         console.log("repair cost updated");
                 });
             }
+            */
 
         }
     })
@@ -152,7 +155,10 @@ router.route('/repairs')
         var query = { $and: [{'search': new RegExp(search, 'i')}] };
 
 
-       if("outstanding"==req.query.filter){
+        var opts = { format: '%s%v', symbol: '$' };
+
+
+        if("outstanding"==req.query.filter){
             query.$and.push({returnDate:{$eq:null}});
        }
 
@@ -177,6 +183,11 @@ router.route('/repairs')
                 if (repairs[i].customerFirstName && repairs[i].customerLastName) customerName += " ";
                 if (repairs[i].customerLastName) customerName += repairs[i].customerLastName;
 
+                var formattedRepairCost = "";
+                if(repairs[i].repairCost!=null){
+                    formattedRepairCost = formatCurrency(repairs[i].repairCost,opts);
+                }
+
                 results.data.push(
                     [
                         '<a href=\"/#/app/repair/' + repairs[i]._id + '\">' + repairs[i].repairNumber + '</a>',
@@ -186,7 +197,8 @@ router.route('/repairs')
                         '<div style="white-space: nowrap;">' + formatDate(repairs[i].expectedReturnDate)+'</div>',
                         '<div style="white-space: nowrap;">' + formatDate(repairs[i].returnDate)+'</div>',
                         customerName,
-                        repairs[i].vendor
+                        repairs[i].vendor,
+                        formattedRepairCost
                     ]
                 );
             }
