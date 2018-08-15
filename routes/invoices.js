@@ -11,6 +11,7 @@ var emailAddresses = require('../email-addresses.js');
 
 var mustache = require("mustache");
 var fs = require("fs");
+var pdf = require('html-pdf');
 
 const checkJwt = require('./jwt-helper').checkJwt;
 const formatCurrency = require('format-currency');
@@ -267,7 +268,73 @@ router.route('/invoices')
 
 
 
-router.route('/invoices/:invoice_id/print')
+
+router.route('/invoices/:invoice_id/pdf')
+    .get( function(req, res) {
+
+        var opts = { format: '%s%v', symbol: '$' };
+
+        Invoice.findById(req.params.invoice_id, function(err, invoice) {
+            if (err) {
+                res.send(err);
+            }
+            else {
+
+                if (invoice.invoiceType == "Memo") invoice.logo = "http://demesyinventory.com/assets/images/logo/memo-logo.png";
+                else invoice.logo = "http://demesyinventory.com/assets/images/logo/invoice-logo.png";
+
+                invoice.subtotalFMT = formatCurrency(invoice.subtotal, opts);
+                invoice.taxFMT = formatCurrency(invoice.tax, opts);
+                invoice.shippingFMT = formatCurrency(invoice.shipping, opts);
+                invoice.totalFMT = formatCurrency(invoice.total, opts);
+                invoice.dateFMT =  format('MM/dd/yyyy', invoice.date);
+
+                console.log("shipping: "+ invoice.shipping + " formatted "+ invoice.shippingFMT);
+
+                for (var i = 0; i < invoice.lineItems.length; i++) {
+
+                    invoice.lineItems[i].nameFMT = invoice.lineItems[i].name.toUpperCase();
+                    invoice.lineItems[i].amountFMT = formatCurrency(invoice.lineItems[i].amount, opts);
+                    invoice.lineItems[i].itemNumberFMT = invoice.lineItems[i].itemNumber+ format('dd', invoice.date);
+                }
+
+                fs.readFile('./src/app/modules/invoice/invoice-content.html', 'utf-8', function (err, template) {
+                    if (err) throw err;
+                    var output = mustache.to_html(template, {data: invoice});
+
+
+
+                    var options = { format: 'Letter' };
+
+
+                    console.log("making string");
+
+
+                    pdf.create(output).toBuffer(function(err, buffer){
+
+                        var pdfstring = buffer.toString();
+
+                        //console.log("string is " + pdfstring);
+                        res.setHeader('Content-disposition', 'inline; filename="demesy-invoice.pdf"');
+                        res.setHeader('Content-type', 'application/pdf');
+
+                        res.send(pdfstring);
+
+                    });
+
+
+
+
+
+
+                });
+            }
+
+        });
+    });
+
+
+        router.route('/invoices/:invoice_id/print')
   //  .get(checkJwt, function(req, res) {
     .get( function(req, res) {
 
@@ -290,9 +357,6 @@ router.route('/invoices/:invoice_id/print')
                 invoice.dateFMT =  format('MM/dd/yyyy', invoice.date);
 
                 console.log("shipping: "+ invoice.shipping + " formatted "+ invoice.shippingFMT);
-
-
-
 
                 for (var i = 0; i < invoice.lineItems.length; i++) {
 

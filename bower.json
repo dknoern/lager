@@ -80,7 +80,9 @@
     "holderjs": "2.5.0",
     "switchery": "0.8.1",
     "angular-file-upload": "2.5.0",
-    "angular-jwt": "0.1.9"
+    "angular-jwt": "0.1.9",
+    "pdfmake": "0.1.37",
+    "html2canvas": "0.4.1"
   },
   "overrides": {
     "bootstrap": {
