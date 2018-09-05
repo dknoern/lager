@@ -91,6 +91,7 @@
             "processing": true,
             "serverSide": true,
             "ordering": false,
+        stateSave: true,
             "ajax": {
               url: "/api/customers",
                 headers: {

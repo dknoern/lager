@@ -25,6 +25,7 @@
             "pageLength": 50,
             "ajax": "/api/logitems",
             "dom": 'Bfrtip',
+            stateSave: true,
             "buttons": [
                 {
                     extend: 'excel',
