@@ -18,6 +18,7 @@ var scopeHolder;
             "processing": true,
             "serverSide": true,
             "ordering": false,
+                stateSave: true,
             "ajax": {
                 url: "/api/repairs?filter=outstanding",
                 headers: {

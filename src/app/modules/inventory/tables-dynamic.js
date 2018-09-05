@@ -18,13 +18,14 @@
           "serverSide": true,
           "ordering": true,
           "pageLength": 50,
+      stateSave: true,
           "ajax": {
               url: "/api/products",
               headers: {
                   "Authorization": "Bearer " + accessToken
               }
               },
-          "order": [[ 5, 'desc' ]]
+          "order": [[ 6, 'desc' ]]
       } );
   }
 

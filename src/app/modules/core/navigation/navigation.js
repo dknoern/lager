@@ -6,9 +6,6 @@
     .directive('snNavigation', snNavigation)
   ;
 
-
-  //this.scope.app.state['nav-static'] = true;
-
   /* ========================================================================
    * Sing App actions. Shortcuts available via data-sn-action attribute
    * ========================================================================
