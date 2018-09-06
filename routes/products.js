@@ -468,6 +468,9 @@ router.route('/products')
             },
                 {
                     itemNumber: {$ne: null}
+                },
+                {
+                    itemNumber: {$ne: ""}
                 }
 
                 , {
