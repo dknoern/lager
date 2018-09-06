@@ -220,10 +220,16 @@ router.route('/invoices')
                     itemNo = invoices[i].lineItems[0].itemNumber;
                     itemName = invoices[i].lineItems[0].name;
                 }
+
+
+                var customerName = "";
+                if(invoices[i].customerFirstName!=null) customerName +=invoices[i].customerFirstName + " ";
+                if(invoices[i].customerLastName!=null) customerName +=invoices[i].customerLastName + " ";
+
                 results.data.push(
                     [
                         '<a href=\"/#/app/invoice/' + invoices[i]._id + '\">' + invoices[i]._id + '</a>',
-                        invoices[i].customerFirstName + " " + invoices[i].customerLastName,
+                        customerName,
                         '<div style="white-space: nowrap;">' + format('yyyy-MM-dd', invoices[i].date)+'</div>',
                         itemNo,
                         itemName,
