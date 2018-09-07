@@ -61,7 +61,7 @@ var upsertLogItem = function (req, res, productId, action) {
         }, {
 
             "$set": {
-                'history.$.date': Date.now(),
+                // don't change date...   'history.$.date': Date.now(),
                     'history.$.action': action,
                     'history.$.user': req.body.history.user,
                     'history.$.itemReceived': req.body.history.itemReceived,
