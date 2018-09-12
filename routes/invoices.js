@@ -40,7 +40,37 @@ function getFullName(name){
     else if("janet"==name) fullName = "Janet Gary";
 }
 
-function upsertInvoice(req,res,invoice){
+
+function buildSearchField(doc){
+
+    var search = "";
+    if(doc._id != null){
+        search += doc._id + " ";
+    }
+
+    search += doc.customerFirstName + " " + doc.customerLastName + " " + format('yyyy-MM-dd', doc.date) + " ";
+
+    if (doc.lineItems != null) {
+        for (var i = 0; i < doc.lineItems.length; i++) {
+            if(doc.lineItems[i] != null){
+                search += " " + doc.lineItems[i].itemNumber + " " + doc.lineItems[i].name;
+            }
+        }
+    }
+
+    console.log("SEARCH = " + search);
+
+    return search;
+}
+
+async function upsertInvoice(req,res,invoice){
+
+
+    if(invoice._id==null) {
+        var counter = await Counter.findByIdAndUpdate({_id: 'invoiceNumber'}, {$inc: {seq: 1}});
+        invoice._id = counter.seq;
+    }
+
 
     // update item status to sold, but only if NOT Partner
     if(invoice.invoiceType!="Partner"){
@@ -51,32 +81,17 @@ function upsertInvoice(req,res,invoice){
             itemStatus = "Memo";
             itemAction = "item memo"
         }
-        history.updateProductHistory(req.body.lineItems, itemStatus, itemAction, req.user['http://mynamespace/name']);
+        history.updateProductHistory(req.body.lineItems, itemStatus, itemAction, req.user['http://mynamespace/name'],invoice._id);
     }
 
-    invoice.search = invoice._id + " " + invoice.customerFirstName + " " + invoice.customerLastName + " " + format('yyyy-MM-dd', invoice.date) + " ";
 
-    if (invoice.lineItems != null && invoice.lineItems.length > 0 && invoice.lineItems[0] != null) {
+    console.log("new invoice ID is "+ invoice._id);
 
-        invoice.search += invoice.lineItems[0].itemNumber + invoice.lineItems[0].name;
-    }
+    // end try
 
-    console.log('search is ' + invoice.search);
+    invoice.search = buildSearchField(invoice);
+    console.log("search is " + invoice.search);
 
-          // use save for updates, findOne and update for inserts for now until we
-          // figure out the problem with the "pre" in mongoose.
-          if (invoice._id == null || invoice._id == "") {
-              invoice.save(function(err) {
-                  if (err) {
-                      console.log('error saving invoice: ' + err);
-                      res.send(err);
-                  } else {
-                      res.json({
-                          message: 'invoice updated'
-                      });
-                  }
-              });
-          } else {
               var query = {
                   _id: invoice._id
               };
@@ -88,7 +103,6 @@ function upsertInvoice(req,res,invoice){
                   });
                   return res.send("invoice saved");
               });
-          }
 }
 
 
@@ -194,8 +208,12 @@ router.route('/invoices')
         var length = 10;
         if (req.query.start) start = req.query.start;
         if (req.query.length) length = req.query.length;
+
+
         var search = req.query.search.value;
+
         var opts = { format: '%s%v', symbol: '$' };
+
 
         var results = {
             "draw": draw,
@@ -216,9 +234,16 @@ router.route('/invoices')
 
                 var itemNo = "";
                 var itemName = "";
-                if (invoices[i].lineItems != null && invoices[i].lineItems.length > 0) {
-                    itemNo = invoices[i].lineItems[0].itemNumber;
-                    itemName = invoices[i].lineItems[0].name;
+
+                if (invoices[i].lineItems != null) {
+
+
+                    for (var j=0;j< invoices[i].lineItems.length ;j++){
+                        itemNo += invoices[i].lineItems[j].itemNumber + "<br/>";
+                        itemName +=  " " + invoices[i].lineItems[j].name + "<br/>";
+
+                    }
+
                 }
 
 

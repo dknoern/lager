@@ -42,7 +42,7 @@ function upcertRepair(req,res, repair){
         if(repair.vendor != null){
             action += " - " + repair.vendor;
         }
-        history.updateProductHistory([{productId: repair.itemId}], "Repair", action, req.user['http://mynamespace/name']);
+        history.updateProductHistory([{productId: repair.itemId}], "Repair", action, req.user['http://mynamespace/name'],null);
 
         repair.save(function(err) {
             if (err) {
@@ -327,7 +327,7 @@ router.route('/repairs/:repair_id/return')
                     if (err)
                         res.send(err);
 
-                    history.updateProductHistory([{productId: repair.itemId}], "In Stock", "back from repair", req.user['http://mynamespace/name']);
+                    history.updateProductHistory([{productId: repair.itemId}], "In Stock", "back from repair", req.user['http://mynamespace/name'],null);
 
 
                     res.json({

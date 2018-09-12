@@ -115,9 +115,6 @@ router.route('/returns')
             });
         }
 
-        console.log("calling updateProductHistory")
-
-
         // filter out non-included items
         var includedLineItems = new Array();
         for (var i = 0, len = req.body.lineItems.length; i < len; i++) {
@@ -126,7 +123,7 @@ router.route('/returns')
             }
         }
 
-        history.updateProductHistory(includedLineItems, "In Stock", "item returned", req.user['http://mynamespace/name']);
+        history.updateProductHistory(includedLineItems, "In Stock", "item returned", req.user['http://mynamespace/name'],null);
 
     })
 
@@ -289,7 +286,7 @@ router.route('/customers/:customer_id/returns')
             'customerId': customerId
         });
 
-        query.select('customer date returnNumber customerId total');
+        query.select('customer returnDate returnNumber customerId totalReturnAmount');
 
         query.exec(function(err, returns) {
             if (err)

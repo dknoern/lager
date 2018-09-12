@@ -11,7 +11,7 @@ const option = {
     reconnectTries: 90000
 };
 
-mongoose.connect('mongodb://localhost:27018/lager', option);
+mongoose.connect('mongodb://localhost:27017/lager', option);
 
 fixInvoices();
 
@@ -28,9 +28,12 @@ function fixInvoices() {
             // fix search
             invoice.search = invoice._id + " " + invoice.customerFirstName + " " + invoice.customerLastName + " " + format('yyyy-MM-dd', invoice.date) + " ";
 
-            if (invoice.lineItems != null && invoice.lineItems.length > 0 && invoice.lineItems[0] != null) {
-
-                invoice.search += invoice.lineItems[0].itemNumber + " " + invoice.lineItems[0].name;
+            if (invoice.lineItems != null) {
+                for (var i = 0; i < invoice.lineItems.length; i++) {
+                    if(invoice.lineItems[i] != null){
+                        invoice.search += " " + invoice.lineItems[i].itemNumber + " " + invoice.lineItems[i].name;
+                    }
+                }
             }
 
             invoice.save();
