@@ -610,7 +610,11 @@
                                             <tr data-ng-repeat="historyEntry in data.history" ng-if="historyEntry.action!='received-deleted'">
                                                 <td>{{historyEntry.date | date : "MM/dd/y"}}</td>
                                                 <td>{{historyEntry.user}}</td>
-                                                <td>{{historyEntry.action}}</td>
+                                                <td>{{historyEntry.action}}
+                                                    <span ng-if ="historyEntry.refDoc!=null">
+                                                        <a href="/#/app/invoice/{{historyEntry.refDoc}}">{{historyEntry.refDoc}}</a>
+                                                    </span>
+                                                </td>
                                             </tr>
                                             </tbody>
                                         </table>

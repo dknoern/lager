@@ -61,20 +61,38 @@ var InvoiceSchema = new mongoose.Schema({
     }
 });
 
+// TODO: remove pre hook
 InvoiceSchema.pre('save', function (next) {
     var doc = this;
+
+    doc.search = doc.customerFirstName + " " + doc.customerLastName + " " + format('yyyy-MM-dd', doc.date) + " ";
+
+    if (doc.lineItems != null) {
+        for (var i = 0; i < doc.lineItems.length; i++) {
+            if(doc.lineItems[i] != null){
+                doc.search += " " + doc.lineItems[i].itemNumber + " " + doc.lineItems[i].name;
+            }
+        }
+    }
 
     if (doc._id==null) {
         Counter.findByIdAndUpdate({_id: 'invoiceNumber'}, {$inc: {seq: 1}}, function (error, counter) {
             if (error)
                 return next(error);
             doc._id = counter.seq;
+
+            doc.search = doc._id + " " + doc.search;
+            console.log("SEARCH: "+ doc.search);
             next();
         });
     }else{
+
+        doc.search = doc._id + " " + doc.search;
+        console.log("SEARCH: "+ doc.search);
         next();
     }
 });
+
 
 InvoiceSchema.virtual('dateFMT').get(function () {
     return format('MM/dd/yyyy', this.date);

@@ -1,6 +1,6 @@
 var Product = require('../models/product');
 
-module.exports.updateProductHistory = function(lineItems,status,action,user) {
+module.exports.updateProductHistory = function(lineItems,status,action,user, refDoc) {
 
 
     // don't log product updates (edits)
@@ -35,6 +35,10 @@ module.exports.updateProductHistory = function(lineItems,status,action,user) {
                     date: Date.now(),
                     action: action
                 };
+
+                if(refDoc!=null){
+                    historyEntry.refDoc = refDoc;
+                }
 
                 console.log("updating product " + product._id);
 
