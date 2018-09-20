@@ -100,6 +100,8 @@
 
                         <li ng-if="'In Stock' == data.status"><a ng-click="toggleStatus('In Stock','At Show')">Out to
                             Show</a></li>
+                        <li ng-if="'Partnership' == data.status"><a ng-click="toggleStatus('Partnership','At Show')">Out to
+                            Show</a></li>
                         <li ng-if="'At Show' == data.status"><a ng-click="toggleStatus('In Stock','At Show')">Back
                             from Show</a></li>
 

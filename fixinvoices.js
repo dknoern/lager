@@ -11,7 +11,7 @@ const option = {
     reconnectTries: 90000
 };
 
-mongoose.connect('mongodb://localhost:27017/lager', option);
+mongoose.connect('mongodb://localhost:27018/lager', option);
 
 fixInvoices();
 
