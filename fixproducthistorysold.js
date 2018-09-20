@@ -17,7 +17,7 @@ const option = {
 // db.products.update({},{$pull:{"history": {"action":"item sold"}}},{multi:true});
 
 
-mongoose.connect('mongodb://localhost:27017/lager', option);
+mongoose.connect('mongodb://localhost:27018/lager', option);
 
 fixInvoices();
 

@@ -81,7 +81,13 @@
               statusChanged = true;
           }
 
+
           if(statusChanged) {
+
+              if('In Stock' == newStatus && 'Partner' == $scope.data.sellerType){
+                  newStatus = 'Partnership';
+              }
+
 
               var statusData = {
                   "status": newStatus
