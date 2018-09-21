@@ -195,7 +195,6 @@ var upsertLogItem = function (req, res, productId, action) {
     }
 }
 
-
 router.route('/products/outtoshow')
     .post(checkJwt, function (req, res) {
             var itemNumbers = req.body;
@@ -486,12 +485,14 @@ router.route('/products')
 
             for (var i = 0; i < products.length; i++) {
 
+                var status = products[i].statusDisplay;
+
                 var badgeStyle = "default"; // grey
-                if (products[i].status == 'In Stock' || products[i].status == 'Partnership' || products[i].status == 'Problem')
+                if (status == 'In Stock' || status == 'Partnership' || status == 'Problem')
                     badgeStyle = "success"; // green
-                else if (products[i].status == 'Repair' || products[i].status == 'Memo' || products[i].status == 'At Show')
+                else if (status == 'Repair' || status == 'Memo' || status == 'At Show')
                     badgeStyle = "warning" // yellow
-                else if (products[i].status == 'Sale Pending')
+                else if (status == 'Sale Pending')
                     badgeStyle = "danger" // red
 
 
@@ -501,16 +502,14 @@ router.route('/products')
                     titleAndDial += ' - ' + products[i].dial;
                 }
 
-
                 results.data.push(
                     [
                         '<a href=\"#\" onclick=\"selectProduct(\'' + products[i]._id + '\');return false;\">' + products[i].itemNumber + '</a>',
-                        //'<a href=\"/#/app/item/' + products[i]._id + '\">' + products[i]._id,
                         titleAndDial,
                         products[i].serialNo,
                         formatCurrency(products[i].sellingPrice,opts),
                         products[i].modelNumber,
-                        "<span class=\"badge bg-" + badgeStyle + "\">" + products[i].status + "</span>",
+                        "<span class=\"badge bg-" + badgeStyle + "\">" + status + "</span>",
                         format('yyyy-MM-dd', products[i].lastUpdated),
                     ]
                 );
@@ -551,7 +550,8 @@ router.route('/products')
             modelNumber: 1,
             status: 1,
             productType: 1,
-            lastUpdated: 1
+            lastUpdated: 1,
+            sellerType: 1
         });
     });
 
@@ -731,13 +731,18 @@ router.route('/logitems')
         };
 
         var sortClause = {"history.date": -1};
+        
 
         Product.
-        aggregate([{ $match: {$and: [
+        aggregate([
+
+
+            {$unwind: "$history"},
+            { $match: {$and: [
             {'history.action': 'received'},
             {'history.search': new RegExp(search, 'i')}
                 ]}   }]).
-        unwind('history').sort(sortClause).skip(parseInt(start)).limit(parseInt(length))
+        sort(sortClause).skip(parseInt(start)).limit(parseInt(length))
             .exec(function (err, products) {
 
             if(products==null){
@@ -747,9 +752,6 @@ router.route('/logitems')
             else {
 
                 for (var i = 0; i < products.length; i++) {
-
-                    if (products[i].history.action == "received") {
-
 
                         var itemReceived = "";
                         if (products[i].itemNumber != null && products[i].itemNumber != "") {
@@ -768,27 +770,51 @@ router.route('/logitems')
                                 products[i].history.comments
                             ]
                         );
-                    }
                 }
             }
 
-            Product.count({
-                'history.action': 'received'
-            }, function (err, count) {
-                results.recordsTotal = count;
 
-                if (search == '' || search == null) {
-                    results.recordsFiltered = count;
-                    res.json(results);
-                } else {
-                    Product.count({
-                        'history.action': 'received'
-                    }, function (err, count) {
-                        results.recordsFiltered = count;
+
+
+                Product.aggregate([{$unwind: "$history"},
+                    {
+                    $match: {
+                        $and: [
+                            {'history.action': 'received'}
+
+                        ]
+                    }
+                }]).exec(function (err, products2) {
+                    results.recordsTotal = products2.length
+
+
+                    if (search == '' || search == null) {
+                        results.recordsFiltered = results.recordsTotal;
                         res.json(results);
-                    });
-                }
-            });
+                    }else {
+
+
+                        Product.aggregate([
+                            {$unwind: "$history"},{
+                            $match: {
+                                $and: [
+                                    {'history.action': 'received'},
+                                    {'history.search': new RegExp(search, 'i')}
+                                ]
+                            }
+                        }]).exec(function (err, products3) {
+                            results.recordsFiltered = products3.length
+
+                            res.json(results);
+                        });
+                    }
+
+                });
+
+
+
+
+
         });
     });
 
