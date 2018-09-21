@@ -82,15 +82,13 @@
                         <li><a href="#" data-toggle="modal" data-toggle="modal"
                                data-target="#addImagesModal">Add Images</a></li>
 
-                        <li ng-if="'In Stock' == data.status || 'Memo' == data.status || 'Partnership' == data.status"><a href="#"
+                        <li ng-if="'In Stock' == data.status || 'Memo' == data.status"><a href="#"
                                                                                           data-toggle="modal"
                                                                                           data-target="#customerModal" onclick="customerSelectMode='invoice';">Create
                             Invoice</a></li>
 
-                        <!--li ng-if="'Partner' == data.sellerType"><a href="#" ng-click="getPartnerInvoice()">Partner Invoice</a></li-->
 
-
-                        <li ng-if="'In Stock' == data.status || 'Memo' == data.status || 'Partnership' == data.status || 'Sold' == data.status"><a href="#"
+                        <li ng-if="'In Stock' == data.status || 'Memo' == data.status || 'Sold' == data.status"><a href="#"
                                                                                           data-toggle="modal"
                                                                                           data-target="#customerModal" onclick="customerSelectMode='repair';">Repair</a></li>
 
@@ -99,8 +97,6 @@
                         <li><a ng-click="cloneItem()">Clone Item</a></li>
 
                         <li ng-if="'In Stock' == data.status"><a ng-click="toggleStatus('In Stock','At Show')">Out to
-                            Show</a></li>
-                        <li ng-if="'Partnership' == data.status"><a ng-click="toggleStatus('Partnership','At Show')">Out to
                             Show</a></li>
                         <li ng-if="'At Show' == data.status"><a ng-click="toggleStatus('In Stock','At Show')">Back
                             from Show</a></li>
@@ -433,7 +429,7 @@
                                     <div class="col-sm-8">
                                         <select id="sellerType" class="selectpicker"
                                                 data-selectpicker data-width="auto"
-                                                ng-model="data.sellerType" required ng-change="changeSellerType()">
+                                                ng-model="data.sellerType" required>
                                             <option></option>
                                             <option>Individual</option>
                                             <option>Partner</option>

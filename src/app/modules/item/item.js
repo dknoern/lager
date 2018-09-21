@@ -34,10 +34,12 @@
                     }
                 }
             });
+        }else{
+            $scope.data = {"status":"In Stock"};
         }
 
         $scope.getPartnerInvoice = function() {
-            alert('gettingh partner invpoice');
+            alert('getting partner invpoice');
             $window.location = "/#/app/partnerinvoice/" + $scope.data._id;
         }
 
@@ -58,13 +60,6 @@
           });
         }
 
-        $scope.changeSellerType = function(){
-            console.log("change seller type...");
-            if($scope.data.sellerType == "Partner" && ($scope.data.status=="In Stock" || $scope.data.status==null))
-                $scope.data.status = "Partnership";
-            else if($scope.data.sellerType != "Partner" && $scope.data.status=="Partnership" || $scope.data.status==null)
-                $scope.data.status = "In Stock";
-        }
 
         $scope.toggleStatus = function(status1, status2) {
 
@@ -83,10 +78,6 @@
 
 
           if(statusChanged) {
-
-              if('In Stock' == newStatus && 'Partner' == $scope.data.sellerType){
-                  newStatus = 'Partnership';
-              }
 
 
               var statusData = {

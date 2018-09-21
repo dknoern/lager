@@ -47,4 +47,14 @@ var ProductSchema = new mongoose.Schema({
     }]
 });
 
+
+ProductSchema.virtual('statusDisplay').get(function () {
+
+    if('Partner' == this.sellerType && 'In Stock' == this.status){
+        return "Partnership";
+    }else{
+        return this.status;
+    }
+});
+
 module.exports = mongoose.model('Product', ProductSchema);
