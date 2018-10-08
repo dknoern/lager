@@ -50,6 +50,8 @@
         width: 30%;
     }
 
+
+
     /* Use a media query to add a break point at 800px: */
     @media screen and (max-width: 800px) {
         .left, .right {
@@ -70,7 +72,9 @@
 
         <div class="box box70">
 
-            <img src="{{data.logo}}" alt="Logo" class="invoice-logo" style="max-height:150px;"/>
+
+            <img src="{{logoUrl}}" alt="Logo" class="invoice-logo" style="max-height:63px;"/>
+            <div style="padding-left: 5px; font-weight: 500; font-size:32px; color:#C3AA63;">{{data.invoiceTypeFMT}}</div>
 
 
         </div>
@@ -78,13 +82,17 @@
 
             {{data.invoiceType}} # {{data._id}}<br/>
             {{data.invoiceType}} Date: {{data.dateFMT }}<br/>
+            {{#data.salesPerson}}
             Sold By: {{data.salesPerson}}<br/>
+            {{/data.salesPerson}}
+            {{#data.methodOfSale}}
             Method of Sale: {{data.methodOfSale}}<br/>
-            Paid By: {{data.paidBy}}
+            {{/data.methodOfSale}}
+            {{#data.paidBy}}
+            Paid By: {{data.paidBy}}<br/>
+            {{/data.paidBy}}
             {{#data.authNumber}}
-
-            <br/>Auth #: {{data.authNumber}}
-
+            Auth #: {{data.authNumber}}<br/>
             {{/data.authNumber}}
         </div>
     </div>
@@ -92,11 +100,7 @@
     <div>
         <div class="box box50">
 
-
-
-
             {{data.customerFirstName}} {{data.customerLastName}}<br/>
-
 
             <div>{{data.shipAddress1}}</div>
             <div>{{data.shipAddress2}}</div>
@@ -128,7 +132,14 @@
 
             </th>
             <th width="15%" style="border-bottom: 1px solid #aaa;"></th>
-            <th width="15%" align="left" style="border-bottom: 1px solid #aaa;">TOTAL</th>
+            <th width="15%" align="left" style="border-bottom: 1px solid #aaa;">
+                {{#data.isConsignment}}
+                Net price to consigner
+                {{/data.isConsignment}}
+                {{^data.isConsignment}}
+                TOTAL
+                {{/data.isConsignment}}
+            </th>
         </tr>
         </thead>
         <tbody>
@@ -150,6 +161,10 @@
             <td style="border-bottom: 1px solid #aaa; padding: 8px;">{{amountFMT }}</td>
         </tr>
         {{/data.lineItems}}
+
+
+
+        {{^data.isConsignment}}
 
         <tr>
             <td></td>
@@ -180,8 +195,13 @@
             </td>
         </tr>
 
+        {{/data.isConsignment}}
+
         </tbody>
     </table>
+
+
+    {{^data.isConsignment}}
 
     <div align="right" style="padding:8px;font-size:14px">
         Thank you for your business
@@ -220,6 +240,39 @@
 
         Unfortunately, NIB (New in Box) or UNUSED watches are not eligible for our return policy.
     </div>
+
+    {{/data.isConsignment}}
+
+
+    {{#data.isConsignment}}
+
+    <table width="100%">
+
+        <tr>
+            <td width="33%" height=40px><b>Consignee</b></td><td width="33%"></td></td><td width="33%"><b>Consignor</b></td>
+        </tr>
+
+        <tr>
+            <td width="33%" height=40px style="border-bottom: 1px solid #CCCCCC"></td><td width="33%"></td></td><td width="33%" style="border-bottom: 1px solid #CCCCCC">
+        </tr>
+
+
+        <tr>
+            <td>DeMesy & Co.</td><td></td><td>{{data.customerFirstName}} {{data.customerLastName}}</td>
+        </tr>
+        <tr>
+            <td width="33%" height=40px style="border-bottom: 1px solid #CCCCCC"><td width="33%"></td></td><td width="33%" style="border-bottom: 1px solid #CCCCCC">
+        </tr>
+        <tr>
+            <td>Date</td><td></td><td>Date</td>
+        </tr>
+
+
+    </table>
+
+
+    {{/data.isConsignment}}
+
 
     <hr style="border-top:1px solid #eeeeee; margin-top:5px; margin-bottom:5px"/>
 

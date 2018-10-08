@@ -18,7 +18,6 @@ var scopeHolder;
 
         $scope.email = function() {
 
-
             $http({
                 method: "POST",
                 url: "api/invoices/email",
@@ -49,7 +48,6 @@ var scopeHolder;
             });
 
         }
-
 
 
         $scope.copyAddress = function() {
@@ -168,12 +166,14 @@ var scopeHolder;
 
 
         $scope.pdf = function(){
-            html2canvas(document.getElementById('invoice'), {
+            html2canvas(document.getElementById('printable'), {
+
                 onrendered: function (canvas) {
                     var data = canvas.toDataURL();
                     var docDefinition = {
                         content: [{
-                            image: data
+                            image: data,
+                            width: 500
                         }]
                     };
                     pdfMake.createPdf(docDefinition).download("demesy-invoice.pdf");

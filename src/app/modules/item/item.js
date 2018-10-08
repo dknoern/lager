@@ -39,7 +39,7 @@
         }
 
         $scope.getPartnerInvoice = function() {
-            alert('getting partner invpoice');
+            alert('getting partner invoice');
             $window.location = "/#/app/partnerinvoice/" + $scope.data._id;
         }
 

@@ -98,11 +98,14 @@ InvoiceSchema.virtual('dateFMT').get(function () {
     return format('MM/dd/yyyy', this.date);
 });
 
-InvoiceSchema.virtual('logo').get(function () {
-    var type =  "invoice";
-    if("Memo" == this.invoiceType) type = "memo";
-    return  "http://demesyinventory.com/assets/images/logo/" + type + "-logo.png";
+InvoiceSchema.virtual('invoiceTypeFMT').get(function () {
+    var invoiceType = this.invoiceType;
+    if(invoiceType == null) invoiceType = "Invoice";
+    if(invoiceType == 'Consignment') invoiceType = "Consignment Agreement";
+    else if(invoiceType == 'Partner') invoiceType = "Partner Invoice";
+    return invoiceType.toUpperCase();
 });
+
 
 InvoiceSchema.virtual('subtotalFMT').get(function () {
     return formatCurrency(this.subtotal, opts);
@@ -152,5 +155,11 @@ function formatCity(city, state, zip){
 
     return cityFMT;
 }
+
+
+InvoiceSchema.virtual('isConsignment').get(function () {
+    return "Consignment" == this.invoiceType;
+});
+
 
 module.exports = mongoose.model('Invoice', InvoiceSchema);

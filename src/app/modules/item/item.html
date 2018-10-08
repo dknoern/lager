@@ -454,6 +454,10 @@
                                     <a href="/#/app/partnerinvoice/{{data._id}}">Partner invoice</a>
                                 </div>
 
+                                <div ng-if="data._id!=null && 'Consignment' == data.sellerType">
+                                    <a href="/#/app/consignmentinvoice/{{data._id}}">Consignment agreement</a>
+                                </div>
+
                                 <div class="form-group">
                                     <div class="col-sm-3"></div>
                                     <div class="col-sm-8">

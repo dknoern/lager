@@ -103,6 +103,9 @@ var upsertLogItem = function (req, res, productId, action) {
                             if("Partner"==product.sellerType){
                                 console.log("item status set to partnership ");
                                 newStatus = "Partnership"
+                            } else if("Consignment"==product.sellerType){
+                                console.log("item status set to consignment-items.html ");
+                                newStatus = "Consignment"
                             }
                         }else {
                             console.log("found at least one invoice that contains item : " + productId);
@@ -488,7 +491,7 @@ router.route('/products')
                 var status = products[i].statusDisplay;
 
                 var badgeStyle = "default"; // grey
-                if (status == 'In Stock' || status == 'Partnership' || status == 'Problem')
+                if (status == 'In Stock' || status == 'Partnership' || status == 'Consignment' || status == 'Problem')
                     badgeStyle = "success"; // green
                 else if (status == 'Repair' || status == 'Memo' || status == 'At Show')
                     badgeStyle = "warning" // yellow
@@ -706,7 +709,7 @@ router.route('/logitems')
                     console.log("creating new log item for existing item");
                     return upsertLogItem(req, res, product._id,);
                 } else {
-                    console.log('didnt find existing product with itemNumber ' + req.body.itemNumber);
+                    console.log('did not find existing product with itemNumber ' + req.body.itemNumber);
                     return upsertLogItem(req, res, null);
                 }
             });
@@ -731,7 +734,7 @@ router.route('/logitems')
         };
 
         var sortClause = {"history.date": -1};
-        
+
 
         Product.
         aggregate([
