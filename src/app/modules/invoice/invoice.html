@@ -182,12 +182,12 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group">
+                                        <div class="form-group required">
                                             <label for="invoiceType" class="col-sm-3 control-label">Invoice Type</label>
 
                                             <div class="col-sm-8">
 
-                                                <select id="invoiceType" class="selectpicker" data-selectpicker data-width="auto" ng-model="data.invoiceType" ng-readonly="'Partner' == data.invoiceType">
+                                                <select id="invoiceType" class="selectpicker" data-selectpicker data-width="auto" ng-model="data.invoiceType" ng-readonly="'Partner' == data.invoiceType" required>
                                                     <option></option>
                                                     <option>Invoice</option>
                                                     <option>Memo</option>
