@@ -13,6 +13,45 @@ function formatMoney(value){
     else return formatCurrency(value,  { format: '%s%v', code: "", symbol: '$' });
 }
 
+
+function getBySellerType(sellerType, res){
+    var results = {
+        "data": []
+    };
+    Product.find({
+        "sellerType": sellerType
+    }, function (err, products) {
+
+        if (err)
+            res.send(err);
+
+        for (var i = 0; i < products.length; i++) {
+
+            results.data.push(
+                [
+                    products[i].seller,
+                    format('yyyy-MM-dd', products[i].lastUpdated),
+                    products[i].itemNumber,
+                    products[i].title,
+                    '$' + products[i].cost,
+                    '$' + products[i].sellingPrice
+                ]
+            );
+        }
+        res.json(results);
+    }).sort({
+        lastUpdated: -1
+    }).select({
+        seller: 1,
+        lastUpdated: 1,
+        _id: 1,
+        itemNumber: 1,
+        title: 1,
+        cost: 1,
+        sellingPrice: 1
+    });
+}
+
 router.use(function (req, res, next) {
     next();
 });
@@ -139,9 +178,7 @@ router.route('/reports/daily-sales/:year/:month/:day')
                 $gte: new Date(year, month - 1, day),
                 $lt: new Date(year, month - 1, day + 1)
             },
-            "invoiceType": {
-                $ne: "Partner"
-            }
+            "invoiceType": {$nin: [ "Partner", "Consignment" ] }
     }, function (err, invoices) {
 
             if (err)
@@ -271,13 +308,19 @@ router.route('/reports/returns-summary/:year/:month')
         });
     });
 
-router.route('/reports/partnership-items')
+
+
+router.route('/reports/items/sellertype/:sellerType')
     .get(checkJwt, function (req, res) {
+        var sellerType = req.params.sellerType;
+
+        console.log("report called for items of sellerType " + sellerType);
+
         var results = {
             "data": []
         };
         Product.find({
-            "sellerType": "Partner"
+            "sellerType": sellerType
         }, function (err, products) {
 
             if (err)
@@ -308,7 +351,13 @@ router.route('/reports/partnership-items')
             cost: 1,
             sellingPrice: 1
         });
+
+
     });
+
+
+
+
 
 router.route('/reports/monthly-sales/:year/:month')
     .get(checkJwt, function (req, res) {
@@ -410,7 +459,7 @@ router.route('/reports/in-stock')
 
         Product.find({
             $and: [{
-                status: { $in: ["In Stock","Partnership"] }
+                status: { $in: ["In Stock","Partnership","Consignment"] }
             },
                 { itemNumber: {$ne: null} }
                 ]

@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+var pdf = require('express-pdf');
 var bodyParser = require('body-parser');
 const path = require('path');
 var mongoose = require('mongoose');
@@ -13,6 +14,8 @@ mongoose.connect('mongodb://localhost:27017/lager');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+
+app.use(pdf);
 
 app.use('/app/modules', express.static('./src/app/modules'));
 

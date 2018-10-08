@@ -45,5 +45,18 @@
                     $scope.productId = $stateParams.productId;
                 }
             });
+
+
+        $stateProvider
+            .state('app.consignmentinvoice', {
+                url: '/consignmentinvoice/:productId',
+                templateUrl: 'app/modules/invoice/extra-invoice.html',
+                controller: function ($scope, $stateParams) {
+                    $scope.productId = $stateParams.productId;
+                }
+            });
+
+
+
     }
 })();

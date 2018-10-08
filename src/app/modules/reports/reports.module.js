@@ -60,7 +60,18 @@
                     url: '/reports/5',
                     templateUrl: 'app/modules/reports/partnership-items.html',
                     controller: function($scope, $stateParams) {
-                        $scope.reportId = "partnership-items";
+                        $scope.reportId = "items/sellertype/Partner";
+                    }
+                });
+
+
+
+            $stateProvider
+                .state('app.reports5b', {
+                    url: '/reports/5b',
+                    templateUrl: 'app/modules/reports/consignment-items.html',
+                    controller: function($scope, $stateParams) {
+                        $scope.reportId = "items/sellertype/Consignment";
                     }
                 });
 

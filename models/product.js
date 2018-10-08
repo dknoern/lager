@@ -52,6 +52,8 @@ ProductSchema.virtual('statusDisplay').get(function () {
 
     if('Partner' == this.sellerType && 'In Stock' == this.status){
         return "Partnership";
+    }else if('Consignment' == this.sellerType && 'In Stock' == this.status){
+        return "Consignment";
     }else{
         return this.status;
     }

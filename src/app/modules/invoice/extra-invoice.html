@@ -1,8 +1,12 @@
 <div class="row" data-ng-controller="InvoiceCtrl">
   <div class="col-md-11" id="invoice">
 
+    <div id="printable">
 
     <ng-include src="printableUrl"></ng-include>
+
+
+    </div>
 
     <div class="btn-toolbar mt-lg text-align-center hidden-print">
       <button data-ng-click="print()" class="btn btn-inverse">
@@ -30,13 +34,13 @@
 
 
 
-      <!--button class="btn btn-primary" ng-click="pdf()">
+      <button class="btn btn-danger" ng-click="pdf()">
         PDF
         &nbsp;
         <span class="circle bg-white">
-                              <i class="fa fa-file-pdf-o text-primary"></i>
+                              <i class="fa fa-file-pdf-o text-danger"></i>
                           </span>
-      </button-->
+      </button>
 
 
     </div>

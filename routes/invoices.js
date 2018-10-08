@@ -299,6 +299,17 @@ router.route('/invoices')
 
 
 
+function streamToString(stream, cb) {
+    const chunks = [];
+    stream.on('data', (chunk) => {
+        chunks.push(chunk.toString());
+    });
+    stream.on('end', () => {
+        cb(chunks.join(''));
+    });
+}
+
+
 
 router.route('/invoices/:invoice_id/pdf')
     .get( function(req, res) {
@@ -310,9 +321,6 @@ router.route('/invoices/:invoice_id/pdf')
                 res.send(err);
             }
             else {
-
-                if (invoice.invoiceType == "Memo") invoice.logo = "http://demesyinventory.com/assets/images/logo/memo-logo.png";
-                else invoice.logo = "http://demesyinventory.com/assets/images/logo/invoice-logo.png";
 
                 invoice.subtotalFMT = formatCurrency(invoice.subtotal, opts);
                 invoice.taxFMT = formatCurrency(invoice.tax, opts);
@@ -331,28 +339,58 @@ router.route('/invoices/:invoice_id/pdf')
 
                 fs.readFile('./src/app/modules/invoice/invoice-content.html', 'utf-8', function (err, template) {
                     if (err) throw err;
-                    var output = mustache.to_html(template, {data: invoice});
+                    var output = mustache.to_html(template, {data: invoice,logoUrl:"http://demesyinventory.com/assets/images/logo/logo.png"});
 
 
 
-                    var options = { format: 'Letter' };
+                    var options = {
+                        format: 'Letter',
+                        zoomFactor: ".5"
+                    };
 
 
                     console.log("making string");
 
 
-                    pdf.create(output).toBuffer(function(err, buffer){
+
+
+
+
+
+
+
+
+//---------------
+
+
+
+                   // pdf.create(output,options).toStream(function(err, stream){
+                  //      stream.pipe(fs.createWriteStream('./invoice.pdf'));
+                  //  });
+
+
+
+                    res.pdfFromHTML({
+                        filename: 'invoice.pdf',
+                        htmlContent: output,
+                        options: options
+                    });
+
+
+
+/*
+                    pdf.create(output,options).toBuffer(function(err, buffer){
 
                         var pdfstring = buffer.toString();
 
-                        //console.log("string is " + pdfstring);
+                        console.log("string is " + pdfstring);
                         res.setHeader('Content-disposition', 'inline; filename="demesy-invoice.pdf"');
                         res.setHeader('Content-type', 'application/pdf');
 
                         res.send(pdfstring);
 
                     });
-
+*/
 
 
 
@@ -378,9 +416,6 @@ router.route('/invoices/:invoice_id/pdf')
             }
             else {
 
-                if (invoice.invoiceType == "Memo") invoice.logo = "http://demesyinventory.com/assets/images/logo/memo-logo.png";
-                else invoice.logo = "http://demesyinventory.com/assets/images/logo/invoice-logo.png";
-
                 invoice.subtotalFMT = formatCurrency(invoice.subtotal, opts);
                 invoice.taxFMT = formatCurrency(invoice.tax, opts);
                 invoice.shippingFMT = formatCurrency(invoice.shipping, opts);
@@ -398,7 +433,7 @@ router.route('/invoices/:invoice_id/pdf')
 
                 fs.readFile('./src/app/modules/invoice/invoice-content.html', 'utf-8', function (err, template) {
                     if (err) throw err;
-                    var output = mustache.to_html(template, {data: invoice});
+                    var output = mustache.to_html(template, {data: invoice, logoUrl:"/assets/images/logo/logo.png"});
                     res.send(output);
                 });
             }
@@ -453,10 +488,16 @@ router.route('/invoices/:invoice_id')
 router.route('/invoices/partner/:product_id')
     .get(checkJwt, function (req, res) {
 
-
         Invoice.findOne({
-                invoiceType: 'Partner',
-                'lineItems.productId': req.params.product_id
+                $and: [
+                    {
+                        $or: [
+                            { invoiceType: 'Consignment' },
+                            { invoiceType: 'Partner' }
+                            ]
+                    },
+                    {'lineItems.productId': req.params.product_id}
+                    ]
             },
             function (err, invoice) {
                 if (err) {
@@ -469,7 +510,7 @@ router.route('/invoices/partner/:product_id')
                         // create partner invoice
 
                         invoice = new Invoice();
-                        invoice.invoiceType = "Partner";
+
 
 
                         console.log("lookng up product: "+ req.params.product_id);
@@ -483,6 +524,7 @@ router.route('/invoices/partner/:product_id')
 
                                 var amount = product.sellingPrice/2.0;
 
+                                invoice.invoiceType = product.sellerType;
                                 invoice.customerFirstName = product.seller;
                                 invoice.customerLastName = "";
                                 invoice.total = amount;
@@ -561,7 +603,11 @@ router.route('/invoices/email')
                     fs.readFile('./src/app/modules/invoice/invoice-content.html', 'utf-8', function (err, template) {
                         if (err) throw err;
                         var output =
-                            "<p>" + req.body.note + " </p>" + mustache.to_html(template, {data: invoice});
+                            "<p>" + req.body.note + " </p>" + mustache.to_html(template, {data: invoice,logoUrl:"http://demesyinventory.com/assets/images/logo/logo.png"});
+
+                        var output2 = output.replace(/foo/g, "bar")
+
+
                         ses.sendEmail({
                                 Source: from,
                                 Destination: {
