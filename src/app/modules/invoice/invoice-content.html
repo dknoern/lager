@@ -11,20 +11,20 @@
     }
 
     td {
-        padding: 8px;
-        font-size: 11px;
+        padding: {{footerFontSize}}px;
+        font-size: {{fontSize}}px;
     }
 
     th {
-        padding: 8px;
-        font-size: 11px;
+        padding: {{footerFontSize}}px;
+        font-size: {{fontSize}}px;
     }
 
     .box {
         font-coloe: #555555;
 
-        font-size: 11px;
-        padding: 10px;
+        font-size: {{fontSize}}px;
+        padding: {{footerFontSize}}px;
         float: left;
     }
 
@@ -73,8 +73,8 @@
         <div class="box box70">
 
 
-            <img src="{{logoUrl}}" alt="Logo" class="invoice-logo" style="max-height:63px;"/>
-            <div style="padding-left: 5px; font-weight: 500; font-size:32px; color:#C3AA63;">{{data.invoiceTypeFMT}}</div>
+            <img src="{{logoUrl}}" alt="Logo" class="invoice-logo" style="max-width:{{logoWidth}}px;"/>
+            <div style="padding-left: 5px; font-weight: 500; font-size:{{hugeFontSize}}px; color:#C3AA63;">{{data.invoiceTypeFMT}}</div>
 
 
         </div>
@@ -185,12 +185,12 @@
         <tr>
             <td style="border-top:0;"></td>
             <td align="right" cellspacing="0" cellpadding="0"
-                style="border:0; font-size:14px; border-color:#C3AA63; background-color:#C3AA63;color:white;">TOTAL DUE:
+                style="border:0; font-size:{bigFontSize}}px; border-color:#C3AA63; background-color:#C3AA63;color:white;">TOTAL DUE:
             </td>
             </font></td>
 
             <td cellspacing="0" cellpadding="8"
-                style="border:0; font-size:14px;border-color:#C3AA63;  background-color:#C3AA63;color:white;">
+                style="border:0; font-size:{{bigFontSize}}px;border-color:#C3AA63;  background-color:#C3AA63;color:white;">
                 {{data.totalFMT}}
             </td>
         </tr>
@@ -203,12 +203,12 @@
 
     {{^data.isConsignment}}
 
-    <div align="right" style="padding:8px;font-size:14px">
+    <div align="right" style="padding:8px;font-size:{{bigFontSize}}px">
         Thank you for your business
     </div>
 
 
-    <div style="padding:8px;font-size:11px;">
+    <div style="padding:8px;font-size:{{fontSize}}px;">
         <b>Warranty:</b><br/>
         DeMesy Fine Watches warranties all watches for one full year from date of invoice, unless otherwise indicated in
         the listing or on the invoice and with
@@ -220,11 +220,11 @@
         tightened crown, will render this warranty null and void.
 
     </div>
-    <div style="padding:8px;font-size:11px;">
+    <div style="padding:8px;font-size:{{fontSize}}px;">
         All warranty work must by sent to our Dallas, TX office for repairs.<br/>
         The warranty does not cover wholesale/dealer orders.
     </div>
-    <div style="padding:8px;font-size:11px;">
+    <div style="padding:8px;font-size:{{fontSize}}px;">
         <b>Return Privilege:</b><br/>
         Any PRE-OWNED watch purchase from us online may be returned, provided that you notify us of your intention to do
         so within three (3) days of
@@ -276,23 +276,23 @@
 
     <hr style="border-top:1px solid #eeeeee; margin-top:5px; margin-bottom:5px"/>
 
-    <table width="100%" style="font-size: 11px;">
+    <table width="100%">
         <tr>
 
             <td width="33%">
-                <div style="float: left;"><img src="http://demesyinventory.com/assets/images/phone.png" width="32px"
+                <div style="float: left;"><img src="http://demesyinventory.com/assets/images/phone.png" width="{{iconWidth}}px"
                                                alt="Phone"/></div>
-                <div style="font-size:8pt;">PHONE<br/>+ 214.855.8777<br/></div>
+                <div style="font-size:{{footerFontSize}}pt;">PHONE<br/>+ 214.855.8777<br/></div>
             </td>
             <td width="33%">
-                <div style="float: left;"><img src="http://demesyinventory.com/assets/images/address.png" width="32px"
+                <div style="float: left;"><img src="http://demesyinventory.com/assets/images/address.png" width="{{iconWidth}}px"
                                                alt="Phone"/></div>
-                <div style="font-size:8pt;">ADDRESS<br/>4514 Cole Ave. Suite 808<br/>Dallas, TX 75205</div>
+                <div style="font-size:{{footerFontSize}}pt;">ADDRESS<br/>4514 Cole Ave. Suite 808<br/>Dallas, TX 75205</div>
             </td>
             <td width="33%">
-                <div style="float: left;"><img src="http://demesyinventory.com/assets/images/web.png" width="32px"
+                <div style="float: left;"><img src="http://demesyinventory.com/assets/images/web.png" width="{{iconWidth}}px"
                                                alt="Web"/></div>
-                <div style="font-size:8pt;">WEB<br/>www.demesy.com<br/></div>
+                <div style="font-size:{{footerFontSize}}pt;">WEB<br/>www.demesy.com<br/></div>
             </td>
         </tr>
     </table>
