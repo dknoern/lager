@@ -33,14 +33,15 @@
       </button>
 
 
-
-      <button class="btn btn-danger" ng-click="pdf()">
+      <a href="/api/invoices/{{data._id}}/pdf" download>
+      <button class="btn btn-danger">
         PDF
         &nbsp;
         <span class="circle bg-white">
                               <i class="fa fa-file-pdf-o text-danger"></i>
                           </span>
       </button>
+      </a>
 
 
     </div>

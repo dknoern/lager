@@ -339,35 +339,24 @@ router.route('/invoices/:invoice_id/pdf')
 
                 fs.readFile('./src/app/modules/invoice/invoice-content.html', 'utf-8', function (err, template) {
                     if (err) throw err;
-                    var output = mustache.to_html(template, {data: invoice,logoUrl:"http://demesyinventory.com/assets/images/logo/logo.png"});
+                    var output = mustache.to_html(template, {data: invoice,
+                        logoUrl:"http://demesyinventory.com/assets/images/logo/logo.png",
+                        logoWidth:250,
+                        fontSize:8,
+                        bigFontSize:11,
+                        hugeFontSize:24,
+                        footerFontSize:5,
+                        iconWidth:24
+                    });
 
 
 
                     var options = {
-                        format: 'Letter',
-                        zoomFactor: ".5"
+                        format: 'Letter'
                     };
 
 
                     console.log("making string");
-
-
-
-
-
-
-
-
-
-
-//---------------
-
-
-
-                   // pdf.create(output,options).toStream(function(err, stream){
-                  //      stream.pipe(fs.createWriteStream('./invoice.pdf'));
-                  //  });
-
 
 
                     res.pdfFromHTML({
@@ -375,26 +364,6 @@ router.route('/invoices/:invoice_id/pdf')
                         htmlContent: output,
                         options: options
                     });
-
-
-
-/*
-                    pdf.create(output,options).toBuffer(function(err, buffer){
-
-                        var pdfstring = buffer.toString();
-
-                        console.log("string is " + pdfstring);
-                        res.setHeader('Content-disposition', 'inline; filename="demesy-invoice.pdf"');
-                        res.setHeader('Content-type', 'application/pdf');
-
-                        res.send(pdfstring);
-
-                    });
-*/
-
-
-
-
 
                 });
             }
@@ -433,7 +402,16 @@ router.route('/invoices/:invoice_id/pdf')
 
                 fs.readFile('./src/app/modules/invoice/invoice-content.html', 'utf-8', function (err, template) {
                     if (err) throw err;
-                    var output = mustache.to_html(template, {data: invoice, logoUrl:"/assets/images/logo/logo.png"});
+                    var output = mustache.to_html(template, {
+                        data: invoice,
+                        logoUrl:"/assets/images/logo/logo.png",
+                        logoWidth:333,
+                        fontSize:11,
+                        bigFontSize:14,
+                        hugeFontSize:32,
+                        footerFontSize:8,
+                        iconWidth:32
+                    });
                     res.send(output);
                 });
             }
@@ -603,7 +581,17 @@ router.route('/invoices/email')
                     fs.readFile('./src/app/modules/invoice/invoice-content.html', 'utf-8', function (err, template) {
                         if (err) throw err;
                         var output =
-                            "<p>" + req.body.note + " </p>" + mustache.to_html(template, {data: invoice,logoUrl:"http://demesyinventory.com/assets/images/logo/logo.png"});
+                            "<p>" + req.body.note + " </p>" + mustache.to_html(template, {
+                                data: invoice,
+                                logoUrl:"http://demesyinventory.com/assets/images/logo/logo.png",
+                                logoWidth:333,
+                                fontSize:11,
+                                bigFontSize:14,
+                                hugeFontSize:32,
+                                footerFontSize:8,
+                                iconWidth:32
+
+                            });
 
                         var output2 = output.replace(/foo/g, "bar")
 

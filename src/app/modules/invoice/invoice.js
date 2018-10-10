@@ -165,34 +165,9 @@ var scopeHolder;
         };
 
 
-        $scope.pdf = function(){
-            html2canvas(document.getElementById('printable'), {
-
-                onrendered: function (canvas) {
-                    var data = canvas.toDataURL();
-                    var docDefinition = {
-                        content: [{
-                            image: data,
-                            width: 500
-                        }]
-                    };
-                    pdfMake.createPdf(docDefinition).download("demesy-invoice.pdf");
-                }
-            });
-        }
-
-
-
-
-
-
-
-
             if ($scope.invoiceId) {
 
-
                 $scope.printableUrl = '/api/invoices/' + $scope.invoiceId + '/print?t='+ new Date().getTime();
-
 
                 if ("new" == $scope.invoiceId) {
                 var customerId = $location.search().customerId;
