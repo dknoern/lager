@@ -30,9 +30,36 @@ var upsertLogItem = function (req, res, productId, action) {
     if (req.body.history.repairNumber != null){
         console.log('looking for repairNumber ' + req.body.history.repairNumber);
         console.log('repair cost is ' + req.body.history.repairCost ||0 );
+
+
+
+        if(req.body.history.date==null){
+            console.log("looking for open repair (history record is new)");
+        }else{
+            console.log("looking for closed repair from about " +req.body.history.date + " (history record is pre-existing)");
+
+            var fromTime = new Date(req.body.history.date);
+            var toTime = new Date(req.body.history.date);
+
+            fromTime.setSeconds(fromTime.getSeconds()-10);
+            toTime.setSeconds(toTime.getSeconds()+10);
+
+            console.log("from time: " + fromTime);
+            console.log("to time: "   + toTime);
+        }
+
+
+
+
+
+
         Repair.update({
             repairNumber: req.body.history.repairNumber,
-            returnDate: null
+
+            $or: [
+                {"returnDate": null},
+                {"returnDate": {"$gte": fromTime, "$lt": toTime}}
+            ]
         }, {
             "$set": {
                 "returnDate": Date.now(),
@@ -40,22 +67,31 @@ var upsertLogItem = function (req, res, productId, action) {
                 "repairNotes": req.body.history.comments
             }
         }, {
-            upsert: true, multi: true
+            upsert: false, multi: false
         }, function (err, doc) {
             if (err)
                 console.log('repair could not be marked as returned ' + err);
             else
-                console.log('repair returned')
+                console.log("updated repair info for " + doc.repairNumber + ", " + doc.returnDate + ", " + doc.repairCost);
+            console.log('repair returned')
         });
+
+
+
+
+
     }else{
         console.log('not looking for repair');
     }
 
-    // update existing history item
+
     if(req.body.history._id !=null){
 
         console.log("updating existing history itemn " +req.body.history._id );
 
+        // ---------------------------------
+        // update existing history item
+        // ---------------------------------
         Product.findOneAndUpdate({
             'history._id': req.body.history._id
         }, {
@@ -121,7 +157,9 @@ var upsertLogItem = function (req, res, productId, action) {
 
                         //TODO: update total repair cost maybe?... will now calculate on display only.
 
-
+                        // ---------------------------------
+                        // create new history item and product status
+                        // ---------------------------------
                         Product.findOneAndUpdate({
                             _id: productId
                         }, {
@@ -165,6 +203,10 @@ var upsertLogItem = function (req, res, productId, action) {
 
     } else {  // create new product
 
+
+        // ---------------------------------
+        // create new product
+        // ---------------------------------
         var product = new Product();
         product.itemNumber = req.body.itemNumber;
         product.title = req.body.history.itemReceived;
