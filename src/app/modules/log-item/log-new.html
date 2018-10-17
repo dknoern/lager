@@ -105,7 +105,26 @@
                     <form class="form-horizontal" role="form" name="logItemForm">
                         <div class="row">
                             <div class="col-sm-12">
+
+
+
                                 <fieldset>
+
+
+
+                                    <div class="form-group" ng-if="data.history.date!=null" >
+                                        <label for="date" class="col-sm-3 control-label">Date</label>
+                                        <div class="col-sm-8">
+
+
+                                            <input type="text" id="date" class="form-control"
+                                                   value="{{data.history.date | date : 'MM/dd/y'}}"
+                                                   readonly="readonly">
+                                        </div>
+                                    </div>
+
+
+
 
                                     <div class="form-group required">
                                         <label for="receivedFrom" class="col-sm-3 control-label">Received
@@ -157,8 +176,7 @@
                                                    data-number-stepfactor="100"
                                                    class="form-control currency"
                                                    id="repairCost"
-                                                   ng-model="data.history.repairCost"
-                                                   ng-readonly="data._id!=null">
+                                                   ng-model="data.history.repairCost">
                                         </div>
                                     </div>
 
