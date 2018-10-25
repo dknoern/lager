@@ -1,0 +1,867 @@
+[33mcommit 61dda9f948588a05f020444a9bae227e57aca846[m
+Merge: f89afce be066ac
+Author: Ubuntu <ubuntu@ip-172-26-2-216.ec2.internal>
+Date:   Mon Jun 4 14:11:31 2018 +0000
+
+    nothing
+    
+    Merge branch 'master' of github.com:dknoern/lager
+
+[33mcommit be066ace031ce67c55b1981dc62244df586b37e5[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Mon Jun 4 07:05:55 2018 -0700
+
+    delete log items
+
+[33mcommit f89afce142f70a996744bd6bc754464fac8bab7c[m
+Merge: cb2b9c3 80ebd07
+Author: Ubuntu <ubuntu@ip-172-26-2-216.ec2.internal>
+Date:   Mon Jun 4 14:10:19 2018 +0000
+
+    no change
+
+[33mcommit 80ebd077c8ea701cb62c51887b288dd54a09f952[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Fri Jun 1 12:23:30 2018 -0700
+
+    don't allow removal of partner items
+
+[33mcommit cb2b9c3967105cf2d613e649257a729495162683[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu May 31 17:34:04 2018 -0700
+
+    partnership item fixes
+
+[33mcommit f3f2d82c16f38d15c75e14abc32ca29031d9dc93[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu May 31 17:34:04 2018 -0700
+
+    partnership item fixes
+
+[33mcommit c8ca439fc318a5f150b72d6b3d26e97e596202e1[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu May 31 17:31:20 2018 -0700
+
+    partnership item fixes
+
+[33mcommit d4155b18746fc04aaf32dcc02086cad5d5df8fa4[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu May 31 17:31:20 2018 -0700
+
+    partnership item fixes
+
+[33mcommit c7554c83e041486ce2814890918a11124751ca83[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu May 31 13:02:45 2018 -0700
+
+    Memo logo
+
+[33mcommit 64a74f6fcd64ed13c9029c9e499e76b48d900707[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu May 31 13:02:45 2018 -0700
+
+    Memo logo
+
+[33mcommit 369e4e83fd04f33c7982f66ec6c7c1f68c918888[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu May 31 12:53:30 2018 -0700
+
+    fix back from memo issue
+
+[33mcommit eeacd8c6ba3da7c38b2e80cedeb0864979e5aee7[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu May 31 12:53:30 2018 -0700
+
+    fix back from memo issue
+
+[33mcommit bb81d26b9c5758801a57a2e26e6569e6ce1599ab[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu May 31 11:27:31 2018 -0700
+
+    unique image filenames
+
+[33mcommit 529aa8a1e9c3131c9cdbb3ea9f9d9a7457761947[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu May 31 11:27:31 2018 -0700
+
+    unique image filenames
+
+[33mcommit fe717a6e9edf5c1d262aafb4a0e6eb8113587455[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu May 31 08:08:56 2018 -0700
+
+    Mari Jo invoice fixes
+
+[33mcommit b3db5c040e3901cf62278a0b6b5a803d6393f3f9[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu May 31 08:08:56 2018 -0700
+
+    Mari Jo invoice fixes
+
+[33mcommit 0ed91bb63fa6725bfb36d95f9d792068396311a9[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Wed May 30 12:06:42 2018 -0700
+
+    delete log item images
+
+[33mcommit 70062e2b2cb2eea7ed75beca2033a9a109cb740e[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Wed May 30 12:06:42 2018 -0700
+
+    delete log item images
+
+[33mcommit 26907b23ac141176f8845d86506748eca62d60ed[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Wed May 30 07:31:48 2018 -0700
+
+    fix repair issues
+
+[33mcommit f7f7b5ebf2c4446be4878fb3dbec571d98210c35[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Wed May 30 07:31:48 2018 -0700
+
+    fix repair issues
+
+[33mcommit 1209bb52fa15c9fb9f13756a4fa21fef45045eb6[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Mon May 28 08:40:36 2018 -0700
+
+    file delete
+
+[33mcommit 52630a0776d904129527b8904023308ca8254d30[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Mon May 28 08:40:36 2018 -0700
+
+    file delete
+
+[33mcommit 27fce9edb027567c3d78c7e45935ba8187dd8a06[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Fri May 25 08:09:56 2018 -0700
+
+    add repair tabto products
+
+[33mcommit 6a708f2f04fd4e6b0e4852c468ca4d1491a48494[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Fri May 25 08:09:56 2018 -0700
+
+    add repair tabto products
+
+[33mcommit 163ccddf0975533ecf7530c3c6ddf3968775c9be[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu May 24 01:18:09 2018 -0700
+
+    bulk load of show items
+
+[33mcommit f9a68f16568413dc55544a5248e530d3843eafa1[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu May 24 01:18:09 2018 -0700
+
+    bulk load of show items
+
+[33mcommit 36a4a6fbd859c84926b1d24a89a6b0d0d16e0d49[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Tue May 22 12:15:14 2018 -0700
+
+    fix save error
+
+[33mcommit 6770cde6f940cedfd5d666388a0529dc2d45bbc6[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Tue May 22 12:15:14 2018 -0700
+
+    fix save error
+
+[33mcommit 541c3a815748a16fc4f66daac5aca96cf342e665[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Tue May 22 06:56:00 2018 -0700
+
+    repair filter fix
+
+[33mcommit 180f020920652d705cca7be6f803779844b603d3[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Tue May 22 06:56:00 2018 -0700
+
+    repair filter fix
+
+[33mcommit 2048e3a850bcf253fa9e9c57a667eb4acc945ce7[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Tue May 22 06:49:23 2018 -0700
+
+    outstanding repair filter and log item lookup
+
+[33mcommit b3860a24efa7eba2dbd5c208ae0cf9d0e2b1e94a[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Tue May 22 06:49:23 2018 -0700
+
+    outstanding repair filter and log item lookup
+
+[33mcommit 22aa1689198a0e1ee222bb1feaa842599a14a245[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Mon May 21 06:50:01 2018 -0700
+
+    weekend fixes for mari jo
+
+[33mcommit b676d771bd54dd2378e35c31f6369af47a6fe4ce[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Mon May 21 06:50:01 2018 -0700
+
+    weekend fixes for mari jo
+
+[33mcommit ba88f8e02cd98d56283807ed94e3632f13df16e7[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Fri May 18 06:50:02 2018 -0700
+
+    mari jo fixes
+
+[33mcommit 0303e8df0407bc5a9c028d0995c1fa6707cb0e04[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Fri May 18 06:50:02 2018 -0700
+
+    mari jo fixes
+
+[33mcommit 539c3eb97fd5bc176a0877e54d7eb699c7eeee6b[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Wed May 16 23:03:47 2018 -0700
+
+    add vendor nane to history for repair
+
+[33mcommit 16d926741b076203cc789c121cdb90ef71353f96[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Wed May 16 23:03:47 2018 -0700
+
+    add vendor nane to history for repair
+
+[33mcommit 8ce77091e203a7dc9704b5f38626c6eb7bc81019[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Wed May 16 17:49:50 2018 -0700
+
+    fixes for go-live
+
+[33mcommit cb7d282034f16cfec771e055794d6bd6b96f983e[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Wed May 16 17:49:50 2018 -0700
+
+    fixes for go-live
+
+[33mcommit 79551a2bcc3c7d49e72bd27f1789abf1a837642b[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Tue May 8 10:51:05 2018 -0700
+
+    fix cost
+
+[33mcommit 9de5c6921cff5fdd4bae796c2305d00a5e0cc3b1[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Tue May 8 10:51:05 2018 -0700
+
+    fix cost
+
+[33mcommit 28a090208420d4aadce41757ae28b085901a734b[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu Mar 29 09:05:51 2018 -0700
+
+    add misc item
+
+[33mcommit e2f46c4095c229adaa7174b069140a894ad684c7[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu Mar 29 09:05:51 2018 -0700
+
+    add misc item
+
+[33mcommit 59816122acf7709972dd7914e39c08c2a1923cfc[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu Mar 29 09:00:49 2018 -0700
+
+    add misc item to invoice
+
+[33mcommit 3b166d04c6f7ac3a335ced84cea85a00889ec80d[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu Mar 29 09:00:49 2018 -0700
+
+    add misc item to invoice
+
+[33mcommit 9f520c3d0106a6bb6b327012a66c8ff187d53c33[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Wed Mar 28 22:17:01 2018 -0700
+
+    handle repair cost
+
+[33mcommit d20bf92e14d18423d97fccc5170a5f3d331da51a[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Wed Mar 28 22:17:01 2018 -0700
+
+    handle repair cost
+
+[33mcommit 5d5be58cf767d000be89ea13a7e89d1003d786f9[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Tue Mar 27 10:22:29 2018 -0700
+
+    fixes
+
+[33mcommit b0da16ab26cf5a5d90d8681465286d6b0560a59d[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Tue Mar 27 10:22:29 2018 -0700
+
+    fixes
+
+[33mcommit f936806233b5628df734003a623eab13a0e1791d[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Fri Mar 23 01:37:44 2018 -0400
+
+    image gallery and rotation
+
+[33mcommit 99824e733aedd09dbaa68c48c4295aa35381dac1[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Fri Mar 23 01:37:44 2018 -0400
+
+    image gallery and rotation
+
+[33mcommit 595e266f7a3536c6bfb56ed6290b97778863521c[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu Mar 22 00:26:40 2018 -0400
+
+    add buttons for export on reports, make outstanding repairs filterable
+
+[33mcommit 663366ebc90c4468e306e7768b7d27ed7f8b3400[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu Mar 22 00:26:40 2018 -0400
+
+    add buttons for export on reports, make outstanding repairs filterable
+
+[33mcommit fa963211dc338aa7f902e1d65e3cc3c13f7416fa[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Tue Mar 13 12:52:08 2018 -0700
+
+    log multiple items
+
+[33mcommit d2f7b554b86416a712a2facda445f53a2ae30943[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Tue Mar 13 12:52:08 2018 -0700
+
+    log multiple items
+
+[33mcommit 6343e809be2f098cdfa61e3758e630091252e93d[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Fri Feb 23 09:01:53 2018 -0800
+
+    fix invoice search, allow override of item price
+
+[33mcommit 345cb82b2044400fc2e6dad90a15b56280b8628e[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Fri Feb 23 09:01:53 2018 -0800
+
+    fix invoice search, allow override of item price
+
+[33mcommit 3a335fa70d40d71e6c2cacd58ae5397e9b565c5f[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu Feb 22 15:13:32 2018 -0800
+
+    fix itemid serialnumber
+
+[33mcommit 049426785057772d01adc34fb063ef3286a8ab68[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu Feb 22 15:13:32 2018 -0800
+
+    fix itemid serialnumber
+
+[33mcommit 444bda3e5c63b6352ffd7af0489f8719d85e8108[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Tue Feb 20 23:29:12 2018 -0800
+
+    add note
+
+[33mcommit 486939bed6dfbe3784ba503f93a5d1f5dce45703[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Tue Feb 20 23:29:12 2018 -0800
+
+    add note
+
+[33mcommit 3e6d8607243b9f45039c2a8915c160068fa3c15f[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Tue Feb 13 23:57:03 2018 -0800
+
+    fix item selection error
+
+[33mcommit f5a88fa7ac83ee09b68d49e1a54e02c24d6fd34a[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Tue Feb 13 23:57:03 2018 -0800
+
+    fix item selection error
+
+[33mcommit 5538deb1b5bdd7ea681c92eaee49453537a728ed[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Tue Feb 13 23:44:28 2018 -0800
+
+    remove logitems
+
+[33mcommit d1bf7de3b21564d06b71b4a4662f875c8df54d1d[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Tue Feb 13 23:44:28 2018 -0800
+
+    remove logitems
+
+[33mcommit bd3d5e11d9ee02b9db84a166116b7f2fd555fb00[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Tue Feb 13 23:35:37 2018 -0800
+
+    fix sort, etc
+
+[33mcommit 162b1d8a1772168d6fe426908c065fd575233df2[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Tue Feb 13 23:35:37 2018 -0800
+
+    fix sort, etc
+
+[33mcommit 1cc72889faa765206cac6cec8a33006147bfd8f0[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Sun Feb 11 11:13:51 2018 -0800
+
+    update import
+
+[33mcommit a482b099bc8e34833dfb1733fb5fd053670062a4[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Sun Feb 11 11:13:51 2018 -0800
+
+    update import
+
+[33mcommit e7bd1c8cdcd59a1daa72c2fdb425f5569fba114c[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Wed Jan 17 00:53:43 2018 -0800
+
+    add log page
+
+[33mcommit 471fddd8d8bdf01b8b70ce116d22e200010b5cd4[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Wed Jan 17 00:53:43 2018 -0800
+
+    add log page
+
+[33mcommit da0bdc5bfc1b504027fcfde8990f09576b58f168[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Sun Nov 26 10:06:12 2017 -0800
+
+    remove accesskey
+
+[33mcommit bf8f34b226d5e33bb8dee59b5410d78f8fe9735a[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Sun Nov 26 10:06:12 2017 -0800
+
+    remove accesskey
+
+[33mcommit bc65fb9d5aa0ac1f28b5a03a894a486ec8b1b865[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Sun Nov 26 10:03:36 2017 -0800
+
+    add back from repair, repair images, and overdue repair email
+
+[33mcommit 2c6ab9d83f716a740b924dd655d3cfba7e975ac8[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Sun Nov 26 10:03:36 2017 -0800
+
+    add back from repair, repair images, and overdue repair email
+
+[33mcommit aa8542fb2fbc0c27108f13bf6c1256fce24c5712[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Tue Nov 14 09:35:07 2017 -0800
+
+    filter sold products from invoice add item
+
+[33mcommit ca0e459fadb364569b84688dfd25537ce6f8a826[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Tue Nov 14 09:35:07 2017 -0800
+
+    filter sold products from invoice add item
+
+[33mcommit 93bd643263800779ac31ae5a90c73c931af36bee[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Tue Nov 14 08:31:52 2017 -0800
+
+    add customer to memo report
+
+[33mcommit b7153cff04b2269b416a26bbca5ce789be9b7d49[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Tue Nov 14 08:31:52 2017 -0800
+
+    add customer to memo report
+
+[33mcommit 53a59d1da6a81c24440ca20ac19deac27fc3befe[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Tue Nov 14 07:57:33 2017 -0800
+
+    add clone and at/back from show
+
+[33mcommit 5be92db839f0f647f24e798350fb34bdbf3410b8[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Tue Nov 14 07:57:33 2017 -0800
+
+    add clone and at/back from show
+
+[33mcommit 03284e12cbcf6ac354a46212bd5da9ecfeb3c3a6[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Mon Nov 13 09:20:31 2017 -0800
+
+    report fixes
+
+[33mcommit 00f27bad1e9ac7cb66a325ee586ef2457a559eb5[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Mon Nov 13 09:20:31 2017 -0800
+
+    report fixes
+
+[33mcommit 1c78a3a9bcd9d4eb7d2aaa3a8898fcc620832e4f[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Sat Nov 11 11:51:02 2017 -0800
+
+    fix IE bug
+
+[33mcommit 3ff35c93f09bf582d5e2c9fd934a6ad542c35438[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Sat Nov 11 11:51:02 2017 -0800
+
+    fix IE bug
+
+[33mcommit 70a74958ed6328acab27b0f34a16dda226a5c5b9[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu Nov 9 17:34:46 2017 -0800
+
+    create invoice from invoices list or product page
+
+[33mcommit 200b865201e94b4efd70fdb73dc4234169a3e70f[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu Nov 9 17:34:46 2017 -0800
+
+    create invoice from invoices list or product page
+
+[33mcommit 870c87a50ef4da9c692386e6a8afa78d15c27594[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Tue Nov 7 12:53:11 2017 -0800
+
+    remove payment details
+
+[33mcommit bb18240e0562917815a29ae02dc693bf4c06a37e[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Tue Nov 7 12:53:11 2017 -0800
+
+    remove payment details
+
+[33mcommit 2c38e4c6fd2b682d05f0f10f6c789a3a228c5db3[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Mon Nov 6 10:06:14 2017 -0800
+
+    delete
+
+[33mcommit d94df776046aa81253a80ad9b558075234ad476c[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Mon Nov 6 10:06:14 2017 -0800
+
+    delete
+
+[33mcommit f5a3348ded48605524a04ba9dc9f1cafc11a5668[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Tue Oct 31 21:17:54 2017 -0700
+
+    latest data
+
+[33mcommit 181a2f0eb766421633308f1b572787776738c947[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Tue Oct 31 21:17:54 2017 -0700
+
+    latest data
+
+[33mcommit 5331294443c924764f1d7621facf6d80065ea636[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Mon Oct 30 13:26:25 2017 -0700
+
+    add bashscript to run in a loop
+
+[33mcommit a6132d0ba787af3306083a1a2f33e9e757a4d82c[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Mon Oct 30 13:26:25 2017 -0700
+
+    add bashscript to run in a loop
+
+[33mcommit 25a2c7c3ef29191c00d060e1b3248389f0166fb2[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Mon Oct 30 07:49:28 2017 -0700
+
+    update reports
+
+[33mcommit 2087c54dcae9cf3c9fe871eb45c2c15ed0922a92[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Mon Oct 30 07:49:28 2017 -0700
+
+    update reports
+
+[33mcommit 7b7b4337c0540019472d64148c8e82a81c56dfd0[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Sun Oct 29 12:45:15 2017 -0700
+
+    remove phillip
+
+[33mcommit 3bce078a915d7b0e55bb2e4078f32fc029b48b0a[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Sun Oct 29 12:45:15 2017 -0700
+
+    remove phillip
+
+[33mcommit 915e0fc99527ad2792ae2e43baa7242376481800[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Sun Oct 29 12:25:14 2017 -0700
+
+    disable ssl and reenable nav static toggle
+
+[33mcommit 43b5601a862d0e3a6222209d0f318fcc690e493e[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Sun Oct 29 12:25:14 2017 -0700
+
+    disable ssl and reenable nav static toggle
+
+[33mcommit 9ae639ffe73076abe668ac27eabe483686ee5443[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Sun Oct 29 11:52:47 2017 -0700
+
+    revert customer.html
+
+[33mcommit 8c57460b306f1f67ea56bc0e87e83b0bae7a9276[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Sun Oct 29 11:52:47 2017 -0700
+
+    revert customer.html
+
+[33mcommit 56ed913916a4d0baafb8f39a33c2910cb3233d4e[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Sun Oct 29 11:05:01 2017 -0700
+
+    nav fixes
+
+[33mcommit 853227b88cbaef746908df76503655949c2d499f[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Sun Oct 29 11:05:01 2017 -0700
+
+    nav fixes
+
+[33mcommit c598cb12102f056705b33962f81a5ff5862ab412[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu Oct 26 10:19:42 2017 -0700
+
+    add ssl
+
+[33mcommit a5548c6ec225c51778cdd72392971dcedc24762a[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu Oct 26 10:19:42 2017 -0700
+
+    add ssl
+
+[33mcommit fd6ca347e81cb53d0319d9bbc195c9998617de4a[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Mon Oct 23 10:58:58 2017 -0700
+
+    some reports
+
+[33mcommit c8bc04903d9b596990b5348bf969ebaed17a0037[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Mon Oct 23 10:58:58 2017 -0700
+
+    some reports
+
+[33mcommit 9e82885fee03d4ef72b73c5ee2edb0fb02de7d8b[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu Oct 19 17:34:22 2017 -0700
+
+    outline reports
+
+[33mcommit f2b7813957924fb8905286e242f350eb5c2651d8[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu Oct 19 17:34:22 2017 -0700
+
+    outline reports
+
+[33mcommit 809a0774b8470d53c9b6d449f7b621a85a679e66[m
+Author: Ubuntu <ubuntu@ip-172-31-6-17.us-west-2.compute.internal>
+Date:   Thu Oct 19 19:45:41 2017 +0000
+
+    make ajax relative
+
+[33mcommit 71bccd733fc214decd93fdb8b95fd134570439f4[m
+Author: Ubuntu <ubuntu@ip-172-31-6-17.us-west-2.compute.internal>
+Date:   Thu Oct 19 19:45:41 2017 +0000
+
+    make ajax relative
+
+[33mcommit bcd6e923c4e5f393684a22f2275cf6b5b01031eb[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu Oct 19 10:54:37 2017 -0700
+
+    partner invoices
+
+[33mcommit 0ca577c5fb89f44fd153b255666eb5a286f15fbc[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu Oct 19 10:54:37 2017 -0700
+
+    partner invoices
+
+[33mcommit 7a8fc2acb332e612e09a273e11bb76e3d70baeb7[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu Oct 5 11:47:31 2017 -0700
+
+    add repairs
+
+[33mcommit 2498f644e21810b65e1445b4f3cc890669ab3830[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu Oct 5 11:47:31 2017 -0700
+
+    add repairs
+
+[33mcommit 710df4740e0b4eeaf23f304fc6004eb10e4a2d47[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Sun Oct 1 12:54:35 2017 -0700
+
+    auth0 fixes
+
+[33mcommit 8185e4457dc6cf447ba4806e9922c8a441f310a6[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Sun Oct 1 12:12:01 2017 -0700
+
+    add auth to all APIs
+
+[33mcommit 5f7bbae7b3d2540494b010db1adeb32e2d928627[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Sun Oct 1 11:02:37 2017 -0700
+
+    add auth for API
+
+[33mcommit f0a56c70996d73038dc34d5d50c1e01e0b382f8f[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Sat Sep 23 12:57:44 2017 -0700
+
+    remove extra navbar stuff
+
+[33mcommit d7480d2fb0e5e4e860e9d9512bc302eecced68bf[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Sat Sep 23 10:15:05 2017 -0700
+
+    remove lineItem cruft
+
+[33mcommit ee3cc3a4cd13a0e2f169670626c43e72bda5e5ac[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Sat Sep 23 10:01:01 2017 -0700
+
+    add print invoice
+
+[33mcommit 08c51542749007d22a4824c3b0bf9dcb954a91eb[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Sat Sep 9 10:12:43 2017 -0400
+
+    initial upload capability
+
+[33mcommit 107ae2bcd11bd4a79d964acf0924efeac1d55cb2[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu Aug 24 17:59:59 2017 -0700
+
+    add favicon
+
+[33mcommit d16f8ed3be94cf285f5d576b1d3bed403896ee34[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu Aug 24 17:34:57 2017 -0700
+
+    revert angular version to fix nav icons
+
+[33mcommit add520caee428e50521a3311181ac160a88d0293[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu Aug 24 15:16:04 2017 -0700
+
+    fix 8 issues from Mari Jo
+
+[33mcommit 291abbc256b03270b43ed9a4fe452700879da6fb[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Wed Aug 23 12:45:52 2017 -0700
+
+    enable dropzone
+
+[33mcommit 7637c5b7c39952f53e693c189e528ddd468ca98f[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Wed Aug 23 01:39:26 2017 -0700
+
+    invoice line items
+
+[33mcommit 168de849114049aa8fe5fe71f2d1a8de3b03f562[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Tue Aug 15 17:02:11 2017 -0700
+
+    invoice improvements
+
+[33mcommit 62b26c72c1d1ebeba34d5a84e65a3678f40600c8[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Mon Aug 14 10:38:49 2017 -0700
+
+    begin invoice work
+
+[33mcommit d172a8ede9b37de2c27a79bb8716d389ffccafb1[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu Aug 3 11:43:06 2017 -0700
+
+    add auth
+
+[33mcommit 4f7424e4e4fe18f0378b2fc3dc8072b95b23f313[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu Jul 13 11:08:33 2017 -0700
+
+    fixes for Marijo
+
+[33mcommit 6b3f7896bfbcdd0224b22788859adebcdfb36925[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Sun Jul 2 23:42:05 2017 -0400
+
+    customer etc
+
+[33mcommit 488a4662da09c76f6f0699e8388bb9a5d16573a3[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu Jun 22 09:29:19 2017 -0700
+
+    extra cleanup
+
+[33mcommit f0c707bee3ebaef43e3bfaa7b19afa2091cc43df[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Thu Jun 22 08:28:17 2017 -0700
+
+    field cleanup
+
+[33mcommit 7043c01c2f4ec70d46b115c2d6bb876a3339d751[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Tue Jun 20 07:18:16 2017 -0700
+
+    fix editing problems
+
+[33mcommit 8b7ac552bdc3c72ee033eaf6c482ad28c1923d4e[m
+Author: David Knoernschild <david@seattleweb.com>
+Date:   Tue Jun 20 02:05:51 2017 -0700
+
+    save products
+
+[33mcommit 43b426d3e2906444cfa1bec89a8a56484ca44ae6[m
+Author: David Knoernschild <davidk@slalom.com>
+Date:   Thu Jun 15 11:04:19 2017 -0700
+
+    add seller type dropdown
+
+[33mcommit 0e4177636acf2255e7387bda319f148d5809ae6f[m
+Author: David Knoernschild <davidk@slalom.com>
+Date:   Thu Jun 15 10:39:50 2017 -0700
+
+    simplfified new item form
+
+[33mcommit 7fe30abe3d07b717f4c686e07d839f77eceaa156[m
+Author: David Knoernschild <davidk@slalom.com>
+Date:   Tue Jun 13 07:21:16 2017 -0700
+
+    new form improvements
+
+[33mcommit 53510ad84637e599387fa3a9273b10c937351174[m
+Author: David Knoernschild <davidk@slalom.com>
+Date:   Mon Jun 5 06:09:44 2017 -0700
+
+    add product page
+
+[33mcommit 8de56f8b5e752e6c870f19650f266cda9f802bf8[m
+Author: David Knoernschild <davidk@slalom.com>
+Date:   Thu Jun 1 01:09:22 2017 -0700
+
+    initial commit
