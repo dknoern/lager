@@ -6,11 +6,26 @@ const path = require('path');
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/lager');
 
-//var fs = require('fs');
-//var key = fs.readFileSync('server.key');
+var fs = require('fs');
+var http = require('http');
 //var cert = fs.readFileSync( 'server.crt' );
-//var https = require('https');
-//var forceSSL = require('express-force-ssl');
+var https = require('https');
+var forceSSL = require('express-force-ssl');
+
+
+
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/demesyinventory.com/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('/etc/letsencrypt/live/demesyinventory.com/cert.pem', 'utf8');
+const ca = fs.readFileSync('/etc/letsencrypt/live/demesyinventory.com/chain.pem', 'utf8');
+
+
+const credentials = {
+key: privateKey,
+cert: certificate,
+ca: ca
+};
+
+app.use(forceSSL);
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -21,6 +36,7 @@ app.use('/app/modules', express.static('./src/app/modules'));
 
 app.use('/assets', express.static('./src/assets'));
 app.use('/uploads', express.static('./uploads'));
+app.use('/.well-known', express.static('./well-known'));
 
 var port = process.env.PORT || 8080;
 
@@ -51,15 +67,21 @@ app.get('/*', function(req, res) {
   res.sendFile(path.join(__dirname + '/index.html'));
 });
 
-app.listen(port);
 
-/*
-app.use(forceSSL);
+var server = http.createServer(app);
+var secureServer = https.createServer(credentials, app);
+ 
+//app.use(express.bodyParser());
+//app.use(app.router);
+ 
+secureServer.listen(443)
+server.listen(80)
 
-var options = {
-  key: key,
-  cert: cert
-};
-https.createServer(options, app).listen(443);
-*/
+
+
+//app.listen(port);
+//https.createServer(credentials, app).listen(443);
+
+//app.use(forceSSL);
+
 console.log('Listening on port ' + port );
