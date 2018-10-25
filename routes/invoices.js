@@ -489,8 +489,6 @@ router.route('/invoices/partner/:product_id')
 
                         invoice = new Invoice();
 
-
-
                         console.log("lookng up product: "+ req.params.product_id);
 
                         Product.findById(req.params.product_id,function(err,product){
@@ -500,7 +498,7 @@ router.route('/invoices/partner/:product_id')
                             }
                             else{
 
-                                var amount = product.sellingPrice/2.0;
+                                var amount = product.cost / 2.0;
 
                                 invoice.invoiceType = product.sellerType;
                                 invoice.customerFirstName = product.seller;
@@ -530,19 +528,14 @@ router.route('/invoices/partner/:product_id')
                             }
                         });
 
-
                     }else{
                         console.log("got partner invoice, not null");
                         res.json(invoice);
                     }
-
-
-
                 }
             });
 
     });
-
 
 // find invoices for a particular customer
 router.route('/customers/:customer_id/invoices')
