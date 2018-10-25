@@ -11,7 +11,6 @@
 
       var accessToken = localStorage.getItem('access_token');
 
-
     jQuery('#example').DataTable( {
             "processing": true,
             "serverSide": true,
@@ -23,7 +22,6 @@
                 "Authorization": "Bearer " + accessToken
             }}
         } );
-
 
         var customerTableShown = false;
 
@@ -40,19 +38,10 @@
                       headers: {
                           "Authorization": "Bearer " + accessToken
                       }}
-
-
-
-
                   } );
                   customerTableShown = true;
                 }
             })
-
-
-
-
-
   }
 
 })();

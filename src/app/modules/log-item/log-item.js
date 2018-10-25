@@ -72,6 +72,10 @@ var scopeHolder;
             };
         }
 
+        $scope.data.itemNumber = $location.search().itemNumber;
+        $scope.data.history.repairNumber = $location.search().repairNumber;
+        $scope.data.history.itemReceived =  $location.search().itemReceived;
+
         $scope.addToInventory = function(){
             document.location.href = "/#/app/item/"+$scope.data._id;
         }

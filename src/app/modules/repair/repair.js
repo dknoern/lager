@@ -14,10 +14,8 @@
         $scope.print = function() {
             $window.print();
         };
-
-
+        
         $scope.email = function() {
-
 
             $http({
                 method: "POST",
@@ -40,17 +38,13 @@
 
             }, function errorCallback(response) {
 
-
                 Messenger().post({
                     message: "unable to email repair: " + response.data.error,
                     type: "error",
                 });
 
             });
-
         }
-
-
 
         $scope.addItem = function(itemId) {
             console.log('setting item id to ' + itemId);
@@ -69,11 +63,9 @@
                 });
         }
 
-
         if ($scope.repairId) {
 
             $scope.printableUrl = '/api/repairs/' + $scope.repairId + '/print?t='+ new Date().getTime();
-
 
             if ("new" == $scope.repairId) {
                 var dateOut = Date.now();
@@ -118,18 +110,11 @@
                 });
             }
 
-
             var productId = $location.search().productId;
             if (productId != null) {
                 $scope.addItem(productId);
             }
-
-
-
-
         }
-
-
 
         $scope.go = function() {
 
@@ -152,36 +137,19 @@
             });
         }
 
-
         $scope.toggleOutForRepair = function() {
 
-            console.log('calling toggleOutForRepair');
+            var itemNumber =  $scope.data.itemNumber || '';
+            var repairNumber =  $scope.data.repairNumber || '';
+            var itemReceived =  $scope.data.description || '';
 
-            if ($scope.data.returnDate == null) {
-                console.log('return date is null');
+            var logItemUrl = "/#/app/log-item"
+            + "?itemNumber=" + itemNumber
+            + "&repairNumber=" + repairNumber
+            + "&itemReceived=" + itemReceived;
 
-                Messenger().post({
-                    message: "flagging item <i>back from repair</i>",
-                    type: "success"
-                });
-
-                // so its shown updating just before dissapearing
-                $scope.data.returnDate = new Date();
-
-                $http({
-                    method: "PUT",
-                    url: "api/repairs/"+$scope.data._id+"/return"
-                }).then(function successCallback(response) {
-                    console.log(response.statusText);
-                    document.location.href = "/#/app/repairs";
-                }, function errorCallback(response) {
-                    console.log(response.statusText);
-                });
-            } else {
-                console.log('return date is ' + $scope.data.returnDate);
-            }
+            $window.location=logItemUrl;
         }
-
 
         var productTableShown = false;
 
@@ -207,7 +175,6 @@
                 productTableShown = true;
             }
         })
-
 
         jQuery('#datetimepicker2').datetimepicker();
     }
