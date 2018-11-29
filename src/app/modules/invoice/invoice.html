@@ -6,7 +6,6 @@
     }
 </style>
 
-<h1 class="page-title"><span class="fw-semi-bold">Invoice</span></h1>
 <div id="AngularInvoiceCtrl" data-ng-controller="InvoiceCtrl">
 
     <script>
@@ -14,6 +13,60 @@
             scopeHolder.addItem(id);
         }
     </script>
+
+
+    <div class="row">
+        <div class="col-md-10">
+            <h1 class="page-title"><span class="fw-semi-bold">Invoice</span></h1>
+        </div>
+        <div class="col-md-2">
+
+            <div ng-if="data._id">
+
+                <div class="btn-group" data-dropdown>
+                    <button class="btn btn-success dropdown-toggle" data-dropdown-toggle
+                            data-original-title="" title="">
+                        &nbsp; Action &nbsp;
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+
+                    <ul class="dropdown-menu">
+
+                        <li class="divider"></li>
+                        <li><a href="#" data-toggle="modal" data-target="#deleteModal">Delete</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Delete Modal -->
+            <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
+                 aria-labelledby="myModalLabel">
+                <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            Are you sure you want to delete invoice <b>{{data._id}}</b>?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
+                                Cancel
+                            </button>
+                            <button type="button" class="btn btn-success btn-sm" ng-click="deleteInvoice()"
+                                    data-dismiss="modal">Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+
 
     <div class="row">
         <div class="col-md-12">
@@ -177,7 +230,6 @@
                                                     <option>Online</option>
                                                     <option>First Dibs</option>
                                                     <option>True Facet</option>
-                                                    <option>Affirm</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -211,6 +263,7 @@
                                                     <option>Bank Wire</option>
                                                     <option>Chrono 24</option>
                                                     <option>Warranty</option>
+                                                    <option>Affirm</option>
                                                     <option>Other</option>
                                                 </select>
                                             </div>

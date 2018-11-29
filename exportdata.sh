@@ -1,3 +1,5 @@
+ssh -f -o ExitOnForwardFailure=yes -l ubuntu -L 27018:localhost:27017 demesyinventory.com  sleep 10
+
 DATE=`date "+%Y-%m-%d"`
 
 BACKUPSDIR=~/Dropbox/demesy/backups

@@ -58,7 +58,8 @@ var InvoiceSchema = new mongoose.Schema({
     taxExempt: Boolean,
     lineItems: {
   	    type: [LineItemSchema]
-    }
+    },
+    status: String
 });
 
 // TODO: remove pre hook
