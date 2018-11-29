@@ -224,7 +224,8 @@ router.route('/invoices')
 
         Invoice.find({
 
-            'search': new RegExp(search, 'i')
+            'search': new RegExp(search, 'i'),
+            status: {$ne: 'Deleted'}
 
         }, function(err, invoices) {
             if (err)
@@ -450,18 +451,39 @@ router.route('/invoices/:invoice_id')
         });
     })
 
-    .delete(checkJwt, function(req, res) {
-        Invoice.remove({
-            _id: req.params.invoice_id
-        }, function(err, invoice) {
+  //  .delete(checkJwt, function(req, res) {
+  //      Invoice.remove({
+  //          _id: req.params.invoice_id
+  //      }, function(err, invoice) {
+  //          if (err)
+  //              res.send(err);
+//
+  //          res.json({
+  //              message: 'Successfully deleted'
+  //          });
+  //      });
+  //  });
+
+.delete(checkJwt, function (req, res) {
+
+    Invoice.findById(req.params.invoice_id, function (err, invoice) {
+        if (err)
+            res.send(err);
+        invoice.status = 'Deleted';
+        invoice.save(function (err) {
             if (err)
                 res.send(err);
-
             res.json({
-                message: 'Successfully deleted'
+                message: 'Invoice ' + req.params.invoice_id + ' deleted'
             });
         });
     });
+});
+
+
+
+
+
 
 router.route('/invoices/partner/:product_id')
     .get(checkJwt, function (req, res) {

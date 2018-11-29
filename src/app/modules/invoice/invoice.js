@@ -155,6 +155,35 @@ var scopeHolder;
         }
 
 
+        $scope.deleteInvoice = function () {
+
+            var invoiceId = document.getElementById('invoiceId').value;
+
+            $http({
+                method: "DELETE",
+                url: "api/invoices/" + invoiceId,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(function successCallback(response) {
+                console.log(response.statusText);
+                $state.go('app.invoices');
+
+                Messenger().post({
+                        message: 'Deleted invoice ' + invoiceId,
+                        type: "success",
+                        showCloseButton: true
+                    }
+                );
+
+            }, function errorCallback(response) {
+                console.log(response.statusText);
+            });
+        }
+
+
+
+
 
         $scope.dtChanged = function(dt) {
             $window.alert('Angular model changed to: ' + dt);
