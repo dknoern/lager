@@ -399,7 +399,6 @@
                                                     <h4 class="modal-title" id="myModalLabel">Select item</h4>
                                                 </div>
                                                 <div class="modal-body">
-                                                    ng-if="data.invoiceType != 'Partner'"
                                                   <table id="productTable" class="display" cellspacing="0" width="100%">
                                                       <thead>
                                                           <tr>
@@ -434,7 +433,9 @@
                                         <tbody>
                                             <tr data-ng-repeat="lineItem in data.lineItems">
                                                 <td>
-                                                    <textarea cols=50 rows="3" id="name" ng-model="lineItem.name"/>
+                                                    <textarea cols=70 rows="2" id="name" ng-model="lineItem.name"/>
+                                                    <br>
+                                                    <textarea cols=70 rows="3" id="longDesc" ng-model="lineItem.longDesc"/>
                                                 </td>
 
                                                 </td>
