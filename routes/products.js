@@ -801,7 +801,7 @@ router.route('/logitems')
 
                         results.data.push(
                             [
-                                '<a href=\"#\" onclick=\"selectProduct(\'' + products[i].history._id + '\');return false;\"><div style="white-space: nowrap;">' + format('yyyy-MM-dd', products[i].history.date) + '</div></a>',
+                                '<a href=\"#\" onclick=\"selectProduct(\'' + products[i].history._id + '\');return false;\"><div style="white-space: nowrap;">' + format('yyyy-MM-dd hh:mm', products[i].history.date) + '</div></a>',
                                 products[i].history.receivedFrom,
                                 products[i].history.customerName,
                                 itemReceived,
