@@ -131,13 +131,6 @@ var upsertLogItem = function (req, res, productId, action) {
 
                         if(doc==null){
                             console.log("found NO invoices that contains item : " + productId);
-                            if("Partner"==product.sellerType){
-                                console.log("item status set to partnership ");
-                                newStatus = "Partnership"
-                            } else if("Consignment"==product.sellerType){
-                                console.log("item status set to consignment-items.html ");
-                                newStatus = "Consignment"
-                            }
                         }else {
                             console.log("found at least one invoice that contains item : " + productId);
                             newStatus = "Sold"
