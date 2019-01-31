@@ -99,6 +99,7 @@
                                         <thead>
                                             <tr>
                                                 <th width="50%">Description</th>
+                                                <th>Item Number</th>
                                                 <th>Amount</th>
                                                 <th>Included</th>
                                             </tr>
@@ -113,6 +114,9 @@
                                                 <td ng-if="!lineItem.included">
                                                   <del>{{lineItem.name}}</del>
                                                 </td>
+                                                <td ng-if="lineItem.included">{{lineItem.itemNumber}}</td>
+                                                <td ng-if="!lineItem.included"><del>{{lineItem.itemNumber}}</del></td>
+
                                                 <td ng-if="lineItem.included">${{lineItem.amount}}</td>
                                                 <td ng-if="!lineItem.included"><del>${{lineItem.amount}}</del></td>
                                                 <td>
@@ -126,21 +130,25 @@
                                             </tr>
                                             <tr>
                                                 <td><b>Subtotal</b></td>
+                                                <td></td>
                                                 <td><b><span id="subtotal">{{data.subTotal | currency}}</span></b></td>
                                                 <td></td>
                                             </tr>
                                             <tr>
                                                 <td><b>Shipping</b></td>
+                                                <td></td>
                                                 <td><b><span id="shipping">{{data.shipping | currency}}</span></b></td>
                                                 <td></td>
 
                                                 <tr>
                                                     <td><b>Tax (TX)</b></td>
+                                                    <td></td>
                                                     <td><b><span id="salesTax">{{data.salesTax | currency}}</span></b></td>
                                                     <td></td>
                                                 </tr>
                                                 <tr>
                                                     <td><b>Total</b></td>
+                                                    <td></td>
                                                     <td><b><span id="totalReturnAmount">{{data.totalReturnAmount | currency}}</span></b></td>
                                                     <td></td>
                                                 </tr>
