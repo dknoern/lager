@@ -56,7 +56,7 @@ ImageStorage.prototype._handleFile = function _handleFile (req, file, cb) {
 
 
         var transformer = sharp()
-            .resize(800,800).max().withoutEnlargement()
+            .resize(1200,1200).max().withoutEnlargement()
             .on('info', function(info) {
                 console.log('Image height is ' + info.height);
             });
