@@ -22,26 +22,23 @@ function buildItemNumberList(lineItems){
     var foundFirst = false;
 
     if(lineItems!=null && lineItems.length>0){
-
-        console.log('line items length = '+ lineItems.length);
-
+        
         for(var i=0;i<lineItems.length;i++){
 
-            console.log(JSON.stringify(lineItems[i]));
-
-            console.log("itemNumber: "+ lineItems[i].itemNumber);
-            console.log("productId: "+ lineItems[i].productId);
-
-            if(lineItems[i]!=null&&lineItems[i].itemNumber!=null && lineItems[i].itemNumber!="") {
-                if(foundFirst) itemNumber += ", ";
-                itemNumber += lineItems[i].itemNumber;
-                foundFirst = true
+            var theNumber = null;
+            if(lineItems[i]!=null&&lineItems[i].itemNumber!=null && lineItems[i].itemNumber!=""){
+                theNumber = lineItems[i].itemNumber;
+            }
+            else if(lineItems[i]!=null&&lineItems[i].productId!=null) {
+                theNumber = lineItems[i].productId;
             }
 
-            else if(lineItems[i]!=null&&lineItems[i].productId!=null) {
+            if(theNumber!=null){
                 if(foundFirst) itemNumber += ", ";
-                itemNumber += lineItems[i].productId;
-                foundFirst = true
+                if(lineItems[i].included==false) itemNumber += "<del>";
+                itemNumber += theNumber;
+                if(lineItems[i].included==false) itemNumber += "</del>";
+                foundFirst = true;
             }
         }
     }
