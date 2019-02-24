@@ -32,7 +32,7 @@
                 {code: "ME", name: "Maine"},
                 {code: "MD", name: "Maryland"},
                 {code: "MA", name: "Massachusetts"},
-                {code: "MI", name: "Michiga"},
+                {code: "MI", name: "Michigan"},
                 {code: "MN", name: "Minnesota"},
                 {code: "MS", name: "Mississippi"},
                 {code: "MO", name: "Missouri"},
