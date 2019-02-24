@@ -82,7 +82,7 @@ var upsertLogItem = function (req, res, productId, action) {
 
     if(req.body.history._id !=null){
 
-        console.log("updating existing history itemn " +req.body.history._id );
+        console.log("updating existing history item " +req.body.history._id );
 
         // ---------------------------------
         // update existing history item
@@ -117,11 +117,7 @@ var upsertLogItem = function (req, res, productId, action) {
 
     else if (productId != null) { // update existing product
 
-        // determine if product was sellerType Partner
-
-        var newStatus = "In Stock";
-
-        Product.findById(productId,'sellerType', function(err,product){
+        Product.findById(productId,'status', function(err,product){
 
             Invoice.findOne({'lineItems.productId':productId, 'invoiceType': "Invoice"
                 },function (err, doc){
@@ -129,15 +125,29 @@ var upsertLogItem = function (req, res, productId, action) {
                         console.log("error looking for invoice that contains item : " + productId + ", " + err);
                     }else{
 
-                        if(doc==null){
-                            console.log("found NO invoices that contains item : " + productId);
-                        }else {
-                            console.log("found at least one invoice that contains item : " + productId);
-                            newStatus = "Sold"
+                        // figure out new state for received item
+
+
+                        var newStatus = product.status;
+
+                        if(product.status == "Sold"){
+                            newStatus = "In Stock";
+                        }
+                        else if (product.status == "Memo"){
+                            newStatus = "In Stock";
                         }
 
+                        else if (product.status == "Repair"){
+                            if(doc==null){
+                                console.log("found NO invoices that contains item : " + productId);
+                                newStatus = "In Stock"
+                            }else {
+                                console.log("found at least one invoice that contains item : " + productId);
+                                newStatus = "Sold"
+                            }
+                        }
 
-                        console.log("checking existing product in, setting status to " + newStatus);
+                        console.log("checking existing product in, status was " + product.status + ", setting status to " + newStatus);
                         var updates = {
                             "lastUpdated": Date.now(),
                             "status": newStatus
