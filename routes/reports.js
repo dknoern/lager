@@ -396,7 +396,8 @@ router.route('/reports/monthly-sales/:year/:month')
                         formatCurrency(invoices[i].total),
                         itemId,
                         description,
-                        '<div style="white-space: nowrap;">' + invoices[i].salesPerson + '</div>'
+                        '<div style="white-space: nowrap;">' + invoices[i].salesPerson + '</div>',
+                        invoices[i].shipState
                     ]
                 );
             }
@@ -411,7 +412,8 @@ router.route('/reports/monthly-sales/:year/:month')
             _id: 1,
             total: 1,
             lineItems: 1,
-            salesPerson: 1
+            salesPerson: 1,
+            shipState: 1
         });
     });
 
