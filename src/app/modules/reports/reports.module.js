@@ -112,6 +112,13 @@
                         $scope.reportId = "in-stock";
                     }
                 });
-
+                $stateProvider
+                .state('app.reports10', {
+                    url: '/reports/10',
+                    templateUrl: 'app/modules/reports/customers.html',
+                    controller: function($scope, $stateParams) {
+                        $scope.reportId = "customers";
+                    }
+                });
         }
 })();

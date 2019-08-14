@@ -132,7 +132,6 @@ router.route('/returns')
         if (req.query.start) start = req.query.start;
         if (req.query.length) length = req.query.length;
         var search = req.query.search.value;
-        console.log('search string is ' + search);
 
         var results = {
             "draw": draw,
