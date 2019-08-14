@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var Customer = require('../models/customer');
 var Product = require('../models/product');
 var Repair = require('../models/repair');
 var Return = require('../models/return');
@@ -571,6 +572,54 @@ router.route('/reports/last-sale-date')
             date: -1
         }).select({
             date: 1
+        });
+    });
+
+
+
+    router.route('/reports/customers')
+    .get(checkJwt, function (req, res) {
+        var results = {
+            "data": []
+        };
+
+
+        Customer.find({
+        }, function(err, customers) {
+            if (err)
+                res.send(err);
+
+            for (var i = 0; i < customers.length; i++) {
+
+
+                var cityAndState = customers[i].city;
+                if(customers[i].state!=null && customers[i].state!=""){
+                    cityAndState += ', ' + customers[i].state;
+                }
+
+                results.data.push(
+                    [
+                        customers[i]._id,
+                        customers[i].firstName + ' ' + customers[i].lastName,
+                        cityAndState,
+                        customers[i].email,
+                        customers[i].phone,
+                        customers[i].company
+                    ]
+                );
+            }
+
+            res.json(results);
+        }).sort({
+            _id: -1
+        }).select({
+            firstName: 1,
+            lastName: 1,
+            city: 1,
+            state: 1,
+            email: 1,
+            phone: 1,
+            company: 1
         });
     });
 
