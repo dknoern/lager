@@ -414,10 +414,10 @@ router.route('/products')
                     
                         Invoice.update({'lineItems.productId':req.body._id},
                             {$set: {
-                                'lineItems.0.itemNumber': req.body.itemNumber,
-                                'lineItems.0.name': req.body.title,
-                                'lineItems.0.longDesc': longDesc,
-                                'lineItems.0.serialNumber': req.body.serialNo
+                                'lineItems.$.itemNumber': req.body.itemNumber,
+                                'lineItems.$.name': req.body.title,
+                                'lineItems.$.longDesc': longDesc,
+                                'lineItems.$.serialNumber': req.body.serialNo
                             }
                         },{multi: true}, function (err, doc){
                         if (err){
