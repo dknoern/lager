@@ -633,22 +633,33 @@ router.route('/products/:product_id')
     })
 
     .delete(checkJwt, function (req, res) {
+        Product.findOneAndUpdate({
+            _id: req.params.product_id
+        }, {
 
-        Product.findById(req.params.product_id, function (err, product) {
+            "$push": {
+                "history": {
+                    user: req.user['http://mynamespace/name'],
+                    date: Date.now(),
+                    action: "item deleted"
+                }
+            },
+            "$set": {
+                "lastUpdated": Date.now(),
+                "status": "Deleted"
+            }
+        }, {
+            upsert: true
+        }, function (err, doc) {
             if (err)
                 res.send(err);
-            product.status = 'Deleted';
-            product.save(function (err) {
-                if (err)
-                    res.send(err);
-                res.json({
-                    message: 'Product updated!'
-                });
+            res.json({
+                message: 'item deleted!'
             });
         });
     });
-
-
+  
+    
 router.route('/products/:product_id/status')
     .put(checkJwt, function (req, res) {
 
@@ -686,6 +697,42 @@ router.route('/products/:product_id/status')
 
     });
 
+
+    router.route('/products/:itemNumber/undelete')
+    .put(checkJwt, function (req, res) {
+
+        console.log('setting status to In Stock (undeleting) item ' + req.params.itemNumber);
+
+        Product.findOneAndUpdate({
+            itemNumber: req.params.itemNumber
+        }, {
+            "$push": {
+                "history": {
+                    user: req.user['http://mynamespace/name'],
+                    date: Date.now(),
+                    action: "item undeleted"
+                }
+            },
+            "$set": {
+                "lastUpdated": Date.now(),
+                "status": "In Stock"
+            }
+        }, {
+            upsert: true
+        }, function (err, doc) {
+
+            console.log('_id is '+ doc._id);
+            if (err){
+                res.send(err);
+            }
+
+            var responseData = {
+                "_id": doc._id
+            }
+
+            res.json(responseData);
+        });
+    });
 
 router.route('/products/:product_id/notes')
     .post(checkJwt, function (req, res) {
