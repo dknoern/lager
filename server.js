@@ -25,7 +25,7 @@ cert: certificate,
 ca: ca
 };
 
-app.use(forceSSL);
+//app.use(forceSSL);
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -74,8 +74,8 @@ var secureServer = https.createServer(credentials, app);
 //app.use(express.bodyParser());
 //app.use(app.router);
  
-secureServer.listen(443)
-server.listen(80)
+//secureServer.listen(8443)
+server.listen(port)
 
 
 
