@@ -211,6 +211,32 @@
 
 
 
+        <!-- item undelete modal -->
+        <div class="modal fade" id="itemUndeleteModal" tabindex="-1" role="dialog"
+             aria-labelledby="myModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Item {{data.itemNumber}} already exists!</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            Would you like to undelete existing item {{data.itemNumber}}?
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" ng-click="undelete()" data-dismiss="modal">
+                            Undelete
+                        </button>
+                        <button type="button" class="btn btn-inverse" data-dismiss="modal">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 

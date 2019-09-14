@@ -162,10 +162,16 @@
             }, function errorCallback(response) {
 
 
-                Messenger().post({
-                    message: response.data.error,
-                    type: "error",
-                });
+                if(response.status==409 && response.data.error.includes('already exists')){
+                    // undelete?
+                    $('#itemUndeleteModal').modal('toggle')
+                }
+                else{
+                    Messenger().post({
+                        message: response.data.error,
+                        type: "error",
+                    });
+                }
 
             });
         }
@@ -196,8 +202,24 @@
                 console.log(response.statusText);
             });
         }
+        $scope.undelete = function() {
+            var itemNumber = document.getElementById('itemNumber').value;
+        
+                $http.put('api/products/' + itemNumber + '/undelete').then(function successCallback(response) {
+                    $scope.data = $resource('api/products/:id').get({
+                        id: response.data._id
+                    });
 
-
+                }, function errorCallback(response) {
+                    console.log(response.statusText);
+                });
+  
+                Messenger().post({
+                    message: "undeleted item " + itemNumber,
+                    type: "success"
+                });
+        }
+  
 
         $scope.imagesAdded = function(){
             $http.get('api/upload/'+$scope.itemId).
