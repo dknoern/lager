@@ -11,7 +11,6 @@ var emailAddresses = require('../email-addresses.js');
 
 var mustache = require("mustache");
 var fs = require("fs");
-var pdf = require('html-pdf');
 
 const checkJwt = require('./jwt-helper').checkJwt;
 const formatCurrency = require('format-currency');
@@ -310,70 +309,7 @@ function streamToString(stream, cb) {
     });
 }
 
-
-
-router.route('/invoices/:invoice_id/pdf')
-    .get( function(req, res) {
-
-        var opts = { format: '%s%v', symbol: '$' };
-
-        Invoice.findById(req.params.invoice_id, function(err, invoice) {
-            if (err) {
-                res.send(err);
-            }
-            else {
-
-                invoice.subtotalFMT = formatCurrency(invoice.subtotal, opts);
-                invoice.taxFMT = formatCurrency(invoice.tax, opts);
-                invoice.shippingFMT = formatCurrency(invoice.shipping, opts);
-                invoice.totalFMT = formatCurrency(invoice.total, opts);
-                invoice.dateFMT =  format('MM/dd/yyyy', invoice.date);
-
-                console.log("shipping: "+ invoice.shipping + " formatted "+ invoice.shippingFMT);
-
-                for (var i = 0; i < invoice.lineItems.length; i++) {
-
-                    invoice.lineItems[i].nameFMT = invoice.lineItems[i].name.toUpperCase();
-                    invoice.lineItems[i].amountFMT = formatCurrency(invoice.lineItems[i].amount, opts);
-                    invoice.lineItems[i].itemNumberFMT = invoice.lineItems[i].itemNumber+ format('dd', invoice.date);
-                }
-
-                fs.readFile('./src/app/modules/invoice/invoice-content.html', 'utf-8', function (err, template) {
-                    if (err) throw err;
-                    var output = mustache.to_html(template, {data: invoice,
-                        logoUrl:"http://demesyinventory.com/assets/images/logo/logo.png",
-                        logoWidth:250,
-                        fontSize:8,
-                        bigFontSize:11,
-                        hugeFontSize:24,
-                        footerFontSize:5,
-                        iconWidth:24
-                    });
-
-
-
-                    var options = {
-                        format: 'Letter'
-                    };
-
-
-                    console.log("making string");
-
-
-                    res.pdfFromHTML({
-                        filename: 'invoice.pdf',
-                        htmlContent: output,
-                        options: options
-                    });
-
-                });
-            }
-
-        });
-    });
-
-
-        router.route('/invoices/:invoice_id/print')
+router.route('/invoices/:invoice_id/print')
   //  .get(checkJwt, function(req, res) {
     .get( function(req, res) {
 
