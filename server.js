@@ -15,9 +15,8 @@ var forceSSL = require('express-force-ssl');
 
 
 const privateKey = fs.readFileSync('/etc/letsencrypt/live/demesyinventory.com/privkey.pem', 'utf8');
-const certificate = fs.readFileSync('/etc/letsencrypt/live/demesyinventory.com/cert.pem', 'utf8');
-const ca = fs.readFileSync('/etc/letsencrypt/live/demesyinventory.com/chain.pem', 'utf8');
-
+const certificate = fs.readFileSync('/etc/letsencrypt/live/demesyinventory.com/fullchain.pem', 'utf8');
+const ca = fs.readFileSync('/etc/letsencrypt/live/demesyinventory.com/fullchain.pem', 'utf8');
 
 const credentials = {
 key: privateKey,
