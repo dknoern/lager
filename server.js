@@ -25,8 +25,6 @@ cert: certificate,
 ca: ca
 };
 
-app.use(forceSSL);
-
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
@@ -37,8 +35,6 @@ app.use('/app/modules', express.static('./src/app/modules'));
 app.use('/assets', express.static('./src/assets'));
 app.use('/uploads', express.static('./uploads'));
 app.use('/.well-known', express.static('./well-known'));
-
-var port = process.env.PORT || 8080;
 
 var customers = require('./routes/customers');
 app.use('/api', customers);
@@ -67,21 +63,18 @@ app.get('/*', function(req, res) {
   res.sendFile(path.join(__dirname + '/index.html'));
 });
 
+var port = process.env.PORT || 8080;
+var httpsPort = (port==80 ? 443 : 8443);
 
 var server = http.createServer(app);
-var secureServer = https.createServer(credentials, app);
- 
-//app.use(express.bodyParser());
-//app.use(app.router);
- 
-secureServer.listen(443)
-server.listen(80)
 
+if(port!=8080){
+   var secureServer = https.createServer(credentials, app);
+   app.use(forceSSL);
+   secureServer.listen(httpsPort);
+   console.log('Listening on port ' + httpsPort );
 
+}
 
-//app.listen(port);
-//https.createServer(credentials, app).listen(443);
-
-//app.use(forceSSL);
-
+server.listen(port);
 console.log('Listening on port ' + port );
