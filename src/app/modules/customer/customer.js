@@ -8,6 +8,8 @@
 
     function CustomerCtrl($scope, $resource, $http, $window, $location, $state, jQuery, refdataService) {
 
+        var accessToken = localStorage.getItem('access_token');
+
         $scope.states = refdataService.states();
         
         $scope.dtChanged = function(dt) {
@@ -20,21 +22,32 @@
                 $scope.data = data;
             });
 
-            $http.get('api/customers/'+$scope.customerId +'/invoices').
-            success(function(invoices) {
-                $scope.invoices = invoices;
-            });
+           jQuery('#invoiceTable').DataTable( {
+            "processing": true,
+            "serverSide": false,
+            "ordering": true,
+            "paging": false,
+            "pageLength": 50,
+        stateSave: true,
+            "ajax": {
+                url: 'api/customers/'+$scope.customerId +'/invoices',
+                headers: {
+                    "Authorization": "Bearer " + accessToken
+                }
+                },
+            "order": [[ 0, 'desc' ]]
+            } );
 
             $http.get('api/customers/'+$scope.customerId + '/returns').
             success(function(returns) {
                 $scope.returns = returns;
             });
+
         }else{
             $scope.data = {
                 copyAddress: true
             };
         }
-
 
         $scope.copyAddress = function() {
             var copying = document.getElementById('copyAddress').checked;

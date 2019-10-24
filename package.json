@@ -10,7 +10,7 @@
     "aws-sdk": "latest",
     "body-parser": "^1.18.3",
     "bootstrap": "^3.3.7",
-    "csv-parse": "1.2.3",
+    "csv-parse": "4.4.6",
     "date-format": "1.2.0",
     "dateformat": "3.0.3",
     "express": "^4.16.3",

@@ -24,7 +24,8 @@ var CustomerSchema = new mongoose.Schema({
     billingCountry: String,
     lastUpdated: Date,
     search: String,
-    copyAddress: Boolean
+    copyAddress: Boolean,
+    customerType: String
 });
 
 module.exports = mongoose.model('Customer', CustomerSchema);
