@@ -57,7 +57,6 @@ function buildSearchField(doc){
         }
     }
 
-    console.log("SEARCH = " + search);
 
     return search;
 }
@@ -328,8 +327,6 @@ router.route('/invoices/:invoice_id/print')
                 invoice.totalFMT = formatCurrency(invoice.total, opts);
                 invoice.dateFMT =  format('MM/dd/yyyy', invoice.date);
 
-                console.log("shipping: "+ invoice.shipping + " formatted "+ invoice.shippingFMT);
-
                 for (var i = 0; i < invoice.lineItems.length; i++) {
 
                     invoice.lineItems[i].nameFMT = invoice.lineItems[i].name.toUpperCase();
@@ -417,10 +414,6 @@ router.route('/invoices/:invoice_id')
 });
 
 
-
-
-
-
 router.route('/invoices/partner/:product_id')
     .get(checkJwt, function (req, res) {
 
@@ -499,14 +492,47 @@ router.route('/invoices/partner/:product_id')
 router.route('/customers/:customer_id/invoices')
     .get(function(req, res) {
 
+
+        var opts = { format: '%s%v', symbol: '$' };
+
+        var results = {
+            "data": []
+        };
+
          var customerId = req.params.customer_id;
          var query = Invoice.find({ 'customerId': customerId });
-          query.select('customer date invoiceNumber customerId total');
+          query.select('customer date invoiceNumber customerId total invoiceType lineItems');
           query.exec(function (err, invoices) {
           if (err) {
               res.send(err);
           }else {
-              res.json(invoices);
+
+            for (var i = 0; i < invoices.length; i++) {
+
+                var itemNo = "";
+                var itemName = "";
+
+                if (invoices[i].lineItems != null) {
+                    for (var j=0;j< invoices[i].lineItems.length ;j++){
+                        itemNo += invoices[i].lineItems[j].itemNumber + "<br/>";
+                        itemName +=  " " + invoices[i].lineItems[j].name + "<br/>";
+
+                    }
+                }
+
+                results.data.push(
+                    [
+                        '<a href=\"/#/app/invoice/' + invoices[i]._id + '\">' + invoices[i]._id + '</a>',
+                        '<div style="white-space: nowrap;">' + format('yyyy-MM-dd', invoices[i].date)+'</div>',
+                        itemNo,
+                        itemName,
+                        formatCurrency(invoices[i].total,opts),
+                        invoices[i].invoiceType
+                    ]
+                );
+            }
+
+            res.json(results);
           }
           })
         });

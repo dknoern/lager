@@ -34,6 +34,7 @@ var upsertCustomer = function(req, res, customerId) {
     customer.billingCountry = req.body.billingCountry;
     customer.lastUpdated = Date.now();
     customer.copyAddress = req.body.copyAddress;
+    customer.customerType = req.body.customerType;
 
     customer.search = customer._id + " " + customer.firstName + " " + customer.lastName + " " +customer.city + " " + customer.email + " " + customer.phone + " " + customer.country;
 
