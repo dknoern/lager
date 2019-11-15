@@ -875,7 +875,12 @@ router.route('/logitems')
                         ]
                     }
                 }]).exec(function (err, products2) {
-                    results.recordsTotal = products2.length
+                    if(products2==null){
+                        console.log('warning, showing zero total log entries!');
+                        results.recordsTotal = 0;
+                    }else{
+                    results.recordsTotal = products2.length;
+                    }
 
 
                     if (search == '' || search == null) {
@@ -893,7 +898,12 @@ router.route('/logitems')
                                 ]
                             }
                         }]).exec(function (err, products3) {
-                            results.recordsFiltered = products3.length
+                            if(products3==null){
+                                console.log('warning, showing zero filtered log entries!');
+                                results.recordsFiltered = 0;
+                            }else{
+                                results.recordsFiltered = products3.length
+                            }
 
                             res.json(results);
                         });

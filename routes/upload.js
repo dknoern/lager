@@ -5,7 +5,6 @@ var fs = require('fs');
 var Jimp = require("jimp");
 var Product = require('../models/product');
 var imageStorage = require('./ImageStorage');
-var sharp = require('sharp');
 
 const checkJwt = require('./jwt-helper').checkJwt;
 
