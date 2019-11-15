@@ -289,7 +289,7 @@ router.route('/reports/returns-summary/:year/:month')
 
                 var itemId = "";
                 if (returns[i].lineItems != null && returns[i].lineItems.length > 0)
-                    itemId = returns[i].lineItems[0].productId;
+                    itemId = returns[i].lineItems[0].itemNumber;
 
                 results.data.push(
                     [
