@@ -315,8 +315,6 @@ router.route('/reports/items/sellertype/:sellerType')
     .get(checkJwt, function (req, res) {
         var sellerType = req.params.sellerType;
 
-        console.log("report called for items of sellerType " + sellerType);
-
         var results = {
             "data": []
         };
