@@ -122,14 +122,14 @@ router.route('/customers')
                 );
             }
 
-            Customer.count({}, function(err, count) {
+            Customer.estimatedDocumentCount({}, function(err, count) {
                 results.recordsTotal = count;
 
                 if (search == '' || search == null) {
                     results.recordsFiltered = count;
                     res.json(results);
                 } else {
-                    Customer.count({
+                    Customer.estimatedDocumentCount({
                         $or: [{
                                 'firstName': new RegExp(search, 'i')
                             },

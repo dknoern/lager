@@ -203,14 +203,14 @@ router.route('/repairs')
                 );
             }
 
-            Repair.count({}, function(err, count) {
+            Repair.estimatedDocumentCount({}, function(err, count) {
                 results.recordsTotal = count;
 
                 if ((search == '' || search == null)&&"all"==req.query.filter) {
                     results.recordsFiltered = count;
                     res.json(results);
                 } else {
-                    Repair.count(
+                    Repair.estimatedDocumentCount(
                         query
                     , function(err, count) {
 
