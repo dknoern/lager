@@ -505,19 +505,13 @@ router.route('/products')
             sortClause = {status: sortOrder};
 
         Product.find({
-            $and: [{
-                status: statusFilter
-            },
-                {
-                    itemNumber: {$ne: null}
-                },
-                {
-                    itemNumber: {$ne: ""}
-                }
-
-                , {
-                    'search': new RegExp(search, 'i')
-                }]
+            $and: [
+                { status: statusFilter },
+                { itemNumber: { $ne: null } },
+                { itemNumber: { $ne: "" } },
+                { title: { $ne: null } },
+                { 'search': new RegExp(search, 'i') }
+            ]
         }, function (err, products) {
 
             if (err)
@@ -558,8 +552,14 @@ router.route('/products')
                 );
             }
 
-            Product.count({
-                status: statusFilter
+            Product.countDocuments({
+                $and: [
+                    { status: statusFilter },
+                    { itemNumber: { $ne: null } },
+                    { itemNumber: { $ne: "" } },
+                    { title: { $ne: null } }
+                ]
+    
             }, function (err, count) {
                 results.recordsTotal = count;
 
@@ -567,15 +567,14 @@ router.route('/products')
                     results.recordsFiltered = count;
                     res.json(results);
                 } else {
-                    Product.count({
+                    Product.countDocuments({
 
-                        $and: [{
-                            status: {
-                                $ne: "Deleted"
-                            }
-                        }, {
-                            'search': new RegExp(search, 'i')
-                        }]
+                        $and: [
+                            { status: {$ne: "Deleted"}},
+                            { itemNumber: {$ne: null}},
+                            { itemNumber: {$ne: ""}},
+                            {'search': new RegExp(search, 'i')}
+                        ]
 
                     }, function (err, count) {
                         results.recordsFiltered = count;
@@ -596,6 +595,7 @@ router.route('/products')
             lastUpdated: 1,
             sellerType: 1
         });
+
     });
 
 
@@ -873,13 +873,22 @@ router.route('/logitems')
                             {'history.action': 'received'}
 
                         ]
-                    }
-                }]).exec(function (err, products2) {
-                    if(products2==null){
+                    },
+                },
+            
+                {$group:
+                {
+                  _id:  null
+                  ,count: { $sum: 1 }
+                }}
+            
+            
+            ]).exec(function (err, products2) {
+                    if(products2==null || products2[0]==null){
                         console.log('warning, showing zero total log entries!');
                         results.recordsTotal = 0;
                     }else{
-                    results.recordsTotal = products2.length;
+                    results.recordsTotal = products2[0].count;
                     }
 
 
@@ -897,12 +906,18 @@ router.route('/logitems')
                                     {'history.search': new RegExp(search, 'i')}
                                 ]
                             }
-                        }]).exec(function (err, products3) {
-                            if(products3==null){
+                        },
+            
+                        {$group:
+                        {
+                          _id:  null
+                          ,count: { $sum: 1 }
+                        }}]).exec(function (err, products3) {
+                            if(products3==null||products3[0]==null){
                                 console.log('warning, showing zero filtered log entries!');
                                 results.recordsFiltered = 0;
                             }else{
-                                results.recordsFiltered = products3.length
+                                results.recordsFiltered = products3[0].count
                             }
 
                             res.json(results);

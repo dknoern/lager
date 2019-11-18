@@ -263,14 +263,14 @@ router.route('/invoices')
                 );
             }
 
-            Invoice.count({}, function(err, count) {
+            Invoice.estimatedDocumentCount({}, function(err, count) {
                 results.recordsTotal = count;
 
                 if (search == '' || search == null) {
                     results.recordsFiltered = count;
                     res.json(results);
                 } else {
-                    Invoice.count({
+                    Invoice.estimatedDocumentCount({
 
                         'search': new RegExp(search, 'i')
 

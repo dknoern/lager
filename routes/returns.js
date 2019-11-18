@@ -169,14 +169,14 @@ router.route('/returns')
                 );
             }
 
-            Return.count({}, function(err, count) {
+            Return.estimatedDocumentCount({}, function(err, count) {
                 results.recordsTotal = count;
 
                 if (search == '' || search == null) {
                     results.recordsFiltered = count;
                     res.json(results);
                 } else {
-                    Return.count({
+                    Return.estimatedDocumentCount({
                         'customer': new RegExp(search, 'i')
                         /*$or: [{
                                 'firstName': new RegExp(search, 'i')
