@@ -96,7 +96,7 @@ InvoiceSchema.pre('save', function (next) {
 
 
 InvoiceSchema.virtual('dateFMT').get(function () {
-    return format('MM/dd/yyyy', this.date);
+    return format('MM/dd/yyyy hh:mm', this.date);
 });
 
 InvoiceSchema.virtual('invoiceTypeFMT').get(function () {
