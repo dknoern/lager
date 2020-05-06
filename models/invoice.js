@@ -96,7 +96,19 @@ InvoiceSchema.pre('save', function (next) {
 
 
 InvoiceSchema.virtual('dateFMT').get(function () {
-    return format('MM/dd/yyyy hh:mm', this.date);
+
+    var hours = this.date.getHours();
+    var minutes = this.date.getMinutes();
+    if(minutes<10) minutes = "0" + minutes;
+    var ampm = " a.m."
+
+    if(hours>12){
+        hours = hours - 12;
+        ampm = " p.m."
+    }
+
+    var formatedDate = format('MM/dd/yyyy', this.date) + " " + hours + ":" + minutes + ampm;
+    return formatedDate;
 });
 
 InvoiceSchema.virtual('invoiceTypeFMT').get(function () {
