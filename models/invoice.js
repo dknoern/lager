@@ -102,12 +102,14 @@ InvoiceSchema.virtual('dateFMT').get(function () {
     if(minutes<10) minutes = "0" + minutes;
     var ampm = " a.m."
 
+    if(hours>11){
+        ampm = " p.m."
+    }   
+    
     if(hours>12){
         hours = hours - 12;
     }
-    if(hours>11){
-        ampm = " p.m."
-    }    
+ 
 
     var formatedDate = format('MM/dd/yyyy', this.date) + " " + hours + ":" + minutes + ampm;
     return formatedDate;
