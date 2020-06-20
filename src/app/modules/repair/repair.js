@@ -59,6 +59,7 @@
                     $http.get('api/upload/' + $scope.data.itemId).
                     success(function(images) {
                         $scope.images = images;
+                        $scope.data.images = images;
                     });
                 });
         }
@@ -100,12 +101,10 @@
                 $http.get('api/repairs/' + $scope.repairId).
                 success(function(data) {
                     $scope.data = data;
-                    if ($scope.data.itemId != null) {
-                        $http.get('api/upload/' + $scope.data.itemId).
-                        success(function(images) {
-                            $scope.images = images;
-                        });
-                    }
+                    $http.get('api/upload/' + $scope.repairId).
+                    success(function(images) {
+                        $scope.images = images;
+                    });
 
                 });
             }
@@ -177,5 +176,59 @@
         })
 
         jQuery('#datetimepicker2').datetimepicker();
+
+        $scope.imagesAdded = function(){
+            $http.get('api/upload/'+$scope.repairId).
+            success(function(images) {
+                $scope.images = images;
+            });
+        }
+
+        $scope.rotate = function(url, direction){
+
+            var filename = url.split("/")[2];
+
+            if(filename.indexOf("?")>0){
+                filename = filename.split("?")[0];
+            }
+
+            $http.get('api/upload/rotate/'+filename +'/'+direction).
+            success(function(images) {
+
+                $http.get('api/upload/'+$scope.repairId).
+                success(function(images) {
+                    $scope.images = images;
+                });
+            });
+        }
+
+        $scope.delete = function(url){
+            $scope.selectedImage = url;
+        }
+
+        $scope.conFirmDelete = function() {
+
+            var filenameFull = $scope.selectedImage;
+
+            var filename = filenameFull.split("/")[2];
+
+
+            if (filename.indexOf("?") > 0) {
+                filename = filename.split("?")[0];
+            }
+
+            $http.delete('api/upload/delete/' + filename).success(function () {
+
+                $http.get('api/upload/' + $scope.repairId).success(function (images) {
+                    $scope.images = images;
+                });
+
+                Messenger().post({
+                    message: "Image deleted.",
+                    type: "success"
+                });
+            });
+        }
+
     }
 })();
