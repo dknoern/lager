@@ -36,7 +36,7 @@
     "chalk": "1.1.1",
     "concat-stream": "~1.4.7",
     "del": "~2.0.2",
-    "http-proxy": "~1.8.0",
+    "http-proxy": "~1.18.1",
     "jshint": "^2.9.6",
     "jshint-stylish": "~1.0.0",
     "lodash": "~4.17.5",
