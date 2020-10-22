@@ -96,8 +96,9 @@ router.route('/repairs')
         repair.email = req.body.email;
         repair.customerId = req.body.customerId;
         repair.hasPapers = req.body.hasPapers;
+        repair.warrantyService = req.body.warrantyService;
         repair.repairCost = req.body.repairCost;
-
+        repair.customerApprovedDate = req.body.customerApprovedDate;
 
 
         if(repair.itemNumber!=null&&repair.itemNumber!=""&&repair.repairNumber!=null&&repair.repairNumber!="" && repair.repairNumber!=repair.itemNumber){
@@ -154,9 +155,7 @@ router.route('/repairs')
 
         var query = { $and: [{'search': new RegExp(search, 'i')}] };
 
-
         var opts = { format: '%s%v', symbol: '$' };
-
 
         if("outstanding"==req.query.filter){
             query.$and.push({returnDate:{$eq:null}});
@@ -194,7 +193,7 @@ router.route('/repairs')
                         repairs[i].itemNumber,
                         repairs[i].description,
                         '<div style="white-space: nowrap;">' + formatDate(repairs[i].dateOut)+'</div>',
-                        '<div style="white-space: nowrap;">' + formatDate(repairs[i].expectedReturnDate)+'</div>',
+                        '<div style="white-space: nowrap;">' + formatDate(repairs[i].customerApprovedDate)+'</div>',
                         '<div style="white-space: nowrap;">' + formatDate(repairs[i].returnDate)+'</div>',
                         customerName,
                         repairs[i].vendor,
@@ -225,7 +224,7 @@ router.route('/repairs')
         }).skip(parseInt(start)).limit(parseInt(length)).select({
             description: 1,
             dateOut: 1,
-            expectedReturnDate: 1,
+            customerApprovedDate: 1,
             returnDate: 1,
             customerFirstName: 1,
             customerLastName: 1,

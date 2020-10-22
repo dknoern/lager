@@ -8,7 +8,7 @@ var scopeHolder;
 
     LogItemCtrl.$inject = ['$scope', '$rootScope','$sce','$resource', '$http', '$window', '$location', '$state', 'jQuery', 'authService'];
 
-    function LogItemCtrl($scope, $rootScope, $sce, $resource, $http, $window, $location, $state, jQuery,$upload,authService) {
+    function LogItemCtrl($scope, $rootScope, $sce, $resource, $http, $window, $location, $state, jQuery,authService,$upload) {
         $scope.dtChanged = function(dt) {
             $window.alert('Angular model changed to: ' + dt);
         };
@@ -43,14 +43,22 @@ var scopeHolder;
         }
 
 
+        var receivedBy = "zzz";
 
 
+        if(authService!=null && authService.getCachedProfile() !=null && authService.getCachedProfile().name != null){
+            var receivedBy = authService.getCachedProfile().name;
+            if (receivedBy != null && receivedBy.length > 0 && receivedBy.indexOf("@") > 0) {
+                receivedBy = receivedBy.substring(0, receivedBy.indexOf("@"));
+            }
 
-        var receivedBy = "Janet";
+            if("ryan" == receivedBy.toLowerCase())  receivedBy = "Ryan Ables";
+            else if("marijo" == receivedBy.toLowerCase()) receivedBy = "Mari Jo Bueno";
+            else if("colby" == receivedBy.toLowerCase()) receivedBy = "Colby Vick";
+            else if("janet" == receivedBy.toLowerCase()) receivedBy = "Janet Gary";
+            else if("david" == receivedBy.toLowerCase()) receivedBy = "David Knoernschild";
 
-        if (authService && authService.getCachedProfile()) {
-            receivedBy = authService.getCachedProfile().nickname;
-        }
+        }    
 
         if ($scope.itemId) {
 

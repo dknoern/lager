@@ -77,12 +77,21 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="expectedReturnDate" class="col-sm-3 control-label">Expected
-                                Return</label>
+                            <div class="col-sm-3"></div>
                             <div class="col-sm-8">
-                                <input type="text" id="expectedReturnDate" class="form-control"
+                                <div class="form-group checkbox checkbox-primary">
+                                    <input type="checkbox" id="customerApproved" ng-click="customerApproved()" ng-checked="data.customerApprovedDate!=null">
+                                    <label for="customerApproved">Customer Approved</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customerApprovedDate" class="col-sm-3 control-label">Customer Approved Date</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="customerApprovedDate" class="form-control"
                                        readonly="readonly"
-                                       value="{{data.expectedReturnDate | date: 'MM/dd/y'}}">
+                                       value="{{data.customerApprovedDate | date: 'MM/dd/y'}}">
                             </div>
                         </div>
 
@@ -101,8 +110,8 @@
                             <div class="col-sm-3"></div>
                             <div class="col-sm-8">
                                 <div class="form-group checkbox checkbox-primary">
-                                    <input type="checkbox" id="ebay" ng-model="data.hasPapers">
-                                    <label for="ebay">Has papers</label>
+                                    <input type="checkbox" id="warrantyService" ng-model="data.warrantyService">
+                                    <label for="warrantyService">Warranty Service</label>
                                 </div>
                             </div>
                         </div>

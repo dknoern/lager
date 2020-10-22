@@ -150,6 +150,15 @@
             $window.location=logItemUrl;
         }
 
+        $scope.customerApproved = function() {
+
+            if($scope.data.customerApprovedDate == null)
+                $scope.data.customerApprovedDate = new Date();
+            else 
+                $scope.data.customerApprovedDate = null
+        }
+
+
         var productTableShown = false;
 
         $('#productModal').on('show.bs.modal', function(e) {
