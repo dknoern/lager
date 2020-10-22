@@ -145,6 +145,7 @@ router.route('/invoices')
         invoice.shipping = req.body.shipping;
         invoice.total = req.body.total;
         invoice.copyAddress = req.body.copyAddress;
+        invoice.trackingNumber = req.body.trackingNumber;
 
         customerId = req.body.customerId;
 

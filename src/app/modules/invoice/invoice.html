@@ -217,7 +217,6 @@
                                             </div>
                                         </div>
 
-
                                         <div class="form-group">
                                             <label for="paidBy" class="col-sm-3 control-label">Method of Sale</label>
                                             <div class="col-sm-8">
@@ -247,7 +246,6 @@
                                                     <option ng-if="'Consignment' == data.invoiceType">Consignment</option>
                                                 </select>
                                             </div>
-
                                         </div>
 
                                         <div class="form-group">
@@ -269,7 +267,6 @@
                                             </div>
                                         </div>
 
-
                                         <div class="form-group " ng-class="{required : data.paidBy == 'Card' || data.paidBy == 'Bank Wire' || data.paidBy == 'Chrono 24'}"    >
                                             <label for="authNumber" class="col-sm-3 control-label">Auth #</label>
                                             <div class="col-sm-8">
@@ -277,8 +274,6 @@
                                                        ng-disabled="data.paidBy != 'Card' && data.paidBy != 'Bank Wire' && data.paidBy != 'Chrono 24'"  ng-required="data.paidBy == 'Card' || data.paidBy == 'Bank Wire' || data.paidBy == 'Chrono 24'">
                                             </div>
                                         </div>
-
-
 
                                         <div class="form-group">
                                             <label for="shipping" class="col-sm-3 control-label">Shipping</label>
@@ -290,8 +285,6 @@
                                             </div>
                                         </div>
 
-
-
                                         <div class="form-group">
                                             <label for="shipVia" class="col-sm-3 control-label">Ship Via</label>
                                             <div class="col-sm-8">
@@ -300,22 +293,23 @@
                                                     <option></option>
                                                     <option>USPS</option>
                                                     <option>UPS</option>
-                                                    <option>FexEx</option>
+                                                    <option>FedEx</option>
                                                     <option>In-Person pick up</option>
                                                 </select>
                                             </div>
                                         </div>
 
-
-
-
-
+                                        <div class="form-group">
+                                            <label for="trackingNumber" class="col-sm-3 control-label">Tracking Number</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="trackingNumber" class="form-control" ng-model="data.trackingNumber" ng-readonly="data.shipVia!='UPS' && data.shipVia!='FedEx'" >
+                                            </div>
+                                        </div>
 
                                     </fieldset>
                                     <fieldset>
 
                                         <legend>Billing Address &nbsp (&nbsp;<input id="copyAddress" ng-click="copyAddress()" type="checkbox" ng-model="data.copyAddress"/> &nbsp; Use Shipping&nbsp;)</legend>
-
 
                                         <div class="form-group">
                                             <label for="billingAddress1" class="col-sm-3 control-label">Billing Address 1</label>

@@ -58,22 +58,32 @@
                 Phone 214-855-8777 &nbsp; 800-635-9006<br/>
                 Fax 214-871-6777</p>
 
-
         </div>
-
 
 
         <b>Repair #</b> </dv>
 
         <div>{{data.repairNumber}}</div>
 
+
+        {{#data.warrantyService}}<div><br/>Warranty Service</div>{{/data.warrantyService}}
         <br/>
 
         <div>
             <b>Repair Date:</b></div>
         <div>{{data.dateOutFMT}}</div>
-
         <br/>
+
+        {{#data.customerApprovedDate}}
+        <div>
+            <b>Customer Approved Date:</b></div>
+        <div>{{data.customerApprovedDateFMT}}</div>
+        <br/>
+        {{/data.customerApprovedDate}}
+
+
+
+
 
         <div>
             <b>Vendor Name</b>

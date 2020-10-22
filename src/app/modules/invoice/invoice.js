@@ -208,11 +208,11 @@ var scopeHolder;
                     salesPerson = salesPerson.substring(0, salesPerson.indexOf("@"));
                 }
 
-                    if("ryan" == salesPerson)  salesPerson = "Ryan Ables";
-                    else if("marijo" == salesPerson) salesPerson = "Mari Jo Bueno";
-                    else if("colby" == salesPerson) salesPerson = "Colby Vick";
-                    else if("janet" == salesPerson) salesPerson = "Janet Gary";
-                    else if("david" == salesPerson) salesPerson = "David Knoernschild";
+                    if("ryan" == salesPerson.toLowerCase())  salesPerson = "Ryan Ables";
+                    else if("marijo" == salesPerson.toLowerCase()) salesPerson = "Mari Jo Bueno";
+                    else if("colby" == salesPerson.toLowerCase()) salesPerson = "Colby Vick";
+                    else if("janet" == salesPerson.toLowerCase()) salesPerson = "Janet Gary";
+                    else if("david" == salesPerson.toLowerCase()) salesPerson = "David Knoernschild";
 
                 }
 

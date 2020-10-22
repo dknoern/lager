@@ -59,7 +59,8 @@ var InvoiceSchema = new mongoose.Schema({
     lineItems: {
   	    type: [LineItemSchema]
     },
-    status: String
+    status: String,
+    trackingNumber: String
 });
 
 // TODO: remove pre hook

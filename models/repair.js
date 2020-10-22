@@ -24,7 +24,9 @@ var RepairSchema = new mongoose.Schema({
     repairNotes: String,
     hasPapers: Boolean,
     search: String,
-    repairCost: Number
+    repairCost: Number,
+    warrantyService: Boolean,
+    customerApprovedDate: Date
 });
 
 
@@ -32,6 +34,11 @@ var RepairSchema = new mongoose.Schema({
 RepairSchema.virtual('dateOutFMT').get(function () {
     return format('MM/dd/yyyy', this.dateOut);
 });
+
+RepairSchema.virtual('customerApprovedDateFMT').get(function () {
+    return format('MM/dd/yyyy', this.customerApprovedDate);
+});
+
 
 RepairSchema.virtual('repairCostFMT').get(function () {
     if(this.repairCost==null) return "";

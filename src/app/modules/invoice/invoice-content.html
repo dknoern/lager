@@ -82,6 +82,8 @@
 
             {{data.invoiceType}} # {{data._id}}<br/>
             {{data.invoiceType}} Date: {{data.dateFMT }}<br/>
+            {{#data.shipVia}}Ship Via: {{data.shipVia}}<br/>{{/data.shipVia}}
+            {{#data.trackingNumber}}Tracking Number: {{data.trackingNumber}}<br/>{{/data.trackingNumber}}
             {{#data.salesPerson}}
             Sold By: {{data.salesPerson}}<br/>
             {{/data.salesPerson}}
