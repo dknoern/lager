@@ -294,6 +294,7 @@
                                                     <option>USPS</option>
                                                     <option>UPS</option>
                                                     <option>FedEx</option>
+                                                    <option>DHL</option>
                                                     <option>In-Person pick up</option>
                                                 </select>
                                             </div>
@@ -302,7 +303,7 @@
                                         <div class="form-group">
                                             <label for="trackingNumber" class="col-sm-3 control-label">Tracking Number</label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="trackingNumber" class="form-control" ng-model="data.trackingNumber" ng-readonly="data.shipVia!='UPS' && data.shipVia!='FedEx'" >
+                                                <input type="text" id="trackingNumber" class="form-control" ng-model="data.trackingNumber" ng-readonly="data.shipVia!='UPS' && data.shipVia!='FedEx' && data.shipVia!='DHL'" >
                                             </div>
                                         </div>
 
