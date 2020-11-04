@@ -258,6 +258,7 @@ router.route('/invoices')
                         '<div style="white-space: nowrap;">' + format('yyyy-MM-dd', invoices[i].date)+'</div>',
                         itemNo,
                         itemName,
+                        invoices[i].trackingNumber,
                         formatCurrency(invoices[i].total,opts),
                         invoices[i].invoiceType
                     ]
@@ -291,7 +292,8 @@ router.route('/invoices')
             date: 1,
             lineItems: 1,
             total: 1,
-            invoiceType: 1
+            invoiceType: 1,
+            trackingNumber: 1
         });
 
     });
