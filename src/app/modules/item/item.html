@@ -668,6 +668,7 @@
                                             <thead>
                                             <tr>
                                                 <th>Date Out</th>
+                                                <th>Returned</th>
                                                 <th>Notes</th>
                                                 <th>Vendor</th>
                                                 <th>Cost</th>
@@ -676,6 +677,7 @@
                                             <tbody>
                                             <tr data-ng-repeat="repair in repairs">
                                                 <td>{{repair.dateOut | date : "MM/dd/y"}}</td>
+                                                <td>{{repair.returnDate | date : "MM/dd/y"}}</td>
                                                 <td>{{repair.repairNotes}}</td>
                                                 <td>{{repair.vendor}}</td>
                                                 <td>{{repair.repairCost}}</td>
