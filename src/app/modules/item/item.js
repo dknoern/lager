@@ -53,6 +53,7 @@
           $scope.data.serialNo = null;
           $scope.data.cost = null;
           $scope.data.totalRepairCost = null;
+          $scope.repairs = null;
 
           Messenger().post({
             message: "Item cloned. Enter new seller, serial number, and cost then save.",
