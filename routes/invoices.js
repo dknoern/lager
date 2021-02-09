@@ -503,7 +503,7 @@ router.route('/customers/:customer_id/invoices')
         };
 
          var customerId = req.params.customer_id;
-         var query = Invoice.find({ 'customerId': customerId });
+         var query = Invoice.find({ 'customerId': customerId, status: {$ne: 'Deleted'} });
           query.select('customer date invoiceNumber customerId total invoiceType lineItems');
           query.exec(function (err, invoices) {
           if (err) {
@@ -541,6 +541,14 @@ router.route('/customers/:customer_id/invoices')
         });
 
 
+    router.route('/customers/:customer_id/invoiceCount')
+        .get(function(req, res) {
+            var customerId = req.params.customer_id;
+            Invoice.count({'customerId': customerId, status: {$ne: 'Deleted'} }, function( err, count){
+                res.json({"invoiceCount": count});
+            })
+    });
+    
 router.route('/invoices/email')
     .post(checkJwt, function(req, res) {
 

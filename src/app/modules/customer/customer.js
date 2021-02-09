@@ -43,6 +43,12 @@
                 $scope.returns = returns;
             });
 
+
+            $http.get('api/customers/' + $scope.customerId + '/invoiceCount').
+            success(function(data) {
+                $scope.invoiceCount = data.invoiceCount;
+            });
+
         }else{
             $scope.data = {
                 copyAddress: true
@@ -86,6 +92,30 @@
 
         $scope.getLongDescritpion = function() {
             return 'this is a long description';
+        }
+
+        $scope.deleteCustomer = function (customerId, customerName) {
+
+            $http({
+                method: "DELETE",
+                url: "api/customers/" + customerId,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(function successCallback(response) {
+                console.log(response.statusText);
+                $state.go('app.customers');
+
+                Messenger().post({
+                        message: 'Deleted customer ' + customerName,
+                        type: "success",
+                        showCloseButton: true
+                    }
+                );
+
+            }, function errorCallback(response) {
+                console.log(response.statusText);
+            });
         }
 
         jQuery('#datetimepicker2').datetimepicker();

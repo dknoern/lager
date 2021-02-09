@@ -95,7 +95,8 @@ router.route('/customers')
 
         Customer.find({
 
-            'search': new RegExp(search, 'i')
+            'search': new RegExp(search, 'i'),
+            'status': {$ne: 'Deleted'} 
 
         }, function(err, customers) {
             if (err)
@@ -210,13 +211,16 @@ router.route('/customers/:customer_id')
     })
 
     .delete(checkJwt, function(req, res) {
-        Customer.remove({
-            _id: req.params.customer_id
-        }, function(err, customer) {
+        Customer.findById(req.params.customer_id, function(err, customer) {
             if (err)
                 res.send(err);
-            res.json({
-                message: 'Successfully deleted'
+            customer.status = "Deleted";
+            customer.save(function(err) {
+                if (err)
+                    res.send(err);
+                res.json({
+                    message: 'Customer deleted'
+                });
             });
         });
     });
