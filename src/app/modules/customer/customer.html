@@ -1,14 +1,62 @@
 
-<h1 class="page-title"><span class="fw-semi-bold">Customer</span></h1>
 
 <div data-ng-controller="CustomerCtrl">
 
+
+
+  <div class="row">
+    <div class="col-md-10">
+        <h1 class="page-title"><span class="fw-semi-bold">Customer</span></h1>
+
+    </div>
+    <div class="col-md-2">
+
+        <div ng-if="data._id && invoiceCount == 0">
+
+            <div class="btn-group" data-dropdown>
+                <button class="btn btn-success dropdown-toggle" data-dropdown-toggle
+                        data-original-title="" title="">
+                    &nbsp; Action &nbsp;
+                    <i class="fa fa-caret-down"></i>
+                </button>
+
+                <ul class="dropdown-menu">
+                    <li class="divider"></li>
+                    <li><a href="#" data-toggle="modal" data-target="#deleteModal" disabled=true>Delete</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    Are you sure you want to delete customer <b>{{data.firstName}}
+                    {{data.lastName}}</b>?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-success btn-sm" ng-click="deleteCustomer(data._id, data.firstName + ' ' + data.lastName)"
+                            data-dismiss="modal">Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
   <div class="row">
     <div class="col-md-12">
-
-
-
-
 
       <section class="widget">
         <div class="widget-body">
