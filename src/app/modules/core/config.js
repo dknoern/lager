@@ -52,7 +52,7 @@
       /**
        * whether navigation is static (prevent automatic collapsing)
        */
-      'nav-static': false
+      'nav-static': true
     }
   };
 
