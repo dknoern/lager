@@ -4,14 +4,15 @@ var bodyParser = require('body-parser');
 const path = require('path');
 var mongoose = require('mongoose');
 var mongoOpts = { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true };
-mongoose.connect('mongodb://localhost:27017/lager',mongoOpts);
+
+var mongoUrl = process.env.MONGO_URL || "mongodb://localhost:27017/lager";
+mongoose.connect(mongoUrl,mongoOpts);
+
 var fs = require('fs');
 var http = require('http');
 //var cert = fs.readFileSync( 'server.crt' );
 var https = require('https');
 var forceSSL = require('express-force-ssl');
-
-
 
 const privateKey = fs.readFileSync('/etc/letsencrypt/live/demesyinventory.com/privkey.pem', 'utf8');
 const certificate = fs.readFileSync('/etc/letsencrypt/live/demesyinventory.com/fullchain.pem', 'utf8');
@@ -22,6 +23,17 @@ key: privateKey,
 cert: certificate,
 ca: ca
 };
+
+function redirectWwwTraffic(req, res, next) {
+  if (req.headers.host.slice(0, 4) === "www.") {
+    var newHost = req.headers.host.slice(4);
+    return res.redirect(301, req.protocol + "://" + newHost + req.originalUrl);
+  }
+  next();
+}
+
+app.set("trust proxy", true);
+app.use(redirectWwwTraffic);
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
