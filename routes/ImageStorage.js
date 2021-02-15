@@ -38,25 +38,8 @@ ImageStorage.prototype._handleFile = function _handleFile (req, file, cb) {
       var finalPath = path.join(destination, filename)
       var outStream = fs.createWriteStream(finalPath)
 
-
-      // original
-        /*
-      file.stream.pipe(outStream)
-      outStream.on('error', cb)
-      outStream.on('finish', function () {
-        cb(null, {
-          destination: destination,
-          filename: filename,
-          path: finalPath,
-          size: outStream.bytesWritten
-        })
-      })
-      */
-
-
-
         var transformer = sharp()
-            .resize(2000,2000).max().withoutEnlargement()
+            .resize(2000,2000,{fit:'inside'})
             .on('info', function(info) {
                 console.log('Image height is ' + info.height);
             });
@@ -71,12 +54,6 @@ ImageStorage.prototype._handleFile = function _handleFile (req, file, cb) {
                 size: outStream.bytesWritten
             })
         })
-
-
-
-
-
-
     })
   })
 }
