@@ -146,6 +146,15 @@ router.route('/repairs')
 
     .get(checkJwt, function(req, res) {
 
+        var repairNumber = req.query.repairNumber;
+
+        if (repairNumber != null) {
+            Repair.findOne({'repairNumber': repairNumber}, '_id description customerFirstName customerLastName', function (err, repair) {
+                res.json(repair);
+            });
+            return;
+        }
+
         var draw = req.query.draw;
         var start = 0;
         var length = 10;
@@ -289,9 +298,6 @@ router.route('/repairs/:repair_id/print')
     });
 
 
-
-
-
 router.route('/repairs/:repair_id')
  .get(checkJwt, function(req, res) {
         Repair.findById(req.params.repair_id, function(err, ret) {
@@ -340,11 +346,6 @@ router.route('/repairs/:repair_id/return')
             }
         });
     });
-
-
-
-
-
 
 
 router.route('/repairs/email')
@@ -398,16 +399,7 @@ router.route('/repairs/email')
             }
         );
 
-
-
-
         res.json("ok");
-
     });
-
-
-
-
-
 
 module.exports = router;

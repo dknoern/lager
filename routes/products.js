@@ -186,16 +186,8 @@ var upsertLogItem = function (req, res, productId, action) {
                             return res.send("successfully saved");
                         });
 
-
-
-
-
                     }
             });
-
-
-
-
 
         });
 
