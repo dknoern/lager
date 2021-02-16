@@ -6,6 +6,7 @@ var mongoose = require('mongoose');
 var mongoOpts = { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true };
 
 var mongoUrl = process.env.MONGO_URL || "mongodb://localhost:27017/lager";
+
 mongoose.connect(mongoUrl,mongoOpts);
 
 var fs = require('fs');
@@ -13,16 +14,6 @@ var http = require('http');
 //var cert = fs.readFileSync( 'server.crt' );
 var https = require('https');
 var forceSSL = require('express-force-ssl');
-
-const privateKey = fs.readFileSync('/etc/letsencrypt/live/demesyinventory.com/privkey.pem', 'utf8');
-const certificate = fs.readFileSync('/etc/letsencrypt/live/demesyinventory.com/fullchain.pem', 'utf8');
-const ca = fs.readFileSync('/etc/letsencrypt/live/demesyinventory.com/fullchain.pem', 'utf8');
-
-const credentials = {
-key: privateKey,
-cert: certificate,
-ca: ca
-};
 
 function redirectWwwTraffic(req, res, next) {
   if (req.headers.host.slice(0, 4) === "www.") {
@@ -73,15 +64,22 @@ app.get('/*', function(req, res) {
 
 var port = process.env.PORT || 8080;
 var httpsPort = (port==80 ? 443 : 8443);
-
 var server = http.createServer(app);
 
 if(port!=8080){
+  const privateKey = fs.readFileSync('/etc/letsencrypt/live/demesyinventory.com/privkey.pem', 'utf8');
+  const certificate = fs.readFileSync('/etc/letsencrypt/live/demesyinventory.com/fullchain.pem', 'utf8');
+  const ca = fs.readFileSync('/etc/letsencrypt/live/demesyinventory.com/fullchain.pem', 'utf8');
+
+  const credentials = {
+    key: privateKey,
+    cert: certificate,
+    ca: ca
+    };
    var secureServer = https.createServer(credentials, app);
    app.use(forceSSL);
    secureServer.listen(httpsPort);
-   console.log('Listening on port ' + httpsPort );
-
+   console.log('Listening on port ' + httpsPort )
 }
 
 server.listen(port);
