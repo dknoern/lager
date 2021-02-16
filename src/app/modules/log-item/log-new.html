@@ -5,33 +5,16 @@
     }
 </style>
 
-
 <script>
     function lookupItemByNumber(){
         scopeHolder.lookupItemByNumber();
-        checkItemAndRepairNumber();
     }
-
-
-    function checkItemAndRepairNumber(){
-
-        console.log("checking");
-
-        var itemNumber = document.getElementById("itemNumber").value;
-        var repairNumber = document.getElementById("repairNumber").value;
-        console.log('itemNumber:' + itemNumber);
-        console.log('repairNumber:' + repairNumber);
-
-
-
+    function lookupRepairByNumber(){
+        scopeHolder.lookupRepairByNumber();
     }
-
-
 </script>
 
-
 <div data-ng-controller="LogItemCtrl">
-
 
     <div class="row">
         <div class="col-md-10">
@@ -106,11 +89,7 @@
                         <div class="row">
                             <div class="col-sm-12">
 
-
-
                                 <fieldset>
-
-
 
                                     <div class="form-group" ng-if="data.history.date!=null" >
                                         <label for="date" class="col-sm-3 control-label">Date</label>
@@ -122,9 +101,6 @@
                                                    readonly="readonly">
                                         </div>
                                     </div>
-
-
-
 
                                     <div class="form-group required">
                                         <label for="receivedFrom" class="col-sm-3 control-label">Received
@@ -152,8 +128,7 @@
                                             <input type="text" id="itemNumber" class="form-control"
                                                    ng-model="data.itemNumber"
                                                    ng-readonly="data._id!=null"
-
-                                            ng-change="lookupItemByNumber();">
+                                                   ng-change="lookupItemByNumber();">
                                         </div>
                                     </div>
 
@@ -163,7 +138,7 @@
                                             <input type="text" id="repairNumber" class="form-control"
                                                    ng-model="data.history.repairNumber"
                                                    ng-readonly="data._id!=null"
-                                                   onchange="checkItemAndRepairNumber()">
+                                                   ng-change="lookupRepairByNumber();">
 
                                         </div>
                                     </div>

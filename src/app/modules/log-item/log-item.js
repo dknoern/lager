@@ -23,11 +23,14 @@ var scopeHolder;
 
         $scope.lookupItemByNumber = function(){
 
+            if($scope.data.itemNumber)
+            {
 
             $http.get("api/products?itemNumber=" + $scope.data.itemNumber)
                 .then(function(response) {
                     if(response!=null&& response.data!=null) {
                         $scope.data.history.itemReceived = response.data.title;
+
                         if("Repair" == response.data.status){
                             $scope.data.history.repairNumber = $scope.data.itemNumber;
                         }else{
@@ -37,14 +40,35 @@ var scopeHolder;
                     else {
                         $scope.data.history.itemReceived = "";
                         $scope.data.history.repairNumber = "";
+                        $scope.data.history.customerName = "";
                     }
                 });
+            }
+        }
+
+        $scope.lookupRepairByNumber = function(){
+
+            if($scope.data.history.repairNumber)
+            {
+
+            $http.get("api/repairs?repairNumber=" +  + $scope.data.history.repairNumber)
+                .then(function(response) {
+                    if(response!=null&& response.data!=null) {
+                        $scope.data.history.itemReceived = response.data.description;
+                        $scope.data.history.customerName = response.data.customerFirstName + " " + response.data.customerLastName;
+                        
+                    }
+                    else {
+                        $scope.data.history.itemReceived = "";
+                        $scope.data.history.customerName = "";
+                        
+                    }
+                });
+            }
 
         }
 
-
         var receivedBy = "zzz";
-
 
         if(authService!=null && authService.getCachedProfile() !=null && authService.getCachedProfile().name != null){
             var receivedBy = authService.getCachedProfile().name;
@@ -221,51 +245,7 @@ var scopeHolder;
             }, function errorCallback(response) {
                 console.log(response.statusText);
             });
-
-
-            /*
-
-
-            $http({
-                method: "DELETE",
-                url: "api/logitems/" + $scope.data.history._id,
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(function successCallback(response) {
-
-                console.log("successful delete");
-
-
-                console.log(response.statusText);
-                $state.go('app.log');
-
-                Messenger().post({
-                        message: 'Deleted log item',
-                        type: "success",
-                        showCloseButton: true
-                    }
-                );
-
-            }, function errorCallback(response) {
-
-                console.log("failed delete");
-                console.log(response.statusText);
-                Messenger().post({
-                        message: 'Failed to delete log item: ' +response.statusText,
-                        type: "error",
-                        showCloseButton: true
-                    }
-                );
-            });
-            */
-
-
-
-
         }
-
-
 
         var customerTableShown = false;
 
