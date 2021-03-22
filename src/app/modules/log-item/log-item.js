@@ -56,6 +56,7 @@ var scopeHolder;
                     if(response!=null&& response.data!=null) {
                         $scope.data.history.itemReceived = response.data.description;
                         $scope.data.history.customerName = response.data.customerFirstName + " " + response.data.customerLastName;
+                        $scope.data.itemNumber = response.data.itemNumber;
                         
                     }
                     else {
@@ -68,7 +69,7 @@ var scopeHolder;
 
         }
 
-        var receivedBy = "zzz";
+        var receivedBy = "";
 
         if(authService!=null && authService.getCachedProfile() !=null && authService.getCachedProfile().name != null){
             var receivedBy = authService.getCachedProfile().name;

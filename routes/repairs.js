@@ -149,7 +149,7 @@ router.route('/repairs')
         var repairNumber = req.query.repairNumber;
 
         if (repairNumber != null) {
-            Repair.findOne({'repairNumber': repairNumber}, '_id description customerFirstName customerLastName', function (err, repair) {
+            Repair.findOne({'repairNumber': repairNumber}, '_id description customerFirstName customerLastName itemNumber', function (err, repair) {
                 res.json(repair);
             });
             return;
