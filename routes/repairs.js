@@ -32,7 +32,7 @@ var bcc = emailAddresses.bcc;
 function formatDate(date) {
     if (date == null) return "";
     else {
-        return format('yyyy-MM-dd', date);
+        return format('yyyy-MM-dd  hh:mm', date);
     }
 }
 
