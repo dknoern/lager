@@ -13,3 +13,5 @@ uploads
 nohup.out
 .idea
 .DS_Store
+start.sh
+avatax-credentials.js
