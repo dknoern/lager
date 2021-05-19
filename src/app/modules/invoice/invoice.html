@@ -451,21 +451,23 @@
                                             </tr>
                                             <tr ng-show="data.invoiceType!='Consignment'">
                                                 <td colspan="3"><b>Subtotal</b></td>
-                                                <td><b><span id="subtotal">{{data.subtotal | currency}}</span></b></td>
+                                                <td style="text-align:right"><b><span id="subtotal">{{data.subtotal | currency}}</span></b></td>
                                                 <td></td>
                                             </tr>
                                             <tr ng-show="data.invoiceType!='Consignment'">
                                                 <td colspan="3"><b>Shipping</b></td>
-                                                <td><b><span id="shippingAmount">{{data.shipping | currency}}</span></b></td>
+                                                <td style="text-align:right"><b><span id="shippingAmount">{{data.shipping | currency}}</span></b></td>
+                                                <td></td>
                                             </tr>
+       
                                             <tr ng-show="data.invoiceType!='Consignment'">
-                                                    <td colspan="3"><b>Tax (TX)</b></td>
-                                                    <td><b><span id="tax">{{data.tax | currency}}</span></b></td>
-                                                    <td></td>
+                                                <td colspan="3"><b>Tax</b></td>
+                                                <td style="text-align:right"><b><span id="tax">{{data.tax | currency}}</span></b></td>
+                                                <td></td>
                                             </tr>
                                             <tr ng-show="data.invoiceType!='Consignment'">
                                                     <td colspan="3"><b>Total</b></td>
-                                                    <td><b><span id="total">{{data.total | currency}}</span></b></td>
+                                                    <td style="text-align:right"><b><span id="total">{{data.total | currency}}</span></b></td>
                                                     <td></td>
                                             </tr>
                                         </tbody>

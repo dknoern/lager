@@ -6,6 +6,8 @@ var history = require('./history');
 var format = require('date-format');
 var Counter = require('../models/counter');
 var Product = require('../models/product');
+var Avatax = require('avatax');
+var avataxCredentials = require('../avatax-credentials.js');
 
 var emailAddresses = require('../email-addresses.js');
 
@@ -106,6 +108,11 @@ async function upsertInvoice(req,res,invoice){
 
 router.route('/invoices')
     .post(checkJwt, function(req, res) {
+
+        console.log("commit = " + req.body.commit);
+
+        calcTax(req.body);
+
         var invoice = new Invoice();
         invoice._id = req.body._id;
         invoice.invoiceNumber = req.body.invoiceNumber;
@@ -622,6 +629,97 @@ router.route('/invoices/email')
     });
 
 
+
+function calcTax(body){
+
+    console.log("CALC TAX-------------------------");
+    console.log("inoice is " + body._id);
+
+    var taxRequest = {
+
+        adjustmentReason: "Other",
+        adjustmentDescription: "Invoice Creation or Update",
+        createTransactionModel: {
+        code: body._id,
+        customerCode: ''+body.customerId,
+        type: 'SalesInvoice',
+        date: format('yyyy-MM-dd', new Date()),
+        companyCode: 'DEFAULT',
+        commit: true,
+        currencyCode: 'USD',
+        taxCode: 'PC040206',
+        addresses: {
+            SingleLocation: {
+                line1: body.shipAddress1,
+                line2: body.shipAddress2,
+                line3: body.shipAddress3,
+                city: body.shipCity,
+                region: body.shipState,
+                postalCode: body.shipZip
+            }
+        },
+        lines: []
+    }
+    };
+
+    var itemOrdinal = 0;
+    body.lineItems.forEach(item => {
+        itemOrdinal++;
+        taxRequest.createTransactionModel.lines.push(
+            {
+            number: itemOrdinal,
+            quantity: 1,
+            amount: item.amount,
+            itemCode: item.itemNumber,
+            description: item.name
+            } 
+        );
+    });
+
+    const config = {
+        appName: 'demesyinventory',
+        appVersion: '1.0',
+        environment: 'sandbox',
+        machineName: 'ygritte'
+    };
+      
+    
+    var client = new Avatax(config).withSecurity(avataxCredentials);
+
+
+    console.log("SAVING tax doc is:" + JSON.stringify(taxRequest));
+    client.createOrAdjustTransaction({ model: taxRequest }).then(result => {
+
+
+
+
+
+
+        console.log(result);
+
+        var totalTax = 0.0;
+
+
+        //$scope.data.taxItems = [];
+        result.summary.forEach(item => {
+            console.log("taxName: "+ item.taxName + ", tax: "+ item.tax);
+            totalTax += item.tax;
+
+        
+           
+        });
+
+        //$scope.data.tax = totalTax;
+        console.log("total tax: " + totalTax);
+
+
+
+        //res.json(result)
+    },error=>{
+        console.log("avalara tax call failure: "+ error);
+    }
+    );
+}
 
 
 module.exports = router;

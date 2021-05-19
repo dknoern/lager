@@ -1,4 +1,4 @@
-WORKDIR=~/Dropbox/demesy/backups/latest
+WORKDIR=~/Documents/demesy/backups/latest
 DB=mongodb://localhost:27017
 
 mongo lager --eval "db.dropDatabase()"
