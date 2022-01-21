@@ -356,7 +356,7 @@ router.route('/repairs/email')
         console.log("emailing repair " + req.body.invoiceId + " to " + JSON.stringify(to));
 
 
-        var from = 'sales@info.demesyinventory.com';
+        var from = 'Marijo@demesy.com';
 
         Repair.findById(req.body.repairId, function (err, repair) {
                 if (err) {

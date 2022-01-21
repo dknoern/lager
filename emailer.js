@@ -32,7 +32,7 @@ console.log('to addresses = ' + to);
 console.log('bcc addresses = ' + bcc);
 
 // this must relate to a verified SES account
-var from = 'repairs@info.demesyinventory.com'
+var from = 'Marijo@demesy.com'
 
 function getOverdueRepairs() {
 

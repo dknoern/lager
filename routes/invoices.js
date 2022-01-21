@@ -41,7 +41,6 @@ function getFullName(name){
     else if("janet"==name) fullName = "Janet Gary";
 }
 
-
 function buildSearchField(doc){
 
     var search = "";
@@ -59,18 +58,15 @@ function buildSearchField(doc){
         }
     }
 
-
     return search;
 }
 
 async function upsertInvoice(req,res,invoice){
 
-
     if(invoice._id==null) {
         var counter = await Counter.findByIdAndUpdate({_id: 'invoiceNumber'}, {$inc: {seq: 1}});
         invoice._id = counter.seq;
     }
-
 
     // update item status to sold, but only if NOT Partner
     if(invoice.invoiceType!="Partner"){
@@ -83,7 +79,6 @@ async function upsertInvoice(req,res,invoice){
         }
         history.updateProductHistory(req.body.lineItems, itemStatus, itemAction, req.user['http://mynamespace/name'],invoice._id);
     }
-
 
     console.log("new invoice ID is "+ invoice._id);
 
@@ -564,7 +559,7 @@ router.route('/invoices/email')
         console.log("emailing invoice " + req.body.invoiceId + " to " + JSON.stringify(to));
 
 
-        var from = 'sales@info.demesyinventory.com';
+        var from = 'Marijo@demesy.com';
 
         Invoice.findById(req.body.invoiceId, function (err, invoice) {
                 if (err) {
@@ -621,14 +616,8 @@ router.route('/invoices/email')
             }
         );
 
-
-
-
         res.json("ok");
-
     });
-
-
 
 function calcTax(body){
 
@@ -683,43 +672,26 @@ function calcTax(body){
         machineName: 'ygritte'
     };
       
-    
     var client = new Avatax(config).withSecurity(avataxCredentials);
-
 
     console.log("SAVING tax doc is:" + JSON.stringify(taxRequest));
     client.createOrAdjustTransaction({ model: taxRequest }).then(result => {
-
-
-
-
-
 
         console.log(result);
 
         var totalTax = 0.0;
 
-
-        //$scope.data.taxItems = [];
         result.summary.forEach(item => {
             console.log("taxName: "+ item.taxName + ", tax: "+ item.tax);
-            totalTax += item.tax;
-
-        
-           
+            totalTax += item.tax;   
         });
 
-        //$scope.data.tax = totalTax;
         console.log("total tax: " + totalTax);
 
-
-
-        //res.json(result)
     },error=>{
         console.log("avalara tax call failure: "+ error);
     }
     );
 }
-
 
 module.exports = router;
