@@ -624,6 +624,11 @@ function calcTax(body){
     console.log("CALC TAX-------------------------");
     console.log("inoice is " + body._id);
 
+    if(body.shipState == '' || body.shipState == null){
+        console.log("state not specified, will not calculate tax");
+        return;
+    }
+
     var taxRequest = {
 
         adjustmentReason: "Other",
@@ -632,7 +637,7 @@ function calcTax(body){
         code: body._id,
         customerCode: ''+body.customerId,
         type: 'SalesInvoice',
-        date: format('yyyy-MM-dd', new Date()),
+        date: format('yyyy-MM-dd', new Date(body.date)),
         companyCode: 'DEFAULT',
         commit: true,
         currencyCode: 'USD',
@@ -668,7 +673,7 @@ function calcTax(body){
     const config = {
         appName: 'demesyinventory',
         appVersion: '1.0',
-        environment: 'sandbox',
+        environment: 'production',
         machineName: 'ygritte'
     };
       
