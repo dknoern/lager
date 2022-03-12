@@ -1,13 +1,13 @@
 var express = require('express');
 var router = express.Router();
 var Invoice = require('../models/invoice');
-var Customer = require('../models/customer');
 var history = require('./history');
 var format = require('date-format');
 var Counter = require('../models/counter');
 var Product = require('../models/product');
 var Avatax = require('avatax');
 var avataxCredentials = require('../avatax-credentials.js');
+var avataxConfig = require('../avatax-config.js');
 
 var emailAddresses = require('../email-addresses.js');
 
@@ -57,16 +57,60 @@ function buildSearchField(doc){
             }
         }
     }
-
     return search;
 }
 
-async function upsertInvoice(req,res,invoice){
+async function upsertInvoice(req,res){
+
+    var invoice = new Invoice();
+    invoice._id = req.body._id;
+    invoice.invoiceNumber = req.body.invoiceNumber;
+    invoice.customerFirstName = req.body.customerFirstName;
+    invoice.customerLastName = req.body.customerLastName;
+    invoice.customerPhone = req.body.customerPhone;
+    invoice.customerEmail = req.body.customerEmail;
+    invoice.customerId = req.body.customerId;
+    invoice.project = req.body.project;
+    invoice.date = new Date(req.body.date);
+    invoice.shipVia = req.body.shipVia;
+    invoice.paidBy = req.body.paidBy;
+    invoice.authNumber = req.body.authNumber;
+    invoice.total = req.body.total;
+    invoice.methodOfSale = req.body.methodOfSale;
+    invoice.salesPerson = req.body.salesPerson;
+    invoice.invoiceType = req.body.invoiceType;
+    invoice.shipToName = req.body.shipToName;
+    invoice.shipAddress1 = req.body.shipAddress1;
+    invoice.shipAddress2 = req.body.shipAddress2;
+    invoice.shipAddress3 = req.body.shipAddress3;
+    invoice.shipCity = req.body.shipCity;
+    invoice.shipState = req.body.shipState;
+    invoice.shipZip = req.body.shipZip;
+    invoice.shipCountry = req.body.shipCountry;
+    invoice.billingAddress1 = req.body.billingAddress1;
+    invoice.billingAddress2 = req.body.billingAddress2;
+    invoice.billingAddress3 = req.body.billingAddress3;
+    invoice.billingCity = req.body.billingCity;
+    invoice.billingState = req.body.billingState;
+    invoice.billingZip = req.body.billingZip;
+    invoice.billingCountry = req.body.billingCountry;
+    invoice.taxExempt = req.body.taxExempt;
+    invoice.lineItems = req.body.lineItems;
+    invoice.subtotal = req.body.subtotal;
+    invoice.shipping = req.body.shipping;
+    invoice.copyAddress = req.body.copyAddress;
+    invoice.trackingNumber = req.body.trackingNumber;
 
     if(invoice._id==null) {
         var counter = await Counter.findByIdAndUpdate({_id: 'invoiceNumber'}, {$inc: {seq: 1}});
         invoice._id = counter.seq;
+        console.log("new invoice ID is "+ invoice._id);
     }
+
+    invoice.tax = await calcTax(invoice);
+    console.log('calcTax complete, total tax is', invoice.tax);
+
+    invoice.total = invoice.subtotal + invoice.tax + invoice.shipping;
 
     // update item status to sold, but only if NOT Partner
     if(invoice.invoiceType!="Partner"){
@@ -80,10 +124,7 @@ async function upsertInvoice(req,res,invoice){
         history.updateProductHistory(req.body.lineItems, itemStatus, itemAction, req.user['http://mynamespace/name'],invoice._id);
     }
 
-    console.log("new invoice ID is "+ invoice._id);
-
     // end try
-
     invoice.search = buildSearchField(invoice);
     console.log("search is " + invoice.search);
 
@@ -103,103 +144,8 @@ async function upsertInvoice(req,res,invoice){
 
 router.route('/invoices')
     .post(checkJwt, function(req, res) {
-
-        console.log("commit = " + req.body.commit);
-
-        calcTax(req.body);
-
-        var invoice = new Invoice();
-        invoice._id = req.body._id;
-        invoice.invoiceNumber = req.body.invoiceNumber;
-        invoice.customerFirstName = req.body.customerFirstName;
-        invoice.customerLastName = req.body.customerLastName;
-        invoice.customerPhone = req.body.customerPhone;
-        invoice.customerEmail = req.body.customerEmail;
-        invoice.customerId = req.body.customerId;
-        invoice.project = req.body.project;
-        invoice.date = new Date(req.body.date);
-        invoice.shipVia = req.body.shipVia;
-        invoice.paidBy = req.body.paidBy;
-        invoice.authNumber = req.body.authNumber;
-        invoice.total = req.body.total;
-        invoice.methodOfSale = req.body.methodOfSale;
-        invoice.salesPerson = req.body.salesPerson;
-        invoice.invoiceType = req.body.invoiceType;
-        invoice.shipToName = req.body.shipToName;
-        invoice.shipAddress1 = req.body.shipAddress1;
-        invoice.shipAddress2 = req.body.shipAddress2;
-        invoice.shipAddress3 = req.body.shipAddress3;
-        invoice.shipCity = req.body.shipCity;
-        invoice.shipState = req.body.shipState;
-        invoice.shipZip = req.body.shipZip;
-        invoice.shipCountry = req.body.shipCountry;
-        invoice.billingAddress1 = req.body.billingAddress1;
-        invoice.billingAddress2 = req.body.billingAddress2;
-        invoice.billingAddress3 = req.body.billingAddress3;
-        invoice.billingCity = req.body.billingCity;
-        invoice.billingState = req.body.billingState;
-        invoice.billingZip = req.body.billingZip;
-        invoice.billingCountry = req.body.billingCountry;
-        invoice.taxExempt = req.body.taxExempt;
-        invoice.lineItems = req.body.lineItems;
-        invoice.subtotal = req.body.subtotal;
-        invoice.tax = req.body.tax;
-        invoice.shipping = req.body.shipping;
-        invoice.total = req.body.total;
-        invoice.copyAddress = req.body.copyAddress;
-        invoice.trackingNumber = req.body.trackingNumber;
-
-        customerId = req.body.customerId;
-
-        if(customerId == null){
-          console.log("customer id is null, will create customer");
-
-          var customer = new Customer();
-
-          customer.firstName = req.body.customerFirstName;
-          customer.lastName = req.body.customerLastName;
-          customer.email = req.body.customerEmail;
-          customer.address1 = req.body.shipAddress1;
-          customer.city = req.body.shipCity;
-          customer.state = req.body.shipState;
-          customer.zip = req.body.shipZip;
-          customer.country = req.body.shipCountry;
-          customer.lastUpdated = Date.now();
-
-            Counter.findByIdAndUpdate({
-              _id: 'customerNumber'
-          }, {
-              $inc: {
-                  seq: 1
-              }
-          }, function(err, counter) {
-              if (err) {
-                  console.log(err);
-                  return res.send(500, {
-                      error: err
-                  });
-              }
-
-              customer._id=counter.seq;
-              customer.search = customer._id + " " + customer.firstName + " " + customer.lastName + " " +customer.city + " " + customer.state;
-
-              customer.save(function(err) {
-                  if (err) {
-                      console.log('xxx-error saving customer: ' + err);
-                      res.send(err);
-                  } else {
-
-                    invoice.customerId = customer._id;
-                    upsertInvoice(req,res,invoice);
-
-                  }
-              });
-          });
-
-        }else{
-          upsertInvoice(req,res,invoice);
-          console.log("customer id is NOT null, will use existing customer");
-        }
+        upsertInvoice(req,res);
+        console.log("customer id is NOT null, will use existing customer");
     })
 
     .get(checkJwt, function(req, res) {
@@ -214,7 +160,6 @@ router.route('/invoices')
         var search = req.query.search.value;
 
         var opts = { format: '%s%v', symbol: '$' };
-
 
         var results = {
             "draw": draw,
@@ -297,27 +242,11 @@ router.route('/invoices')
             invoiceType: 1,
             trackingNumber: 1
         });
-
     });
-
-
-
-
-function streamToString(stream, cb) {
-    const chunks = [];
-    stream.on('data', (chunk) => {
-        chunks.push(chunk.toString());
-    });
-    stream.on('end', () => {
-        cb(chunks.join(''));
-    });
-}
 
 router.route('/invoices/:invoice_id/print')
   //  .get(checkJwt, function(req, res) {
     .get( function(req, res) {
-
-
         var opts = { format: '%s%v', symbol: '$' };
 
         Invoice.findById(req.params.invoice_id, function(err, invoice) {
@@ -354,10 +283,8 @@ router.route('/invoices/:invoice_id/print')
                     res.send(output);
                 });
             }
-
         });
     });
-
 
 router.route('/invoices/:invoice_id')
     .get(checkJwt, function(req, res) {
@@ -389,19 +316,6 @@ router.route('/invoices/:invoice_id')
         });
     })
 
-  //  .delete(checkJwt, function(req, res) {
-  //      Invoice.remove({
-  //          _id: req.params.invoice_id
-  //      }, function(err, invoice) {
-  //          if (err)
-  //              res.send(err);
-//
-  //          res.json({
-  //              message: 'Successfully deleted'
-  //          });
-  //      });
-  //  });
-
 .delete(checkJwt, function (req, res) {
 
     Invoice.findById(req.params.invoice_id, function (err, invoice) {
@@ -417,7 +331,6 @@ router.route('/invoices/:invoice_id')
         });
     });
 });
-
 
 router.route('/invoices/partner/:product_id')
     .get(checkJwt, function (req, res) {
@@ -442,7 +355,6 @@ router.route('/invoices/partner/:product_id')
                         console.log("got partner invoice but it is null, creating partner invoice");
 
                         // create partner invoice
-
                         invoice = new Invoice();
 
                         console.log("lookng up product: "+ req.params.product_id);
@@ -496,7 +408,6 @@ router.route('/invoices/partner/:product_id')
 // find invoices for a particular customer
 router.route('/customers/:customer_id/invoices')
     .get(function(req, res) {
-
 
         var opts = { format: '%s%v', symbol: '$' };
 
@@ -583,9 +494,6 @@ router.route('/invoices/email')
 
                             });
 
-                        var output2 = output.replace(/foo/g, "bar")
-
-
                         ses.sendEmail({
                                 Source: from,
                                 Destination: {
@@ -619,12 +527,12 @@ router.route('/invoices/email')
         res.json("ok");
     });
 
-function calcTax(body){
+async function calcTax(invoice){
 
     console.log("CALC TAX-------------------------");
-    console.log("inoice is " + body._id);
+    console.log("invoice is " + invoice._id);
 
-    if(body.shipState == '' || body.shipState == null){
+    if(invoice.shipState == '' || invoice.shipState == null){
         console.log("state not specified, will not calculate tax");
         return;
     }
@@ -634,22 +542,22 @@ function calcTax(body){
         adjustmentReason: "Other",
         adjustmentDescription: "Invoice Creation or Update",
         createTransactionModel: {
-        code: body._id,
-        customerCode: ''+body.customerId,
+        code: invoice._id,
+        customerCode: '' + invoice.customerId,
         type: 'SalesInvoice',
-        date: format('yyyy-MM-dd', new Date(body.date)),
+        date: format('yyyy-MM-dd', new Date(invoice.date)),
         companyCode: 'DEFAULT',
         commit: true,
         currencyCode: 'USD',
         taxCode: 'PC040206',
         addresses: {
             SingleLocation: {
-                line1: body.shipAddress1,
-                line2: body.shipAddress2,
-                line3: body.shipAddress3,
-                city: body.shipCity,
-                region: body.shipState,
-                postalCode: body.shipZip
+                line1: invoice.shipAddress1,
+                line2: invoice.shipAddress2,
+                line3: invoice.shipAddress3,
+                city: invoice.shipCity,
+                region: invoice.shipState,
+                postalCode: invoice.shipZip
             }
         },
         lines: []
@@ -657,7 +565,7 @@ function calcTax(body){
     };
 
     var itemOrdinal = 0;
-    body.lineItems.forEach(item => {
+    invoice.lineItems.forEach(item => {
         itemOrdinal++;
         taxRequest.createTransactionModel.lines.push(
             {
@@ -670,21 +578,15 @@ function calcTax(body){
         );
     });
 
-    const config = {
-        appName: 'demesyinventory',
-        appVersion: '1.0',
-        environment: 'production',
-        machineName: 'ygritte'
-    };
-      
-    var client = new Avatax(config).withSecurity(avataxCredentials);
+    var client = new Avatax(avataxConfig).withSecurity(avataxCredentials);
 
     console.log("SAVING tax doc is:" + JSON.stringify(taxRequest));
-    client.createOrAdjustTransaction({ model: taxRequest }).then(result => {
+
+    var totalTax = 0.0;
+
+    await client.createOrAdjustTransaction({ model: taxRequest }).then(result => {
 
         console.log(result);
-
-        var totalTax = 0.0;
 
         result.summary.forEach(item => {
             console.log("taxName: "+ item.taxName + ", tax: "+ item.tax);
@@ -694,9 +596,11 @@ function calcTax(body){
         console.log("total tax: " + totalTax);
 
     },error=>{
-        console.log("avalara tax call failure: "+ error);
+        console.log("Avalara tax call failure: "+ error);
     }
     );
+
+    return totalTax;
 }
 
 module.exports = router;
