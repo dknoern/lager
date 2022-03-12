@@ -15,5 +15,6 @@ nohup.out
 .DS_Store
 start.sh
 avatax-credentials.js
+avatax-config.js
 launch.json
 import-atlas.sh

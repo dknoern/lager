@@ -1,0 +1,8 @@
+var avataxConfig = {
+    appName: 'demesyinventory',
+    appVersion: '1.0',
+    environment: 'sandbox',
+    machineName: 'ygritte'
+};
+
+module.exports = avataxConfig;
