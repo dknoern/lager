@@ -536,7 +536,15 @@ async function calcTax(invoice){
         console.log("state not specified, will not calculate tax");
         return 0;
     } else if (invoice.shipState == 'TX') {
-        var totalTax = invoice.subtotal * 0.0825;
+
+
+        var totalTax = 0;
+        console.log("taxExempt: " + invoice.taxExempt);
+
+        if(false ==invoice.taxExempt) {
+            totalTax = invoice.subtotal * 0.0825;
+        }
+
         console.log("manually calculating TX tax: ", totalTax);
         return totalTax;
     }
