@@ -470,7 +470,7 @@ router.route('/invoices/email')
         console.log("emailing invoice " + req.body.invoiceId + " to " + JSON.stringify(to));
 
 
-        var from = 'Marijo@demesy.com';
+        var from = 'marijo@demesy.com';
 
         Invoice.findById(req.body.invoiceId, function (err, invoice) {
                 if (err) {
