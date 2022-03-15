@@ -534,11 +534,14 @@ async function calcTax(invoice){
 
     if(invoice.shipState == '' || invoice.shipState == null){
         console.log("state not specified, will not calculate tax");
-        return;
+        return 0;
+    } else if (invoice.shipState == 'TX') {
+        var totalTax = invoice.subtotal * 0.0825;
+        console.log("manually calculating TX tax: ", totalTax);
+        return totalTax;
     }
 
     var taxRequest = {
-
         adjustmentReason: "Other",
         adjustmentDescription: "Invoice Creation or Update",
         createTransactionModel: {
