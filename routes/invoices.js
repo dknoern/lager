@@ -531,20 +531,17 @@ async function calcTax(invoice){
 
     console.log("CALC TAX-------------------------");
     console.log("invoice is " + invoice._id);
+    console.log("taxExempt: " + invoice.taxExempt);
 
     if(invoice.shipState == '' || invoice.shipState == null){
         console.log("state not specified, will not calculate tax");
         return 0;
-    } else if (invoice.shipState == 'TX') {
-
-
+    }else if (invoice.taxExempt) {
+        console.log("taxExempt, no tax");
+        return 0;
+    }else if (invoice.shipState == 'TX') {
         var totalTax = 0;
-        console.log("taxExempt: " + invoice.taxExempt);
-
-        if(false ==invoice.taxExempt) {
-            totalTax = invoice.subtotal * 0.0825;
-        }
-
+        totalTax = invoice.subtotal * 0.0825;
         console.log("manually calculating TX tax: ", totalTax);
         return totalTax;
     }
