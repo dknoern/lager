@@ -1,7 +1,7 @@
 WORKDIR=~/Documents/demesy/backups/latest
 DB=mongodb://localhost:27017
 
-mongo lager --eval "db.dropDatabase()"
+mongosh lager --eval "db.dropDatabase()"
 
 mongoimport --uri=$DB/lager -c counters --file $WORKDIR/counters.json
 mongoimport --uri=$DB/lager -c customers --file $WORKDIR/customers.json
