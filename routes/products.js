@@ -114,81 +114,92 @@ var upsertLogItem = function (req, res, productId, action) {
         });
     }
 
-
     else if (productId != null) { // update existing product
 
-        Product.findById(productId,'status', function(err,product){
+        Product.findById(productId, ['status', 'history'], function (err, product) {
 
-            Invoice.findOne({'lineItems.productId':productId, 'invoiceType': "Invoice"
-                },function (err, doc){
-                    if (err){
-                        console.log("error looking for invoice that contains item : " + productId + ", " + err);
-                    }else{
+            // replay events to figure out current status
+            var sold = false;
+            var repair = false;
+            var memo = false;
 
-                        // figure out new state for received item
+            product.history.forEach(element => {
 
-
-                        var newStatus = product.status;
-
-                        if(product.status == "Sold"){
-                            newStatus = "In Stock";
-                        }
-                        else if (product.status == "Memo"){
-                            newStatus = "In Stock";
-                        }
-
-                        else if (product.status == "Repair"){
-                            if(doc==null){
-                                console.log("found NO invoices that contains item : " + productId);
-                                newStatus = "In Stock"
-                            }else {
-                                console.log("found at least one invoice that contains item : " + productId);
-                                newStatus = "Sold"
-                            }
-                        }
-
-                        console.log("checking existing product in, status was " + product.status + ", setting status to " + newStatus);
-                        var updates = {
-                            "lastUpdated": Date.now(),
-                            "status": newStatus
-                        };
-
-                        //TODO: update total repair cost maybe?... will now calculate on display only.
-
-                        // ---------------------------------
-                        // create new history item and product status
-                        // ---------------------------------
-                        Product.findOneAndUpdate({
-                            _id: productId
-                        }, {
-
-                            "$push": {
-                                "history": {
-                                    user: req.body.history.user,
-                                    date: Date.now(),
-                                    action: "received",
-                                    itemReceived: req.body.history.itemReceived,
-                                    receivedFrom: req.body.history.receivedFrom,
-                                    repairNumber: req.body.history.repairNumber,
-                                    customerName: req.body.history.customerName,
-                                    comments: req.body.history.comments,
-                                    repairCost:  req.body.history.repairCost || 0,
-                                    search: search
-                                }
-                            },
-                            "$set": updates
-                        }, {
-                            upsert: true
-                        }, function (err, doc) {
-                            if (err) return res.send(500, {
-                                error: err
-                            });
-                            return res.send("successfully saved");
-                        });
-
+                if (element.action == 'sold item') {
+                    sold = true;
+                } else if (element.action == 'item returned') {
+                    sold = false;
+                } else if (element.action == 'in repair') {
+                    repair = true;
+                } else if (element.action == 'item memo') {
+                    memo = true;
+                } else if (element.action == 'received') {
+                    if (repair) {
+                        repair = false;
+                    } else {
+                        sold = false; // cant be both sold and memoed
+                        memo = false;
                     }
+                }
+                console.log("action = ", element.action, "sold = ", sold, "repair = ", repair, "memo = ", memo);
+
             });
 
+            // figure out new state for received item
+
+            var newStatus = product.status;
+
+            // item could be in repair even if sold or memoed
+            if (repair) {
+                if(sold){
+                    newStatus = "Sold";
+                } else if(memo) {
+                    newStatus = "Memo";
+                } else {
+                    newStatus = "In Stock";
+                }
+            } else {
+                newStatus = "In Stock";
+            }
+
+            console.log("checking existing product in, status was " + product.status + ", setting status to " + newStatus);
+            var updates = {
+                "lastUpdated": Date.now(),
+                "status": newStatus
+            };
+
+            //TODO: update total repair cost maybe?... will now calculate on display only.
+
+            // ---------------------------------
+            // create new history item and product status
+            // ---------------------------------
+            Product.findOneAndUpdate({
+                _id: productId
+            }, {
+
+                "$push": {
+                    "history": {
+                        user: req.body.history.user,
+                        date: Date.now(),
+                        action: "received",
+                        itemReceived: req.body.history.itemReceived,
+                        receivedFrom: req.body.history.receivedFrom,
+                        repairNumber: req.body.history.repairNumber,
+                        customerName: req.body.history.customerName,
+                        comments: req.body.history.comments,
+                        repairCost: req.body.history.repairCost || 0,
+                        search: search
+                    }
+                },
+                "$set": updates
+            }, {
+                upsert: true
+            }, function (err, doc) {
+                if (err) return res.send(500, {
+                    error: err
+                });
+                return res.send("successfully saved");
+            });
         });
 
     } else {  // create new product
