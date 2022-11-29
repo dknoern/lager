@@ -3,27 +3,38 @@ var multer = require('multer');
 var router = express.Router();
 var fs = require('fs');
 var Jimp = require("jimp");
-var imageStorage = require('./ImageStorage');
-
+var aws = require('aws-sdk');
+aws.config.loadFromPath('aws-credentials.js');
+const s3 = new aws.S3();
+const multerS3 = require('multer-s3-transform');
+var sharp = require('sharp')
 const checkJwt = require('./jwt-helper').checkJwt;
 const UPLOAD = 'upload';
 
-var storage = imageStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'uploads/')
-    },
-    filename: function (req, file, cb) {
-        var itemId = req.param('itemId');
-        var newfilename = itemId + "-" + Math.floor(Date.now() / 1000) + "-" + file.originalname;
-        cb(null, newfilename);
-    }
-})
-
-var upload = multer({ storage: storage });
+const upload = multer({
+    storage: multerS3({
+        s3: s3,
+        //acl: 'public-read',
+        bucket: 'demesy-dev',
+        shouldTransform: function (req, file, cb) {
+            cb(null, /^image/i.test(file.mimetype))
+        },
+        transforms: [{
+            id: 'thumbnail',
+            key: function (req, file, cb) {
+                var itemId = req.paramsitemId;
+                var newfilename = itemId + "-" + Math.floor(Date.now() / 1000) + "-" + file.originalname;
+                cb(null, newfilename)
+            },
+            transform: function (req, file, cb) {
+                cb(null, sharp().resize(2000, 2000, { fit: 'inside' }))
+            }
+        }]
+    })
+});
 
 router.route(`/${UPLOAD}`)
     .post(upload.single('file'), function (req, res) {
-
         var itemId = req.param('itemId');
         console.log("itemId = " + itemId);
         return res.send("post...");
@@ -33,8 +44,13 @@ router.route(`/${UPLOAD}/:product_id`)
     .get(checkJwt, function (req, res) {
 
         var path = 'uploads';
-
         var urls = new Array();
+
+        s3.listObjects({Prefix: product_id}, function(err, data){
+            if(data.Contents.length){
+                data.Contents.forEach(d=> console.log("found " + d.Key))
+            }
+        })
 
         fs.readdir(path, function (err, items) {
 
