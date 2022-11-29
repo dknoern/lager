@@ -176,30 +176,8 @@ router.route('/returns')
                     results.recordsFiltered = count;
                     res.json(results);
                 } else {
-                    Return.estimatedDocumentCount({
-                        'customer': new RegExp(search, 'i')
-                        /*$or: [{
-                                'firstName': new RegExp(search, 'i')
-                            },
-                            {
-                                'lastName': new RegExp(search, 'i')
-                            },
-                            {
-                                'city': new RegExp(search, 'i')
-                            },
-                            {
-                                'state': new RegExp(search, 'i')
-                            },
-                            {
-                                'phone': new RegExp(search, 'i')
-                            },
-                            {
-                                'email': new RegExp(search, 'i')
-                            },
-                            {
-                                'company': new RegExp(search, 'i')
-                            }
-                        ]*/
+                    Return.countDocuments({
+                        'search': new RegExp(search, 'i')
                     }, function(err, count) {
 
                         results.recordsFiltered = count;

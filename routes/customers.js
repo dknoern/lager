@@ -2,6 +2,9 @@ var express = require('express');
 var router = express.Router();
 var Counter = require('../models/counter');
 var Customer = require('../models/customer');
+var Invoice = require('../models/invoice');
+var Repair = require('../models/repair');
+var Return = require('../models/return');
 
 const checkJwt = require('./jwt-helper').checkJwt;
 
@@ -118,7 +121,8 @@ router.route('/customers')
                        cityAndState,
                         customers[i].email,
                         customers[i].phone,
-                        customers[i].company
+                        customers[i].company,
+                        '<input type="checkbox" class="togglecheck" onclick="toggleCustomer(this, '+customers[i]._id + ')">'
                     ]
                 );
             }
@@ -130,29 +134,9 @@ router.route('/customers')
                     results.recordsFiltered = count;
                     res.json(results);
                 } else {
-                    Customer.estimatedDocumentCount({
-                        $or: [{
-                                'firstName': new RegExp(search, 'i')
-                            },
-                            {
-                                'lastName': new RegExp(search, 'i')
-                            },
-                            {
-                                'city': new RegExp(search, 'i')
-                            },
-                            {
-                                'state': new RegExp(search, 'i')
-                            },
-                            {
-                                'phone': new RegExp(search, 'i')
-                            },
-                            {
-                                'email': new RegExp(search, 'i')
-                            },
-                            {
-                                'company': new RegExp(search, 'i')
-                            }
-                        ]
+                    Customer.countDocuments({
+                        'search': new RegExp(search, 'i'),
+            'status': {$ne: 'Deleted'} 
                     }, function(err, count) {
 
 
@@ -222,6 +206,64 @@ router.route('/customers/:customer_id')
                     message: 'Customer deleted'
                 });
             });
+        });
+    });
+
+router.route('/customers/merge')
+    .post(checkJwt, function (req, res) {
+        console.log('merging customers');
+
+        var ids = req.body.ids;
+        console.log("ids: ", ids)
+
+
+        ids.forEach(id => {
+
+            var query = Invoice.find({ 'customerId': id });
+            query.select('customer date invoiceNumber customerId total invoiceType lineItems');
+            query.exec(function (err, invoices) {
+                if (err) {
+                    console.log("error ", err)
+                } else {
+                    for (var i = 0; i < invoices.length; i++) {
+                        console.log("customer ", id, "has invoice", invoices[i]._id);
+                    }
+                }
+            });
+
+
+            var query2 = Repair.find({ 'customerId': id });
+            query2.select('customerId');
+            query2.exec(function (err, repairs) {
+                if (err) {
+                    console.log("error ", err)
+                } else {
+                    for (var i = 0; i < repairs.length; i++) {
+                        console.log("customer ", id, "has repair", repairs[i]._id);
+                    }
+                }
+            });
+
+            var query3 = Return.find({ 'customerId': id });
+            query3.select('customerId');
+            query3.exec(function (err, returns) {
+                if (err) {
+                    console.log("error ", err)
+                } else {
+                    for (var i = 0; i < returns.length; i++) {
+                        console.log("customer ", id, "has return", returns[i]._id);
+                    }
+                }
+            });
+
+
+
+        });
+
+
+
+        res.json({
+            message: 'Customers merged!'
         });
     });
 
