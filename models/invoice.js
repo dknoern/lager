@@ -84,13 +84,11 @@ InvoiceSchema.pre('save', function (next) {
             doc._id = counter.seq;
 
             doc.search = doc._id + " " + doc.search;
-            console.log("SEARCH: "+ doc.search);
             next();
         });
     }else{
 
         doc.search = doc._id + " " + doc.search;
-        console.log("SEARCH: "+ doc.search);
         next();
     }
 });

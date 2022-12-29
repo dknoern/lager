@@ -5,8 +5,8 @@
     .controller('CustomersCtrl', CustomersCtrl)
   ;
 
-  CustomersCtrl.$inject = ['$scope', '$resource', 'DTOptionsBuilder', 'jQuery'];
-  function CustomersCtrl ($scope, $resource, DTOptionsBuilder, jQuery) {
+  CustomersCtrl.$inject = ['$scope', '$resource', 'DTOptionsBuilder', '$http', 'jQuery'];
+  function CustomersCtrl ($scope, $resource, DTOptionsBuilder, $http, jQuery) {
     jQuery.extend( jQuery.fn.dataTableExt.oPagination, {
       "bootstrap": {
         "fnInit": function( oSettings, nPaging, fnDraw ) {
@@ -87,17 +87,49 @@
 
     var accessToken = localStorage.getItem('access_token');
 
-    jQuery('#example').DataTable( {
-            "processing": true,
-            "serverSide": true,
-            "ordering": false,
-        stateSave: true,
-            "ajax": {
-              url: "/api/customers",
-                headers: {
-                "Authorization": "Bearer " + accessToken
-              }}
-        } );
-  }
+    var table = jQuery('#example').DataTable({
+      "processing": true,
+      "serverSide": true,
+      "ordering": false,
+      stateSave: true,
+      "ajax": {
+        url: "/api/customers",
+        headers: {
+          "Authorization": "Bearer " + accessToken
+        }
+      }
+    }
+    );
 
+    $scope.mergeCustomers = function () {
+
+      console.log("merging");
+
+      const customerIds = [];
+
+      for (let [key, value] of Object.entries(customers)) {
+        console.log(`${key}: ${value}`);
+        if (value == true) {
+          console.log("merging ", key);
+          customerIds.push(parseInt(key));
+        }
+      }
+
+      var postData = {
+        "ids": customerIds
+      }
+
+      $http.post('api/customers/merge', postData).then(function successCallback(response) {
+        console.log(response.statusText);
+        table.ajax.reload();
+
+        Messenger().post({
+          message: "Customers merged.",
+          type: "success"
+        });
+      }, function errorCallback(response) {
+        console.log(response.statusText);
+      });
+    }
+  }
 })();

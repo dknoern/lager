@@ -3,7 +3,6 @@ var router = express.Router();
 var Counter = require('../models/counter');
 var Customer = require('../models/customer');
 var Invoice = require('../models/invoice');
-var Repair = require('../models/repair');
 var Return = require('../models/return');
 
 const checkJwt = require('./jwt-helper').checkJwt;
@@ -39,7 +38,7 @@ var upsertCustomer = function(req, res, customerId) {
     customer.copyAddress = req.body.copyAddress;
     customer.customerType = req.body.customerType;
 
-    customer.search = customer._id + " " + customer.firstName + " " + customer.lastName + " " +customer.city + " " + customer.email + " " + customer.phone + " " + customer.country;
+    customer.search = customer._id + " " + customer.firstName + " " + getLastOrCompany(customer) + " " +customer.city + " " + customer.email + " " + customer.phone + " " + customer.country;
 
     var query = {
         _id: customer._id
@@ -117,7 +116,7 @@ router.route('/customers')
                     [
                     //  '<a href=\"/#/app/customer/' + customers[i]._id + '\">' + customers[i]._id + '</a>',
                       '<a href=\"#\" onclick=\"selectCustomer(' + customers[i]._id + ');return false;\">' + customers[i]._id + '</a>',
-                        customers[i].firstName + ' ' + customers[i].lastName,
+                        customers[i].firstName + ' ' + getLastOrCompany(customers[i]),
                        cityAndState,
                         customers[i].email,
                         customers[i].phone,
@@ -160,9 +159,6 @@ router.route('/customers')
         });
 
     });
-
-
-
 
 router.route('/customers/:customer_id')
     .get(checkJwt, function(req, res) {
@@ -209,62 +205,125 @@ router.route('/customers/:customer_id')
         });
     });
 
+/* experimental endpoint to merge customers. */
 router.route('/customers/merge')
     .post(checkJwt, function (req, res) {
-        console.log('merging customers');
+        var idsUnsorted = req.body.ids;
+        console.log('merging customers ', idsUnsorted);
+        var ids = idsUnsorted.sort(function (a, b) {
+            return a - b;
+        });
+        mergeCustomers(ids, res);
+    });
 
-        var ids = req.body.ids;
-        console.log("ids: ", ids)
+function mergeCustomers(ids, res) {
 
+    var canonicalId = ids[0];
+    ids.forEach(id => {
 
-        ids.forEach(id => {
-
-            var query = Invoice.find({ 'customerId': id });
-            query.select('customer date invoiceNumber customerId total invoiceType lineItems');
-            query.exec(function (err, invoices) {
-                if (err) {
-                    console.log("error ", err)
-                } else {
-                    for (var i = 0; i < invoices.length; i++) {
-                        console.log("customer ", id, "has invoice", invoices[i]._id);
-                    }
+        var query = Invoice.find({ 'customerId': id });
+        query.select('customer date invoiceNumber customerId total invoiceType lineItems');
+        query.exec(function (err, invoices) {
+            if (err) {
+                console.log("error ", err)
+            } else {
+                for (var i = 0; i < invoices.length; i++) {
+                    if (id != canonicalId){
+                      console.log("moving invoice ", invoices[i]._id, " from customer ", invoices[i].customerId, " to ", canonicalId);
+                      invoices[i].customerId = canonicalId;
+                      invoices[i].save(function (err) {
+                      });
+                  }
                 }
-            });
-
-
-            var query2 = Repair.find({ 'customerId': id });
-            query2.select('customerId');
-            query2.exec(function (err, repairs) {
-                if (err) {
-                    console.log("error ", err)
-                } else {
-                    for (var i = 0; i < repairs.length; i++) {
-                        console.log("customer ", id, "has repair", repairs[i]._id);
-                    }
-                }
-            });
-
-            var query3 = Return.find({ 'customerId': id });
-            query3.select('customerId');
-            query3.exec(function (err, returns) {
-                if (err) {
-                    console.log("error ", err)
-                } else {
-                    for (var i = 0; i < returns.length; i++) {
-                        console.log("customer ", id, "has return", returns[i]._id);
-                    }
-                }
-            });
-
-
-
+            }
         });
 
-
-
-        res.json({
-            message: 'Customers merged!'
+        var query3 = Return.find({ 'customerId': id });
+        query3.select('customerId');
+        query3.exec(function (err, returns) {
+            if (err) {
+                console.log("error ", err)
+            } else {
+                for (var i = 0; i < returns.length; i++) {
+                    if (id != canonicalId){
+                      console.log("moving return", returns[i]._id, " from customer ", returns[i].customerId, " to ", canonicalId);
+                      returns[i].customerId = canonicalId;
+                      returns[i].save(function (err) {
+                      });
+                    }
+                }
+            }
         });
     });
+
+    (async() => {
+        const canonicalCustomer = await Customer.findById(canonicalId).exec();
+        for (var i = 1; i < ids.length; i++) {
+            const customer = await Customer.findById(ids[i]).exec();
+            overlayCustomer(canonicalCustomer, customer);
+            console.log("deleting merged customer ", ids[i]);
+            await Customer.deleteOne({ _id: ids[i] }, function (err) {
+                if (err) console.log(err);
+            });
+        }
+
+        console.log('updating canonical customer ', canonicalId);
+
+        await canonicalCustomer.save();
+
+        res.json({
+            message: 'Customers merged.'
+        });
+    })();
+}
+
+function overlayCustomer(canonicalCustomer, customer) {
+    if(customer == null){
+        return;
+    }
+
+    if(canonicalCustomer == null){
+        return;
+    }
+
+    canonicalCustomer.firstName = overlayField(canonicalCustomer.firstName, customer.firstName);
+    canonicalCustomer.lastName = overlayField(canonicalCustomer.lastName, customer.lastName);
+    canonicalCustomer.comapny = overlayField(canonicalCustomer.comapny, customer.company);
+    canonicalCustomer.phone = overlayField(canonicalCustomer.phone, customer.phone);
+    canonicalCustomer.email = overlayField(canonicalCustomer.email, customer.email);   
+    canonicalCustomer.address1 = overlayField(canonicalCustomer.address1, customer.address1);  
+    canonicalCustomer.address2 = overlayField(canonicalCustomer.address2, customer.address2);   
+    canonicalCustomer.city = overlayField(canonicalCustomer.city, customer.city); 
+    canonicalCustomer.state = overlayField(canonicalCustomer.state, customer.state); 
+    canonicalCustomer.zip = overlayField(canonicalCustomer.zip, customer.zip); 
+    canonicalCustomer.country = overlayField(canonicalCustomer.country, customer.country); 
+    canonicalCustomer.billingAddress1 = overlayField(canonicalCustomer.billingAddress1, customer.billingAddress1);  
+    canonicalCustomer.billingAddress2 = overlayField(canonicalCustomer.billingAddress2, customer.billingAddress2);   
+    canonicalCustomer.billingCity = overlayField(canonicalCustomer.billingCity, customer.billingCity); 
+    canonicalCustomer.billingState = overlayField(canonicalCustomer.billingState, customer.billingState); 
+    canonicalCustomer.billingZip = overlayField(canonicalCustomer.billingZip, customer.billingZip); 
+    canonicalCustomer.billingCountry = overlayField(canonicalCustomer.billingCountry, customer.billingCountry); 
+}
+
+function overlayField(canonicalField, field) {
+    if(isEmpty(canonicalField) && !isEmpty(field)){
+        canonicalField = field;
+    }
+    return canonicalField;
+}
+
+function isEmpty(str) {
+    return (!str || str.length === 0 );
+}
+
+function getLastOrCompany(customer){
+    var lastOrCompany = "";
+    if(!isEmpty(customer.lastName)) {
+        lastOrCompany = customer.lastName;
+    }else if (!isEmpty(customer.company)){
+        lastOrCompany = customer.company;
+    }
+    return lastOrCompany;
+}
 
 module.exports = router;
