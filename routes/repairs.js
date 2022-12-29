@@ -218,7 +218,7 @@ router.route('/repairs')
                     results.recordsFiltered = count;
                     res.json(results);
                 } else {
-                    Repair.estimatedDocumentCount(
+                    Repair.countDocuments(
                         query
                     , function(err, count) {
 

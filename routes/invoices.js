@@ -219,7 +219,7 @@ router.route('/invoices')
                     results.recordsFiltered = count;
                     res.json(results);
                 } else {
-                    Invoice.estimatedDocumentCount({
+                    Invoice.countDocuments({
 
                         'search': new RegExp(search, 'i')
 
