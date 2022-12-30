@@ -457,7 +457,7 @@ router.route('/customers/:customer_id/invoices')
     router.route('/customers/:customer_id/invoiceCount')
         .get(function(req, res) {
             var customerId = req.params.customer_id;
-            Invoice.count({'customerId': customerId, status: {$ne: 'Deleted'} }, function( err, count){
+            Invoice.countDocuments({'customerId': customerId, status: {$ne: 'Deleted'} }, function( err, count){
                 res.json({"invoiceCount": count});
             })
     });

@@ -121,7 +121,7 @@ router.route('/customers')
                         customers[i].email,
                         customers[i].phone,
                         customers[i].company,
-                        '<input type="checkbox" class="togglecheck" onclick="toggleCustomer(this, '+customers[i]._id + ')">'
+                        '<input type="checkbox" class="togglecheck" onclick="toggleCustomer(this, '+customers[i]._id + ')" id='+customers[i]._id+'>'
                     ]
                 );
             }
@@ -229,7 +229,7 @@ function mergeCustomers(ids, res) {
             } else {
                 for (var i = 0; i < invoices.length; i++) {
                     if (id != canonicalId){
-                      console.log("moving invoice ", invoices[i]._id, " from customer ", invoices[i].customerId, " to ", canonicalId);
+                      console.log("moving invoice", invoices[i]._id, "from customer", invoices[i].customerId, "to", canonicalId);
                       invoices[i].customerId = canonicalId;
                       invoices[i].save(function (err) {
                       });
@@ -246,7 +246,7 @@ function mergeCustomers(ids, res) {
             } else {
                 for (var i = 0; i < returns.length; i++) {
                     if (id != canonicalId){
-                      console.log("moving return", returns[i]._id, " from customer ", returns[i].customerId, " to ", canonicalId);
+                      console.log("moving return", returns[i]._id, "from customer", returns[i].customerId, "to", canonicalId);
                       returns[i].customerId = canonicalId;
                       returns[i].save(function (err) {
                       });
@@ -261,13 +261,13 @@ function mergeCustomers(ids, res) {
         for (var i = 1; i < ids.length; i++) {
             const customer = await Customer.findById(ids[i]).exec();
             overlayCustomer(canonicalCustomer, customer);
-            console.log("deleting merged customer ", ids[i]);
+            console.log("deleting merged customer", ids[i]);
             await Customer.deleteOne({ _id: ids[i] }, function (err) {
                 if (err) console.log(err);
             });
         }
 
-        console.log('updating canonical customer ', canonicalId);
+        console.log('updating canonical customer', canonicalId, canonicalCustomer.firstName, getLastOrCompany(canonicalCustomer));
 
         await canonicalCustomer.save();
 
