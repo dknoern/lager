@@ -105,16 +105,6 @@
 
       console.log("merging");
 
-      const customerIds = [];
-
-      for (let [key, value] of Object.entries(customers)) {
-        console.log(`${key}: ${value}`);
-        if (value == true) {
-          console.log("merging ", key);
-          customerIds.push(parseInt(key));
-        }
-      }
-
       var postData = {
         "ids": customerIds
       }

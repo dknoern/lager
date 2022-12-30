@@ -1,20 +1,21 @@
 <script>
 
-  var customers = {};
+  var customerIds = new Array();
 
   function selectCustomer(id) {
     document.location.href = "/#/app/customer/" + id;
   }
 
   function toggleCustomer(checkbox, id) {
-    customers[id] = checkbox.checked;
-    var totalChecked = 0;
-    for (let [key, value] of Object.entries(customers)) {
-      if (value == true) {
-        totalChecked++;
-      }
-    }
-    if (totalChecked > 1) {
+    console.log('toggling',id);
+
+    customerIds = new Array();
+    $('#example input[type="checkbox"]:checked').each(function() {
+      customerIds.push($(this).attr('id'));
+    });
+    console.log('all selected', customerIds);
+
+    if (customerIds.length > 1) {
       document.getElementById('merge-button').style.visibility = 'visible';
     } else {
       document.getElementById('merge-button').style.visibility = 'hidden';
