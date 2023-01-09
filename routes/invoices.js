@@ -108,8 +108,6 @@ async function upsertInvoice(req,res){
     }
 
     invoice.tax = await calcTax(invoice);
-    console.log('calcTax complete, total tax is', invoice.tax);
-
     invoice.total = invoice.subtotal + invoice.tax + invoice.shipping;
 
     // update item status to sold, but only if NOT Partner
@@ -126,13 +124,12 @@ async function upsertInvoice(req,res){
 
     // end try
     invoice.search = buildSearchField(invoice);
-    console.log("search is " + invoice.search);
 
               var query = {
                   _id: invoice._id
               };
               Invoice.findOneAndUpdate(query, invoice, {
-                  upsert: true
+                  upsert: true, useFindAndModify:false
               }, function(err, doc) {
                   if (err) return res.send(500, {
                       error: err
@@ -145,7 +142,6 @@ async function upsertInvoice(req,res){
 router.route('/invoices')
     .post(checkJwt, function(req, res) {
         upsertInvoice(req,res);
-        console.log("customer id is NOT null, will use existing customer");
     })
 
     .get(checkJwt, function(req, res) {
@@ -529,9 +525,8 @@ router.route('/invoices/email')
 
 async function calcTax(invoice){
 
-    console.log("CALC TAX-------------------------");
-    console.log("invoice is " + invoice._id);
-    console.log("taxExempt: " + invoice.taxExempt);
+    console.log('calculating tax for invoice',invoice._id);
+
 
     if(invoice.shipState == '' || invoice.shipState == null){
         console.log("state not specified, will not calculate tax");
@@ -588,20 +583,15 @@ async function calcTax(invoice){
 
     var client = new Avatax(avataxConfig).withSecurity(avataxCredentials);
 
-    console.log("SAVING tax doc is:" + JSON.stringify(taxRequest));
-
     var totalTax = 0.0;
 
     await client.createOrAdjustTransaction({ model: taxRequest }).then(result => {
 
-        console.log(result);
-
         result.summary.forEach(item => {
-            console.log("taxName: "+ item.taxName + ", tax: "+ item.tax);
             totalTax += item.tax;   
         });
 
-        console.log("total tax: " + totalTax);
+        console.log("total tax from Avalara for invoice",invoice._id,"is",totalTax);
 
     },error=>{
         console.log("Avalara tax call failure: "+ error);
