@@ -23,7 +23,7 @@
             "serverSide": true,
             "ordering": false,
             "pageLength": 50,
-            "ajax": "/api/logitems",
+            "ajax": "/api/logs",
             "dom": 'Bfrtip',
             stateSave: true,
             "buttons": [

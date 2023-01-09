@@ -1,124 +1,83 @@
 var scopeHolder;
 
-(function() {
+(function () {
     'use strict';
 
     angular.module('singApp.logitem')
         .controller('LogItemCtrl', LogItemCtrl);
 
-    LogItemCtrl.$inject = ['$scope', '$rootScope','$sce','$resource', '$http', '$window', '$location', '$state', 'jQuery', 'authService'];
+    LogItemCtrl.$inject = ['$scope', '$resource', '$http', '$window', '$state', 'jQuery', 'authService'];
 
-    function LogItemCtrl($scope, $rootScope, $sce, $resource, $http, $window, $location, $state, jQuery,authService,$upload) {
-        $scope.dtChanged = function(dt) {
+    function LogItemCtrl($scope, $resource, $http, $window, $state, jQuery, authService, $upload) {
+        $scope.dtChanged = function (dt) {
             $window.alert('Angular model changed to: ' + dt);
         };
 
-
         scopeHolder = $scope;
 
-        $scope.print = function() {
+        $scope.print = function () {
             $window.print();
         };
 
-
-        $scope.lookupItemByNumber = function(){
-
-            if($scope.data.itemNumber)
-            {
-
-            $http.get("api/products?itemNumber=" + $scope.data.itemNumber)
-                .then(function(response) {
-                    if(response!=null&& response.data!=null) {
-                        $scope.data.history.itemReceived = response.data.title;
-
-                        if("Repair" == response.data.status){
-                            $scope.data.history.repairNumber = $scope.data.itemNumber;
-                        }else{
-                            $scope.data.history.repairNumber = "";
-                        }
-                    }
-                    else {
-                        $scope.data.history.itemReceived = "";
-                        $scope.data.history.repairNumber = "";
-                        $scope.data.history.customerName = "";
-                    }
-                });
-            }
-        }
-
-        $scope.lookupRepairByNumber = function(){
-
-            if($scope.data.history.repairNumber)
-            {
-
-            $http.get("api/repairs?repairNumber=" +  + $scope.data.history.repairNumber)
-                .then(function(response) {
-                    if(response!=null&& response.data!=null) {
-                        $scope.data.history.itemReceived = response.data.description;
-                        $scope.data.history.customerName = response.data.customerFirstName + " " + response.data.customerLastName;
-                        $scope.data.itemNumber = response.data.itemNumber;
-                        
-                    }
-                    else {
-                        $scope.data.history.itemReceived = "";
-                        $scope.data.history.customerName = "";
-                        
-                    }
-                });
-            }
-
-        }
-
         var receivedBy = "";
 
-        if(authService!=null && authService.getCachedProfile() !=null && authService.getCachedProfile().name != null){
+        if (authService != null && authService.getCachedProfile() != null && authService.getCachedProfile().name != null) {
             var receivedBy = authService.getCachedProfile().name;
             if (receivedBy != null && receivedBy.length > 0 && receivedBy.indexOf("@") > 0) {
-                receivedBy = receivedBy.substring(0, receivedBy.indexOf("@"));
+                receivedBy = receivedBy.substring(0, receivedBy.indexOf("@")).toLowerCase();
             }
-
-            if("ryan" == receivedBy.toLowerCase())  receivedBy = "Ryan Ables";
-            else if("marijo" == receivedBy.toLowerCase()) receivedBy = "Mari Jo Bueno";
-            else if("colby" == receivedBy.toLowerCase()) receivedBy = "Colby Vick";
-            else if("janet" == receivedBy.toLowerCase()) receivedBy = "Janet Gary";
-            else if("david" == receivedBy.toLowerCase()) receivedBy = "David Knoernschild";
-
-        }    
+        }
 
         if ($scope.itemId) {
+            $resource('api/logs/:id').get({
+                id: $scope.itemId
+            }).$promise.then(function (thedata) {
+                $scope.data = thedata;
 
-            $resource('api/logitems/:id').get({
-                 id: $scope.itemId
-             }).$promise.then(function(thedata){
-                 $scope.data = thedata;
-                 $http.get('api/upload/'+thedata._id).
-                 success(function(images) {
-                     $scope.images = images;
-                 });
-             })
+
+                if(thedata.itemNumber!=null){
+                    console.log('itemNumber=',thedata.itemNumber);
+                }else{
+                    console.log('no itemNumber=');
+                }
+
+                const logRedoDate = new Date('2023-01-07');
+                const logDate = new Date(thedata.date);
+
+                console.log('logRedoDate',logRedoDate);
+                console.log('logDate',new Date(thedata.date));
+
+                var imagesKey = thedata._id; // newer log or older log with no itemNumbers
+
+                if(logDate < logRedoDate){
+                    console.log('pre-dates log redo');
+                    $scope.data.oldLog=true;
+
+                    if(thedata.lineItems!=null&&thedata.lineItems.length==1&&thedata.lineItems[0].itemNumber!=null){
+                        imagesKey = thedata.lineItems[0].productId;
+                        console.log("using productId for images");
+                    }
+                }else{
+                    $scope.data.oldLog=false;
+                }
+
+                $http.get('api/upload/' + imagesKey).
+                    success(function (images) {
+                        $scope.images = images;
+                    });
+            })
 
         }else{
             $scope.data = {
-                history:{
-                    user: receivedBy
-                }
+                "user": receivedBy
             };
-        $scope.data.itemNumber = $location.search().itemNumber;
-        $scope.data.history.repairNumber = $location.search().repairNumber;
-        $scope.data.history.itemReceived =  $location.search().itemReceived;
         }
 
-
-        $scope.addToInventory = function(){
-            document.location.href = "/#/app/item/"+$scope.data._id;
-        }
-
-        $scope.go = function(data, form) {
-
+        $scope.go = function (data, form) {
 
             $http({
                 method: "POST",
-                url: "api/logitems/",
+                url: "api/logs/",
                 data: angular.toJson($scope.data),
                 headers: {
                     'Content-Type': 'application/json'
@@ -131,137 +90,163 @@ var scopeHolder;
             });
         }
 
-        $scope.imagesAdded = function(){
-            $http.get('api/upload/'+$scope.data._id).
-            success(function(images) {
-                $scope.images = images;
-            });
+        $scope.imagesAdded = function () {
+            $http.get('api/upload/' + $scope.data._id).
+                success(function (images) {
+                    $scope.images = images;
+                });
         }
 
-        $scope.uploadFile = function(){
-          alert('uploading file');
-          console.log('uploading file');
+        $scope.uploadFile = function () {
+            alert('uploading file');
+            console.log('uploading file');
 
-         $scope.fileSelected = function(files) {
-             if (files && files.length) {
-                $scope.file = files[0];
-                console.log('file is ' +   $scope.file);
-             }
+            $scope.fileSelected = function (files) {
+                if (files && files.length) {
+                    $scope.file = files[0];
+                    console.log('file is ' + $scope.file);
+                }
 
-             $upload.upload({
-               url: '/api/upload', //node.js route
-               file: $scope.file
-             })
-             .success(function(data) {
-               console.log(data, 'uploaded');
-              });
+                $upload.upload({
+                    url: '/api/upload', //node.js route
+                    file: $scope.file
+                })
+                    .success(function (data) {
+                        console.log(data, 'uploaded');
+                    });
             };
         };
 
-        $scope.getLongDescritpion = function() {
+        $scope.getLongDescritpion = function () {
             return 'this is a long description';
         }
 
         jQuery('#datetimepicker2').datetimepicker();
 
-
-        $scope.rotate = function(url, direction){
+        $scope.rotate = function (url, direction) {
 
             var filename = url.split("/")[2];
-            if(filename.indexOf("?")>0){
-                filename = filename.split("?")[0];
-            }
-
-            $http.get('api/upload/rotate/'+filename +'/'+direction).
-            success(function(images) {
-
-                $http.get('api/upload/'+$scope.data._id).
-                success(function(images) {
-                    $scope.images = images;
-                });
-            });
-        }
-
-
-        $scope.delete = function(url){
-            $scope.selectedImage = url;
-        }
-
-        $scope.conFirmDelete = function() {
-
-            var filenameFull = $scope.selectedImage;
-
-            var filename = filenameFull.split("/")[2];
-
-
             if (filename.indexOf("?") > 0) {
                 filename = filename.split("?")[0];
             }
 
-            $http.delete('api/upload/delete/' + filename).success(function () {
+            $http.get('api/upload/rotate/' + filename + '/' + direction).
+                success(function (images) {
 
-                $http.get('api/upload/' + $scope.itemId).success(function (images) {
-                    $scope.images = images;
+                    $http.get('api/upload/' + $scope.data._id).
+                        success(function (images) {
+                            $scope.images = images;
+                        });
                 });
-
-
-                Messenger().post({
-                    message: "Image deleted.",
-                    type: "success"
-                });
-
-
-            });
-
         }
 
-        $scope.deleteLogItem = function () {
+        $scope.addItem = function (itemId) {
 
-            console.log("deleting log item");
+            console.log('addItem, itemId = ' + itemId);
+            $http.get("api/products/" + itemId)
+                .then(function (response) {
 
-            $scope.data.history.action = "received-deleted";
-
-            $http({
-                method: "POST",
-                url: "api/logitems/",
-                data: angular.toJson($scope.data),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(function successCallback(response) {
-
-
-
-
-                console.log(response.statusText);
-                $state.go('app.log');
-
-
-                Messenger().post({
-                        message: 'Deleted log item',
-                        type: "success",
-                        showCloseButton: true
+                    var lineItem = {
+                        name: response.data.title,
+                        itemNumber: response.data.itemNumber,
+                        productId: response.data._id
                     }
-                );
-            }, function errorCallback(response) {
-                console.log(response.statusText);
-            });
+
+                    console.log('adding item', response.data.title);
+                    console.log('itemNumber', response.data.itemNumber);
+
+                    if ($scope.data.lineItems == null) {
+                        $scope.data.lineItems = new Array();
+                    }
+                    $scope.data.lineItems.push(lineItem);
+
+                });
+
+            $('#productModal').modal('hide');
         }
 
-        var customerTableShown = false;
+        $scope.addMisc = function () {
+            console.log('adding misc item');
+            var lineItem = {
+                name: ""
+            }
+            console.log('adding misc item');
+            if ($scope.data.lineItems == null) {
+                $scope.data.lineItems = new Array();
+            }
+            $scope.data.lineItems.push(lineItem);
+        }
 
-            $('#customerModal').on('show.bs.modal', function (e) {
+        $scope.addRepair = function (repairId) {
+            $http.get("api/repairs/" + repairId)
+                .then(function (response) {
 
-              if(customerTableShown==false){
+                    var lineItem = {
+                        name: response.data.description,
+                        itemNumber: response.data.itemNumber,
+                        repairNumber: response.data.repairNumber,
+                        repairId: response.data._id,
+                        productId: response.data.itemId,
+                        repairCost: 0
+                    }
 
-              jQuery('#customerTable').DataTable( {
-                      "processing": true,
-                      "serverSide": true,
-                      "ordering": false,
-                      "ajax": "/api/customers"
-                  } );
-                  customerTableShown = true;
-                }
-            })
+                    console.log('adding repair', response.data.title);
+
+                    if ($scope.data.lineItems == null) {
+                        $scope.data.lineItems = new Array();
+                    }
+                    $scope.data.lineItems.push(lineItem);
+
+                });
+
+            $('#repairModal').modal('hide');
+        }
+
+        $scope.removeItem = function(index) {
+            $scope.data.lineItems.splice(index, 1);
+        }
+
+        var productTableShown = false;
+        $('#productModal').on('show.bs.modal', function (e) {
+            if (productTableShown == false) {
+                var accessToken = localStorage.getItem('access_token');
+                jQuery('#productTable').dataTable({
+                    "processing": true,
+                    "serverSide": true,
+                    "ordering": true,
+                    "ajax": {
+                        "url": "/api/products",
+                        "data": {
+                            "status": "Out" 
+                        },
+                        "headers": {
+                            "Authorization": "Bearer " + accessToken
+                        }
+                    },
+                    "order": [[5, 'desc']]
+                });
+                productTableShown = true;
+            }
+        })
+
+        var repairTableShown = false;
+        $('#repairModal').on('show.bs.modal', function (e) {
+            if (repairTableShown == false) {
+                var accessToken = localStorage.getItem('access_token');
+                jQuery('#repairTable').dataTable({
+                    "processing": true,
+                    "serverSide": true,
+                    "ordering": true,
+                    "ajax": {
+                        "url": "/api/repairs?filter=outstanding",
+                        "headers": {
+                            "Authorization": "Bearer " + accessToken
+                        }
+                    },
+                    "order": [[5, 'desc']]
+                });
+                repairTableShown = true;
+            }
+        })
     }
 })();
