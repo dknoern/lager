@@ -9,7 +9,6 @@ const checkJwt = require('./jwt-helper').checkJwt;
 var format = require('date-format');
 
 function formatDate(date) {
-    console.log('formatting date, yo: ' + date);
     if (date == null) return "";
     else {
         return format('yyyy-MM-dd', date);
@@ -38,27 +37,39 @@ router.route('/logs')
             + log.lineItems.map(function (k) { return k.repairNumber }).join(" ") + " "
             + log.comments).replace(/\s+/g, ' ').trim();
 
-        console.log('search item is', log.search);
+        if (req.body._id != null) {
+            log._id = req.body._id;
 
-        log.save(function (doc, err) {
-            if (err) {
-                console.log('error saving log: ' + err);
-            }
+            Log.findOneAndUpdate({
+                _id: req.body._id
+            }, log, {
+                upsert: false, useFindAndModify:false
+            }, function (err, doc) {
+                if (err) 
+                    console.log('error updating log item',err);
+                else
+                    console.log('updated existing log item successfully');
 
-            
-
-            // loop through items and update
-            log.lineItems.forEach(lineItem => {
-
-                if (lineItem.productId != null) {
-                    console.log("update product", lineItem.itemNumber);
-                    receiveProduct(log, lineItem);
-                }
-                closeRepair(lineItem, log.comments);
+                return res.send("Saved log item");
             });
+        } else {
 
-            return res.send("Saved log item");
-        });
+            log.save(function (doc, err) {
+                if (err) {
+                    console.log('error saving log: ' + err);
+                }
+                log.lineItems.forEach(lineItem => {
+
+                    if (lineItem.productId != null) {
+                        console.log("update product", lineItem.itemNumber);
+                        receiveProduct(log, lineItem);
+                    }
+                    closeRepair(lineItem, log.comments);
+                });
+
+                return res.send("Saved log item");
+            });
+        }
 
 
     })
