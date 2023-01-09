@@ -22,8 +22,13 @@ var storage = imageStorage({
 var upload = multer({ storage: storage });
 
 router.route(`/${UPLOAD}`)
-    .post(upload.single('file'), function (req, res) {
+    .post(upload.single('file'), function (req, res, err) {
 
+        if(err!=null){
+            console.log('upload error',err.message);
+        }else{
+            console.log('no upload error');
+        }
         var itemId = req.param('itemId');
         console.log("itemId = " + itemId);
         return res.send("post...");
