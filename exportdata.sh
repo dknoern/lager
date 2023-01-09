@@ -15,6 +15,7 @@ mongoexport --uri=$DB/lager -c products -o $WORKDIR/products.json
 mongoexport --uri=$DB/lager -c invoices -o $WORKDIR/invoices.json
 mongoexport --uri=$DB/lager -c repairs -o $WORKDIR/repairs.json
 mongoexport --uri=$DB/lager -c returns -o $WORKDIR/returns.json
+mongoexport --uri=$DB/lager -c logs -o $WORKDIR/logs.json
 
 
 rsync -azv ubuntu@demesyinventory.com:lager/uploads $BACKUPSDIR
