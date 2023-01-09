@@ -191,9 +191,8 @@ router.route('/products')
                     });
 
                     // update info inside any invoices
-
                     
-                        Invoice.update({'lineItems.productId':req.body._id},
+                        Invoice.updateMany({'lineItems.productId':req.body._id},
                             {$set: {
                                 'lineItems.$.itemNumber': req.body.itemNumber,
                                 'lineItems.$.name': req.body.title,
@@ -205,7 +204,7 @@ router.route('/products')
                             console.log("ERROR: " + err);
                         }
 
-                        console.log("updated subdocs for product in invoice " + JSON.stringify(doc));
+                        console.log('updated', doc.nModified,'invoices for product',req.body.itemNumber);
 
                             return res.send("product updated");
                         });

@@ -54,7 +54,7 @@ router.route('/logs')
             });
         } else {
 
-            log.save(function (doc, err) {
+            log.save(function (err, result) {
                 if (err) {
                     console.log('error saving log: ' + err);
                 }
@@ -67,7 +67,9 @@ router.route('/logs')
                     closeRepair(lineItem, log.comments);
                 });
 
-                return res.send("Saved log item");
+
+                console.log("sucessfully saved new log entry", result._id);
+                return res.send("sucessfully saved new log entry ");
             });
         }
 
@@ -112,6 +114,7 @@ router.route('/logs')
                                 logs[i].customerName,
                                 logs[i].lineItems.map(function (k) { return k.name }).join(","),
                                 logs[i].lineItems.map(function (k) { return k.repairNumber }).join(" "),
+                                logs[i].lineItems.map(function (k) { return k.itemNumber }).join(" "),
                                 logs[i].user,
                                 logs[i].comments
                             ]
@@ -232,7 +235,7 @@ function receiveProduct(log, lineItem) {
             },
             "$set": updates
         }, {
-            upsert: true
+            upsert: true, useFindAndModify: false
         }, function (err, doc) {
             if (err) 
                 console.log('error adding history',err);
