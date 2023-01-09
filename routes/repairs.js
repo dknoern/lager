@@ -168,6 +168,10 @@ router.route('/repairs')
 
         if("outstanding"==req.query.filter){
             query.$and.push({returnDate:{$eq:null}});
+            var now = new Date();
+            now.setFullYear(now.getFullYear()-2);
+            var agedOutString = format('yyyy-MM-dd',now);
+            query.$and.push({dateOut:{$gt:agedOutString}});
        }
 
         var results = {

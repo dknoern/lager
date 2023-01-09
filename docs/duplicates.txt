@@ -1,0 +1,6 @@
+db.customers.aggregate([ { $group: { _id: { firstName: "$firstName", lastName: "$lastName", email: "$email", phone: "$phone" }, count: { $sum: 1 } } }, { "$match": { "_id": { "$ne": null }, "count": { "$gt": 1 } } }])
+
+db.products.aggregate([ { $group: { _id: { itemNumber: "$itemNumber" }, count: { $sum: 1 } } }, { "$match": { "_id": { "$ne": null }, "count": { "$gt": 1 } } }])
+
+db.repairs.aggregate([ { $group: { _id: { repairNumber: "$repairNumber" }, count: { $sum: 1 } } }, { "$match": { "_id": { "$ne": null }, "count": { "$gt": 1 } } }])
+
