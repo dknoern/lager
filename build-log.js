@@ -19,11 +19,9 @@ const option = {
     reconnectTries: 90000
 };
 
-//mongoose.connect('mongodb://lager:wntNJy5DqatKcvdYWCDrwAxYr67JC32D@ds123698.mlab.com:23698/lager');
-//mongoose.connect('mongodb://localhost:27018/lager', option);
-mongoose.connect('mongodb://localhost:27017/lager', option);
+//mongoose.connect('mongodb://localhost:27017/lager', option);
 
-//mongoose.connect('mongodb://localhost:27018/lager', option);
+mongoose.connect('mongodb://localhost:27018/lager', option);
 
 read();
 
