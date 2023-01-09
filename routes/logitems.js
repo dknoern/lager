@@ -240,40 +240,48 @@ function receiveProduct(log, lineItem) {
             if (err) 
                 console.log('error adding history',err);
                 else
-                console.log('added history',err);
+                console.log('added history line',doc._id,'for itemNumber',lineItem.itemNumber);
         });
     });
 }
 
 function closeRepair(lineItem, comments) {
-    console.log('marking repairs for repairId',lineItem.repairId,'or productId',lineItem.productId );
+    console.log('marking repairs for repairId', lineItem.repairId, 'or productId', lineItem.productId);
 
     Repair.updateMany(
         {
-            $or: [
+
+
+            $and: [
+                { returnDate: { $eq: null } },
                 {
-                    _id: lineItem.repairId // _id never null
-                },
-                {
-                    $and: [
-                        {itemId: lineItem.productId},
-                        {itemId:{$ne:null}} // itemId could be null if not inventory item
-                    ] 
+                    $or: [
+                        {
+                            _id: lineItem.repairId // _id never null
+                        },
+                        {
+                            $and: [
+                                { itemId: lineItem.productId },
+                                { itemId: { $ne: null } } // itemId could be null if not inventory item
+                            ]
+                        }
+                    ]
                 }
+
             ]
-        }, 
+        },
         {
             returnDate: new Date(),
             repairCost: lineItem.repairCost,
             repairNotes: comments
-        }, function (err, docs) {
-        if (err){
-            console.log(err)
-        }
-        else{
-            console.log('closed',docs,'returns');
-        }
-    });
+        }, function (err, doc) {
+            if (err) {
+                console.log(err)
+            }
+            else {
+                console.log('closed', doc.nModified, 'repairs for repairId', lineItem.repairId, 'or productId', lineItem.productId);
+            }
+        });
 }
 
 module.exports = router;
