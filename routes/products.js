@@ -2,7 +2,6 @@ var express = require('express');
 var mongoose = require('mongoose');
 var router = express.Router();
 var Product = require('../models/product');
-var Repair = require('../models/repair');
 var Invoice = require('../models/invoice');
 const checkJwt = require('./jwt-helper').checkJwt;
 var format = require('date-format');
@@ -19,227 +18,6 @@ function formatDate(date) {
 router.use(function (req, res, next) {
     next();
 });
-
-var upsertLogItem = function (req, res, productId, action) {
-
-    var search = req.body.itemNumber + " " + formatDate(new Date()) + " " + req.body.history.receivedFrom + " " + req.body.history.customerName
-        + " " + req.body.history.repairNumber + " " + req.body.history.itemReceived + req.body.history.user + " " + req.body.history.comments;
-
-    var action = req.body.history.action || "received";
-
-    if (req.body.history.repairNumber != null){
-        console.log('looking for repairNumber ' + req.body.history.repairNumber);
-        console.log('repair cost is ' + req.body.history.repairCost ||0 );
-
-
-        var returnDate = null;
-
-        if(req.body.history.date==null){
-            console.log("history date is null, setting now");
-            returnDate = new Date();
-        }
-        else {
-            console.log("history date is not null");
-            returnDate = new Date(req.body.history.date);
-        }
-
-        console.log("return date for repairs is " + returnDate);
-
-        var fromTime = new Date(returnDate);
-        var toTime = new Date(returnDate);
-
-        fromTime.setSeconds(fromTime.getSeconds()-10);
-        toTime.setSeconds(toTime.getSeconds()+10);
-
-        Repair.update({
-            repairNumber: req.body.history.repairNumber,
-
-            $or: [
-                {"returnDate": null},
-                {"returnDate": {"$gte": fromTime, "$lt": toTime}}
-            ]
-        }, {
-            "$set": {
-                "returnDate": returnDate,
-                "repairCost": req.body.history.repairCost || 0,
-                "repairNotes": req.body.history.comments
-            }
-        }, {
-            upsert: false, multi: false
-        }, function (err, doc) {
-            if (err)
-                console.log('repair could not be marked as returned ' + err);
-            else
-            console.log('repair returned')
-        });
-
-
-
-    }else{
-        console.log('not looking for repair');
-    }
-
-
-    if(req.body.history._id !=null){
-
-        console.log("updating existing history item " +req.body.history._id );
-
-        // ---------------------------------
-        // update existing history item
-        // ---------------------------------
-        Product.findOneAndUpdate({
-            'history._id': req.body.history._id
-        }, {
-
-            "$set": {
-                // don't change date...   'history.$.date': Date.now(),
-                    'history.$.action': action,
-                    'history.$.user': req.body.history.user,
-                    'history.$.itemReceived': req.body.history.itemReceived,
-                    'history.$.receivedFrom': req.body.history.receivedFrom,
-                    'history.$.repairNumber': req.body.history.repairNumber,
-                    'history.$.customerName': req.body.history.customerName,
-                    'history.$.comments': req.body.history.comments,
-                    'history.$.search': search,
-                    'history.$.repairCost':  req.body.history.repairCost || 0,
-                    itemNumber: req.body.itemNumber
-            }
-        }, {
-            upsert: true
-        }, function (err, doc) {
-            if (err) return res.send(500, {
-                error: err
-            });
-            return res.send("successfully saved");
-        });
-    }
-
-    else if (productId != null) { // update existing product
-
-        Product.findById(productId, ['status', 'history'], function (err, product) {
-
-            // replay events to figure out current status
-            var sold = false;
-            var repair = false;
-            var memo = false;
-
-            product.history.forEach(element => {
-
-                if (element.action == 'sold item') {
-                    sold = true;
-                } else if (element.action == 'item returned') {
-                    sold = false;
-                } else if (element.action == 'in repair') {
-                    repair = true;
-                } else if (element.action == 'item memo') {
-                    memo = true;
-                } else if (element.action == 'received') {
-                    if (repair) {
-                        repair = false;
-                    } else {
-                        sold = false; // cant be both sold and memoed
-                        memo = false;
-                    }
-                }
-                console.log("action = ", element.action, "sold = ", sold, "repair = ", repair, "memo = ", memo);
-
-            });
-
-            // figure out new state for received item
-
-            var newStatus = product.status;
-
-            // item could be in repair even if sold or memoed
-            if (repair) {
-                if(sold){
-                    newStatus = "Sold";
-                } else if(memo) {
-                    newStatus = "Memo";
-                } else {
-                    newStatus = "In Stock";
-                }
-            } else {
-                newStatus = "In Stock";
-            }
-
-            console.log("checking existing product in, status was " + product.status + ", setting status to " + newStatus);
-            var updates = {
-                "lastUpdated": Date.now(),
-                "status": newStatus
-            };
-
-            //TODO: update total repair cost maybe?... will now calculate on display only.
-
-            // ---------------------------------
-            // create new history item and product status
-            // ---------------------------------
-            Product.findOneAndUpdate({
-                _id: productId
-            }, {
-
-                "$push": {
-                    "history": {
-                        user: req.body.history.user,
-                        date: Date.now(),
-                        action: "received",
-                        itemReceived: req.body.history.itemReceived,
-                        receivedFrom: req.body.history.receivedFrom,
-                        repairNumber: req.body.history.repairNumber,
-                        customerName: req.body.history.customerName,
-                        comments: req.body.history.comments,
-                        repairCost: req.body.history.repairCost || 0,
-                        search: search
-                    }
-                },
-                "$set": updates
-            }, {
-                upsert: true
-            }, function (err, doc) {
-                if (err) return res.send(500, {
-                    error: err
-                });
-                return res.send("successfully saved");
-            });
-        });
-
-    } else {  // create new product
-
-
-        // ---------------------------------
-        // create new product
-        // ---------------------------------
-        var product = new Product();
-        product.itemNumber = req.body.itemNumber;
-        product.title = req.body.history.itemReceived;
-        product.longDesc = req.body.history.itemReceived;
-        product.search = req.body.itemNumber + " " + req.body.history.itemReceived;
-        product.lastUpdated = Date.now();
-        product.status = "In Stock";
-        product.history = {
-            user: req.body.history.user,
-            date: Date.now(),
-            action: "received",
-            itemReceived: req.body.history.itemReceived,
-            receivedFrom: req.body.history.receivedFrom,
-            repairNumber: req.body.history.repairNumber,
-            customerName: req.body.history.customerName,
-            comments: req.body.history.comments,
-            search: search
-        }
-        product.totalRepairCost = req.body.repairCost;
-
-        product.save(function (err) {
-            if (err) {
-                console.log('error saving product: ' + err);
-                return res.send(err);
-            } else {
-                return res.json({
-                    message: 'product saved'
-                });
-            }
-        });
-    }
-}
 
 router.route('/products/outtoshow')
     .post(checkJwt, function (req, res) {
@@ -473,11 +251,15 @@ router.route('/products')
         };
 
         var statusFilter;
-        if (status != null) {
+        if (status == "Available") {
             // value of "Available" maps to "In Stock" and "Partnership"
             statusFilter = { $in: ["In Stock","Partnership"] }
 
-        } else {
+        } else if (status == "Out") {
+            // value of "Out" maps to "Sold" and "Memo"
+            statusFilter = { $in: ["Sold","Memo"] }
+
+        }else {
             statusFilter = {
                 $ne: "Deleted"
             };
@@ -598,9 +380,7 @@ router.route('/products')
             lastUpdated: 1,
             sellerType: 1
         });
-
     });
-
 
 router.route('/products/:product_id')
     .get(checkJwt, function (req, res) {
@@ -614,25 +394,6 @@ router.route('/products/:product_id')
                 }
             });
         }
-    })
-
-    // TODO: is this block dead code?
-    .put(checkJwt, function (req, res) {
-        Product.findById(req.params.product_id, function (err, product) {
-            if (err)
-                res.send(err);
-            product.itemNumber = req.body.itemNumber;
-            product.serialNo = req.body.serialNo;
-            product.title = req.body.title;
-            product.sellingPrice = req.body.sellingPrice;
-            product.save(function (err) {
-                if (err)
-                    res.send(err);
-                res.json({
-                    message: 'Product updated!'
-                });
-            });
-        });
     })
 
     .delete(checkJwt, function (req, res) {
@@ -661,8 +422,7 @@ router.route('/products/:product_id')
             });
         });
     });
-  
-    
+   
 router.route('/products/:product_id/status')
     .put(checkJwt, function (req, res) {
 
@@ -696,12 +456,9 @@ router.route('/products/:product_id/status')
                 res.send(err);
             res.json(responseData);
         });
-
-
     });
 
-
-    router.route('/products/:itemNumber/undelete')
+router.route('/products/:itemNumber/undelete')
     .put(checkJwt, function (req, res) {
 
         console.log('setting status to In Stock (undeleting) item ' + req.params.itemNumber);
@@ -774,195 +531,6 @@ router.route('/products/:product_id/notes')
             }
         });
     });
-
-
-router.route('/logitems')
-
-    .post(checkJwt, function (req, res) {
-
-
-        if (req.body.itemNumber == null || req.body.itemNumber == "") {
-            console.log('no item number, creating new log item');
-            return upsertLogItem(req, res, null);
-        }
-
-        else {
-            console.log('item  specified, looking for existing item');
-
-            Product.findOne({'itemNumber': req.body.itemNumber}, '_id lastUpdated', function (err, product) {
-                if (err) return res.send(500, {
-                    error: err
-                });
-
-                else if (product != null) {
-                    console.log('found existing product with itemNumber ' + req.body.itemNumber);
-                    console.log("creating new log item for existing item");
-                    return upsertLogItem(req, res, product._id,);
-                } else {
-                    console.log('did not find existing product with itemNumber ' + req.body.itemNumber);
-                    return upsertLogItem(req, res, null);
-                }
-            });
-        }
-    })
-
-    .get(function (req, res) {
-
-        var draw = req.query.draw;
-        var start = 0;
-        var length = 10;
-
-        if (req.query.start) start = req.query.start;
-        if (req.query.length) length = req.query.length;
-
-        var search = req.query.search.value;
-        var results = {
-            "draw": draw,
-            "recordsTotal": 0,
-            "recordsFiltered": 0,
-            "data": []
-        };
-
-        var sortClause = {"history.date": -1};
-
-
-        Product.
-        aggregate([
-
-
-            {$unwind: "$history"},
-            { $match: {$and: [
-            {'history.action': 'received'},
-            {'history.search': new RegExp(search, 'i')}
-                ]}   }]).
-        sort(sortClause).skip(parseInt(start)).limit(parseInt(length))
-            .exec(function (err, products) {
-
-            if(products==null){
-                console.log("no log items found");
-            }
-
-            else {
-
-                for (var i = 0; i < products.length; i++) {
-
-                        var itemReceived = "";
-                        if (products[i].itemNumber != null && products[i].itemNumber != "") {
-                            itemReceived += products[i].itemNumber + ": ";
-                        }
-                        itemReceived += products[i].history.itemReceived;
-
-                        results.data.push(
-                            [
-                                '<a href=\"#\" onclick=\"selectProduct(\'' + products[i].history._id + '\');return false;\"><div style="white-space: nowrap;">' + format('yyyy-MM-dd hh:mm', products[i].history.date) + '</div></a>',
-                                products[i].history.receivedFrom,
-                                products[i].history.customerName,
-                                itemReceived,
-                                products[i].history.repairNumber,
-                                products[i].history.user,
-                                products[i].history.comments
-                            ]
-                        );
-                }
-            }
-
-
-
-
-                Product.aggregate([{$unwind: "$history"},
-                    {
-                    $match: {
-                        $and: [
-                            {'history.action': 'received'}
-
-                        ]
-                    },
-                },
-            
-                {$group:
-                {
-                  _id:  null
-                  ,count: { $sum: 1 }
-                }}
-            
-            
-            ]).exec(function (err, products2) {
-                    if(products2==null || products2[0]==null){
-                        console.log('warning, showing zero total log entries!');
-                        results.recordsTotal = 0;
-                    }else{
-                    results.recordsTotal = products2[0].count;
-                    }
-
-
-                    if (search == '' || search == null) {
-                        results.recordsFiltered = results.recordsTotal;
-                        res.json(results);
-                    }else {
-
-
-                        Product.aggregate([
-                            {$unwind: "$history"},{
-                            $match: {
-                                $and: [
-                                    {'history.action': 'received'},
-                                    {'history.search': new RegExp(search, 'i')}
-                                ]
-                            }
-                        },
-            
-                        {$group:
-                        {
-                          _id:  null
-                          ,count: { $sum: 1 }
-                        }}]).exec(function (err, products3) {
-                            if(products3==null||products3[0]==null){
-                                console.log('warning, showing zero filtered log entries!');
-                                results.recordsFiltered = 0;
-                            }else{
-                                results.recordsFiltered = products3[0].count
-                            }
-
-                            res.json(results);
-                        });
-                    }
-
-                });
-
-
-
-
-
-        });
-    });
-
-
-router.route('/logitems/:id')
-    .get(function (req, res) {
-
-        Product.aggregate([
-
-            {
-                $match: {
-                    'history._id': mongoose.Types.ObjectId(req.params.id)
-                }
-            }
-        ]).unwind('history').limit(50)
-            .exec(function (err, products) {
-
-                var logitem = {};
-
-                // above will return unwound docs, one for each history item, find correct one
-                for (var i = 0; i < products.length; i++) {
-                    if (products[i].history._id == req.params.id) {
-                        logitem = products[i];
-                    }
-                }
-
-                res.json(logitem);
-            });
-    });
-
 
 
 module.exports = router;

@@ -6,11 +6,11 @@
 </style>
 
 <script>
-    function lookupItemByNumber(){
-        scopeHolder.lookupItemByNumber();
+    function selectProduct(id) {
+        scopeHolder.addItem(id);
     }
-    function lookupRepairByNumber(){
-        scopeHolder.lookupRepairByNumber();
+    function selectRepair(id) {
+        scopeHolder.addRepair(id);
     }
 </script>
 
@@ -18,67 +18,27 @@
 
     <div class="row">
         <div class="col-md-10">
-            <h1 class="page-title"><span class="fw-semi-bold">Log Item</span></h1>
+            <h1 class="page-title"><span class="fw-semi-bold">Log</span></h1>
         </div>
         <div class="col-md-2">
 
             <div ng-if="data._id">
                 <div class="btn-group hidden-print" data-dropdown>
-                    <button class="btn btn-success dropdown-toggle" data-dropdown-toggle
-                            data-original-title="" title="">
+                    <button class="btn btn-success dropdown-toggle" data-dropdown-toggle data-original-title=""
+                        title="">
                         &nbsp; Action &nbsp;
                         <i class="fa fa-caret-down"></i>
                     </button>
 
                     <ul class="dropdown-menu">
-                        <li ng-disabled="true"><a href="#" data-toggle="modal" data-toggle="modal"
-                                                  data-target="#addImagesModal">Add Images</a></li>
-
-                        <li ng-if='data.itemNumber==null || data.itemNumber==""'><a
-                                ng-click="addToInventory()">Add to Inventory</a></li>
+                        <li ng-if="data.oldLog==false" ng-disabled="true"><a href="#" data-toggle="modal" data-toggle="modal"
+                                data-target="#addImagesModal">Add Images</a></li>
                         <li><a ng-click="print()"><i class="fa fa-print"></i> Print</a></li>
-
-                        <li class="divider"></li>
-                        <li><a href="#" data-toggle="modal" data-target="#deleteModal">Delete</a>
-
                     </ul>
                 </div>
             </div>
         </div>
     </div>
-
-
-    <!-- Add image modal -->
-    <div class="modal fade" id="addImagesModal" tabindex="-1" role="dialog"
-         aria-labelledby="myModalLabel">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-body">
-
-                    <section class="widget">
-                        <header>
-                            <h5><strong>Image Upload</strong></h5>
-                        </header>
-                        <div class="widget-body">
-                            <form class="dropzone" action="/api/upload" data-dropzone action="#"
-                                  id="myDropzone">
-                                <input type="hidden" name="itemId" value="{{data._id}}"/>
-                            </form>
-                        </div>
-                    </section>
-
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success btn-sm" ng-click="imagesAdded()"
-                            data-dismiss="modal">OK
-                    </button>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
 
     <div class="row">
         <div class="col-md-12">
@@ -91,14 +51,12 @@
 
                                 <fieldset>
 
-                                    <div class="form-group" ng-if="data.history.date!=null" >
+                                    <div class="form-group" ng-if="data.date!=null">
                                         <label for="date" class="col-sm-3 control-label">Date</label>
                                         <div class="col-sm-8">
 
-
                                             <input type="text" id="date" class="form-control"
-                                                   value="{{data.history.date | date : 'MM/dd/y'}}"
-                                                   readonly="readonly">
+                                                value="{{data.date | date : 'MM/dd/y'}}" readonly="readonly">
                                         </div>
                                     </div>
 
@@ -107,12 +65,11 @@
                                             From</label>
                                         <div class="col-sm-8">
 
-                                            <select id="receivedFrom" class="selectpicker"
-                                                    data-selectpicker
-                                                    data-width="auto" required
-                                                    ng-model="data.history.receivedFrom">
+                                            <select id="receivedFrom" class="selectpicker" data-selectpicker
+                                                data-width="auto" required ng-model="data.receivedFrom"
+                                                ng-disabled="data._id!=null">
                                                 <option></option>
-                                                <option>FexEx</option>
+                                                <option>FedEx</option>
                                                 <option>UPS</option>
                                                 <option>USPS</option>
                                                 <option>Courier</option>
@@ -122,55 +79,11 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="itemNumber" class="col-sm-3 control-label">Item
-                                            Number</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" id="itemNumber" class="form-control"
-                                                   ng-model="data.itemNumber"
-                                                   ng-readonly="data._id!=null"
-                                                   ng-change="lookupItemByNumber();">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="title" class="col-sm-3 control-label">Repair Number</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" id="repairNumber" class="form-control"
-                                                   ng-model="data.history.repairNumber"
-                                                   ng-readonly="data._id!=null"
-                                                   ng-change="lookupRepairByNumber();">
-
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="title" class="col-sm-3 control-label">Repair Cost</label>
-                                        <div class="col-sm-8">
-                                            <input type="number" min="0" step="0.01"
-                                                   data-number-to-fixed="2"
-                                                   data-number-stepfactor="100"
-                                                   class="form-control currency"
-                                                   id="repairCost"
-                                                   ng-model="data.history.repairCost">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group required">
-                                        <label for="title" class="col-sm-3 control-label">Item
-                                            Received</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" id="title" class="form-control"
-                                                   ng-model="data.history.itemReceived" required>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
                                         <label for="customerName" class="col-sm-3 control-label">Customer
                                             Name</label>
                                         <div class="col-sm-8">
-                                            <input type="text" id="customerName"
-                                                   class="form-control"
-                                                   ng-model="data.history.customerName">
+                                            <input type="text" id="customerName" class="form-control"
+                                                ng-model="data.customerName" ng-readonly="data._id!=null">
                                         </div>
                                     </div>
 
@@ -178,40 +91,177 @@
                                         <label for="receivedBy" class="col-sm-3 control-label">Received
                                             By</label>
                                         <div class="col-sm-8">
-                                            <input type="text" id="receivedBy" class="form-control"
-                                                   ng-model="data.history.user">
+                                            <input type="text" id="receivedBy" class="form-control" ng-model="data.user"
+                                                ng-disabled="data._id!=null">
                                         </div>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="comments" class="col-sm-3 control-label">Note/Comment</label>
                                         <div class="col-sm-8">
-                                            <textarea id="comments" rows=6 cols="40"
-                                                      ng-model="data.history.comments"></textarea>
+                                            <textarea id="comments" rows=6 cols="40" ng-model="data.comments"
+                                                ng-disabled="data._id!=null"></textarea>
                                         </div>
                                     </div>
 
-                                    <div>
+                                    <div class="form-actions">
+                                        <div class="row">
+                                            <div class="col-sm-offset-1 col-sm-10">
 
+                                                <h2>Items</h2>
+                                                <div ng-if="data._id==null">
+                                                    <!-- New line item modal -->
+                                                    <button button type="button" class="btn btn-success"
+                                                        data-toggle="modal" data-target="#productModal">
+                                                        Inventory item
+                                                    </button>
+
+                                                    <button type="button" class="btn btn-info" ng-click="addMisc()">
+                                                        Misc item
+                                                    </button>
+
+                                                    <button type="button" class="btn btn-warning" data-toggle="modal"
+                                                        data-target="#repairModal">
+                                                        Repair return
+                                                    </button>
+                                                </div>
+
+                                                <!-- Product Modal -->
+                                                <div class="modal fade" id="productModal" tabindex="-1" role="dialog"
+                                                    aria-labelledby="myModalLabel">
+                                                    <div class="modal-dialog modal-lg" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal"
+                                                                    aria-label="Close"><span
+                                                                        aria-hidden="true">&times;</span></button>
+                                                                <h4 class="modal-title" id="myModalLabel">Select item
+                                                                </h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <table id="productTable" class="display" cellspacing="0"
+                                                                    width="100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th style="white-space: nowrap;">Item No
+                                                                            </th>
+                                                                            <th width="50%">Title</th>
+                                                                            <th>Serial No</th>
+                                                                            <th>Model No</th>
+                                                                            <th>Status</th>
+                                                                            <th>Updated</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                </table>
+
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-default btn-sm"
+                                                                    data-dismiss="modal">Cancel</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Repair Modal -->
+                                                <div class="modal fade" id="repairModal" tabindex="-1" role="dialog"
+                                                    aria-labelledby="myModalLabel">
+                                                    <div class="modal-dialog modal-lg" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal"
+                                                                    aria-label="Close"><span
+                                                                        aria-hidden="true">&times;</span></button>
+                                                                <h4 class="modal-title" id="myModalLabel">Select item
+                                                                </h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <table id="repairTable" class="display" cellspacing="0"
+                                                                    width="100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Repair</th>
+                                                                            <th>Item</th>
+                                                                            <th>Description</th>
+                                                                            <th>Out</th>
+                                                                            <th>Approved</th>
+                                                                            <th>Returned</th>
+                                                                            <th>Customer</th>
+                                                                            <th>Vendor</th>
+                                                                            <th>Cost</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                </table>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-default btn-sm"
+                                                                    data-dismiss="modal">Cancel</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Line Item Table-->
+                                                <table class="table table-striped table-hover" width="100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Item Received</th>
+                                                            <th>Item Number</td>
+                                                            <th>Repair Number</td>
+                                                            <th>Repair Cost</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr data-ng-repeat="lineItem in data.lineItems">
+                                                            <td>
+                                                                <textarea cols=70 rows="1" id="name"
+                                                                    ng-model="lineItem.name"
+                                                                    ng-disabled="data._id!=null" />
+                                                            </td>
+                                                            <td><a href="/#/app/item/{{lineItem.productId}}">{{lineItem.itemNumber}}</a></td>
+                                                            <td ng-if="lineItem.repairId!=null" ><a href="/#/app/repair/{{lineItem.repairId}}">{{lineItem.repairNumber}}</a></td>
+                                                            <td ng-if="lineItem.repairId==null" >{{lineItem.repairNumber}}</td>
+                                                            <td>
+                                                                <div ng-if="lineItem.repairNumber!=null"
+                                                                    class="input-group">
+                                                                    <span class="input-group-addon">$</span>
+                                                                    <input ng-disabled="data._id!=null" type="number"
+                                                                        step="0.01" id="lineItemAmount"
+                                                                        ng-model="lineItem.repairCost"
+                                                                        ng-disabled="data._id!=null">
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <button
+                                                                    ng-if="data._id==null &&($index>0 || data.invoiceType != 'Partner')"
+                                                                    type="button" class="btn btn-danger btn-sm"
+                                                                    ng-click="removeItem($index)">
+                                                                    <span class="glyphicon glyphicon-minus"></span>
+                                                                    Remove
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </fieldset>
-
                             </div>
-
                         </div>
 
-                        <div class="form-actions hidden-print">
-                            <div class="row">
-                                <div
-                                     class="col-sm-offset-4 col-sm-7">
+                        <div ng-if="data._id==null" class="form-actions hidden-print">
+                            <div class="row" ng-readonly="data._id!=null">
+                                <div class="col-sm-offset-4 col-sm-7">
                                     <button type="submit" class="btn btn-primary" ng-click="go()"
-                                            ng-disabled="logItemForm.$invalid">Save
+                                        ng-disabled="logItemForm.$invalid">Save
                                     </button>
                                     <a href="/#/app/log">
                                         <button type="button" class="btn btn-inverse"> Cancel
                                         </button>
                                     </a>
                                 </div>
-
                             </div>
                         </div>
                     </form>
@@ -220,25 +270,22 @@
         </div>
     </div>
 
-
     <!-- IMAGE GALLERY -->
-    <div class="row gallery" data-ui-jq="magnificPopup"
-         data-sn-gallery data-options="{ itemSelector: '.gallery-item'}"
-         data-ui-options="{ delegate: '.thumbnail > a',  type: 'image', gallery: { enabled: true  } }">
-        <div data-ng-repeat="item in images"
-             class="col-sm-6 col-md-3 gallery-item" data-groups='{{item.groups}}'
-             data-title="{{item.name}}">
+    <div class="row gallery" data-ui-jq="magnificPopup" data-sn-gallery data-options="{ itemSelector: '.gallery-item'}"
+        data-ui-options="{ delegate: '.thumbnail > a',  type: 'image', gallery: { enabled: true  } }">
+        <div data-ng-repeat="item in images" class="col-sm-6 col-md-3 gallery-item" data-groups='{{item.groups}}'
+            data-title="{{item.name}}">
             <div class="thumbnail">
                 <a href="{{item.src}}"><img data-ng-src="{{item.src}}" alt="..."></a>
                 <div class="caption hidden-print">
                     <h5 class="mt-0 mb-xs">{{item.name}}</h5>
                     <ul class="post-links">
                         <li><a href="#" ng-click="rotate(item.src,'left')"><span><i
-                                class="fa fa-rotate-left"></i></span></a></li>
+                                        class="fa fa-rotate-left"></i></span></a></li>
                         <li><a href="#" ng-click="rotate(item.src,'left')"><span><i
-                                class="fa fa-rotate-right"></i></span></a></li>
-                        <li><a href="#" data-toggle="modal" data-target="#deleteImageModal"  ng-click="delete(item.src)"><span><i class="fa fa-trash"></i></span></a></li>
-
+                                        class="fa fa-rotate-right"></i></span></a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#deleteImageModal"
+                                ng-click="delete(item.src)"><span><i class="fa fa-trash"></i></span></a></li>
                     </ul>
                 </div>
             </div>
@@ -246,8 +293,8 @@
         <div class="col-sm-6 col-md-3 js-shuffle-sizer"></div>
     </div>
 
-
-    <div class="modal"  id="deleteImageModal" tabindex="-1" role="dialog">
+    <!-- Delete image modal -->
+    <div class="modal" id="deleteImageModal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -255,44 +302,42 @@
 
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to delete this image?  </p>
-                    <p><img src="{{selectedImage}}"   style="max-width: 200px;"/></p>
+                    <p>Are you sure you want to delete this image? </p>
+                    <p><img src="{{selectedImage}}" style="max-width: 200px;" /></p>
                     <p> Delete cannot be undone.</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" ng-click="conFirmDelete()"  data-dismiss="modal">Delete</button>
+                    <button type="button" class="btn btn-primary" ng-click="conFirmDelete()"
+                        data-dismiss="modal">Delete</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
         </div>
     </div>
 
-
-    <!-- Delete Modal -->
-    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
-         aria-labelledby="myModalLabel">
-        <div class="modal-dialog modal-sm" role="document">
+    <!-- Add image modal -->
+    <div class="modal fade" id="addImagesModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-body">
-                    Are you sure you want to delete this log item?
+                    <section class="widget">
+                        <header>
+                            <h5><strong>Image Upload</strong></h5>
+                        </header>
+                        <div class="widget-body">
+                            <form class="dropzone" action="/api/upload" data-dropzone action="#" id="myDropzone">
+                                <input type="hidden" name="itemId" value="{{data._id}}" />
+                            </form>
+                        </div>
+                    </section>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
-                        Cancel
-                    </button>
-                    <button type="button" class="btn btn-success btn-sm" ng-click="deleteLogItem()"
-                            data-dismiss="modal">Delete
+                    <button type="button" class="btn btn-success btn-sm" ng-click="imagesAdded()"
+                        data-dismiss="modal">OK
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
-
-
 </div>
-
-
-
-
-

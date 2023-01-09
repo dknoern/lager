@@ -43,7 +43,8 @@ var ProductSchema = new mongoose.Schema({
         search: String,
         repairNumber: String,
         repairCost: Number,
-        refDoc: String
+        refDoc: String,
+        logId: String
     }]
 });
 

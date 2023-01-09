@@ -8,8 +8,12 @@ function selectCustomer(id){
 function toggleRepairFilter(){
     scopeHolder.toggleRepairFilter();
 }
-</script>
 
+function selectRepair(id){
+   document.location.href = "/#/app/repair/"+id;
+}
+</script>
+</script>
 
 <h1 class="page-title"><span class="fw-semi-bold">Repairs</span></h1>
 
@@ -47,8 +51,6 @@ function toggleRepairFilter(){
       </table>
     </div>
 
-
-
           <!-- Customer Modal -->
           <div class="modal fade" id="customerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
               <div class="modal-dialog modal-lg" role="document">
@@ -78,10 +80,5 @@ function toggleRepairFilter(){
                   </div>
               </div>
           </div>
-
-
-
-
-
   </div>
 </section>
