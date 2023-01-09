@@ -29,14 +29,18 @@ function ImageStorage (opts) {
 ImageStorage.prototype._handleFile = function _handleFile (req, file, cb) {
   var that = this
 
+  console.log('handing image storage');
+
   that.getDestination(req, file, function (err, destination) {
     if (err) return cb(err)
 
     that.getFilename(req, file, function (err, filename) {
       if (err) return cb(err)
 
-      var finalPath = path.join(destination, filename)
-      var outStream = fs.createWriteStream(finalPath)
+      var finalPath = path.join(destination, filename);
+      var outStream = fs.createWriteStream(finalPath);
+
+      console.log('finalPath',finalPath);
 
         var transformer = sharp()
             .resize(2000,2000,{fit:'inside'})
@@ -45,6 +49,7 @@ ImageStorage.prototype._handleFile = function _handleFile (req, file, cb) {
             });
         file.stream.pipe(transformer).pipe(outStream);
 
+        console.log('transformed');
 
         outStream.on('finish', function () {
             cb(null, {
@@ -55,7 +60,9 @@ ImageStorage.prototype._handleFile = function _handleFile (req, file, cb) {
             })
         })
     })
-  })
+  });
+
+  console.log('done handing image storage');
 }
 
 ImageStorage.prototype._removeFile = function _removeFile (req, file, cb) {
