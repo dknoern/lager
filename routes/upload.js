@@ -13,7 +13,7 @@ var storage = imageStorage({
         cb(null, 'uploads/')
     },
     filename: function (req, file, cb) {
-        var itemId = req.param('itemId');
+        var itemId = req.body.itemId;
         var newfilename = itemId + "-" + Math.floor(Date.now() / 1000) + "-" + file.originalname;
         cb(null, newfilename);
     }
@@ -29,7 +29,7 @@ router.route(`/${UPLOAD}`)
         }else{
             console.log('no upload error');
         }
-        var itemId = req.param('itemId');
+        var itemId = req.body.itemId;
         console.log("itemId = " + itemId);
         return res.send("post...");
     })
