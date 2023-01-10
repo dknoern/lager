@@ -6,9 +6,9 @@ var scopeHolder;
     angular.module('singApp.logitem')
         .controller('LogItemCtrl', LogItemCtrl);
 
-    LogItemCtrl.$inject = ['$scope', '$resource', '$http', '$window', '$state', 'jQuery', 'authService'];
+    LogItemCtrl.$inject = ['$scope', '$resource', '$http', '$location','$window', '$state', 'jQuery', 'authService'];
 
-    function LogItemCtrl($scope, $resource, $http, $window, $state, jQuery, authService, $upload) {
+    function LogItemCtrl($scope, $resource, $http, $location, $window, $state, jQuery, authService, $upload) {
         $scope.dtChanged = function (dt) {
             $window.alert('Angular model changed to: ' + dt);
         };
@@ -71,6 +71,20 @@ var scopeHolder;
             $scope.data = {
                 "user": receivedBy
             };
+        }
+
+        // pre-fill single item if comming from repair screen.
+        if ($location.search().itemNumber != null || $location.search().repairNumber != null || $location.search().itemReceived) {
+
+            $scope.data.lineItems =
+                [
+                    {
+                        itemNumber: $location.search().itemNumber,
+                        repairNumber: $location.search().repairNumber,
+                        name: $location.search().itemReceived,
+                        repairId: $location.search().repairId
+                    }
+                ]
         }
 
         $scope.go = function (data, form) {
@@ -139,18 +153,13 @@ var scopeHolder;
                     $scope.images = images;
                 });
 
-
                 Messenger().post({
                     message: "Image deleted.",
                     type: "success"
                 });
-
-
             });
 
         }
-
-        
 
         $scope.getLongDescritpion = function () {
             return 'this is a long description';
