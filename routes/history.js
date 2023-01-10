@@ -1,67 +1,40 @@
 var Product = require('../models/product');
 
-module.exports.updateProductHistory = function(lineItems,status,action,user, refDoc) {
+module.exports.updateProductHistory = async function (lineItems, status, action, user, refDoc) {
 
-
-    // don't log product updates (edits)
-    if("product updated"==action){
-        console.log("action is "+ action + " will NOT log history");
-
-        return;
-    }else{
-        console.log("action is "+ action + " will log history");
-    }
-
-    for (var i = 0; lineItems !=null &&i < lineItems.length; i++) {
+    for (var i = 0; lineItems != null && i < lineItems.length; i++) {
         var lineItem = lineItems[i];
 
-        console.log("product id " + lineItem.productId);
+        if (lineItem.productId != null && lineItem.itemNumber != null) {
 
-        Product.findById(lineItem.productId, function(err, product) {
-            if (err) {
-                console.log("error=" + err);
+            var historyEntry = {
+                user: user,
+                date: Date.now(),
+                action: action
+            };
+
+            if (refDoc != null) {
+                historyEntry.refDoc = refDoc;
             }
 
-            if(product==null){
-              console.log("null product fund for line item " + lineItem.productId);
-            }
-            else{
+            console.log("updating product history for ",lineItem.itemNumber,"status",status);
 
-            console.log("status " + product.status);
+            await Product.findOneAndUpdate({
+                _id: lineItem.productId,
+                status: { $ne: status }
 
-            if (product != null && product.status != status) {
-                var historyEntry = {
-                    user: user,
-                    date: Date.now(),
-                    action: action
-                };
-
-                if(refDoc!=null){
-                    historyEntry.refDoc = refDoc;
+            }, {
+                "$push": {
+                    "history": historyEntry
+                },
+                "$set": {
+                    "status": status,
+                    "lastUpdated": new Date()
                 }
-
-                console.log("updating product " + product._id);
-
-                Product.findOneAndUpdate({
-                    _id: product._id
-                }, {
-                    "$push": {
-                        "history": historyEntry
-                    },
-                    "$set": {
-                        "status": status,
-                        "lastUpdated": new Date()
-                    }
-                }, {
-                    upsert: true
-                }, function(err, doc) {
-                    if (err) {
-                        console.log("ERROR UPDATING STATUS " + err);
-                    }
-                    console.log("updated product status to " + status);
-                });
-            }
-          }
-        });
+            }, {
+                upsert: false, useFindAndModify: false
+            });
+            console.log('updated product', lineItem.productId,'history and set status to',status);
+        }
     }
 }

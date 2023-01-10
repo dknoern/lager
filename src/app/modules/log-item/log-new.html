@@ -222,10 +222,10 @@
                                                                 <div ng-if="lineItem.repairNumber!=null"
                                                                     class="input-group">
                                                                     <span class="input-group-addon">$</span>
-                                                                    <input ng-disabled="data._id!=null" type="number"
+                                                                    <input type="text" type="number"
                                                                         step="0.01" id="lineItemAmount"
                                                                         ng-model="lineItem.repairCost"
-                                                                        ng-disabled="data._id!=null">
+                                                                        size="7">
                                                                 </div>
                                                             </td>
                                                             <td>

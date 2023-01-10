@@ -8,7 +8,6 @@ var format = require('date-format');
 const formatCurrency = require('format-currency');
 
 function formatDate(date) {
-    console.log('formatting date, yo: ' + date);
     if (date == null) return "";
     else {
         return format('yyyy-MM-dd', date);
@@ -152,8 +151,6 @@ router.route('/products')
                 } else {
                     console.log('didnt find existing product with itemNumber ' + req.body.itemNumber);
 
-                    console.log('creating new product');
-
                     product.history = {
                         user: req.user['http://mynamespace/name'],
                         date: Date.now(),
@@ -178,8 +175,7 @@ router.route('/products')
 
         } else {
 
-
-            console.log('updating existing product');
+            console.log('updating existing product',req.body.itemNumber);
 
             Product.findByIdAndUpdate(
                 req.body._id,
@@ -208,15 +204,7 @@ router.route('/products')
 
                             return res.send("product updated");
                         });
-
-
-
                 });
-
-
-
-
-
         }
     })
 
@@ -316,8 +304,6 @@ router.route('/products')
                 else if (status == 'Sale Pending')
                     badgeStyle = "danger" // red
 
-
-
                 var titleAndDial = products[i].title;
                 if(products[i].dial!=null && products[i].dial !=""){
                     titleAndDial += ' - ' + products[i].dial;
@@ -412,7 +398,7 @@ router.route('/products/:product_id')
                 "status": "Deleted"
             }
         }, {
-            upsert: true
+            upsert: true, useFindAndModify: false
         }, function (err, doc) {
             if (err)
                 res.send(err);
@@ -449,7 +435,7 @@ router.route('/products/:product_id/status')
                 "status": req.body.status
             }
         }, {
-            upsert: true
+            upsert: true, useFindAndModify: false
         }, function (err, doc) {
             if (err)
                 res.send(err);
@@ -477,7 +463,7 @@ router.route('/products/:itemNumber/undelete')
                 "status": "In Stock"
             }
         }, {
-            upsert: true
+            upsert: true, useFindAndModify: false
         }, function (err, doc) {
 
             console.log('_id is '+ doc._id);
@@ -511,7 +497,7 @@ router.route('/products/:product_id/notes')
                 "lastUpdated": Date.now()
             }
         }, {
-            upsert: true
+            upsert: true, useFindAndModify: false
         }, function (err, doc) {
             if (err)
                 res.send(err);
