@@ -52,6 +52,10 @@ router.route('/logs')
 
                 return res.send("Saved log item");
             });
+
+            log.lineItems.forEach(lineItem => {
+                updateRepairDetails(lineItem, log.comments);
+            });
         } else {
 
             log.save(function (err, result) {
@@ -283,5 +287,43 @@ function closeRepair(lineItem, comments) {
             }
         });
 }
+
+
+function updateRepairDetails(lineItem, comments) {
+    console.log('updating repair details for repairId', lineItem.repairId, 'or productId', lineItem.productId);
+
+    Repair.updateMany(
+        {
+
+            $and: [
+                {
+                    $or: [
+                        {
+                            _id: lineItem.repairId // _id never null
+                        },
+                        {
+                            $and: [
+                                { itemId: lineItem.productId },
+                                { itemId: { $ne: null } } // itemId could be null if not inventory item
+                            ]
+                        }
+                    ]
+                }
+
+            ]
+        },
+        {
+            repairCost: lineItem.repairCost,
+            repairNotes: comments
+        }, function (err, doc) {
+            if (err) {
+                console.log(err)
+            }
+            else {
+                console.log('updated', doc.nModified, 'repairs for repairId', lineItem.repairId, 'or productId', lineItem.productId);
+            }
+        });
+}
+
 
 module.exports = router;
