@@ -145,7 +145,8 @@
             var logItemUrl = "/#/app/log-item"
             + "?itemNumber=" + itemNumber
             + "&repairNumber=" + repairNumber
-            + "&itemReceived=" + itemReceived;
+            + "&itemReceived=" + itemReceived
+            + "&repairId=" + $scope.data._id;
 
             $window.location=logItemUrl;
         }
