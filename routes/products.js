@@ -178,12 +178,18 @@ router.route('/products')
             Product.findByIdAndUpdate(
                 req.body._id,
                 product, {
-                    upsert: true
-                }, function (err, doc) {
-                    if (err) return res.send(500, {
+                upsert: true, useFindAndModify: false
+            }, function (err, doc) {
+                if (err) {
+                    return res.send(500, {
                         error: err
                     });
-                });
+                } else {
+                    return res.json({
+                        message: 'product created'
+                    });
+                }
+            });
         }
     })
 
