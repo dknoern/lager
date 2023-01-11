@@ -2,10 +2,6 @@ var Product = require('../models/product');
 
 module.exports.updateProductHistory = async function (lineItems, status, action, user, refDoc) {
 
-    console.log("updatingProductHistory for ",JSON.stringify(lineItems),status,action,user,refDoc);
-
-
-
     for (var i = 0; lineItems != null && i < lineItems.length; i++) {
         var lineItem = lineItems[i];
 
@@ -20,8 +16,6 @@ module.exports.updateProductHistory = async function (lineItems, status, action,
             if (refDoc != null) {
                 historyEntry.refDoc = refDoc;
             }
-
-            console.log("updating product history for productId",lineItem.productId,"status",status);
 
             await Product.findOneAndUpdate({
                 _id: lineItem.productId,
