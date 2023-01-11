@@ -234,7 +234,7 @@ function receiveProduct(log, lineItem) {
                     customerName: log.customerName,
                     comments: log.comments,
                     repairCost: log.repairCost,
-                    logId: log._id
+                    refDoc: log._id
                 }
             },
             "$set": updates

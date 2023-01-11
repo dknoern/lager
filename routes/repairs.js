@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var Repair = require('../models/repair');
-var Product = require('../models/product');
 var history = require('./history');
 const checkJwt = require('./jwt-helper').checkJwt;
 var format = require('date-format');
@@ -28,7 +27,6 @@ var ses = new aws.SES({
 var to = emailAddresses.to;
 var bcc = emailAddresses.bcc;
 
-
 function formatDate(date) {
     if (date == null) return "";
     else {
@@ -36,49 +34,22 @@ function formatDate(date) {
     }
 }
 
-function upcertRepair(req,res, repair){
-    if(req.body._id ==null) {
-        var action = "in repair";
-        if(repair.vendor != null){
-            action += " - " + repair.vendor;
-        }
-        history.updateProductHistory([{productId: repair.itemId}], "Repair", action, req.user['http://mynamespace/name'],null);
-
-        repair.save(function(err) {
-            if (err) {
-                res.send(err);
-            }
-            return res.send("repair saved");
-        });
-
-    } else {
-
-        console.log("repair_.id is NOT null");
-
-        Repair.findOneAndUpdate({
-            _id: repair._id
-        }, repair, {
-            upsert: true
-        }, function(err, doc) {
-            if (err) return res.send(500, {
-                error: err
-            });
-            return res.send("repair saved");
-        });
-    }
+function isEmpty(str) {
+    return (!str || str.length === 0 );
 }
 
 router.route('/repairs')
-    .post(checkJwt, function(req, res) {
+    .post(checkJwt, function (req, res) {
 
+        const newRepair = (req.body._id == null);
         var repair = new Repair();
 
-        console.log("setting repair_id from body: " + req.body._id);
-        console.log("existing id is : " + repair._id);
-
-        repair._id = req.body._id;
-
-        console.log("after setting, repair._id = " + repair._id);
+        if (newRepair) {
+            console.log('creating new repair, repairNumber', req.body.repairNumber);
+        } else {
+            repair._id = req.body._id;
+            console.log('updating existing repair', repair._id, 'repairNumber', req.body.repairNumber);
+        }
 
         repair.dateOut = req.body.dateOut;
         repair.expectedReturnDate = req.body.expectedReturnDate;
@@ -100,47 +71,45 @@ router.route('/repairs')
         repair.repairCost = req.body.repairCost;
         repair.customerApprovedDate = req.body.customerApprovedDate;
 
-
-        if(repair.itemNumber!=null&&repair.itemNumber!=""&&repair.repairNumber!=null&&repair.repairNumber!="" && repair.repairNumber!=repair.itemNumber){
+        if (!isEmpty(repair.itemNumber) && !isEmpty(repair.itemNumber) && repair.repairNumber != repair.itemNumber) {
             return res.send(500, {
                 error: "for inventory item, repair number must match item number"
             }
             );
-
         }
 
         else {
-
-
-            console.log('saving repair ' + repair.repairNumber);
+            console.log('saving repair', repair.repairNumber);
             repair.search = repair.repairNumber + " " + repair.itemNumber + " " + repair.description + " " + formatDate(repair.dateOut)
                 + " " + formatDate(repair.expectedReturnDate) + " " + formatDate(repair.returnDate)
                 + " " + repair.customerFirstName + " " + repair.customerLastName + " " + repair.vendor;
 
+            Repair.findOneAndUpdate({
+                _id: repair._id
+            }, repair, {
+                new: true, upsert: true, useFindAndModify: false
+            }, function (err, doc) {
+                if (err) {
+                    return res.send(500, {
+                        error: err
+                    });
 
-            upcertRepair(req, res, repair);
+                } else {
+                    if (newRepair) {
+                        var action = "in repair";
+                        if (repair.vendor != null) {
+                            action += " - " + repair.vendor;
+                        }
 
-
-            // update repair cost in item
-            /*
-            if (repair.itemNumber != null) {
-                Product.findOneAndUpdate({
-                    _id: repair.itemId
-                }, {
-                    "$set": {
-                        "repairCost": repair.repairCost
+                        history.updateProductHistory([{ productId: repair.itemId }], "Repair", action, req.user['http://mynamespace/name'], doc._id);
                     }
-                }, {
-                    upsert: true
-                }, function (err, doc) {
-                    if (err)
-                        console.log(err);
-                    else
-                        console.log("repair cost updated");
-                });
-            }
-            */
+                }
 
+                const message = 'repair ' + doc._id + ' saved';
+                console.log(message);
+
+                return res.send(message);
+            });
         }
     })
 
@@ -188,8 +157,6 @@ router.route('/repairs')
                 res.send(err);
 
             for (var i = 0; i < repairs.length; i++) {
-
-
                 var customerName = "";
                 if (repairs[i].customerFirstName) customerName += repairs[i].customerFirstName;
                 if (repairs[i].customerFirstName && repairs[i].customerLastName) customerName += " ";
@@ -248,9 +215,6 @@ router.route('/repairs')
         });
     });
 
-
-
-
 router.route('/repairs/:repair_id/print')
 //  .get(checkJwt, function(req, res) {
     .get( function(req, res) {
@@ -263,41 +227,12 @@ router.route('/repairs/:repair_id/print')
                 res.send(err);
             }
             else {
-
-                /*
-
-                if (invoice.invoiceType == "Memo") invoice.logo = "http://demesyinventory.com/assets/images/logo/memo-logo.png";
-                else invoice.logo = "http://demesyinventory.com/assets/images/logo/invoice-logo.png";
-
-                invoice.subtotalFMT = formatCurrency(invoice.subtotal, opts);
-                invoice.taxFMT = formatCurrency(invoice.tax, opts);
-                invoice.shippingFMT = formatCurrency(invoice.shipping, opts);
-                invoice.totalFMT = formatCurrency(invoice.total, opts);
-                invoice.dateFMT =  format('MM/dd/yyyy', invoice.date);
-
-                console.log("shipping: "+ invoice.shipping + " formatted "+ invoice.shippingFMT);
-
-
-
-
-                for (var i = 0; i < invoice.lineItems.length; i++) {
-
-                    invoice.lineItems[i].nameFMT = invoice.lineItems[i].name.toUpperCase();
-                    invoice.lineItems[i].amountFMT = formatCurrency(invoice.lineItems[i].amount, opts);
-                    invoice.lineItems[i].itemNumberFMT = invoice.lineItems[i].itemNumber+ format('dd', invoice.date);
-                }
-                */
-
                 fs.readFile('./src/app/modules/repair/repair-content.html', 'utf-8', function (err, template) {
                     if (err) throw err;
                     var output = mustache.to_html(template, {data: repair});
                     res.send(output);
                 });
-
-
-
             }
-
         });
     });
 
@@ -311,7 +246,6 @@ router.route('/repairs/:repair_id')
         });
     });
 
-
 router.route('/repairs/products/:item_id')
  .get(checkJwt, function(req, res) {
 
@@ -321,7 +255,6 @@ router.route('/repairs/products/:item_id')
             res.json(ret);
         });
     });
-
 
 router.route('/repairs/:repair_id/return')
     .put(checkJwt, function(req, res) {
@@ -338,7 +271,6 @@ router.route('/repairs/:repair_id/return')
 
                     history.updateProductHistory([{productId: repair.itemId}], "In Stock", "back from repair", req.user['http://mynamespace/name'],null);
 
-
                     res.json({
                         message: 'Repair updated!'
                     });
@@ -351,14 +283,12 @@ router.route('/repairs/:repair_id/return')
         });
     });
 
-
 router.route('/repairs/email')
     .post(checkJwt, function(req, res) {
 
         var to = req.body.emailAddresses.split(/[ ,\n]+/);
 
         console.log("emailing repair " + req.body.invoiceId + " to " + JSON.stringify(to));
-
 
         var from = 'Marijo@demesy.com';
 

@@ -2,7 +2,6 @@ var express = require('express');
 var mongoose = require('mongoose');
 var router = express.Router();
 var Product = require('../models/product');
-var Invoice = require('../models/invoice');
 const checkJwt = require('./jwt-helper').checkJwt;
 var format = require('date-format');
 const formatCurrency = require('format-currency');
@@ -138,7 +137,7 @@ router.route('/products')
         // is existing item?
         if (req.body._id == null) {
 
-            console.log('item  specified, looking for existing item');
+            console.log('saving product with itemNumber',product.itemNumber);
 
             Product.findOne({'itemNumber': req.body.itemNumber}, '_id lastUpdated', function (err, dupeProduct) {
                 if (err) return res.send(500, {error: err});
@@ -149,7 +148,6 @@ router.route('/products')
                     return res.send(409, {error: 'error: item number ' + req.body.itemNumber + ' already exists'});
 
                 } else {
-                    console.log('didnt find existing product with itemNumber ' + req.body.itemNumber);
 
                     product.history = {
                         user: req.user['http://mynamespace/name'],
@@ -164,7 +162,7 @@ router.route('/products')
                             return res.send(err);
                         } else {
 
-                            console.log("created product, id = " + createdProduct._id + " item number is " + createdProduct.itemNumber);
+                            console.log("created new product, id = " + createdProduct._id + " for item number " + createdProduct.itemNumber);
                             return res.json({
                                 message: 'product created'
                             });
@@ -185,25 +183,6 @@ router.route('/products')
                     if (err) return res.send(500, {
                         error: err
                     });
-
-                    // update info inside any invoices
-                    
-                        Invoice.updateMany({'lineItems.productId':req.body._id},
-                            {$set: {
-                                'lineItems.$.itemNumber': req.body.itemNumber,
-                                'lineItems.$.name': req.body.title,
-                                'lineItems.$.longDesc': longDesc,
-                                'lineItems.$.serialNumber': req.body.serialNo
-                            }
-                        },{multi: true}, function (err, doc){
-                        if (err){
-                            console.log("ERROR: " + err);
-                        }
-
-                        console.log('updated', doc.nModified,'invoices for product',req.body.itemNumber);
-
-                            return res.send("product updated");
-                        });
                 });
         }
     })

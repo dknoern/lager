@@ -639,18 +639,19 @@
                                                 <td>{{historyEntry.date | date : "MM/dd/y"}}</td>
                                                 <td>{{historyEntry.user}}</td>
                                                 <td>{{historyEntry.action}}
-                                                    <span ng-if ="historyEntry.refDoc!=null">
+                                                    <span ng-if ="historyEntry.refDoc!=null && historyEntry.action.startsWith('in repair')">
+                                                        - <a href="/#/app/repair/{{historyEntry.refDoc}}">repair</a>
+                                                    </span>
+                                                    <span ng-if ="historyEntry.refDoc!=null && !historyEntry.action.startsWith('in repair') && !historyEntry.action.startsWith('received')">
                                                         <a href="/#/app/invoice/{{historyEntry.refDoc}}">{{historyEntry.refDoc}}</a>
                                                     </span>
-
-                                                    <span ng-if ="historyEntry.logId!=null">
-                                                        - <a href="/#/app/log-item/{{historyEntry.logId}}">log</a>
+                                                    <span ng-if ="historyEntry.refDoc!=null && historyEntry.action.startsWith('received')">
+                                                        - <a href="/#/app/log-item/{{historyEntry.refDoc}}">log</a>
                                                     </span>
                                                 </td>
                                             </tr>
                                             </tbody>
                                         </table>
-
 
                                         <div ng-if ="data._id!=null">
                                         <div class="form-group">
