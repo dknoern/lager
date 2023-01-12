@@ -24,10 +24,8 @@ var upload = multer({ storage: storage });
 router.route(`/${UPLOAD}`)
     .post(upload.single('file'), function (req, res, err) {
 
-        if(err!=null){
+        if(err!=null && err.message!=null){
             console.log('upload error',err.message);
-        }else{
-            console.log('no upload error');
         }
         var itemId = req.body.itemId;
         console.log("itemId = " + itemId);

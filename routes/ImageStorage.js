@@ -45,7 +45,7 @@ ImageStorage.prototype._handleFile = function _handleFile (req, file, cb) {
         var transformer = sharp()
             .resize(2000,2000,{fit:'inside'})
             .on('info', function(info) {
-                console.log('Image height is ' + info.height);
+                console.log('image resized to',info.width,'x',info.height);
             });
         file.stream.pipe(transformer).pipe(outStream);
 

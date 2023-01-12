@@ -104,6 +104,7 @@
                         <li ng-if="'In Stock' == data.status"><a ng-click="toggleStatus('In Stock','Sale Pending')">Hold for Sale Pending</a></li>
                         <li ng-if="'Sale Pending' == data.status"><a ng-click="toggleStatus('In Stock','Sale Pending')">Release from Sale Pending</a></li>
 
+                        <li ng-if="'In Stock' == data.status"><a ng-click="toggleStatus('In Stock','Incoming')">Incoming</a></li>
 
                         <li class="divider"></li>
                         <li><a href="#" data-toggle="modal" data-target="#deleteModal">Delete</a>
