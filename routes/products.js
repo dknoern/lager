@@ -229,7 +229,7 @@ router.route('/products')
 
         } else if (status == "Out") {
             // value of "Out" maps to "Sold" and "Memo"
-            statusFilter = { $in: ["Sold","Memo"] }
+            statusFilter = { $in: ["Sold","Memo","Incoming"] }
 
         }else {
             statusFilter = {
@@ -288,6 +288,8 @@ router.route('/products')
                     badgeStyle = "warning" // yellow
                 else if (status == 'Sale Pending')
                     badgeStyle = "danger" // red
+                else if (status == 'Incoming')
+                    badgeStyle = "info" // aqua
 
                 var titleAndDial = products[i].title;
                 if(products[i].dial!=null && products[i].dial !=""){

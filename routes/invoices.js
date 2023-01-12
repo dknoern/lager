@@ -511,9 +511,11 @@ router.route('/invoices/email')
                                 }
                             }
                             , function (err, data) {
-                                if (err) throw err
-                                console.log('Email sent:');
-                                console.log(data);
+                                if (err) {
+
+                                    console.log("error sending email:", err);
+                                    throw err;
+                                }
                             });
                     });
                 }
