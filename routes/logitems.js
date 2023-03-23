@@ -117,8 +117,8 @@ router.route('/logs')
                                 logs[i].receivedFrom,
                                 logs[i].customerName,
                                 logs[i].lineItems.map(function (k) { return k.name }).join(","),
-                                logs[i].lineItems.map(function (k) { return k.repairNumber }).join(" "),
                                 logs[i].lineItems.map(function (k) { return k.itemNumber }).join(" "),
+                                logs[i].lineItems.map(function (k) { return k.repairNumber }).join(" "),
                                 logs[i].user,
                                 logs[i].comments
                             ]
@@ -294,23 +294,7 @@ function updateRepairDetails(lineItem, comments) {
 
     Repair.updateMany(
         {
-
-            $and: [
-                {
-                    $or: [
-                        {
-                            _id: lineItem.repairId // _id never null
-                        },
-                        {
-                            $and: [
-                                { itemId: lineItem.productId },
-                                { itemId: { $ne: null } } // itemId could be null if not inventory item
-                            ]
-                        }
-                    ]
-                }
-
-            ]
+            _id: lineItem.repairId
         },
         {
             repairCost: lineItem.repairCost,
