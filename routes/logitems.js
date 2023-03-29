@@ -42,7 +42,18 @@ router.route('/logs')
 
             Log.findOneAndUpdate({
                 _id: req.body._id
-            }, log, {
+            }, 
+            {
+                // don't update date
+                "$set": {
+                    "receivedFrom": log.receivedFrom,
+                    "customerName": log.customerName,
+                    "user": log.user,
+                    "comments": log.comments,
+                    "lineItems": log.lineItems
+                }
+            },
+            {
                 upsert: false, useFindAndModify:false
             }, function (err, doc) {
                 if (err) 
