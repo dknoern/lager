@@ -7,7 +7,7 @@
 
     OutCtrl.$inject = ['$scope', '$resource', 'DTOptionsBuilder', 'jQuery', 'authService', '$window'];
 
-    function OutCtrl($scope, jQuery, authService, $window) {
+    function OutCtrl($scope, $resource, DTOptionsBuilder, jQuery, authService, $window) {
 
         var vm = this;
         vm.auth = authService;
