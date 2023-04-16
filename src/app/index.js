@@ -20,6 +20,8 @@
         'singApp.repair',
         'singApp.repairs',
         'singApp.reports',
+        'singApp.out',
+        'singApp.outitem',
         'singApp.log',
         'singApp.logitem'
 

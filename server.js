@@ -59,6 +59,9 @@ app.use('/api', reports);
 var logitems = require('./routes/logitems');
 app.use('/api', logitems);
 
+var out = require('./routes/out');
+app.use('/api', out);
+
 app.use('/', express.static(__dirname +  '/'));
 
 app.get('/*', function(req, res) {

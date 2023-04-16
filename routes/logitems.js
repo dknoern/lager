@@ -50,7 +50,8 @@ router.route('/logs')
                     "customerName": log.customerName,
                     "user": log.user,
                     "comments": log.comments,
-                    "lineItems": log.lineItems
+                    "lineItems": log.lineItems,
+                    "search": log.search
                 }
             },
             {

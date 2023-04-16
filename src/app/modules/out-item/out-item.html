@@ -1,0 +1,178 @@
+<style>
+    .form-group.required .control-label:after {
+        content: " *";
+        color: darkred;
+    }
+</style>
+
+<div data-ng-controller="OutItemCtrl">
+
+    <div class="row">
+        <div class="col-md-10">
+            <h1 class="page-title"><span class="fw-semi-bold">Log Out</span></h1>
+        </div>
+        <div class="col-md-2">
+
+            <div ng-if="data._id">
+                <div class="btn-group hidden-print" data-dropdown>
+                    <button class="btn btn-success dropdown-toggle" data-dropdown-toggle data-original-title=""
+                        title="">
+                        &nbsp; Action &nbsp;
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+
+                    <ul class="dropdown-menu">
+                        <li><a href="#" data-toggle="modal" data-toggle="modal" data-target="#addImagesModal">Add
+                                Images</a></li>
+                        <li><a ng-click="print()"><i class="fa fa-print"></i> Print</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <section class="widget">
+                <div class="widget-body">
+                    <form class="form-horizontal" role="form" name="logItemForm">
+                        <div class="row">
+                            <div class="col-sm-12">
+
+                                <fieldset>
+
+                                    <div class="form-group" ng-if="data.date!=null">
+                                        <label for="date" class="col-sm-3 control-label">Date</label>
+                                        <div class="col-sm-8">
+
+                                            <input type="text" id="date" class="form-control"
+                                                value="{{data.date | date : 'MM/dd/y'}}" readonly="readonly">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="sentTo" class="col-sm-3 control-label">Sent
+                                            To</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="customerName" class="form-control"
+                                                ng-model="data.sentTo">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="sentTo" class="col-sm-3 control-label">Description</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="customerName" class="form-control"
+                                                ng-model="data.description">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="receivedBy" class="col-sm-3 control-label">Sent
+                                            By</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="receivedBy" class="form-control"
+                                                ng-model="data.user">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="comments" class="col-sm-3 control-label">Note/Comment</label>
+                                        <div class="col-sm-8">
+                                            <textarea id="comments" rows=6 cols="40"
+                                                ng-model="data.comments"></textarea>
+                                        </div>
+                                    </div>
+
+                                </fieldset>
+                            </div>
+                        </div>
+
+                        <div class="form-actions hidden-print">
+                            <div class="row" ng-readonly="data._id!=null">
+                                <div class="col-sm-offset-4 col-sm-7">
+                                    <button type="submit" class="btn btn-primary" ng-click="go()"
+                                        ng-disabled="logItemForm.$invalid">Save
+                                    </button>
+                                    <a href="/#/app/log">
+                                        <button type="button" class="btn btn-inverse"> Cancel
+                                        </button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- IMAGE GALLERY -->
+    <div class="row gallery" data-ui-jq="magnificPopup" data-sn-gallery data-options="{ itemSelector: '.gallery-item'}"
+        data-ui-options="{ delegate: '.thumbnail > a',  type: 'image', gallery: { enabled: true  } }">
+        <div data-ng-repeat="item in images" class="col-sm-6 col-md-3 gallery-item" data-groups='{{item.groups}}'
+            data-title="{{item.name}}">
+            <div class="thumbnail">
+                <a href="{{item.src}}"><img data-ng-src="{{item.src}}" alt="..."></a>
+                <div class="caption hidden-print">
+                    <h5 class="mt-0 mb-xs">{{item.name}}</h5>
+                    <ul class="post-links">
+                        <li><a href="#" ng-click="rotate(item.src,'left')"><span><i
+                                        class="fa fa-rotate-left"></i></span></a></li>
+                        <li><a href="#" ng-click="rotate(item.src,'left')"><span><i
+                                        class="fa fa-rotate-right"></i></span></a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#deleteImageModal"
+                                ng-click="delete(item.src)"><span><i class="fa fa-trash"></i></span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-3 js-shuffle-sizer"></div>
+    </div>
+
+    <!-- Delete image modal -->
+    <div class="modal" id="deleteImageModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete image</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this image? </p>
+                    <p><img src="{{selectedImage}}" style="max-width: 200px;" /></p>
+                    <p> Delete cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" ng-click="conFirmDelete()"
+                        data-dismiss="modal">Delete</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add image modal -->
+    <div class="modal fade" id="addImagesModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <section class="widget">
+                        <header>
+                            <h5><strong>Image Upload</strong></h5>
+                        </header>
+                        <div class="widget-body">
+                            <form class="dropzone" action="/api/upload" data-dropzone action="#" id="myDropzone">
+                                <input type="hidden" name="itemId" value="{{data._id}}" />
+                            </form>
+                        </div>
+                    </section>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success btn-sm" ng-click="imagesAdded()"
+                        data-dismiss="modal">OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
