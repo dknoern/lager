@@ -136,21 +136,6 @@
             });
         }
 
-        $scope.toggleOutForRepair = function() {
-
-            var itemNumber =  $scope.data.itemNumber || '';
-            var repairNumber =  $scope.data.repairNumber || '';
-            var itemReceived =  $scope.data.description || '';
-
-            var logItemUrl = "/#/app/log-item"
-            + "?itemNumber=" + itemNumber
-            + "&repairNumber=" + repairNumber
-            + "&itemReceived=" + itemReceived
-            + "&repairId=" + $scope.data._id;
-
-            $window.location=logItemUrl;
-        }
-
         $scope.customerApproved = function() {
 
             if($scope.data.customerApprovedDate == null)
