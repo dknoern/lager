@@ -40,7 +40,7 @@
 
                 Messenger().post({
                     message: "unable to email repair: " + response.data.error,
-                    type: "error",
+                    type: "danger",
                 });
 
             });
