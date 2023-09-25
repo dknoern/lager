@@ -107,35 +107,46 @@ async function upsertInvoice(req,res){
         console.log("new invoice ID is "+ invoice._id);
     }
 
-    invoice.tax = await calcTax(invoice);
-    invoice.total = invoice.subtotal + invoice.tax + invoice.shipping;
+    invoice.tax = await calcTax(invoice).then(result => {
 
-    // update item status to sold, but only if NOT Partner
-    if(invoice.invoiceType!="Partner"){
-        var itemStatus = "Sold";
-        var itemAction = "sold item";
+        invoice.tax = result;
 
-        if ("Memo" == invoice.invoiceType) {
-            itemStatus = "Memo";
-            itemAction = "item memo"
+        console.log("invoice tax calculated is " + invoice.tax);
+
+        invoice.total = invoice.subtotal + invoice.tax + invoice.shipping;
+
+        // update item status to sold, but only if NOT Partner
+        if(invoice.invoiceType!="Partner"){
+            var itemStatus = "Sold";
+            var itemAction = "sold item";
+    
+            if ("Memo" == invoice.invoiceType) {
+                itemStatus = "Memo";
+                itemAction = "item memo"
+            }
+            history.updateProductHistory(req.body.lineItems, itemStatus, itemAction, req.user['http://mynamespace/name'],invoice._id);
         }
-        history.updateProductHistory(req.body.lineItems, itemStatus, itemAction, req.user['http://mynamespace/name'],invoice._id);
-    }
+    
+        // end try
+        invoice.search = buildSearchField(invoice);
 
-    // end try
-    invoice.search = buildSearchField(invoice);
-
-              var query = {
-                  _id: invoice._id
-              };
-              Invoice.findOneAndUpdate(query, invoice, {
-                  upsert: true, useFindAndModify:false
-              }, function(err, doc) {
-                  if (err) return res.send(500, {
-                      error: err
-                  });
-                  return res.send("invoice saved");
-              });
+        var query = {
+            _id: invoice._id
+        };
+        Invoice.findOneAndUpdate(query, invoice, {
+            upsert: true, useFindAndModify: false
+        }, function (err, doc) {
+            if (err) return res.send(500, {
+                error: err
+            });
+            return res.send("invoice saved");
+        });
+    }, error => {
+        console.log("calcTax call failure: " + error);
+        res.send(500, {
+            error: "Failure calculating tax."
+        });
+    });
 }
 
 
@@ -587,19 +598,12 @@ async function calcTax(invoice){
 
     var totalTax = 0.0;
 
-    await client.createOrAdjustTransaction({ model: taxRequest }).then(result => {
+    result = await client.createOrAdjustTransaction({ model: taxRequest });
+    result.summary.forEach(item => {
+        totalTax += item.tax;   
+    });
 
-        result.summary.forEach(item => {
-            totalTax += item.tax;   
-        });
-
-        console.log("total tax from Avalara for invoice",invoice._id,"is",totalTax);
-
-    },error=>{
-        console.log("Avalara tax call failure: "+ error);
-    }
-    );
-
+    console.log("total tax from Avalara for invoice",invoice._id,"is",totalTax);
     return totalTax;
 }
 
