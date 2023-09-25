@@ -42,7 +42,7 @@ var scopeHolder;
 
                 Messenger().post({
                     message: "unable to email invoice: " + response.data.error,
-                    type: "error",
+                    type: "danger",
                 });
 
             });
@@ -306,7 +306,7 @@ var scopeHolder;
             }, function errorCallback(response) {
                 Messenger().post({
                     message: 'Error saving invoice ' +$scope.data._id + ": "+ response.data.error,
-                    type: "success",
+                    type: "danger",
                     showCloseButton: true
                 }
             );

@@ -170,7 +170,7 @@
                 else{
                     Messenger().post({
                         message: response.data.error,
-                        type: "error",
+                        type: "danger",
                     });
                 }
 
