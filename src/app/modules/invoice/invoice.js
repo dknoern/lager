@@ -304,6 +304,12 @@ var scopeHolder;
                 console.log(response.statusText);
                 $state.go('app.invoices');
             }, function errorCallback(response) {
+                Messenger().post({
+                    message: 'Error saving invoice ' +$scope.data._id + ": "+ response.data.error,
+                    type: "success",
+                    showCloseButton: true
+                }
+            );
                 console.log(response.statusText);
             });
         }
