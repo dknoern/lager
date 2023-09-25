@@ -144,7 +144,7 @@ async function upsertInvoice(req,res){
     }, error => {
         console.log("calcTax call failure: " + error);
         res.send(500, {
-            error: "Failure calculating tax."
+            error: "" + error
         });
     });
 }
@@ -599,6 +599,11 @@ async function calcTax(invoice){
     var totalTax = 0.0;
 
     result = await client.createOrAdjustTransaction({ model: taxRequest });
+
+    if(result.error != null){
+        throw new Error(result.error.message);
+    }
+
     result.summary.forEach(item => {
         totalTax += item.tax;   
     });
