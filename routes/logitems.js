@@ -32,10 +32,11 @@ router.route('/logs')
 
         log.search = (formatDate(new Date()) + " "
             + log.receivedFrom + " "
-            + log.customerName + " "
+            + valueOrBlank(log.customerName) + " "
             + log.lineItems.map(function (k) { return k.name }).join(",") + " "
-            + log.lineItems.map(function (k) { return k.repairNumber }).join(" ") + " "
-            + log.comments).replace(/\s+/g, ' ').trim();
+            + log.lineItems.map(function (k) { return valueOrBlank(k.itemNumber) }).join(" ") + " "
+            + log.lineItems.map(function (k) { return valueOrBlank(k.repairNumber) }).join(" ") + " "
+            + valueOrBlank(log.comments)).replace(/\s+/g, ' ').trim();
 
         if (req.body._id != null) {
             log._id = req.body._id;
@@ -187,7 +188,7 @@ function receiveProduct(log, lineItem) {
                 sold = true;
             } else if (element.action == 'item returned') {
                 sold = false;
-            } else if (element.action == 'in repair') {
+            } else if (element.action.startsWith('in repair')) {
                 repair = true;
             } else if (element.action == 'item memo') {
                 memo = true;
@@ -321,5 +322,10 @@ function updateRepairDetails(lineItem, comments) {
         });
 }
 
+function valueOrBlank(value){
+    if(value !=null) return value;
+    return "";
+  
+}
 
 module.exports = router;
