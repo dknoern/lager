@@ -113,7 +113,19 @@ router.route('/logs')
 
         var sortClause = { "date": -1 };
 
-        Log.find({ 'search': new RegExp(search, 'i') }).
+        // search individual fields, composite search field was missing itemNumber for some time.
+        //Log.find({ 'search': new RegExp(search, 'i') }).
+
+        Log.find({ 
+            $or:[
+                {'receivedFrom': new RegExp(search, 'i')},
+                {'customerName': new RegExp(search, 'i')},
+                {'comments': new RegExp(search, 'i')},
+                {'lineItems': { $elemMatch: {"name": new RegExp(search, 'i')}}},
+                {'lineItems': { $elemMatch: {"itemNumber": new RegExp(search, 'i')}}},
+                {'lineItems': { $elemMatch: {"repairNumber": new RegExp(search, 'i')}}},
+            ]
+        }).
             sort(sortClause).skip(parseInt(start)).limit(parseInt(length))
             .exec(function (err, logs) {
 
