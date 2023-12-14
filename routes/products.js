@@ -130,14 +130,15 @@ router.route('/products')
             "seller": req.body.seller,
             "sellerType": req.body.sellerType,
             "lastUpdated": Date.now(),
-            "status": req.body.status,
+            // dont allow update of status, must be driven by action
+            //"status": req.body.status,
             "search": req.body.itemNumber + " " + req.body.title + " " + req.body.serialNo + " " + req.body.modelNumber
         }
 
         // is existing item?
         if (req.body._id == null) {
 
-            console.log('saving product with itemNumber',product.itemNumber);
+            console.log('saving new product with itemNumber',product.itemNumber);
 
             Product.findOne({'itemNumber': req.body.itemNumber}, '_id lastUpdated', function (err, dupeProduct) {
                 if (err) return res.send(500, {error: err});
@@ -155,6 +156,8 @@ router.route('/products')
                         action: "entered",
                         search: formatDate(new Date()) + " " + req.user['http://mynamespace/name']
                     };
+
+                    product.status = 'In Stock';
 
                     Product.create(product, function (err,createdProduct) {
                         if (err) {
