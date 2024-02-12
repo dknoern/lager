@@ -115,8 +115,8 @@ async function upsertInvoice(req,res){
 
         invoice.total = invoice.subtotal + invoice.tax + invoice.shipping;
 
-        // update item status to sold, but only if NOT Partner
-        if(invoice.invoiceType!="Partner"){
+        // update item status to sold, but only if NOT Partner and NOT Estimate
+        if(invoice.invoiceType!="Partner" && invoice.invoiceType!="Estimate"){
             var itemStatus = "Sold";
             var itemAction = "sold item";
     
@@ -541,7 +541,11 @@ async function calcTax(invoice){
     console.log('calculating tax for invoice',invoice._id);
 
 
-    if(invoice.shipState == '' || invoice.shipState == null){
+    if(invoice.invoiceType=='Estimate'){
+        console.log('estimate, will not calculate tax');
+        return 0;
+    }
+    else if(invoice.shipState == '' || invoice.shipState == null){
         console.log("state not specified, will not calculate tax");
         return 0;
     }else if (invoice.taxExempt) {

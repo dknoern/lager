@@ -228,10 +228,11 @@
 
                                             <div class="col-sm-8">
 
-                                                <select id="invoiceType" class="selectpicker" data-selectpicker data-width="auto" ng-model="data.invoiceType" ng-readonly="'Partner' == data.invoiceType" required>
+                                                <select id="invoiceType" class="selectpicker" data-selectpicker data-width="auto" ng-model="data.invoiceType" ng-readonly="'Partner' == data.invoiceType" required ng-change="computeTotals()">
                                                     <option></option>
                                                     <option>Invoice</option>
                                                     <option>Memo</option>
+                                                    <option>Estimate</option>
                                                     <option ng-if="'Partner' == data.invoiceType">Partner</option>
                                                     <option ng-if="'Consignment' == data.invoiceType">Consignment</option>
                                                 </select>
