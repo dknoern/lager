@@ -148,7 +148,7 @@ var scopeHolder;
             $scope.data.subtotal = total;
 
             var taxRate = 0.00;
-            if ($scope.data.shipState == "TX" && $scope.data.taxExempt == false)
+            if ($scope.data.shipState == "TX" && $scope.data.taxExempt == false &&  $scope.data.invoiceType == 'Invoice')
                 taxRate = 0.0825;
             $scope.data.tax = taxRate * total;
             $scope.data.total = $scope.data.subtotal + $scope.data.tax + $scope.data.shipping;
