@@ -10,3 +10,4 @@ mongoimport --uri=$DB/lager -c invoices --file $WORKDIR/invoices.json
 mongoimport --uri=$DB/lager -c repairs --file $WORKDIR/repairs.json
 mongoimport --uri=$DB/lager -c returns --file $WORKDIR/returns.json
 mongoimport --uri=$DB/lager -c logs --file $WORKDIR/logs.json
+mongoimport --uri=$DB/lager -c outs --file $WORKDIR/outs.json
