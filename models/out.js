@@ -7,7 +7,9 @@ var OutSchema = new mongoose.Schema({
     comments: String,
     user: String,
     search: String,
-
+    signature: String,
+    signatureDate: Date,
+    signatureUser: String
 });
 
 module.exports = mongoose.model('Out', OutSchema);

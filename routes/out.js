@@ -151,4 +151,26 @@ router.route('/outs/:out_id')
     });
 
 
+    // e-sign
+    router.route('/outs-sign')
+        .post(checkJwt, function (req, res) {
+            Out.findOneAndUpdate(
+                { "_id": req.body.outId },
+                {
+                    "$set": {
+                        "signatureDate": Date.now(),
+                        "signatureUser": req.user['http://mynamespace/name'],
+                        "signature": req.body.signature
+                    }
+                }, {
+                "new": true,
+                "upsert": false,
+                "useFindAndModify": false
+            }, function (err, doc) {
+                if (err)
+                    res.send(err);
+                res.json(doc);
+            });
+        });
+    
 module.exports = router;

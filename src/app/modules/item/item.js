@@ -17,23 +17,39 @@
                         $scope.images = images;
                     });
 
-            $scope.data = $resource('api/products/:id').get({
-                id: $scope.itemId
-            });
 
+            $http.get('api/products/'+$scope.itemId).
+            success(function(result) {
+                $scope.data = result;
+                console.log('status:',$scope.data.status);
 
-            $http.get('api/repairs/products/'+$scope.itemId).
-            success(function(images) {
-                $scope.repairs = images;
-                $scope.totalRepairCost = 0;
+                $http.get('api/repairs/products/'+$scope.itemId).
+                success(function(images) {
+                    $scope.repairs = images;
+                    $scope.totalRepairCost = 0;
+    
+                    for( var i =0;i<$scope.repairs.length;i++){
+                        if( typeof $scope.repairs[i].repairCost== 'number')
+                        {
+                            $scope.totalRepairCost += $scope.repairs[i].repairCost;
+                        }
 
-                for( var i =0;i<$scope.repairs.length;i++){
-                    if( typeof $scope.repairs[i].repairCost== 'number')
-                    {
-                        $scope.totalRepairCost += $scope.repairs[i].repairCost;
+                        // vendor may have changed, get current vendor for repair history item
+                        try {
+                            for (var j = 0; j < $scope.data.history.length; j++) {
+                                if ($scope.data.history[j].refDoc == $scope.repairs[i]._id) {
+                                    if ($scope.data.history[j].action.startsWith('in repair -')) {
+                                        $scope.data.history[j].action = 'in repair - ' + $scope.repairs[i].vendor;
+                                    }
+                                }
+                            }
+                        } catch (error) {
+                            console.log(error);
+                        }
                     }
-                }
+                });
             });
+
         }else{
             $scope.data = {"status":"In Stock"};
         }

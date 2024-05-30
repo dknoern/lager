@@ -19,6 +19,10 @@ var scopeHolder;
             $window.print();
         };
 
+        $scope.sign = function () {
+            $window.sign();
+        };
+
         var receivedBy = "";
 
         if (authService != null && authService.getCachedProfile() != null && authService.getCachedProfile().name != null) {
@@ -79,7 +83,7 @@ var scopeHolder;
         }
 
         $scope.uploadFile = function () {
-            alert('uploading file');
+
             console.log('uploading file');
 
             $scope.fileSelected = function (files) {
@@ -140,6 +144,41 @@ var scopeHolder;
                             $scope.images = images;
                         });
                 });
+        }
+
+        $scope.esign = function () {
+            var canvas = document.getElementById("sig-canvas");
+            var signature = canvas.toDataURL();
+            console.log('saving signature');
+            canvas.width = canvas.width;
+
+            $http({
+                method: 'POST',
+                url: 'api/outs-sign',
+                data: {
+                    outId: $scope.data._id,
+                    signature: signature
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(function successCallback(response) {
+                console.log(response.statusText);
+
+                $scope.data.signature = response.data.signature;
+                $scope.data.signatureDate = response.data.signatureDate;
+
+                Messenger().post({
+                    message: 'Signature saved.',
+                    type: "success",
+                });
+
+            }, function errorCallback(response) {
+                Messenger().post({
+                    message: "Dnable to save signature: " + response.data.error,
+                    type: "danger",
+                });
+            });
         }
     }
 })();
