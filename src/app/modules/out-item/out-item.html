@@ -276,31 +276,24 @@
 
     <!-- eSignature Modal-->
     <div class="modal fade" id="eSignModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-      <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h1>E-Signature</h1>
             <p>Sign below to confirm receipt of items.</p>
           </div>
-
-          <div class="modal-body">
-
-            <div class="row">
-              <div class="col-md-12" id="parent">
-                <canvas id="sig-canvas" width="620" height="160">
-                  Browser not supported.
-                </canvas>
-              </div>
-            </div>
+    
+          <div class="modal-body" style="text-align: center;">
+            <canvas id="sig-canvas" width="560" height="160">
+              Browser not supported.
+            </canvas>
           </div>
           <div class="modal-footer">
-            <div class="row">
-              <div class="col-md-12">
-                <button class="btn btn-primary" id="sig-submitBtn" data-dismiss="modal" ng-click="esign()">Submit Signature</button>
-                <button class="btn btn-default" id="sig-clearBtn">Clear Signature</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-              </div>
-            </div>
+    
+            <button class="btn btn-primary" id="sig-submitBtn" data-dismiss="modal" ng-click="esign()">Submit
+              Signature</button>
+            <button class="btn btn-default" id="sig-clearBtn">Clear Signature</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
           </div>
         </div>
       </div>
