@@ -1,11 +1,149 @@
-<style>
+
+
+<div data-ng-controller="OutItemCtrl">
+
+  <style>
     .form-group.required .control-label:after {
         content: " *";
         color: darkred;
     }
+
+    #sig-canvas {
+  border: 2px dotted #CCCCCC;
+  border-radius: 10px;
+  cursor: crosshair;
+}
 </style>
 
-<div data-ng-controller="OutItemCtrl">
+
+<script>
+(function() {
+  window.requestAnimFrame = (function(callback) {
+    return window.requestAnimationFrame ||
+      window.webkitRequestAnimationFrame ||
+      window.mozRequestAnimationFrame ||
+      window.oRequestAnimationFrame ||
+      window.msRequestAnimaitonFrame ||
+      function(callback) {
+        window.setTimeout(callback, 1000 / 60);
+      };
+  })();
+
+  var canvas = document.getElementById("sig-canvas");
+  var ctx = canvas.getContext("2d");
+  ctx.strokeStyle = "#222222";
+  ctx.lineWidth = 4;
+
+  var drawing = false;
+  var mousePos = {
+    x: 0,
+    y: 0
+  };
+  var lastPos = mousePos;
+
+  canvas.addEventListener("mousedown", function(e) {
+    drawing = true;
+    lastPos = getMousePos(canvas, e);
+  }, false);
+
+  canvas.addEventListener("mouseup", function(e) {
+    drawing = false;
+  }, false);
+
+  canvas.addEventListener("mousemove", function(e) {
+    mousePos = getMousePos(canvas, e);
+  }, false);
+
+  // Add touch event support for mobile
+  canvas.addEventListener("touchstart", function(e) {
+
+  }, false);
+
+  canvas.addEventListener("touchmove", function(e) {
+    var touch = e.touches[0];
+    var me = new MouseEvent("mousemove", {
+      clientX: touch.clientX,
+      clientY: touch.clientY
+    });
+    canvas.dispatchEvent(me);
+  }, false);
+
+  canvas.addEventListener("touchstart", function(e) {
+    mousePos = getTouchPos(canvas, e);
+    var touch = e.touches[0];
+    var me = new MouseEvent("mousedown", {
+      clientX: touch.clientX,
+      clientY: touch.clientY
+    });
+    canvas.dispatchEvent(me);
+  }, false);
+
+  canvas.addEventListener("touchend", function(e) {
+    var me = new MouseEvent("mouseup", {});
+    canvas.dispatchEvent(me);
+  }, false);
+
+  function getMousePos(canvasDom, mouseEvent) {
+    var rect = canvasDom.getBoundingClientRect();
+    return {
+      x: mouseEvent.clientX - rect.left,
+      y: mouseEvent.clientY - rect.top
+    }
+  }
+
+  function getTouchPos(canvasDom, touchEvent) {
+    var rect = canvasDom.getBoundingClientRect();
+    return {
+      x: touchEvent.touches[0].clientX - rect.left,
+      y: touchEvent.touches[0].clientY - rect.top
+    }
+  }
+
+  function renderCanvas() {
+    if (drawing) {
+      ctx.moveTo(lastPos.x, lastPos.y);
+      ctx.lineTo(mousePos.x, mousePos.y);
+      ctx.stroke();
+      lastPos = mousePos;
+    }
+  }
+
+  // Prevent scrolling when touching the canvas
+  document.body.addEventListener("touchstart", function(e) {
+    if (e.target == canvas) {
+      e.preventDefault();
+    }
+  }, false);
+  document.body.addEventListener("touchend", function(e) {
+    if (e.target == canvas) {
+      e.preventDefault();
+    }
+  }, false);
+  document.body.addEventListener("touchmove", function(e) {
+    if (e.target == canvas) {
+      e.preventDefault();
+    }
+  }, false);
+
+  (function drawLoop() {
+    requestAnimFrame(drawLoop);
+    renderCanvas();
+  })();
+
+  function clearCanvas() {
+    canvas.width = canvas.width;
+  }
+
+  // Set up the UI
+  var clearBtn = document.getElementById("sig-clearBtn");
+  var submitBtn = document.getElementById("sig-submitBtn");
+  clearBtn.addEventListener("click", function(e) {
+    clearCanvas();
+  }, false);
+
+})();
+
+</script>
 
     <div class="row">
         <div class="col-md-10">
@@ -22,14 +160,15 @@
                     </button>
 
                     <ul class="dropdown-menu">
-                        <li><a href="#" data-toggle="modal" data-toggle="modal" data-target="#addImagesModal">Add
-                                Images</a></li>
+                        <li><a href="#" data-toggle="modal" data-toggle="modal" data-target="#addImagesModal"><i class="fa fa-image"></i> Add Images</a></li>
                         <li><a ng-click="print()"><i class="fa fa-print"></i> Print</a></li>
+                        <li><a href="#" data-toggle="modal" data-toggle="modal" data-target="#eSignModal"><i class="fa fa-pencil"></i> e-Sign</a></li>
                     </ul>
                 </div>
             </div>
         </div>
     </div>
+
 
     <div class="row">
         <div class="col-md-12">
@@ -128,6 +267,43 @@
             </div>
         </div>
         <div class="col-sm-6 col-md-3 js-shuffle-sizer"></div>
+    </div>
+
+    <div ng-if="data.signatureDate">
+      <b>Received {{data.signatureDate | date: 'MM/dd/y hh:mm'}} by</b>:<br/>
+      <img ng-model="data.signature" src="{{data.signature}}"/>
+    </div>
+
+    <!-- eSignature Modal-->
+    <div class="modal fade" id="eSignModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1>E-Signature</h1>
+            <p>Sign below to confirm receipt of items.</p>
+          </div>
+
+          <div class="modal-body">
+
+            <div class="row">
+              <div class="col-md-12" id="parent">
+                <canvas id="sig-canvas" width="620" height="160">
+                  Browser not supported.
+                </canvas>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <div class="row">
+              <div class="col-md-12">
+                <button class="btn btn-primary" id="sig-submitBtn" data-dismiss="modal" ng-click="esign()">Submit Signature</button>
+                <button class="btn btn-default" id="sig-clearBtn">Clear Signature</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Delete image modal -->
