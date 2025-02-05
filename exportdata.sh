@@ -1,12 +1,10 @@
-ssh -f -o ExitOnForwardFailure=yes -l ubuntu -L 27018:localhost:27017 demesyinventory.com  sleep 10
-
 DATE=`date "+%Y-%m-%d"`
 
 BACKUPSDIR=~/Documents/demesy/backups
 WORKDIR=${BACKUPSDIR}/${DATE}
 rm ${BACKUPSDIR}/latest
 ln -s $WORKDIR ${BACKUPSDIR}/latest
-DB=mongodb://localhost:27018
+DB=mongodb://demesyinventory:27017
 
 mkdir $WORKDIR
 mongoexport --uri=$DB/lager -c counters -o $WORKDIR/counters.json
