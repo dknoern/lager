@@ -234,6 +234,9 @@ var scopeHolder;
                         repairCost: 0
                     }
 
+                    if($scope.data.customerName == null) {
+                        $scope.data.customerName = response.data.customerFirstName + ' ' + response.data.customerLastName;
+                    }
                     console.log('adding repair', response.data.title);
 
                     if ($scope.data.lineItems == null) {
