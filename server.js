@@ -6,6 +6,9 @@ var mongoose = require('mongoose');
 var mongoOpts = { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true };
 
 var mongoUrl = process.env.MONGO_URL || "mongodb://localhost:27017/lager";
+require('console-stamp')(console, { 
+  format: ':date(yyyy-mm-dd HH:MM:ss.l)' 
+} );
 
 mongoose.connect(mongoUrl,mongoOpts);
 
