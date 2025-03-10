@@ -11,6 +11,7 @@
     "aws-sdk": "latest",
     "body-parser": "^1.18.3",
     "bootstrap": "^3.3.7",
+    "console-stamp": "^3.1.2",
     "csv-parse": "4.4.6",
     "date-format": "1.2.0",
     "dateformat": "3.0.3",
