@@ -1,6 +1,5 @@
 WORKDIR=~/Documents/demesy/backups/latest
-#DB=mongodb://localhost:27017
-DB=mongodb+srv://user:Ec7ZPVnQIuuAlDil@demesy-test.4e7jdgt.mongodb.net
+DB=<MONGODBURI>
 
 
 
