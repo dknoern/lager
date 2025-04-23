@@ -132,10 +132,10 @@
 
                                         <legend>Shipping Address</legend>
 
-                                        <div class="form-group">
+                                        <div class="form-group required">
                                             <label for="address1-field" class="col-sm-3 control-label">Ship Address 1</label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="address1-field" class="form-control" ng-model="data.shipAddress1" ng-change="copyAddress()">
+                                                <input type="text" id="address1-field" class="form-control" ng-model="data.shipAddress1" ng-change="copyAddress()" required>
                                             </div>
                                         </div>
 
@@ -153,27 +153,27 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group">
+                                        <div class="form-group required">
                                             <label for="shipCity" class="col-sm-3 control-label">Ship City</label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="shipCity" class="form-control" ng-model="data.shipCity" ng-change="copyAddress()">
+                                                <input type="text" id="shipCity" class="form-control" ng-model="data.shipCity" ng-change="copyAddress()" required>
                                             </div>
                                         </div>
 
-                                        <div class="form-group">
+                                        <div class="form-group required">
                                             <label for="shipState" class="col-sm-3 control-label">Ship State</label>
                                             <div class="col-sm-8">
-                                                <select id="shipState" class="selectpicker" data-selectpicker data-width="auto" ng-model="data.shipState" ng-change="computeTotals()" ng-change="copyAddress()">
+                                                <select id="shipState" class="selectpicker" data-selectpicker data-width="auto" ng-model="data.shipState" ng-change="computeTotals()" ng-change="copyAddress()" required>
                                                     <option ng-repeat="state in states" value="{{state.code}}">{{state.name}}</option>
 
                                                 </select>
                                             </div>
                                         </div>
 
-                                        <div class="form-group">
+                                        <div class="form-group required">
                                             <label for="shipZip" class="col-sm-3 control-label">Ship Zip</label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="shipZip" class="form-control" ng-model="data.shipZip" ng-change="copyAddress()">
+                                                <input type="text" id="shipZip" class="form-control" ng-model="data.shipZip" ng-change="copyAddress()" required>
                                             </div>
                                         </div>
 

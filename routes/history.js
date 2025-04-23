@@ -5,7 +5,7 @@ module.exports.updateProductHistory = async function (lineItems, status, action,
     for (var i = 0; lineItems != null && i < lineItems.length; i++) {
         var lineItem = lineItems[i];
 
-        if (lineItem.productId != null) {
+        if (lineItem.productId != null && lineItem.productId != '') {
 
             var historyEntry = {
                 user: user,
