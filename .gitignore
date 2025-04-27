@@ -18,3 +18,9 @@ avatax-credentials.js
 avatax-config.js
 launch.json
 import-atlas.sh
+*.log.*
+*.log
+.well-known
+docker-compose.yml
+data/
+traefik
