@@ -12,3 +12,4 @@ mongoimport --uri=$DB/lager -c returns --file $WORKDIR/returns.json
 mongoimport --uri=$DB/lager -c logs --file $WORKDIR/logs.json
 mongoimport --uri=$DB/lager -c outs --file $WORKDIR/outs.json
 mongoimport --uri=$DB/lager -c tenants --file $WORKDIR/tenants.json
+mongoimport --uri=$DB/lager -c wanteds --file $WORKDIR/wanteds.json

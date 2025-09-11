@@ -551,6 +551,9 @@ async function calcTax(invoice){
     }else if (invoice.taxExempt) {
         console.log("taxExempt, no tax");
         return 0;
+    }else if (invoice.methodOfSale == 'Ebay') {
+        console.log("ebay, no tax");
+        return 0;
     }else if (invoice.shipState == 'TX') {
         var totalTax = 0;
         totalTax = invoice.subtotal * 0.0825;
