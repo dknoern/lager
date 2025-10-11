@@ -24,3 +24,4 @@ import-atlas.sh
 docker-compose.yml
 data/
 traefik
+.env

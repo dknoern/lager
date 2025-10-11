@@ -2,10 +2,11 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 const path = require('path');
+const config = require('./config');
 var mongoose = require('mongoose');
 var mongoOpts = { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true };
 
-var mongoUrl = process.env.MONGO_URL || "mongodb://localhost:27017/lager";
+var mongoUrl = config.mongo.url;
 require('console-stamp')(console, { 
   format: ':date(yyyy-mm-dd HH:MM:ss.l)' 
 } );
@@ -66,6 +67,15 @@ var out = require('./routes/out');
 app.use('/api', out);
 
 app.use('/', express.static(__dirname +  '/'));
+
+// Serve auth0-variables.js dynamically from config
+app.get('/auth0-variables.js', function(req, res) {
+  res.type('application/javascript');
+  res.send(`var AUTH0_CLIENT_ID='${config.auth0.clientId}';
+var AUTH0_DOMAIN='${config.auth0.domain}';
+var AUTH0_CALLBACK_URL='${config.auth0.callbackUrl}';
+var AUTH0_AUDIENCE='${config.auth0.audience}';`);
+});
 
 app.get('/*', function(req, res) {
   res.sendFile(path.join(__dirname + '/index.html'));

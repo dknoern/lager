@@ -6,10 +6,7 @@ var format = require('date-format');
 var Counter = require('../models/counter');
 var Product = require('../models/product');
 var Avatax = require('avatax');
-var avataxCredentials = require('../avatax-credentials.js');
-var avataxConfig = require('../avatax-config.js');
-
-var emailAddresses = require('../email-addresses.js');
+const config = require('../config');
 
 var mustache = require("mustache");
 var fs = require("fs");
@@ -17,20 +14,23 @@ var fs = require("fs");
 const checkJwt = require('./jwt-helper').checkJwt;
 const formatCurrency = require('format-currency');
 
-// load aws sdk
-var aws = require('aws-sdk');
+// load AWS SDK v3
+const { SESClient, SendEmailCommand } = require('@aws-sdk/client-ses');
 
-// load aws config
-aws.config.loadFromPath('aws-credentials.js');
-
-// load AWS SES
-var ses = new aws.SES({
-    apiVersion: '2010-12-01'
+// create SES client
+const ses = new SESClient({
+    region: config.aws.region,
+    credentials: {
+        accessKeyId: config.aws.accessKeyId,
+        secretAccessKey: config.aws.secretAccessKey
+    }
 });
 
-// send to list
-var to = emailAddresses.to;
-var bcc = emailAddresses.bcc;
+// Config references
+const avataxCredentials = config.avatax.credentials;
+const avataxConfig = config.avatax.config;
+const to = config.email.to;
+const bcc = config.email.bcc;
 
 function getFullName(name){
     var fullName = name;
@@ -501,7 +501,7 @@ router.route('/invoices/email')
 
                             });
 
-                        ses.sendEmail({
+                        const command = new SendEmailCommand({
                                 Source: from,
                                 Destination: {
                                     ToAddresses: to,
@@ -520,13 +520,15 @@ router.route('/invoices/email')
                                         }
                                     }
                                 }
-                            }
-                            , function (err, data) {
-                                if (err) {
+                            });
 
-                                    console.log("error sending email:", err);
-                                    throw err;
-                                }
+                        ses.send(command)
+                            .then(data => {
+                                console.log("Email sent successfully");
+                            })
+                            .catch(err => {
+                                console.log("error sending email:", err);
+                                throw err;
                             });
                     });
                 }

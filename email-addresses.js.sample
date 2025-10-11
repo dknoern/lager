@@ -1,7 +1,0 @@
-var emailAddresses = {};
-
-emailAddresses.to = ["david@seattleweb.com","davidk@slalom.com"];
-
-emailAddresses.bcc = ["knoernschild@gmail.com"];
-
-module.exports = emailAddresses;

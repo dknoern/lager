@@ -4,28 +4,28 @@ var Repair = require('../models/repair');
 var history = require('./history');
 const checkJwt = require('./jwt-helper').checkJwt;
 var format = require('date-format');
-
-var emailAddresses = require('../email-addresses.js');
+const config = require('../config');
 
 var mustache = require("mustache");
 var fs = require("fs");
 
 const formatCurrency = require('format-currency');
 
-// load aws sdk
-var aws = require('aws-sdk');
+// load AWS SDK v3
+const { SESClient, SendEmailCommand } = require('@aws-sdk/client-ses');
 
-// load aws config
-aws.config.loadFromPath('aws-credentials.js');
-
-// load AWS SES
-var ses = new aws.SES({
-    apiVersion: '2010-12-01'
+// create SES client
+const ses = new SESClient({
+    region: config.aws.region,
+    credentials: {
+        accessKeyId: config.aws.accessKeyId,
+        secretAccessKey: config.aws.secretAccessKey
+    }
 });
 
 // send to list
-var to = emailAddresses.to;
-var bcc = emailAddresses.bcc;
+var to = config.email.to;
+var bcc = config.email.bcc;
 
 function formatDate(date) {
     if (date == null) return "";
@@ -303,7 +303,7 @@ router.route('/repairs/email')
                         if (err) throw err;
                         var output =
                             "<p>" + req.body.note + " </p>" + mustache.to_html(template, {data: repair});
-                        ses.sendEmail({
+                        const command = new SendEmailCommand({
                                 Source: from,
                                 Destination: {
                                     ToAddresses: to,
@@ -322,11 +322,16 @@ router.route('/repairs/email')
                                         }
                                     }
                                 }
-                            }
-                            , function (err, data) {
-                                if (err) throw err
+                            });
+
+                        ses.send(command)
+                            .then(data => {
                                 console.log('Email sent:');
                                 console.log(data);
+                            })
+                            .catch(err => {
+                                console.error('Error sending email:', err);
+                                throw err;
                             });
                     });
                 }
