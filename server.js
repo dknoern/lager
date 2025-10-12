@@ -11,6 +11,8 @@ require('console-stamp')(console, {
   format: ':date(yyyy-mm-dd HH:MM:ss.l)' 
 } );
 
+console.log("Starting server with MongoDB URL: " + mongoUrl);
+
 mongoose.connect(mongoUrl,mongoOpts);
 
 var fs = require('fs');
