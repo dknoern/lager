@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:8
+    container_name: lager-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  lager:
+    image: ghcr.io/dknoern/lager:latest
+    container_name: lager
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      # Override MongoDB URL for Docker network
+      - MONGODB_URI=mongodb://mongo:27017/lager
+    volumes:
+      - ./uploads:/app/uploads
+    depends_on:
+      - mongo
+
+volumes:
+  mongo-data:

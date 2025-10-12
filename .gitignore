@@ -21,7 +21,6 @@ import-atlas.sh
 *.log.*
 *.log
 .well-known
-docker-compose.yml
 data/
 traefik
 .env
