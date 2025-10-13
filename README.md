@@ -55,8 +55,6 @@ npm install -g bower
 bower install
 ```
 
-When prompted, choose **angular 1.4.14**.
-
 ### 2. Start MongoDB
 
 Make sure MongoDB is running locally:
@@ -88,7 +86,7 @@ The application will be available at [http://localhost:8080](http://localhost:80
 ### 1. Build the Docker Image
 
 ```bash
-docker build -t tryit .
+docker build -t lager .
 ```
 
 ### 2. Configure Environment
