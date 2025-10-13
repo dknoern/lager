@@ -161,11 +161,11 @@ docker-compose up -d
 
 ```
 lager/
-├── app/                    # Frontend AngularJS modules
-├── assets/                 # Static assets
-├── models/                 # Mongoose data models
-├── routes/                 # Express API routes
-├── src/                    # Frontend source code
+├── app/                   # Frontend AngularJS modules
+├── assets/                # Static assets
+├── models/                # Mongoose data models
+├── routes/                # Express API routes
+├── src/                   # Frontend source code
 ├── uploads/               # Uploaded images
 ├── config.js              # Configuration loader
 ├── server.js              # Express server

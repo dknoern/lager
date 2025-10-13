@@ -18,6 +18,4 @@ mongoexport --uri=$DB/lager -c outs -o $WORKDIR/outs.json
 mongoexport --uri=$DB/lager -c tenants -o $WORKDIR/tenants.json
 mongoexport --uri=$DB/lager -c wanteds -o $WORKDIR/wanteds.json
 
-
-rsync -azv ubuntu@demesyinventory.com:lager/uploads $BACKUPSDIR
-
+rsync -azv ubuntu@demesyinventory:lager/uploads $BACKUPSDIR

@@ -37,7 +37,7 @@ const aws = {
 // AvaTax Configuration
 const avatax = {
     config: {
-        appName: process.env.AVATAX_APP_NAME || 'demesyinventory',
+        appName: process.env.AVATAX_APP_NAME || 'lagerinventory',
         appVersion: process.env.AVATAX_APP_VERSION || '1.0',
         environment: process.env.AVATAX_ENVIRONMENT || 'sandbox',
         machineName: process.env.AVATAX_MACHINE_NAME || 'ygritte'
@@ -59,7 +59,7 @@ const auth0 = {
     clientId: process.env.AUTH0_CLIENT_ID,
     domain: process.env.AUTH0_DOMAIN,
     callbackUrl: process.env.AUTH0_CALLBACK_URL || 'http://localhost:8080/app/inventory',
-    audience: process.env.AUTH0_AUDIENCE || 'https://demesyinventory/api'
+    audience: process.env.AUTH0_AUDIENCE || 'https://lagerinventory/api'
 };
 
 // MongoDB URL

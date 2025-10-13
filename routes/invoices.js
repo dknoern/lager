@@ -491,7 +491,7 @@ router.route('/invoices/email')
                         var output =
                             "<p>" + req.body.note + " </p>" + mustache.to_html(template, {
                                 data: invoice,
-                                logoUrl:"http://demesyinventory.com/assets/images/logo/logo.png",
+                                logoUrl:"https://github.com/dknoern/lager/blob/main/src/assets/images/logo/logo.png",
                                 logoWidth:333,
                                 fontSize:11,
                                 bigFontSize:14,
