@@ -24,3 +24,4 @@ import-atlas.sh
 data/
 traefik
 .env
+*.iml
