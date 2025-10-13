@@ -196,7 +196,7 @@ Required variables:
 - `AUTH0_DOMAIN` - Auth0 domain
 
 Optional variables:
-- `MONGO_URL` - MongoDB connection string (default: `mongodb://localhost:27017/lager`)
+- `MONGODB_URI` - MongoDB connection string (default: `mongodb://localhost:27017/lager`)
 - `PORT` - Server port (default: 8080)
 - `EMAIL_TO` - Email addresses for notifications (comma-separated)
 - `EMAIL_BCC` - BCC email addresses (comma-separated)
