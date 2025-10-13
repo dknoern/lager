@@ -3,6 +3,17 @@ DB=<MONGODBURI>
 
 #mongosh lager --eval "db.dropDatabase()"
 
+
+mongo $DB/lager  --eval "db.products.drop()"
+mongo $DB/lager  --eval "db.customers.drop()"
+mongo $DB/lager  --eval "db.invoices.drop()"
+mongo $DB/lager  --eval "db.repairs.drop()"
+mongo $DB/lager  --eval "db.returns.drop()"
+mongo $DB/lager  --eval "db.logs.drop()"
+mongo $DB/lager  --eval "db.outs.drop()"
+mongo $DB/lager  --eval "db.counters.drop()"
+mongo $DB/lager  --eval "db.tenants.drop()"
+
 mongoimport --uri=$DB/lager -c counters --file $WORKDIR/counters.json
 mongoimport --uri=$DB/lager -c customers --file $WORKDIR/customers.json
 mongoimport --uri=$DB/lager -c products --file $WORKDIR/products.json
