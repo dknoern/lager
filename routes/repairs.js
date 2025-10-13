@@ -290,7 +290,7 @@ router.route('/repairs/email')
 
         console.log("emailing repair " + req.body.invoiceId + " to " + JSON.stringify(to));
 
-        var from = 'Marijo@demesy.com';
+        var from = config.email.from;
 
         Repair.findById(req.body.repairId, function (err, repair) {
                 if (err) {

@@ -50,7 +50,7 @@ const avatax = {
 
 // Email Configuration
 const email = {
-    to: process.env.EMAIL_TO ? process.env.EMAIL_TO.split(',').map(e => e.trim()) : [],
+    from: process.env.EMAIL_FROM ? process.env.EMAIL_FROM : 'email1@example.com',
     bcc: process.env.EMAIL_BCC ? process.env.EMAIL_BCC.split(',').map(e => e.trim()) : []
 };
 

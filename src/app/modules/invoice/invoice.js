@@ -202,19 +202,12 @@ var scopeHolder;
                 var customerId = $location.search().customerId;
 
 
-                if(authService!=null && authService.getCachedProfile() !=null && authService.getCachedProfile().name != null){
-                var salesPerson = authService.getCachedProfile().name;
-                if (salesPerson != null && salesPerson.length > 0 && salesPerson.indexOf("@") > 0) {
-                    salesPerson = salesPerson.substring(0, salesPerson.indexOf("@"));
-                }
-
-                    if("ryan" == salesPerson.toLowerCase())  salesPerson = "Ryan Ables";
-                    else if("marijo" == salesPerson.toLowerCase()) salesPerson = "Mari Jo Bueno";
-                    else if("colby" == salesPerson.toLowerCase()) salesPerson = "Colby Vick";
-                    else if("janet" == salesPerson.toLowerCase()) salesPerson = "Janet Gary";
-                    else if("david" == salesPerson.toLowerCase()) salesPerson = "David Knoernschild";
-
-                }
+                    if (authService != null && authService.getCachedProfile() != null && authService.getCachedProfile().name != null) {
+                        var salesPerson = authService.getCachedProfile().name;
+                        if (salesPerson != null && salesPerson.length > 0 && salesPerson.indexOf("@") > 0) {
+                            salesPerson = salesPerson.substring(0, salesPerson.indexOf("@"));
+                        }
+                    }
 
                 console.log("new invoice, setting base data....");
 

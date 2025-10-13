@@ -29,17 +29,7 @@ const ses = new SESClient({
 // Config references
 const avataxCredentials = config.avatax.credentials;
 const avataxConfig = config.avatax.config;
-const to = config.email.to;
 const bcc = config.email.bcc;
-
-function getFullName(name){
-    var fullName = name;
-    if("david"==name)fullName = "David Knoernschild";
-    else if("ryan"==name) fullName = "Ryan Ables";
-    else if("marijo"==name) fullName = "Mari Jo Bueno";
-    else if("colby"==name) fullName = "Colby Vick";
-    else if("janet"==name) fullName = "Janet Gary";
-}
 
 function buildSearchField(doc){
 
@@ -477,7 +467,7 @@ router.route('/invoices/email')
         console.log("emailing invoice " + req.body.invoiceId + " to " + JSON.stringify(to));
 
 
-        var from = 'marijo@demesy.com';
+        var from = config.email.from;
 
         Invoice.findById(req.body.invoiceId, function (err, invoice) {
                 if (err) {

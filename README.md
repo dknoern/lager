@@ -196,7 +196,7 @@ Required variables:
 Optional variables:
 - `MONGODB_URI` - MongoDB connection string (default: `mongodb://localhost:27017/lager`)
 - `PORT` - Server port (default: 8080)
-- `EMAIL_TO` - Email addresses for notifications (comma-separated)
+- `EMAIL_FROM` - Email source address for notifications
 - `EMAIL_BCC` - BCC email addresses (comma-separated)
 
 ## Troubleshooting
