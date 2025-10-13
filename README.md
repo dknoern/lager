@@ -66,7 +66,7 @@ Make sure MongoDB is running locally:
 brew services start mongodb-community
 
 # Or with Docker
-docker run -d -p 27017:27017 --name mongo mongo:5
+docker run -d -p 27017:27017 --name mongo mongo:8
 ```
 
 ### 3. Create Uploads Directory
