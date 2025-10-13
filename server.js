@@ -4,15 +4,15 @@ var bodyParser = require('body-parser');
 const path = require('path');
 const config = require('./config');
 var mongoose = require('mongoose');
-var mongoOpts = { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true };
+var mongoOpts = { useNewUrlParser: true, useUnifiedTopology: true };
 
 var mongoUrl = config.mongo.url;
-require('console-stamp')(console, { 
-  format: ':date(yyyy-mm-dd HH:MM:ss.l)' 
+require('console-stamp')(console, {
+  format: ':date(yyyy-mm-dd HH:MM:ss.l)'
 } );
 
+mongoose.set('strictQuery', false);
 mongoose.connect(mongoUrl,mongoOpts);
-
 var http = require('http');
 
 app.set("trust proxy", true);
