@@ -16,7 +16,7 @@ exports.checkJwt = jwt({
   }),
 
   // Validate the audience and the issuer.
-  audience: "https://demesyinventory/api",
+  audience: "https://lager/api",
   issuer: "https://seattleweb.auth0.com/",
   algorithms: ['RS256']
 });

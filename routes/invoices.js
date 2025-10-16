@@ -29,7 +29,6 @@ const ses = new SESClient({
 // Config references
 const avataxCredentials = config.avatax.credentials;
 const avataxConfig = config.avatax.config;
-const bcc = config.email.bcc;
 
 function buildSearchField(doc){
 
@@ -269,13 +268,20 @@ router.route('/invoices/:invoice_id/print')
                     if (err) throw err;
                     var output = mustache.to_html(template, {
                         data: invoice,
-                        logoUrl:"/assets/images/logo/logo.png",
-                        logoWidth:333,
                         fontSize:11,
                         bigFontSize:14,
                         hugeFontSize:32,
                         footerFontSize:8,
-                        iconWidth:32
+                        iconWidth:32,
+                        tenantName: config.tenant.name,
+                        tenantWebsite: config.tenant.website,
+                        tenantBankWireTransferInstructions: config.tenant.bankWireTransferInstructions,
+                        tenantAddress: config.tenant.address,
+                        tenantCity: config.tenant.city,
+                        tenantState: config.tenant.state,
+                        tenantZip: config.tenant.zip,
+                        tenantPhone: config.tenant.phone,
+                        tenantAppRoot: config.tenant.appRoot
                     });
                     res.send(output);
                 });
@@ -467,7 +473,7 @@ router.route('/invoices/email')
         console.log("emailing invoice " + req.body.invoiceId + " to " + JSON.stringify(to));
 
 
-        var from = config.email.from;
+        var from = config.tenant.email;
 
         Invoice.findById(req.body.invoiceId, function (err, invoice) {
                 if (err) {
@@ -481,25 +487,30 @@ router.route('/invoices/email')
                         var output =
                             "<p>" + req.body.note + " </p>" + mustache.to_html(template, {
                                 data: invoice,
-                                logoUrl:"https://github.com/dknoern/lager/blob/main/src/assets/images/logo/logo.png",
-                                logoWidth:333,
                                 fontSize:11,
                                 bigFontSize:14,
                                 hugeFontSize:32,
                                 footerFontSize:8,
-                                iconWidth:32
-
+                                iconWidth:32,
+                                tenantName: config.tenant.name,
+                                tenantWebsite: config.tenant.website,
+                                tenantBankWireTransferInstructions: config.tenant.bankWireTransferInstructions,
+                                tenantAddress: config.tenant.address,
+                                tenantCity: config.tenant.city,
+                                tenantState: config.tenant.state,
+                                tenantZip: config.tenant.zip,
+                                tenantPhone: config.tenant.phone,
+                                tenantAppRoot: config.tenant.appRoot
                             });
 
                         const command = new SendEmailCommand({
                                 Source: from,
                                 Destination: {
-                                    ToAddresses: to,
-                                    BccAddresses: bcc
+                                    ToAddresses: to
                                 },
                                 Message: {
                                     Subject: {
-                                        Data: 'DeMesy Invoice'
+                                        Data: `${config.tenant.name} Invoice`
                                     },
                                     Body: {
                                         Text: {

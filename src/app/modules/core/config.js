@@ -6,8 +6,8 @@
     ;
 
   var config = {
-    name: 'DeMesy',
-    title: 'Lager - IMS',
+    name: 'Lager',
+    title: 'Inventory Management System',
     version: '2.0.0',
     /**
      * Whether to print and alert some log information

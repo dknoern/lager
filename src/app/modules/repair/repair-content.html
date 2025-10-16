@@ -20,15 +20,12 @@
         font-size: 11px;
     }
 
-
-
     /* Use a media query to add a break point at 800px: */
     @media screen and (max-width: 800px) {
         .left, .right {
             width: 100%; /* The width is 100%, when the viewport is 800px or smaller */
         }
     }
-
 
 </style>
 
@@ -39,24 +36,19 @@
 <div style="background-color: #fff; padding:45px; max-width: 800px;">
 
     <div>
-
         <div>
-
-            <img src="https://raw.githubusercontent.com/dknoern/lager/refs/heads/main/src/assets/images/logo/logo-small.png" alt="Logo" class="invoice-logo" style="max-height:150px;"/>
-
+            <img src="{{appRoot}}/uploads/logo.png" alt="Logo" class="invoice-logo" style="max-width:330px;"/>
         </div>
         <div class="box box30">
-
         </div>
     </div>
 
     <div>
         <div>
-
-            <p>4514 Cole Avenue - Suite 808<br/>
-                Dallas, TX 75205<br/>
-                Phone 214-855-8777 &nbsp; 800-635-9006<br/>
-                Fax 214-871-6777</p>
+            <p>{{tenantAddress}} t address<br/>
+                {{tenantCity}}, {{tenantState}} {{tenantZip}}<br/>
+                Phone {{tenantPhone}}<br/>
+                Fax {{tenantFax}}</p>
 
         </div>
 

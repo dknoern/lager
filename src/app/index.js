@@ -61,7 +61,7 @@
             audience: AUTH0_AUDIENCE,
             redirectUri: AUTH0_CALLBACK_URL,
             scope: 'openid profile',
-            icon: 'https://www.demesy.com/media/wysiwyg/footer-logo.png'
+            icon: 'https://github.com/dknoern/lager/blob/main/src/assets/images/logo/logo-small.png'
           });
 
           $locationProvider.hashPrefix('');

@@ -73,7 +73,7 @@
         <div class="box box70">
 
 
-            <img src="{{logoUrl}}" alt="Logo" class="invoice-logo" style="max-width:{{logoWidth}}px;"/>
+            <img src="{{appRoot}}/uploads/logo.png" alt="Logo" class="invoice-logo" style="max-width:330px;"/>
             <div style="padding-left: 5px; font-weight: 500; font-size:{{hugeFontSize}}px; color:#C3AA63;">{{data.invoiceTypeFMT}}</div>
 
 
@@ -202,25 +202,22 @@
         </tbody>
     </table>
 
-
     {{^data.isConsignment}}
 
     <div align="right" style="padding:8px;font-size:{{bigFontSize}}px">
         Thank you for your business
     </div>
 
-
     <div style="padding:8px;font-size:{{fontSize}}px;">
         <b>Warranty:</b><br/>
-        DeMesy Fine Watches warranties all watches for one full year from date of invoice, unless otherwise indicated in
+        {{tenantName}} warranties all watches for one full year from date of invoice, unless otherwise indicated in
         the listing or on the invoice and with
         the exception of vintage wristwatch, pocket watches. This warranty does not cover accessories, boxes, bands,
         batteries, or cracked or broken crystals.
-        Custom work, alterations and/or repairs done without written acknowledgement by DeMesy Fine Watches, tampering
+        Custom work, alterations and/or repairs done without written acknowledgement by {{tenantName}}, tampering
         by unauthorized technicians, damage
         from abuse or misuse, negligence, accidents (knocks, dents, crushing), or water damage due to improperly
         tightened crown, will render this warranty null and void.
-
     </div>
 
     <div style="padding:8px;font-size:{{fontSize}}px;">
@@ -250,18 +247,14 @@
     {{#data.isConsignment}}
 
     <table width="100%">
-
         <tr>
             <td width="33%" height=40px><b>Consignee</b></td><td width="33%"></td></td><td width="33%"><b>Consignor</b></td>
         </tr>
-
         <tr>
             <td width="33%" height=40px style="border-bottom: 1px solid #CCCCCC"></td><td width="33%"></td></td><td width="33%" style="border-bottom: 1px solid #CCCCCC">
         </tr>
-
-
         <tr>
-            <td>DeMesy & Co.</td><td></td><td>{{data.customerFirstName}} {{data.customerLastName}}</td>
+            <td>{{tenantName}}</td><td></td><td>{{data.customerFirstName}} {{data.customerLastName}}</td>
         </tr>
         <tr>
             <td width="33%" height=40px style="border-bottom: 1px solid #CCCCCC"><td width="33%"></td></td><td width="33%" style="border-bottom: 1px solid #CCCCCC">
@@ -269,10 +262,7 @@
         <tr>
             <td>Date</td><td></td><td>Date</td>
         </tr>
-
-
     </table>
-
 
     {{/data.isConsignment}}
 
@@ -281,29 +271,27 @@
 
     <table width="100%">
         <tr>
-
             <td width="33%">
                 <div style="float: left;"><img src="https://raw.githubusercontent.com/dknoern/lager/refs/heads/main/src/assets/images/phone.png" width="{{iconWidth}}px"
                                                alt="Phone"/></div>
-                <div style="font-size:{{footerFontSize}}pt;">PHONE<br/>+ 214.855.8777<br/></div>
+                <div style="font-size:{{footerFontSize}}pt;">PHONE<br/>{{tenantPhone}}<br/></div>
             </td>
             <td width="33%">
                 <div style="float: left;"><img src="https://raw.githubusercontent.com/dknoern/lager/refs/heads/main/src/assets/images/address.png" width="{{iconWidth}}px"
                                                alt="Phone"/></div>
-                <div style="font-size:{{footerFontSize}}pt;">ADDRESS<br/>4514 Cole Ave. Suite 808<br/>Dallas, TX 75205</div>
+                <div style="font-size:{{footerFontSize}}pt;">ADDRESS<br/>{{tenantAddress}}<br/>{{tenantCity}}, {{tenantState}} {{tenantZip}}</div>
             </td>
             <td width="33%">
                 <div style="float: left;"><img src="https://raw.githubusercontent.com/dknoern/lager/refs/heads/main/src/assets/images/web.png" width="{{iconWidth}}px"
                                                alt="Web"/></div>
-                <div style="font-size:{{footerFontSize}}pt;">WEB<br/>www.demesy.com<br/></div>
+                <div style="font-size:{{footerFontSize}}pt;">WEB<br/>{{tenantWebsite}}<br/></div>
             </td>
         </tr>
         <tr><td colspan=3>
             BANK WIRE TRANSFER INSTRUCTIONS:<br>
-            Bank of Texas (BOKF) 6701 Preston Road Dallas, TX 75205 BANK ABA#: 111014325 Account Name: DEMESY & COMPANY LTD Account#: 8098342661 SWIFT CODE: BAOKUS44
+            {{tenantBankWireTransferInstructions}}
             </td></tr>
     </table>
     <hr style="border-top:1px solid #eeeeee; margin-top:5px; margin-bottom:5px"/>
-
 </div>
 </body>

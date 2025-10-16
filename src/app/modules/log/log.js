@@ -22,7 +22,7 @@
             "processing": true,
             "serverSide": true,
             "ordering": false,
-            "pageLength": 50,
+            "pageLength": 10,
             "ajax": "/api/logs",
             "dom": 'Bfrtip',
             stateSave: true,

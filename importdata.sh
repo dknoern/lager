@@ -1,15 +1,16 @@
-WORKDIR=~/Documents/demesy/backups/latest
+WORKDIR=sample
 DB=mongodb://localhost:27017
 
 mongosh lager --eval "db.dropDatabase()"
 
-mongoimport --uri=$DB/lager -c counters --file $WORKDIR/counters.json
-mongoimport --uri=$DB/lager -c customers --file $WORKDIR/customers.json
-mongoimport --uri=$DB/lager -c products --file $WORKDIR/products.json
-mongoimport --uri=$DB/lager -c invoices --file $WORKDIR/invoices.json
-mongoimport --uri=$DB/lager -c repairs --file $WORKDIR/repairs.json
-mongoimport --uri=$DB/lager -c returns --file $WORKDIR/returns.json
-mongoimport --uri=$DB/lager -c logs --file $WORKDIR/logs.json
-mongoimport --uri=$DB/lager -c outs --file $WORKDIR/outs.json
-mongoimport --uri=$DB/lager -c tenants --file $WORKDIR/tenants.json
-mongoimport --uri=$DB/lager -c wanteds --file $WORKDIR/wanteds.json
+mongoimport --uri=$DB/lager -c counters --file sample/records/counters.json
+mongoimport --uri=$DB/lager -c customers --file sample/records/customers.json
+mongoimport --uri=$DB/lager -c products --file sample/records/products.json
+mongoimport --uri=$DB/lager -c invoices --file sample/records/invoices.json
+mongoimport --uri=$DB/lager -c repairs --file sample/records/repairs.json
+mongoimport --uri=$DB/lager -c returns --file sample/records/returns.json
+mongoimport --uri=$DB/lager -c logs --file sample/records/logs.json
+mongoimport --uri=$DB/lager -c outs --file sample/records/outs.json
+
+rm uploads/*
+cp sample/images/* uploads/.

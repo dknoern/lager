@@ -1,21 +1,16 @@
-DATE=`date "+%Y-%m-%d"`
+rm sample/*.json
 
-BACKUPSDIR=~/Documents/demesy/backups
-WORKDIR=${BACKUPSDIR}/${DATE}
-rm ${BACKUPSDIR}/latest
-ln -s $WORKDIR ${BACKUPSDIR}/latest
-DB=mongodb://demesyinventory:27017
+DB=mongodb://localhost:27017
 
-mkdir $WORKDIR
-mongoexport --uri=$DB/lager -c counters -o $WORKDIR/counters.json
-mongoexport --uri=$DB/lager -c customers -o $WORKDIR/customers.json
-mongoexport --uri=$DB/lager -c products -o $WORKDIR/products.json
-mongoexport --uri=$DB/lager -c invoices -o $WORKDIR/invoices.json
-mongoexport --uri=$DB/lager -c repairs -o $WORKDIR/repairs.json
-mongoexport --uri=$DB/lager -c returns -o $WORKDIR/returns.json
-mongoexport --uri=$DB/lager -c logs -o $WORKDIR/logs.json
-mongoexport --uri=$DB/lager -c outs -o $WORKDIR/outs.json
-mongoexport --uri=$DB/lager -c tenants -o $WORKDIR/tenants.json
-mongoexport --uri=$DB/lager -c wanteds -o $WORKDIR/wanteds.json
+rm sample/records/*
+mongoexport --uri=$DB/lager -c counters -o sample/records/counters.json
+mongoexport --uri=$DB/lager -c customers -o sample/records/customers.json
+mongoexport --uri=$DB/lager -c products -o sample/records/products.json
+mongoexport --uri=$DB/lager -c invoices -o sample/records/invoices.json
+mongoexport --uri=$DB/lager -c repairs -o sample/records/repairs.json
+mongoexport --uri=$DB/lager -c returns -o sample/records/returns.json
+mongoexport --uri=$DB/lager -c logs -o sample/records/logs.json
+mongoexport --uri=$DB/lager -c outs -o sample/records/outs.json
 
-rsync -azv ubuntu@demesyinventory:lager/uploads $BACKUPSDIR
+rm sample/images/*
+cp uploads/* sample/images/.

@@ -48,18 +48,26 @@ const avatax = {
     }
 };
 
-// Email Configuration
-const email = {
-    from: process.env.EMAIL_FROM ? process.env.EMAIL_FROM : 'email1@example.com',
-    bcc: process.env.EMAIL_BCC ? process.env.EMAIL_BCC.split(',').map(e => e.trim()) : []
-};
-
 // Auth0 Configuration
 const auth0 = {
     clientId: process.env.AUTH0_CLIENT_ID,
     domain: process.env.AUTH0_DOMAIN,
     callbackUrl: process.env.AUTH0_CALLBACK_URL || 'http://localhost:8080/app/inventory',
-    audience: process.env.AUTH0_AUDIENCE || 'https://lagerinventory/api'
+    audience: process.env.AUTH0_AUDIENCE || 'https://lager/api'
+};
+
+const tenant = {
+    name: process.env.TENANT_NAME || 'My Company',
+    address: process.env.TENANT_ADDRESS || '123 Main St.',
+    city: process.env.TENANT_CITY || 'Anytown',
+    state: process.env.TENANT_STATE || 'CA',
+    zip: process.env.TENANT_ZIP || '12345',
+    bankWireTransferInstructions: process.env.TENANT_BANK_WIRE_TRANSFER_INSTRUCTIONS || 'Bank Name, Account Number, Routing Number',
+    phone: process.env.TENANT_PHONE || '555-555-5555',
+    fax: process.env.TENANT_FAX || '555-555-5556',
+    website: process.env.TENANT_WEBSITE || 'https://www.example.com',
+    appRoot: process.env.TENANT_APP_ROOT || 'http://localhost:8080',
+    email: process.env.TENANT_EMAIL || 'email1@example.com'
 };
 
 // MongoDB URL
@@ -70,7 +78,7 @@ const mongo = {
 module.exports = {
     aws,
     avatax,
-    email,
     auth0,
+    tenant,
     mongo
 };

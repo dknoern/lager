@@ -23,10 +23,6 @@ const ses = new SESClient({
     }
 });
 
-// send to list
-var to = config.email.to;
-var bcc = config.email.bcc;
-
 function formatDate(date) {
     if (date == null) return "";
     else {
@@ -229,7 +225,17 @@ router.route('/repairs/:repair_id/print')
             else {
                 fs.readFile('./src/app/modules/repair/repair-content.html', 'utf-8', function (err, template) {
                     if (err) throw err;
-                    var output = mustache.to_html(template, {data: repair});
+                    var output = mustache.to_html(template, {
+                        data: repair,
+                        tenantAddress: config.tenant.address,
+                        tenantCity: config.tenant.city,
+                        tenantState: config.tenant.state,
+                        tenantZip: config.tenant.zip,
+                        tenantPhone: config.tenant.phone,
+                        tenantFax: config.tenant.fax,
+                        tenantAppRoot: config.tenant.appRoot
+                
+                    });
                     res.send(output);
                 });
             }
@@ -290,7 +296,7 @@ router.route('/repairs/email')
 
         console.log("emailing repair " + req.body.invoiceId + " to " + JSON.stringify(to));
 
-        var from = config.email.from;
+        var from = config.tenant.email;
 
         Repair.findById(req.body.repairId, function (err, repair) {
                 if (err) {
@@ -302,16 +308,24 @@ router.route('/repairs/email')
                     fs.readFile('./src/app/modules/repair/repair-content.html', 'utf-8', function (err, template) {
                         if (err) throw err;
                         var output =
-                            "<p>" + req.body.note + " </p>" + mustache.to_html(template, {data: repair});
+                            "<p>" + req.body.note + " </p>" + mustache.to_html(template, {
+                                data: repair,
+                                tenantAddress: config.tenant.address,
+                                tenantCity: config.tenant.city,
+                                tenantState: config.tenant.state,
+                                tenantZip: config.tenant.zip,
+                                tenantPhone: config.tenant.phone,
+                                tenantFax: config.tenant.fax,
+                                tenantAppRoot: config.tenant.appRoot
+                            });
                         const command = new SendEmailCommand({
                                 Source: from,
                                 Destination: {
-                                    ToAddresses: to,
-                                    BccAddresses: bcc
+                                    ToAddresses: to
                                 },
                                 Message: {
                                     Subject: {
-                                        Data: 'DeMesy Repair'
+                                        Data: `${config.tenant.name} Repair`
                                     },
                                     Body: {
                                         Text: {

@@ -17,7 +17,7 @@
           "processing": true,
           "serverSide": true,
           "ordering": true,
-          "pageLength": 50,
+          "pageLength": 10,
       stateSave: true,
           "ajax": {
               url: "/api/products",

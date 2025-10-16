@@ -27,7 +27,7 @@
             "serverSide": false,
             "ordering": true,
             "paging": false,
-            "pageLength": 50,
+            "pageLength": 10,
         stateSave: true,
             "ajax": {
                 url: 'api/customers/'+$scope.customerId +'/invoices',

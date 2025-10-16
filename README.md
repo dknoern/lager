@@ -2,6 +2,8 @@
 
 A full-stack inventory management system for tracking products, customers, invoices, repairs, and returns.
 
+![Lager Inventory Management System](assets/screens/screen-1.png)   
+
 ## Tech Stack
 
 - **Backend**: Node.js, Express, MongoDB, Mongoose
@@ -9,6 +11,8 @@ A full-stack inventory management system for tracking products, customers, invoi
 - **Image Processing**: Sharp
 - **Authentication**: Auth0
 - **Deployment**: Docker, Docker Compose
+
+![Lager Inventory Management System](assets/screens/screen-2.png)  
 
 ## Prerequisites
 
@@ -125,36 +129,6 @@ To also remove volumes (MongoDB data):
 docker-compose down -v
 ```
 
-## Production Deployment
-
-### Using GitHub Container Registry
-
-The GitHub Actions workflow automatically builds and pushes Docker images to `ghcr.io/dknoern/lager:latest` when you push to the `main` or `master` branch.
-
-### On Your Production Server
-
-1. **Login to GitHub Container Registry**:
-
-```bash
-echo "YOUR_GITHUB_PAT" | docker login ghcr.io -u dknoern --password-stdin
-```
-
-2. **Create `.env` file** with production values
-
-3. **Pull and start containers**:
-
-```bash
-docker-compose pull
-docker-compose up -d
-```
-
-4. **Update to latest version**:
-
-```bash
-docker-compose pull
-docker-compose up -d
-```
-
 ## Development
 
 ### Project Structure
@@ -192,12 +166,20 @@ Required variables:
 - `AVATAX_PASSWORD` - AvaTax API password
 - `AUTH0_CLIENT_ID` - Auth0 client ID
 - `AUTH0_DOMAIN` - Auth0 domain
+- `TENANT_EMAIL` - From email address for emailing invoices and repair orders
+- `TENANT_APP_ROOT` - URL of the application (e.g. http://localhost:8080)
+- `TENANT_NAME` - Name of the tenant
+- `TENANT_ADDRESS` - Address of the tenant
+- `TENANT_CITY` - City of the tenant
+- `TENANT_STATE` - State of the tenant
+- `TENANT_ZIP` - Zip code of the tenant
+- `TENANT_PHONE` - Phone number of the tenant
+- `TENANT_FAX` - Fax number of the tenant
+- `TENANT_WEBSITE` - Website of the tenant
 
 Optional variables:
 - `MONGODB_URI` - MongoDB connection string (default: `mongodb://localhost:27017/lager`)
 - `PORT` - Server port (default: 8080)
-- `EMAIL_FROM` - Email source address for notifications
-- `EMAIL_BCC` - BCC email addresses (comma-separated)
 
 ## Troubleshooting
 
