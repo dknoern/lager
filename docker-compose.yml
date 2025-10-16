@@ -11,7 +11,7 @@ services:
       - mongo-data:/data/db
 
   lager:
-    image: ghcr.io/dknoern/lager:latest
+    image: lager
     container_name: lager
     restart: unless-stopped
     ports:

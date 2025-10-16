@@ -25,6 +25,9 @@ A full-stack inventory management system for tracking products, customers, invoi
 - Docker
 - Docker Compose
 
+
+![Lager Inventory Management System](assets/screens/screen-3.png)
+
 ## Getting Started
 
 ### 1. Clone the Repository
@@ -77,7 +80,13 @@ docker run -d -p 27017:27017 --name mongo mongo:8
 mkdir -p uploads
 ```
 
-### 4. Start the Server
+### 4. Seed the Database and Copy Sample Images
+
+```bash
+./seed.sh
+```
+
+### 5. Start the Server
 
 ```bash
 node server.js
@@ -107,7 +116,13 @@ This will start:
 - MongoDB container (port 27017)
 - Application container (port 8080)
 
-### 4. View Logs
+### 4. Seed the Database and Copy Sample Images
+
+```bash
+./seed.sh
+```
+
+### 5. View Logs
 
 ```bash
 # View all logs
