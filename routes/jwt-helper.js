@@ -1,5 +1,5 @@
 const jwtAuthz = require('express-jwt-authz');
-const jwt = require('express-jwt');
+const { expressjwt: jwt } = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
 const config = require('../config');
 exports.checkJwt = jwt({
@@ -14,7 +14,8 @@ exports.checkJwt = jwt({
   // Validate the audience and the issuer.
   audience: "https://lager/api",
   issuer: "https://seattleweb.auth0.com/",
-  algorithms: ['RS256']
+  algorithms: ['RS256'],
+  requestProperty: 'user' // Store the decoded token in req.user instead of req.auth
 });
 
 exports.checkScopes = jwtAuthz([ 'read:messages' ]);
