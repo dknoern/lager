@@ -1,5 +1,3 @@
-rm sample/*.json
-
 DB=mongodb://localhost:27017
 
 rm sample/records/*

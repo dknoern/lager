@@ -1,4 +1,3 @@
-WORKDIR=sample
 DB=mongodb://localhost:27017
 
 mongosh lager --eval "db.dropDatabase()"
