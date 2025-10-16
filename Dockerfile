@@ -28,6 +28,6 @@ COPY src ./src
 COPY index.html ./index.html
 COPY config.js ./config.js
 
-EXPOSE 8080
+EXPOSE 3000
 
 CMD ["node","server.js"]

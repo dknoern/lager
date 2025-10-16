@@ -52,7 +52,7 @@ const avatax = {
 const auth0 = {
     clientId: process.env.AUTH0_CLIENT_ID,
     domain: process.env.AUTH0_DOMAIN,
-    callbackUrl: process.env.AUTH0_CALLBACK_URL || 'http://localhost:8080/app/inventory',
+    callbackUrl: process.env.AUTH0_CALLBACK_URL || 'http://localhost:3000/app/inventory',
     audience: process.env.AUTH0_AUDIENCE || 'https://lager/api'
 };
 
@@ -66,7 +66,7 @@ const tenant = {
     phone: process.env.TENANT_PHONE || '555-555-5555',
     fax: process.env.TENANT_FAX || '555-555-5556',
     website: process.env.TENANT_WEBSITE || 'https://www.example.com',
-    appRoot: process.env.TENANT_APP_ROOT || 'http://localhost:8080',
+    appRoot: process.env.TENANT_APP_ROOT || 'http://localhost:3000',
     email: process.env.TENANT_EMAIL || 'email1@example.com'
 };
 

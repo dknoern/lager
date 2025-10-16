@@ -7,7 +7,6 @@
   <meta name="description" content="">
   <meta name="author" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
   <!-- remove head/footer on printed pages like invoice -->
@@ -17,18 +16,14 @@
 
   <!-- build:css({.tmp/serve,src}) styles/vendor.css -->
   <!-- bower:css -->
+
   <link rel="stylesheet" href="../bower_components/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" />
   <link rel="stylesheet" href="../bower_components/animate.css/animate.css" />
   <link rel="stylesheet" href="../bower_components/pace.js/themes/pace-theme-flash.css" />
-  <link rel="stylesheet" href="../bower_components/rickshaw/rickshaw.css" />
-  <link rel="stylesheet" href="../bower_components/bootstrap_calendar/bootstrap_calendar/css/bootstrap_calendar.css" />
-  <link rel="stylesheet" href="../bower_components/jvectormap/jquery-jvectormap-2.0.3.css" />
   <link rel="stylesheet" href="../bower_components/datatables/media/css/jquery.dataTables.css" />
   <link rel="stylesheet" href="../bower_components/bootstrap-select/dist/css/bootstrap-select.css" />
   <link rel="stylesheet" href="../bower_components/magnific-popup/dist/magnific-popup.css" />
   <link rel="stylesheet" href="../bower_components/messenger/build/css/messenger.css" />
-  <link rel="stylesheet" href="../bower_components/nvd3/build/nv.d3.css" />
-  <link rel="stylesheet" href="../bower_components/morris.js/morris.css" />
   <link rel="stylesheet" href="../bower_components/summernote/dist/summernote.css" />
   <link rel="stylesheet" href="../bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
   <link rel="stylesheet" href="../bower_components/dropzone/dist/dropzone.css" />
@@ -42,18 +37,10 @@
   <!-- build:css({.tmp/serve,src}) styles/app.css -->
   <!-- inject:css -->
   <link rel="stylesheet" href="app/index.css">
-
-
   <!-- endinject -->
   <!-- endbuild -->
 </head>
 <body ng-controller="App" ng-class="{'nav-static': app.state['nav-static'], 'login-page': $state.is('login'), 'error-page': $state.is('error')}">
-
-  <!--navbar></navbar-->
-
-<!--[if lt IE 10]>
-<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-<![endif]-->
 
 <div class="app" id="app" ui-view></div>
 
@@ -75,23 +62,12 @@
 <script src="../bower_components/jquery-touchswipe/jquery.touchSwipe.js"></script>
 <script src="../bower_components/angular-ui-utils/jq.js"></script>
 <script src="../bower_components/angular-ui-event/dist/event.js"></script>
-<script src="../bower_components/raphael/raphael.js"></script>
-<script src="../bower_components/jQuery-Mapael/js/jquery.mapael.js"></script>
-<script src="../bower_components/jQuery-Mapael/js/maps/usa_states.js"></script>
-<script src="../bower_components/jQuery-Mapael/js/maps/world_countries.js"></script>
-<script src="../bower_components/jquery-animateNumber/jquery.animateNumber.js"></script>
-<script src="../bower_components/d3/d3.js"></script>
-<script src="../bower_components/rickshaw/rickshaw.js"></script>
-<script src="../bower_components/bootstrap_calendar/bootstrap_calendar/js/bootstrap_calendar.js"></script>
-<script src="../bower_components/jvectormap/jquery-jvectormap-2.0.3.min.js"></script>
-<script src="../bower_components/jvectormap-world/index.js"></script>
 <script src="../bower_components/jquery-ui/ui/core.js"></script>
 <script src="../bower_components/jquery-ui/ui/widget.js"></script>
 <script src="../bower_components/jquery-ui/ui/mouse.js"></script>
 <script src="../bower_components/jquery-ui/ui/sortable.js"></script>
 <script src="../bower_components/jquery-ui/ui/draggable.js"></script>
 <script src="../bower_components/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
-<script src="../bower_components/jquery.sparkline/index.js"></script>
 <script src="../bower_components/datatables/media/js/jquery.dataTables.js"></script>
 <script src="../bower_components/angular-datatables/dist/angular-datatables.js"></script>
 <script src="../bower_components/angular-datatables/dist/plugins/bootstrap/angular-datatables.bootstrap.js"></script>
@@ -110,16 +86,6 @@
 <script src="../bower_components/magnific-popup/dist/jquery.magnific-popup.js"></script>
 <script src="../bower_components/messenger/build/js/messenger.js"></script>
 <script src="../bower_components/messenger/build/js/messenger-theme-flat.js"></script>
-<script src="../bower_components/messenger/docs/welcome/javascripts/location-sel.js"></script>
-<script src="../bower_components/flot/jquery.flot.js"></script>
-<script src="../bower_components/flot/jquery.flot.selection.js"></script>
-<script src="../bower_components/flot/jquery.flot.time.js"></script>
-<script src="../bower_components/nvd3/build/nv.d3.js"></script>
-<script src="../bower_components/flot.animator/jquery.flot.animator.js"></script>
-<script src="../bower_components/flot-orderBars/js/jquery.flot.orderBars.js"></script>
-<script src="../bower_components/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>
-<script src="../bower_components/mocha/mocha.js"></script>
-<script src="../bower_components/morris.js/morris.js"></script>
 <script src="../bower_components/summernote/dist/summernote.js"></script>
 <script src="../bower_components/angular-summernote/dist/angular-summernote.js"></script>
 <script src="../bower_components/moment-timezone/builds/moment-timezone-with-data-2012-2022.js"></script>
@@ -138,20 +104,8 @@
 <script src="../src/app/modules/core/widget/widget.js"></script>
 <script src="../src/app/modules/core/utils/utils.js"></script>
 <script src="../src/app/modules/core/navigation/navigation.js"></script>
-<script src="../src/app/modules/components/sparkline/sparkline.module.js"></script>
-<script src="../src/app/modules/components/sparkline/sparkline.js"></script>
-<script src="../src/app/modules/components/rickshaw/rickshaw.module.js"></script>
-<script src="../src/app/modules/components/rickshaw/rickshaw.js"></script>
-<script src="../src/app/modules/components/nvd3/nvd3.module.js"></script>
-<script src="../src/app/modules/components/nvd3/nvd3.js"></script>
-<script src="../src/app/modules/components/morris/morris.module.js"></script>
-<script src="../src/app/modules/components/morris/morris.js"></script>
-<script src="../src/app/modules/components/mapael/mapael.module.js"></script>
-<script src="../src/app/modules/components/mapael/mapael.js"></script>
 <script src="../src/app/modules/components/gallery/gallery.module.js"></script>
 <script src="../src/app/modules/components/gallery/gallery.js"></script>
-<script src="../src/app/modules/components/flot/flot.module.js"></script>
-<script src="../src/app/modules/components/flot/flot.js"></script>
 <script src="../src/app/modules/components/dropzone/dropzone.module.js"></script>
 <script src="../src/app/modules/components/dropzone/dropzone.js"></script>
 <script src="../src/app/modules/returns/returns.module.js"></script>
@@ -172,16 +126,12 @@
 <script src="../src/app/modules/invoice/invoice.js"></script>
 <script src="../src/app/modules/inventory/tables-dynamic.module.js"></script>
 <script src="../src/app/modules/inventory/tables-dynamic.js"></script>
-<script src="../src/app/modules/dashboard/dashboard.module.js"></script>
-<script src="../src/app/modules/dashboard/dashboard.js"></script>
 <script src="../src/app/modules/customers/customers.module.js"></script>
 <script src="../src/app/modules/customers/customers.js"></script>
 <script src="../src/app/modules/customer/customer.module.js"></script>
 <script src="../src/app/modules/customer/customer.js"></script>
 <script src="../src/app/modules/core/core.js"></script>
 <script src="../src/app/modules/core/config.js"></script>
-<script src="../src/app/modules/charts/charts.module.js"></script>
-<script src="../src/app/modules/charts/charts.js"></script>
 <script src="../src/app/index.js"></script>
 <script src="../src/app/app.run.js"></script>
 <script src="../src/app/modules/log/log.module.js"></script>
@@ -208,7 +158,6 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
-
 
 <script type="text/javascript" src="app/refdata/refdata.js"></script>
 

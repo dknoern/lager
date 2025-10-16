@@ -92,7 +92,7 @@ mkdir -p uploads
 node server.js
 ```
 
-The application will be available at [http://localhost:8080](http://localhost:8080)
+The application will be available at [http://localhost:3000](http://localhost:3000)
 
 ## Running with Docker Compose
 
@@ -114,7 +114,7 @@ docker-compose up -d
 
 This will start:
 - MongoDB container (port 27017)
-- Application container (port 8080)
+- Application container (port 3000)
 
 ### 4. Seed the Database and Copy Sample Images
 
@@ -182,7 +182,7 @@ Required variables:
 - `AUTH0_CLIENT_ID` - Auth0 client ID
 - `AUTH0_DOMAIN` - Auth0 domain
 - `TENANT_EMAIL` - From email address for emailing invoices and repair orders
-- `TENANT_APP_ROOT` - URL of the application (e.g. http://localhost:8080)
+- `TENANT_APP_ROOT` - URL of the application (e.g. http://localhost:3000)
 - `TENANT_NAME` - Name of the tenant
 - `TENANT_ADDRESS` - Address of the tenant
 - `TENANT_CITY` - City of the tenant
@@ -194,7 +194,7 @@ Required variables:
 
 Optional variables:
 - `MONGODB_URI` - MongoDB connection string (default: `mongodb://localhost:27017/lager`)
-- `PORT` - Server port (default: 8080)
+- `PORT` - Server port (default: 3000)
 
 ## Troubleshooting
 
