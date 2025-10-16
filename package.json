@@ -4,15 +4,12 @@
   "description": "Lager Inventory App",
   "dependencies": {
     "@aws-sdk/client-ses": "^3.0.0",
-    "@uirouter/angularjs": "^1.0.5",
     "angular": "^1.6.1",
     "angular-auth0": "^3.0.0",
     "auth0-js": "^9.3.0",
     "avatax": "^25.9.0",
     "body-parser": "^1.18.3",
-    "bootstrap": "^4.6.2",
     "console-stamp": "^3.1.2",
-    "csv-parse": "4.4.6",
     "date-format": "1.2.0",
     "dotenv": "^16.6.1",
     "express": "^4.16.3",
@@ -28,23 +25,6 @@
     "sharp": "^0.33.0"
   },
   "scripts": {},
-  "devDependencies": {
-    "browser-sync": "^3.0.4",
-    "browser-sync-spa": "^1.0.0",
-    "chalk": "1.1.1",
-    "concat-stream": "~1.4.7",
-    "del": "~2.0.2",
-    "http-proxy": "~1.18.1",
-    "jshint": "^2.9.6",
-    "jshint-stylish": "~1.0.0",
-    "lodash": "~4.17.5",
-    "main-bower-files": "^2.13.1",
-    "merge-stream": "~0.1.7",
-    "require-dir": "~0.1.0",
-    "uglify-save-license": "~0.4.1",
-    "wiredep": "~4.0.0",
-    "wrench": "~1.5.8"
-  },
   "engines": {
     "node": ">=0.10.0"
   },
