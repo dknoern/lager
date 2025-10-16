@@ -2,7 +2,7 @@ var express = require('express');
 var multer = require('multer');
 var router = express.Router();
 var fs = require('fs');
-var Jimp = require("jimp");
+var { Jimp } = require("jimp");
 var imageStorage = require('./ImageStorage');
 
 const checkJwt = require('./jwt-helper').checkJwt;
