@@ -4,8 +4,6 @@ var opts = { format: '%s%v', symbol: '$' };
 
 var mongoose = require('mongoose');
 
-var Schema = new mongoose.Schema();
-
 var RepairSchema = new mongoose.Schema({
     repairNumber: String,
     dateOut: Date,

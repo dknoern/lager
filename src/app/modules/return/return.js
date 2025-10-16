@@ -57,11 +57,8 @@
 
       }else{
       $scope.data = $resource('api/returns/:id').get({id: $scope.returnId});
-
       }
-
     }
-
 
     $scope.includeItem = function(i,included)
     {
@@ -69,7 +66,6 @@
         $scope.computeTotals();
     }
 
-    //function computeTotals()
     $scope.computeTotals = function()
     {
       var total = 0.0;
@@ -82,16 +78,12 @@
 
       $scope.data.subTotal = total;
 
-
-
-
       var taxRate = 0.00;
       if($scope.data.taxable)
         taxRate = 0.0825;
       $scope.data.salesTax = taxRate * total;
 
         $scope.data.totalReturnAmount = $scope.data.subTotal + $scope.data.salesTax + $scope.data.shipping;
-       // $scope.data.totalReturnAmount = $scope.data.subTotal + $scope.data.shipping;
     }
 
     $scope.go = function() {

@@ -1,5 +1,4 @@
 var express = require('express');
-var mongoose = require('mongoose');
 var router = express.Router();
 var Product = require('../models/product');
 const checkJwt = require('./jwt-helper').checkJwt;

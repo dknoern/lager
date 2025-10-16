@@ -1,5 +1,4 @@
 var express = require('express');
-var mongoose = require('mongoose');
 var router = express.Router();
 var Product = require('../models/product');
 var Log = require('../models/log');

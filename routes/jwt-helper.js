@@ -12,8 +12,8 @@ exports.checkJwt = jwt({
   }),
 
   // Validate the audience and the issuer.
-  audience: "https://lager/api",
-  issuer: "https://seattleweb.auth0.com/",
+  audience: config.auth0.audience || "https://lager/api",
+  issuer: config.auth0.issuer || "https://seattleweb.auth0.com/",
   algorithms: ['RS256'],
   requestProperty: 'user' // Store the decoded token in req.user instead of req.auth
 });

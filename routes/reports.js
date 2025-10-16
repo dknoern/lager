@@ -14,7 +14,6 @@ function formatMoney(value){
     else return formatCurrency(value,  { format: '%s%v', code: "", symbol: '$' });
 }
 
-
 function getBySellerType(sellerType, res){
     var results = {
         "data": []

@@ -62,15 +62,6 @@
 
     function isAuthenticated() {
 
-      //if(userProfile && userProfile.sub) alert("sub:"+ userProfile.sub)
-
-      //if(userProfile && userProfile.sub && userProfile.sub !='facebook|10212774134421457')
-      //return false
-      //alert('profile='+ JSON.stringify(userProfile));
-
-      // to bypass auth, uncomment the following:
-      //return true;
-
       // Check whether the current time is past the
       // access token's expiry time
       var expiresAt = JSON.parse(localStorage.getItem('expires_at'));

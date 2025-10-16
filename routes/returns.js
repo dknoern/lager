@@ -1,11 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var Return = require('../models/return');
-var mongoose = require('mongoose');
 var history = require('./history');
 const checkJwt = require('./jwt-helper').checkJwt;
 var format = require('date-format');
-
 
 function formatDate(date) {
     console.log('formatting date, yo: ' + date);
@@ -14,7 +12,6 @@ function formatDate(date) {
         return format('yyyy-MM-dd', date);
     }
 }
-
 
 function buildItemNumberList(lineItems){
     var itemNumber = "";
@@ -43,19 +40,6 @@ function buildItemNumberList(lineItems){
         }
     }
     return itemNumber;
-}
-
-
-function buildCustomerName(firstName, lastName){
-    var customerName = "";
-    if(firstName!=null) {
-        customerName += firstName;
-        if(lastName!=null) customerName += " ";
-    }
-    if(lastName!=null){
-        customerName += lastName;
-    }
-    return customerName;
 }
 
 router.route('/returns')
@@ -121,7 +105,6 @@ router.route('/returns')
         }
 
         history.updateProductHistory(includedLineItems, "In Stock", "item returned", req.user['http://mynamespace/name'],null);
-
     })
 
     .get(checkJwt,function(req, res) {

@@ -241,7 +241,6 @@ router.route('/invoices')
     });
 
 router.route('/invoices/:invoice_id/print')
-  //  .get(checkJwt, function(req, res) {
     .get( function(req, res) {
         var opts = { format: '%s%v', symbol: '$' };
 

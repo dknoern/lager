@@ -1,5 +1,4 @@
 var express = require('express');
-var mongoose = require('mongoose');
 var router = express.Router();
 var Out = require('../models/out');
 const checkJwt = require('./jwt-helper').checkJwt;
@@ -17,7 +16,6 @@ router.use(function (req, res, next) {
 });
 
 router.route('/outs')
-    // post new out entry
     .post(checkJwt, function (req, res) {
         var out = new Out();
         out.date = new Date();
