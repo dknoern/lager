@@ -6,7 +6,7 @@
     "@aws-sdk/client-ses": "^3.0.0",
     "@uirouter/angularjs": "^1.0.5",
     "angular": "^1.6.1",
-    "angular-auth0": "^2.0.0",
+    "angular-auth0": "^3.1.0",
     "auth0-js": "^9.3.0",
     "avatax": "^21.3.0",
     "body-parser": "^1.18.3",
