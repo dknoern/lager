@@ -19,7 +19,7 @@
     "express-jwt": "^5.3.1",
     "express-jwt-authz": "1.0.0",
     "format-currency": "1.0.0",
-    "jimp": "0.2.28",
+    "jimp": "1.6.0",
     "jwks-rsa": "1.2.0",
     "mongoose": "6.13.6",
     "multer": "2.0.2",
@@ -41,7 +41,7 @@
     "merge-stream": "~0.1.7",
     "require-dir": "~0.1.0",
     "uglify-save-license": "~0.4.1",
-    "wiredep": "~2.2.2",
+    "wiredep": "~4.0.0",
     "wrench": "~1.5.8"
   },
   "engines": {
