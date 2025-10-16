@@ -9,8 +9,6 @@
     'ui.event',
     'ngResource',
     'singApp.components.dropzone',
-    'singApp.components.switchery',
-    'singApp.components.holderjs',
     'angular-bootstrap-select',
     'summernote'
   ]);
