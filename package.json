@@ -6,7 +6,7 @@
     "@aws-sdk/client-ses": "^3.0.0",
     "@uirouter/angularjs": "^1.0.5",
     "angular": "^1.6.1",
-    "angular-auth0": "^3.1.0",
+    "angular-auth0": "^3.0.0",
     "auth0-js": "^9.3.0",
     "avatax": "^25.9.0",
     "body-parser": "^1.18.3",
@@ -30,7 +30,7 @@
   "scripts": {},
   "devDependencies": {
     "browser-sync": "^3.0.4",
-    "browser-sync-spa": "~1.0.3",
+    "browser-sync-spa": "^1.0.0",
     "chalk": "1.1.1",
     "concat-stream": "~1.4.7",
     "del": "~2.0.2",
