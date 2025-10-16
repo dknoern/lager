@@ -47,7 +47,7 @@
   <!-- endinject -->
   <!-- endbuild -->
 </head>
-<body ng-controller="App" sn-demo ng-class="{'nav-static': app.state['nav-static'], 'login-page': $state.is('login'), 'error-page': $state.is('error')}">
+<body ng-controller="App" ng-class="{'nav-static': app.state['nav-static'], 'login-page': $state.is('login'), 'error-page': $state.is('error')}">
 
   <!--navbar></navbar-->
 
@@ -137,9 +137,7 @@
 <script src="../src/app/modules/core/core.module.js"></script>
 <script src="../src/app/modules/core/widget/widget.js"></script>
 <script src="../src/app/modules/core/utils/utils.js"></script>
-<script src="../src/app/modules/core/notifications/notifications.js"></script>
 <script src="../src/app/modules/core/navigation/navigation.js"></script>
-<script src="../src/app/modules/core/chat/chat.js"></script>
 <script src="../src/app/modules/components/sparkline/sparkline.module.js"></script>
 <script src="../src/app/modules/components/sparkline/sparkline.js"></script>
 <script src="../src/app/modules/components/rickshaw/rickshaw.module.js"></script>

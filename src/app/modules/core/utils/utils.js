@@ -5,7 +5,6 @@
     .directive('inputGroupNoBorder', inputGroupNoBorder)
     .directive('inputGroupTransparent', inputGroupNoBorder)
     .directive('ajaxLoad', ajaxLoad)
-    .directive('snDemo', snDemo)
     .directive('snProgressAnimate', snProgressAnimate)
     .directive('animateNumber', animateNumber)
     .directive('checkAll', checkAll)
@@ -83,42 +82,6 @@
         jQuery($window.document).on('click', '[data-toggle^=button]', function (e) {
           return jQuery(e.target).find('input').data('ajax-trigger') !== 'change';
         });
-      }
-    }
-  }
-
-  /* ========================================================================
-   * Sing Demo functions directive. Demo-only functions. Does not affect the core Sing functionality.
-   * Should be removed when used in real app.
-   * ========================================================================
-   */
-  snDemo.$inject = ['jQuery', '$timeout', '$document'];
-  function snDemo (jQuery, $timeout, $document){
-    return {
-      link: function(){
-        jQuery($document).on('ajax-load:end', '#load-notifications-btn', function () {
-          $timeout(function(){
-            jQuery('#notifications-list').find('.bg-attention').removeClass('bg-attention');
-          }, 10000)
-        });
-        jQuery($document).on('ajax-load:end', '#notifications-toggle input', function(){
-          jQuery('#notifications-list').find('[data-toggle=tooltip]').tooltip();
-        });
-
-        $timeout(function(){
-          var $chatNotification = jQuery('#chat-notification');
-          $chatNotification.removeClass('hide').addClass('animated fadeIn')
-            .one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
-              $chatNotification.removeClass('animated fadeIn');
-              $timeout(function(){
-                $chatNotification.addClass('animated fadeOut')
-                  .one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
-                    $chatNotification.addClass('hide');
-                  });
-              }, 4000);
-            });
-          $chatNotification.siblings('[data-sn-action="toggle-chat-sidebar-state"]').append('<i class="chat-notification-sing animated bounceIn"></i>')
-        }, 4000)
       }
     }
   }
