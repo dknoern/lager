@@ -10,7 +10,6 @@
     'ngResource',
     'singApp.components.dropzone',
     'angular-bootstrap-select',
-    'summernote'
   ]);
 
   module.config(appConfig);
