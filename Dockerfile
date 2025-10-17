@@ -2,15 +2,12 @@ FROM node:22-alpine AS deps
 WORKDIR /app
 
 COPY package.json package-lock.json* ./
-COPY bower.json ./bower.json
 
 RUN apk add --no-cache git python3 make g++ vips-dev ca-certificates
 RUN npm config set strict-ssl false
 RUN git config --global http.sslVerify false
 RUN git config --global http.postBuffer 524288000
 RUN npm install
-RUN npm install -g bower
-RUN bower --allow-root -f install || bower --allow-root -f install || bower --allow-root -f install
 
 FROM node:22-alpine AS runner
 WORKDIR /app
@@ -21,7 +18,6 @@ COPY app ./app
 COPY assets ./assets
 COPY models ./models
 COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/bower_components ./bower_components
 COPY routes ./routes
 COPY server.js ./server.js
 COPY src ./src
