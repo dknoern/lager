@@ -4,8 +4,9 @@
   "description": "Lager Inventory App",
   "dependencies": {
     "@aws-sdk/client-ses": "^3.0.0",
-    "angular": "^1.6.1",
+    "angular": "1.4.1",
     "angular-auth0": "^3.0.0",
+    "angular-animate": "1.4.1",
     "auth0-js": "^9.3.0",
     "avatax": "^25.9.0",
     "body-parser": "^1.18.3",
