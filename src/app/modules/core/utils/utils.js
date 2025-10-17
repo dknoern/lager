@@ -146,7 +146,7 @@
       restrict: 'E',
       link: function(scope, $element) {
         // prevent unwanted navigation
-        $element.on('click', 'a[href=#]', function(e) {
+        $element.on('click', 'a[href="#"]', function(e) {
           e.preventDefault();
         })
       }
