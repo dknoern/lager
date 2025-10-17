@@ -26,7 +26,6 @@
     "pace.js": "git://github.com/HubSpot/pace.git#v0.7.1",
     "angular-ui-utils": "bower-jq",
     "angular-ui-event": "1.0.0",
-    "angular-datatables": "~0.4.3",
     "datatables": "~1.10.16",
     "angular-resource": "~1.4.3",
     "angular-bootstrap-select": "0.1.0-rc2",
