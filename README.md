@@ -11,6 +11,7 @@ A full-stack inventory management system for tracking products, customers, invoi
 - **Image Processing**: Sharp
 - **Authentication**: Auth0
 - **Deployment**: Docker, Docker Compose
+- **Package Management**: NPM (fully migrated from Bower)
 
 ![Lager Inventory Management System](assets/screens/screen-2.png)  
 
@@ -19,7 +20,7 @@ A full-stack inventory management system for tracking products, customers, invoi
 ### For Local Development
 - Node.js 22.x or higher
 - MongoDB 5.x
-- npm
+- npm (comes with Node.js)
 
 ### For Docker Deployment
 - Docker
@@ -58,8 +59,6 @@ Edit `.env` with your actual credentials:
 
 ```bash
 npm install
-npm install -g bower
-bower install
 ```
 
 ### 2. Start MongoDB

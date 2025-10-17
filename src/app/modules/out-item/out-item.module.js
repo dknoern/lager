@@ -3,11 +3,10 @@
 
     var module = angular.module('singApp.outitem', [
         'ui.router',
-        'ui.jq',
         'ui.event',
         'ngResource',
         'singApp.components.dropzone',
-        'angular-bootstrap-select',
+        'ui.select',
     ]);
 
     module.config(appConfig);

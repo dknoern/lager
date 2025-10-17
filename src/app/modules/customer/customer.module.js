@@ -5,11 +5,10 @@
 
   var module = angular.module('singApp.customer', [
     'ui.router',
-    'ui.jq',
     'ui.event',
     'ngResource',
     'singApp.components.dropzone',
-    'angular-bootstrap-select',
+    'ui.select',
   ]);
 
   module.config(appConfig);
