@@ -8,6 +8,7 @@
     "angular-auth0": "^3.0.0",
     "angular-animate": "1.4.1",
     "angular-datatables": "0.4.3",
+    "animate.css": "3.7.2",
     "datatables.net": "1.10.16",
     "datatables.net-dt": "1.10.16",
 
