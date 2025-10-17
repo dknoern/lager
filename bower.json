@@ -60,12 +60,6 @@
         "./docs/welcome/javascripts/location-sel.js"
       ]
     },
-    "shufflejs": {
-      "main": [
-        "./dist/jquery.shuffle.modernizr.js"
-      ],
-      "dependencies": {}
-    },
     "jquery-ui": {
       "main": [
         "./ui/core.js",
