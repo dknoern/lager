@@ -2,12 +2,12 @@
 @import "theme/mixins";
 
 $icon-font-path: "../../bower_components/bootstrap-sass/assets/fonts/bootstrap/";
-$fa-font-path: "../../bower_components/font-awesome/fonts";
-$OpenSansPath: "../../bower_components/open-sans-fontface/fonts";
+$fa-font-path: "../../node_modules/font-awesome/fonts";
+$OpenSansPath: "../../node_modules/open-sans-fontface/fonts";
 
 @import "../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap";
-@import "../../bower_components/font-awesome/scss/font-awesome";
-@import "../../bower_components/open-sans-fontface/open-sans.scss";
+@import "../../node_modules/font-awesome/scss/font-awesome";
+@import "../../node_modules/open-sans-fontface/open-sans.scss";
 @import "../../bower_components/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.scss";
 
 @import "theme/override-bootstrap";
