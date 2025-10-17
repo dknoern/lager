@@ -9,6 +9,7 @@
     .directive('animateNumber', animateNumber)
     .directive('checkAll', checkAll)
     .directive('body', body)
+    .directive('selectpicker', selectpicker)
   ;
 
   /* ========================================================================
@@ -151,6 +152,35 @@
         })
       }
     }
+  }
+
+  /* ========================================================================
+   * Bootstrap Select Directive
+   * ========================================================================
+   */
+  selectpicker.$inject = ['jQuery', '$timeout'];
+  function selectpicker(jQuery, $timeout) {
+    return {
+      restrict: 'C',
+      link: function(scope, element, attrs) {
+        // Initialize selectpicker after DOM is ready
+        $timeout(function() {
+          jQuery(element).selectpicker();
+        });
+
+        // Watch for model changes and refresh selectpicker
+        scope.$watch(attrs.ngModel, function() {
+          $timeout(function() {
+            jQuery(element).selectpicker('refresh');
+          });
+        });
+
+        // Cleanup on destroy
+        scope.$on('$destroy', function() {
+          jQuery(element).selectpicker('destroy');
+        });
+      }
+    };
   }
 
 })();
