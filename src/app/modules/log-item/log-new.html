@@ -23,8 +23,8 @@
         <div class="col-md-2">
 
             <div ng-if="data._id" style="height: 50px;">
-                <div class="btn-group hidden-print" data-dropdown>
-                    <button class="btn btn-success dropdown-toggle" data-dropdown-toggle data-original-title=""
+                <div class="btn-group dropdown hidden-print">
+                    <button class="btn btn-success dropdown-toggle" data-toggle="dropdown" data-original-title=""
                         title="">
                         &nbsp; Action &nbsp;
                         <i class="fa fa-caret-down"></i>
@@ -203,8 +203,8 @@
                                                     <thead>
                                                         <tr>
                                                             <th>Item Received</th>
-                                                            <th>Item Number</td>
-                                                            <th>Repair Number</td>
+                                                            <th>Item Number</th>
+                                                            <th>Repair Number</th>
                                                             <th>Repair Cost</th>
                                                             <th></th>
                                                         </tr>
@@ -212,8 +212,8 @@
                                                     <tbody>
                                                         <tr data-ng-repeat="lineItem in data.lineItems">
                                                             <td>
-                                                                <textarea cols=70 rows="1" id="name"
-                                                                    ng-model="lineItem.name"/>
+                                                                <textarea cols="70" rows="1" id="name"
+                                                                    ng-model="lineItem.name"></textarea>
                                                             </td>
                                                             <td><a href="/#/app/item/{{lineItem.productId}}">{{lineItem.itemNumber}}</a></td>
                                                             <td ng-if="lineItem.repairId!=null" ><a href="/#/app/repair/{{lineItem.repairId}}">{{lineItem.repairNumber}}</a></td>

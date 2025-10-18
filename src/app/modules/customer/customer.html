@@ -11,8 +11,8 @@
 
         <div ng-if="data._id && invoiceCount == 0">
 
-            <div class="btn-group" data-dropdown>
-                <button class="btn btn-success dropdown-toggle" data-dropdown-toggle
+            <div class="btn-group dropdown">
+                <button class="btn btn-success dropdown-toggle" data-toggle="dropdown"
                         data-original-title="" title="">
                     &nbsp; Action &nbsp;
                     <i class="fa fa-caret-down"></i>
@@ -230,7 +230,7 @@
               <div class="row">
                 <div class="col-sm-offset-4 col-sm-7">
                   <button type="submit" class="btn btn-primary" ng-click="go()">Save</button>
-                  <a href="/#/app/customers"><button type="button" class="btn btn-inverse"> Cancel</button></a>
+                  <a href="/#/app/customers" class="btn btn-inverse">Cancel</a>
                 </div>
               </div>
             </div>
@@ -251,7 +251,7 @@
       <div id="tabs1c" class="tab-content mb-lg">
         <div class="tab-pane active clearfix" id="tab1">
           <div>
-            <a href="/#/app/invoice/edit/new?customerId={{data._id}}"><button type="button" class="btn btn-primary">New</button></a>
+            <a href="/#/app/invoice/edit/new?customerId={{data._id}}" class="btn btn-primary">New</a>
           </div>
 
           <div class="mt">

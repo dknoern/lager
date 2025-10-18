@@ -21,8 +21,8 @@
 
             <div ng-if="data._id" style="height: 50px;">
 
-                <div class="btn-group" data-dropdown>
-                    <button class="btn btn-success dropdown-toggle" data-dropdown-toggle
+                <div class="btn-group dropdown">
+                    <button class="btn btn-success dropdown-toggle" data-toggle="dropdown"
                             data-original-title="" title="">
                         &nbsp; Action &nbsp;
                         <i class="fa fa-caret-down"></i>
@@ -409,8 +409,8 @@
                                         <thead>
                                             <tr>
                                                 <th>Description</th>
-                                                <th>Item Number</td>
-                                                <th>Serial Number</td>
+                                                <th>Item Number</th>
+                                                <th>Serial Number</th>
                                                 <th>Amount</th>
                                                 <th></th>
                                             </tr>
@@ -418,11 +418,9 @@
                                         <tbody>
                                             <tr data-ng-repeat="lineItem in data.lineItems">
                                                 <td>
-                                                    <textarea cols=70 rows="2" id="name" ng-model="lineItem.name"/>
+                                                    <textarea cols="70" rows="2" id="name" ng-model="lineItem.name"></textarea>
                                                     <br>
-                                                    <textarea cols=70 rows="3" id="longDesc" ng-model="lineItem.longDesc"/>
-                                                </td>
-
+                                                    <textarea cols="70" rows="3" id="longDesc" ng-model="lineItem.longDesc"></textarea>
                                                 </td>
                                                 <td>{{lineItem.itemNumber}}</td>
                                                 <td>{{lineItem.serialNumber}}</td>
@@ -462,24 +460,20 @@
                                             </tr>
                                         </tbody>
                                     </table>
+                                    
+                                    <!-- Save/Cancel buttons after line items and totals -->
+                                    <br>
+                                    <button type="submit" class="btn btn-primary" ng-click="go()" ng-disabled="invoiceForm.$invalid">Save Invoice</button>
+                                    <button type="button" class="btn btn-default" onclick="window.location.href='/#/app/inventory'" style="margin-left: 10px;">Cancel</button>
+                                    
                                 </div>
                             </div>
                         </div>
 
-                        <div  ng-if="data.invoiceType != 'Partner'" ng-if="data._id" class="form-actions" ng-show="data.invoiceType!='Consignment'">
+                        <div ng-if="data.invoiceType != 'Partner' && data._id" class="form-actions" ng-show="data.invoiceType!='Consignment'">
                             <div class="row">
                                 <div class="col-sm-offset-4 col-sm-7">
-                                  <a href="/#/app/return/new?invoiceId={{data._id}}"><button type="button" class="btn btn-danger">Return item(s)</button></a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-actions">
-                            <div class="row">
-                                <div class="col-sm-offset-4 col-sm-7">
-
-                                    <button type="submit" class="btn btn-primary" ng-click="go()" ng-disabled="invoiceForm.$invalid">Save</button>
-                                    <a href="/#/app/inventory"><button type="button" class="btn btn-inverse"> Cancel</button></a>
+                                  <a href="/#/app/return/new?invoiceId={{data._id}}" class="btn btn-danger">Return item(s)</a>
                                 </div>
                             </div>
                         </div>

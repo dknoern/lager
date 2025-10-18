@@ -1,4 +1,3 @@
-const jwtAuthz = require('express-jwt-authz');
 const { expressjwt: jwt } = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
 const config = require('../config');
@@ -17,5 +16,3 @@ exports.checkJwt = jwt({
   algorithms: ['RS256'],
   requestProperty: 'user' // Store the decoded token in req.user instead of req.auth
 });
-
-exports.checkScopes = jwtAuthz([ 'read:messages' ]);
