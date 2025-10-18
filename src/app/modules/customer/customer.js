@@ -11,10 +11,6 @@
         var accessToken = localStorage.getItem('access_token');
 
         $scope.states = refdataService.states();
-        
-        $scope.dtChanged = function(dt) {
-            $window.alert('Angular model changed to: ' + dt);
-        };
 
         if ($scope.customerId) {
             $http.get('api/customers/' + $scope.customerId).

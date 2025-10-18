@@ -3,7 +3,6 @@ var router = express.Router();
 var Product = require('../models/product');
 var Log = require('../models/log');
 var Repair = require('../models/repair');
-var Log = require('../models/log');
 const checkJwt = require('./jwt-helper').checkJwt;
 var format = require('date-format');
 

@@ -9,10 +9,6 @@ var scopeHolder;
     LogItemCtrl.$inject = ['$scope', '$resource', '$http', '$location','$window', '$state', 'jQuery', 'authService'];
 
     function LogItemCtrl($scope, $resource, $http, $location, $window, $state, jQuery, authService, $upload) {
-        $scope.dtChanged = function (dt) {
-            $window.alert('Angular model changed to: ' + dt);
-        };
-
         scopeHolder = $scope;
 
         $scope.print = function () {

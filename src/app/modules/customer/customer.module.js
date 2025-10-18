@@ -33,10 +33,4 @@
         })
   }
 
-
- function submitForm(){
-   alert('saving customer!');
- }
-
-
 })();

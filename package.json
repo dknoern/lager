@@ -64,7 +64,9 @@
     "mustache": "^2.3.0",
     "sharp": "^0.33.0"
   },
-  "scripts": {},
+  "scripts": {
+    "start": "node server.js"
+  },
   "engines": {
     "node": ">=0.10.0"
   },

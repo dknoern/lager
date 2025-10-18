@@ -7,10 +7,6 @@
     RepairCtrl.$inject = ['$scope', '$resource', '$http', '$window', '$location', '$state', 'jQuery'];
 
     function RepairCtrl($scope, $resource, $http, $window, $location, $state, jQuery) {
-        $scope.dtChanged = function(dt) {
-            $window.alert('Angular model changed to: ' + dt);
-        };
-
         $scope.print = function() {
             $window.print();
         };

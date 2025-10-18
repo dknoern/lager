@@ -86,15 +86,6 @@ var scopeHolder;
                     }
                     $scope.data.lineItems.push(lineItem);
                     $scope.computeTotals();
-
-                    // remove selected item from list
-                    /*
-                    for(var i=0;i<$scope.products;i++){
-                      if($scope.products[i]._id == itemId){
-                        $scope.products.splice(i,1);
-                      }
-                    }
-                    */
                 });
 
             $('#productModal').modal('hide');
@@ -127,7 +118,6 @@ var scopeHolder;
             $scope.computeTotals();
         }
 
-        //function computeTotals()
         $scope.computeTotals = function() {
 
             // make sure shipping and taxexempt have values
@@ -185,9 +175,6 @@ var scopeHolder;
 
 
 
-        $scope.dtChanged = function(dt) {
-            $window.alert('Angular model changed to: ' + dt);
-        };
 
         $scope.print = function() {
             $window.print();

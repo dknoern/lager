@@ -7,10 +7,6 @@
 
   ReturnCtrl.$inject = ['$scope', '$resource','$http', '$window', '$location','$state', 'jQuery'];
   function ReturnCtrl ($scope, $resource, $http,$window, $location, $state, jQuery) {
-    $scope.dtChanged = function(dt){
-      $window.alert('Angular model changed to: ' + dt);
-    };
-
     if ($scope.returnId) {
 
       if("new" == $scope.returnId){

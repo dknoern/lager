@@ -46,10 +46,4 @@
 
   }
 
-
- function submitForm(){
-   alert('saving item!');
- }
-
-
 })();

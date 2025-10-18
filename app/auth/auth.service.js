@@ -25,13 +25,11 @@
           setSession(authResult);
           $state.go('app.inventory');
         } else if (err) {
-          //alert('error');
           $timeout(function() {
             $state.go('app.inventory');
           });
           console.log(err);
 
-          //alert('Error: ' + err.error + '. Check the console for further details.');
           alert('Login must be enabled by admin, please request access');
         }
       });
@@ -40,15 +38,12 @@
     function setSession(authResult) {
       // Set the time that the access token will expire at
         var expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
-        //var expiresAt = JSON.stringify((authResult.expiresIn * 1000)  / 4.0 + new Date().getTime());
         // if 2 hours, set to 30 min
       localStorage.setItem('access_token', authResult.accessToken);
       localStorage.setItem('id_token', authResult.idToken);
       localStorage.setItem('expires_at', expiresAt);
       console.log("new expires at: "+ expiresAt);
       scheduleRenewal();
-
-    //  alert("access_token="+ authResult.accessToken + ", id_token="+authResult.idToken);
     }
 
     function logout() {
@@ -73,7 +68,6 @@
       var accessToken = localStorage.getItem('access_token');
 
       if (!accessToken) {
-        //throw new Error('Access token must exist to fetch profile');
       }else{
 
         angularAuth0.client.userInfo(accessToken, function(err, profile) {
