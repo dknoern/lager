@@ -252,7 +252,7 @@ router.route('/invoices/:invoice_id/print')
                     invoice.lineItems[i].itemNumberFMT = invoice.lineItems[i].itemNumber+ format('dd', invoice.date);
                 }
 
-                fs.readFile('./src/app/modules/invoice/invoice-content.html', 'utf-8', function (err, template) {
+                fs.readFile('./app/modules/invoice/invoice-content.html', 'utf-8', function (err, template) {
                     if (err) throw err;
                     var output = mustache.to_html(template, {
                         data: invoice,
@@ -459,7 +459,7 @@ router.route('/invoices/email')
                     return;
                 }
                 else {
-                    fs.readFile('./src/app/modules/invoice/invoice-content.html', 'utf-8', function (err, template) {
+                    fs.readFile('./app/modules/invoice/invoice-content.html', 'utf-8', function (err, template) {
                         if (err) throw err;
                         var output =
                             "<p>" + req.body.note + " </p>" + mustache.to_html(template, {

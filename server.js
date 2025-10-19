@@ -20,9 +20,9 @@ app.set("trust proxy", true);
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-app.use('/app/modules', express.static('./src/app/modules'));
+app.use('/app/modules', express.static('./app/modules'));
 
-app.use('/assets', express.static('./src/assets'));
+app.use('/assets', express.static('./assets'));
 app.use('/uploads', express.static('./uploads'));
 
 var customers = require('./routes/customers');

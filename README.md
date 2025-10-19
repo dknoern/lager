@@ -88,7 +88,7 @@ mkdir -p uploads
 ### 5. Start the Server
 
 ```bash
-node server.js
+npm start
 ```
 
 The application will be available at [http://localhost:3000](http://localhost:3000)

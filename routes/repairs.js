@@ -215,7 +215,7 @@ router.route('/repairs/:repair_id/print')
                 res.send(err);
             }
             else {
-                fs.readFile('./src/app/modules/repair/repair-content.html', 'utf-8', function (err, template) {
+                fs.readFile('./app/modules/repair/repair-content.html', 'utf-8', function (err, template) {
                     if (err) throw err;
                     var output = mustache.to_html(template, {
                         data: repair,
@@ -292,7 +292,7 @@ router.route('/repairs/email')
                 return "Error formatting repair";
             }
             else {
-                fs.readFile('./src/app/modules/repair/repair-content.html', 'utf-8', function (err, template) {
+                fs.readFile('./app/modules/repair/repair-content.html', 'utf-8', function (err, template) {
                     if (err) throw err;
                     var output =
                         "<p>" + req.body.note + " </p>" + mustache.to_html(template, {
