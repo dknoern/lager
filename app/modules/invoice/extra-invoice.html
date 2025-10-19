@@ -7,20 +7,18 @@
     </div>
 
     <div class="btn-toolbar mt-lg text-align-center hidden-print">
-      <button data-ng-click="print()" class="btn btn-inverse">
+      <button data-ng-click="print()" class="btn btn-inverse" style="margin-right: 4px;">
         <i class="fa fa-print"></i>
         &nbsp;&nbsp;
         Print
       </button>
-      <a href="/#/app/invoice/edit/{{data._id}}" ng-if="'Partner' !=invoiceType">
-        <button class="btn btn-success">
-          Edit
-          &nbsp;
-          <span class="circle bg-white">
-            <i class="fa fa-edit text-success"></i>
-          </span>
-        </button></a>
-
+      <a href="/#/app/invoice/edit/{{data._id}}" ng-if="'Partner' !=invoiceType" class="btn btn-success" style="margin-right: 4px;">
+        Edit
+        &nbsp;
+        <span class="circle bg-white">
+          <i class="fa fa-edit text-success"></i>
+        </span>
+      </a>
 
       <button class="btn btn-primary" data-toggle="modal" data-target="#emailModal">
         EMail
