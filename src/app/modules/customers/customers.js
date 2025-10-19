@@ -103,14 +103,11 @@
 
     $scope.mergeCustomers = function () {
 
-      console.log("merging");
-
       var postData = {
         "ids": customerIds
       }
 
       $http.post('api/customers/merge', postData).then(function successCallback(response) {
-        console.log(response.statusText);
         table.ajax.reload();
 
         Messenger().post({
@@ -118,7 +115,7 @@
           type: "success"
         });
       }, function errorCallback(response) {
-        console.log(response.statusText);
+        // Error handled by UI
       });
     }
   }

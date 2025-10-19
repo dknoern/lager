@@ -56,10 +56,8 @@ router.route('/logs')
             {
                 upsert: false, useFindAndModify:false
             }, function (err, doc) {
-                if (err) 
-                    console.log('error updating log item',err);
-                else
-                    console.log('updated existing log item successfully');
+                if (err)
+                    console.error('Error updating log item:', err);
 
                 return res.send("Saved log item");
             });
@@ -71,19 +69,16 @@ router.route('/logs')
 
             log.save(function (err, result) {
                 if (err) {
-                    console.log('error saving log: ' + err);
+                    console.error('Error saving log:', err);
                 }
                 log.lineItems.forEach(lineItem => {
 
                     if (lineItem.productId != null) {
-                        console.log("update product", lineItem.itemNumber);
                         receiveProduct(log, lineItem);
                     }
                     closeRepair(lineItem, log.comments);
                 });
 
-
-                console.log("sucessfully saved new log entry", result._id);
                 return res.send("sucessfully saved new log entry ");
             });
         }
@@ -92,7 +87,7 @@ router.route('/logs')
     })
 
     // get all log entries
-    .get(function (req, res) {
+    .get(checkJwt, function (req, res) {
 
         var draw = req.query.draw;
         var start = 0;
@@ -114,7 +109,7 @@ router.route('/logs')
         // search individual fields, composite search field was missing itemNumber for some time.
         //Log.find({ 'search': new RegExp(search, 'i') }).
 
-        Log.find({ 
+        Log.find({
             $or:[
                 {'receivedFrom': new RegExp(search, 'i')},
                 {'customerName': new RegExp(search, 'i')},
@@ -127,11 +122,7 @@ router.route('/logs')
             sort(sortClause).skip(parseInt(start)).limit(parseInt(length))
             .exec(function (err, logs) {
 
-                if (logs == null) {
-                    console.log("no log items found");
-                }
-
-                else {
+                if (logs != null) {
 
                     for (var i = 0; i < logs.length; i++) {
                         results.data.push(
@@ -210,7 +201,6 @@ function receiveProduct(log, lineItem) {
                     memo = false;
                 }
             }
-            console.log("action = ", element.action, "sold = ", sold, "repair = ", repair, "memo = ", memo);
 
         });
 
@@ -231,13 +221,10 @@ function receiveProduct(log, lineItem) {
             newStatus = "In Stock";
         }
 
-        console.log("checking existing product in, status was " + product.status + ", setting status to " + newStatus);
         var updates = {
             "lastUpdated": Date.now(),
             "status": newStatus
         };
-
-        //TODO: update total repair cost maybe?... will now calculate on display only.
 
         // ---------------------------------
         // create new history item and product status
@@ -264,16 +251,13 @@ function receiveProduct(log, lineItem) {
         }, {
             upsert: true, useFindAndModify: false
         }, function (err, doc) {
-            if (err) 
-                console.log('error adding history',err);
-                else
-                console.log('added history line',doc._id,'for itemNumber',lineItem.itemNumber);
+            if (err)
+                console.error('Error adding history:', err);
         });
     });
 }
 
 function closeRepair(lineItem, comments) {
-    console.log('marking repairs for repairId', lineItem.repairId, 'or productId', lineItem.productId);
 
     Repair.updateMany(
         {
@@ -303,17 +287,13 @@ function closeRepair(lineItem, comments) {
             repairNotes: comments
         }, function (err, doc) {
             if (err) {
-                console.log(err)
-            }
-            else {
-                console.log('closed', doc.nModified, 'repairs for repairId', lineItem.repairId, 'or productId', lineItem.productId);
+                console.error('Error closing repairs:', err);
             }
         });
 }
 
 
 function updateRepairDetails(lineItem, comments) {
-    console.log('updating repair details for repairId', lineItem.repairId, 'or productId', lineItem.productId);
 
     Repair.updateMany(
         {
@@ -324,10 +304,7 @@ function updateRepairDetails(lineItem, comments) {
             repairNotes: comments
         }, function (err, doc) {
             if (err) {
-                console.log(err)
-            }
-            else {
-                console.log('updated', doc.nModified, 'repairs for repairId', lineItem.repairId, 'or productId', lineItem.productId);
+                console.error('Error updating repair details:', err);
             }
         });
 }

@@ -93,15 +93,11 @@ async function upsertInvoice(req,res){
     if(invoice._id==null) {
         var counter = await Counter.findByIdAndUpdate({_id: 'invoiceNumber'}, {$inc: {seq: 1}});
         invoice._id = counter.seq;
-        console.log("new invoice ID is "+ invoice._id);
     }
 
     invoice.tax = await calcTax(invoice).then(result => {
 
         invoice.tax = result;
-
-        console.log("invoice tax calculated is " + invoice.tax);
-
         invoice.total = invoice.subtotal + invoice.tax + invoice.shipping;
 
         // update item status to sold, but only if NOT Partner and NOT Estimate
@@ -131,7 +127,7 @@ async function upsertInvoice(req,res){
             return res.send("invoice saved");
         });
     }, error => {
-        console.log("calcTax call failure: " + error);
+        console.error("calcTax call failure:", error);
         res.send(500, {
             error: "" + error
         });
@@ -241,7 +237,7 @@ router.route('/invoices')
     });
 
 router.route('/invoices/:invoice_id/print')
-    .get( function(req, res) {
+    .get(checkJwt, function(req, res) {
         var opts = { format: '%s%v', symbol: '$' };
 
         Invoice.findById(req.params.invoice_id, function(err, invoice) {
@@ -350,20 +346,16 @@ router.route('/invoices/partner/:product_id')
             },
             function (err, invoice) {
                 if (err) {
-                    console.log("error getting partner invoice");
+                    console.error("Error getting partner invoice:", err);
                     res.send(err);
                 } else {
                     if(invoice == null){
-                        console.log("got partner invoice but it is null, creating partner invoice");
-
                         // create partner invoice
                         invoice = new Invoice();
 
-                        console.log("lookng up product: "+ req.params.product_id);
-
                         Product.findById(req.params.product_id,function(err,product){
                             if(err){
-                                console.log("error getting partner product " + err);
+                                console.error("Error getting partner product:", err);
                                 res.send(err);
                             }
                             else{
@@ -399,7 +391,6 @@ router.route('/invoices/partner/:product_id')
                         });
 
                     }else{
-                        console.log("got partner invoice, not null");
                         res.json(invoice);
                     }
                 }
@@ -409,7 +400,7 @@ router.route('/invoices/partner/:product_id')
 
 // find invoices for a particular customer
 router.route('/customers/:customer_id/invoices')
-    .get(function(req, res) {
+    .get(checkJwt, function(req, res) {
 
         var opts = { format: '%s%v', symbol: '$' };
 
@@ -457,7 +448,7 @@ router.route('/customers/:customer_id/invoices')
 
 
     router.route('/customers/:customer_id/invoiceCount')
-        .get(function(req, res) {
+        .get(checkJwt, function(req, res) {
             var customerId = req.params.customer_id;
             Invoice.countDocuments({'customerId': customerId, status: {$ne: 'Deleted'} }, function( err, count){
                 res.json({"invoiceCount": count});
@@ -468,17 +459,13 @@ router.route('/invoices/email')
     .post(checkJwt, function(req, res) {
 
         var to = req.body.emailAddresses.split(/[ ,\n]+/);
-
-        console.log("emailing invoice " + req.body.invoiceId + " to " + JSON.stringify(to));
-
-
         var from = config.tenant.email;
 
         Invoice.findById(req.body.invoiceId, function (err, invoice) {
                 if (err) {
+                    console.error("Error fetching invoice:", err);
                     res.send(err);
-
-                    return "Error formatting invoice";
+                    return;
                 }
                 else {
                     fs.readFile('./src/app/modules/invoice/invoice-content.html', 'utf-8', function (err, template) {
@@ -524,10 +511,10 @@ router.route('/invoices/email')
 
                         ses.send(command)
                             .then(data => {
-                                console.log("Email sent successfully");
+                                // Email sent successfully
                             })
                             .catch(err => {
-                                console.log("error sending email:", err);
+                                console.error("Error sending email:", err);
                                 throw err;
                             });
                     });
@@ -540,26 +527,18 @@ router.route('/invoices/email')
 
 async function calcTax(invoice){
 
-    console.log('calculating tax for invoice',invoice._id);
-
-
     if(invoice.invoiceType=='Estimate'){
-        console.log('estimate, will not calculate tax');
         return 0;
     }
     else if(invoice.shipState == '' || invoice.shipState == null){
-        console.log("state not specified, will not calculate tax");
         return 0;
     }else if (invoice.taxExempt) {
-        console.log("taxExempt, no tax");
         return 0;
     }else if (invoice.methodOfSale == 'Ebay') {
-        console.log("ebay, no tax");
         return 0;
     }else if (invoice.shipState == 'TX') {
         var totalTax = 0;
         totalTax = invoice.subtotal * 0.0825;
-        console.log("manually calculating TX tax: ", totalTax);
         return totalTax;
     }
 
@@ -614,10 +593,9 @@ async function calcTax(invoice){
     }
 
     result.summary.forEach(item => {
-        totalTax += item.tax;   
+        totalTax += item.tax;
     });
 
-    console.log("total tax from Avalara for invoice",invoice._id,"is",totalTax);
     return totalTax;
 }
 

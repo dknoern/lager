@@ -546,8 +546,6 @@ router.route('/reports/first-sale-date')
             if (err)
                 res.send(err);
             var dateString = format('yyyy/MM/dd', invoice.date);
-            console.log("date string is " + dateString);
-
             res.json(dateString);
         }).sort({
             date: 1
@@ -562,8 +560,6 @@ router.route('/reports/last-sale-date')
             if (err)
                 res.send(err);
             var dateString = format('yyyy/MM/dd', invoice.date);
-            console.log("date string is " + dateString);
-
             res.json(dateString);
         }).sort({
             date: -1

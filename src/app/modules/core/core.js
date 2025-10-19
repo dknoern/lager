@@ -59,7 +59,7 @@
       $window.localStorage.setItem('sing-2-angular-errors', $window.JSON.stringify(errors));
       if ($injector.get('config').debug) {
         $log.error.apply($log, arguments);
-        $window.alert('check errors');
+        console.error('Angular error caught:', exception, 'Cause:', cause);
       }
     };
   }

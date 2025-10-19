@@ -32,7 +32,6 @@ router.route('/products/outtoshow')
 
             if (enteredCount > 0) {
                 query = {$and: [{'status': "In Stock"}, ors]};
-                console.log("query is " + JSON.stringify(query));
                 Product.update(query, {
                         "$push": {
                             "history": {
@@ -45,14 +44,10 @@ router.route('/products/outtoshow')
                     }, {multi: true},
                     function (err, obj) {
                         if (err) {
-                            console.log('error: ' + err);
+                            console.error('Error updating products to At Show:', err);
                             return res.send("unable to set anything to At Show: " + err);
                         } else {
-                            console.log("done: " + JSON.stringify(obj));
-
                             var nModified = obj.nModified;
-
-                            console.log("data is " + JSON.stringify(req.body));
                             return res.send("Entered a total of " + enteredCount + " products.  Updated total of " + nModified + " from \"In Stock\" to \"At Show\"");
                         }
                     });
@@ -76,10 +71,9 @@ router.route('/products/backfromshow')
                     }, {multi: true},
                 function (err, obj) {
                     if (err) {
-                        console.log('error: ' + err);
+                        console.error('Error updating products back from show:', err);
                         return res.send("unable to set anything to At Show: " + err);
                     } else {
-                        console.log("done: " + JSON.stringify(obj));
                         var nModified = obj.nModified;
                         return res.send("Updated total of " + nModified + " from \"At Show\" to \"In Stock\"");
                     }
@@ -137,14 +131,10 @@ router.route('/products')
         // is existing item?
         if (req.body._id == null) {
 
-            console.log('saving new product with itemNumber',product.itemNumber);
-
             Product.findOne({'itemNumber': req.body.itemNumber}, '_id lastUpdated', function (err, dupeProduct) {
                 if (err) return res.send(500, {error: err});
 
                 else if (dupeProduct != null) {
-                    console.log('found existing product with itemNumber ' + req.body.itemNumber);
-
                     return res.send(409, {error: 'error: item number ' + req.body.itemNumber + ' already exists'});
 
                 } else {
@@ -160,11 +150,9 @@ router.route('/products')
 
                     Product.create(product, function (err,createdProduct) {
                         if (err) {
-                            console.log('error saving product: ' + err);
+                            console.error('Error saving product:', err);
                             return res.send(err);
                         } else {
-
-                            console.log("created new product, id = " + createdProduct._id + " for item number " + createdProduct.itemNumber);
                             return res.json({
                                 message: 'product created'
                             });
@@ -174,8 +162,6 @@ router.route('/products')
             });
 
         } else {
-
-            console.log('updating existing product',req.body.itemNumber);
 
             Product.findByIdAndUpdate(
                 req.body._id,
@@ -401,9 +387,6 @@ router.route('/products/:product_id/status')
     .put(checkJwt, function (req, res) {
 
         var newStatus = req.body.status;
-
-        console.log('setting status to ' + newStatus);
-
         var responseData = {
             "status": newStatus
         }
@@ -435,8 +418,6 @@ router.route('/products/:product_id/status')
 router.route('/products/:itemNumber/undelete')
     .put(checkJwt, function (req, res) {
 
-        console.log('setting status to In Stock (undeleting) item ' + req.params.itemNumber);
-
         Product.findOneAndUpdate({
             itemNumber: req.params.itemNumber
         }, {
@@ -455,7 +436,6 @@ router.route('/products/:itemNumber/undelete')
             upsert: true, useFindAndModify: false
         }, function (err, doc) {
 
-            console.log('_id is '+ doc._id);
             if (err){
                 res.send(err);
             }

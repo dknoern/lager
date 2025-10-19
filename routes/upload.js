@@ -22,13 +22,11 @@ var storage = imageStorage({
 var upload = multer({ storage: storage });
 
 router.route(`/${UPLOAD}`)
-    .post(upload.single('file'), function (req, res, err) {
+    .post(checkJwt, upload.single('file'), function (req, res, err) {
 
         if(err!=null && err.message!=null){
-            console.log('upload error',err.message);
+            console.error('Upload error:', err.message);
         }
-        var itemId = req.body.itemId;
-        console.log("itemId = " + itemId);
         return res.send("post...");
     })
 
@@ -66,8 +64,6 @@ router.route(`/${UPLOAD}/rotate/:image/:direction`)
 
         var filename = 'uploads/' + image;
 
-        console.log("rotating file " + filename);
-
         Jimp.read(filename).then(function (img) {
             img.rotate(angle)
                 .write(filename);
@@ -82,7 +78,6 @@ router.route(`/${UPLOAD}/delete/:image`)
     .delete(checkJwt, function (req, res) {
         var path = 'uploads';
         var image = req.params.image;
-        console.log("deleting file " + image);
 
         fs.unlink(path + "/" + image, function (err) {
             if (err) {

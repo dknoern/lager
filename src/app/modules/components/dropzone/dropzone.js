@@ -18,6 +18,19 @@
 
       config = angular.extend({}, scope[attrs.dropzone]);
 
+      // Add default options with authorization header
+      var defaultOptions = {
+        headers: {
+          "Authorization": "Bearer " + localStorage.getItem('access_token')
+        }
+      };
+
+      // Merge default options with config options
+      if (!config.options) {
+        config.options = {};
+      }
+      config.options = angular.extend(defaultOptions, config.options);
+
       // create a Dropzone for the element with the given options
       dropzone = new Dropzone(element[0], config.options);
 

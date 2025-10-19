@@ -7,9 +7,6 @@
     ItemCtrl.$inject = ['$scope', '$rootScope','$sce','$resource', '$http', '$window', '$location', '$state', 'jQuery'];
 
     function ItemCtrl($scope, $rootScope, $sce, $resource, $http, $window, $location, $state, jQuery,$upload) {
-        $scope.dtChanged = function(dt) {
-            $window.alert('Angular model changed to: ' + dt);
-        };
 
         if ($scope.itemId) {
                     $http.get('api/upload/'+$scope.itemId).
@@ -21,7 +18,6 @@
             $http.get('api/products/'+$scope.itemId).
             success(function(result) {
                 $scope.data = result;
-                console.log('status:',$scope.data.status);
 
                 $http.get('api/repairs/products/'+$scope.itemId).
                 success(function(images) {
@@ -55,7 +51,6 @@
         }
 
         $scope.getPartnerInvoice = function() {
-            alert('getting partner invoice');
             $window.location = "/#/app/partnerinvoice/" + $scope.data._id;
         }
 
@@ -102,15 +97,13 @@
               }
 
               $http.put('api/products/' + $scope.itemId + '/status', statusData).then(function successCallback(response) {
-                  console.log(response.statusText);
 
                   $scope.data = $resource('api/products/:id').get({
                       id: $scope.itemId
                   });
 
-
               }, function errorCallback(response) {
-                  console.log(response.statusText);
+                  // Error handled by UI
               });
 
 
@@ -138,15 +131,13 @@
                     'Content-Type': 'application/json'
                 }
             }).then(function successCallback(response) {
-                console.log(response.statusText);
 
                 $scope.data.history =  $resource('api/products/:id/notes').query({
                     id: $scope.itemId
                 });
 
-
             }, function errorCallback(response) {
-                console.log(response.statusText);
+                // Error handled by UI
             });
 
             Messenger().post({
@@ -168,7 +159,6 @@
                     'Content-Type': 'application/json'
                 }
             }).then(function successCallback(response) {
-                console.log(response.statusText);
                 $state.go('app.inventory');
 
                 Messenger().post({
@@ -177,7 +167,6 @@
                 });
 
             }, function errorCallback(response) {
-
 
                 if(response.status==409 && response.data.error.includes('already exists')){
                     // undelete?
@@ -205,7 +194,6 @@
                     'Content-Type': 'application/json'
                 }
             }).then(function successCallback(response) {
-                console.log(response.statusText);
                 $state.go('app.inventory');
 
                 Messenger().post({
@@ -216,19 +204,19 @@
                 );
 
             }, function errorCallback(response) {
-                console.log(response.statusText);
+                // Error handled by UI
             });
         }
         $scope.undelete = function() {
             var itemNumber = document.getElementById('itemNumber').value;
-        
+
                 $http.put('api/products/' + itemNumber + '/undelete').then(function successCallback(response) {
                     $scope.data = $resource('api/products/:id').get({
                         id: response.data._id
                     });
 
                 }, function errorCallback(response) {
-                    console.log(response.statusText);
+                    // Error handled by UI
                 });
   
                 Messenger().post({
@@ -247,20 +235,20 @@
 
         $scope.uploadFile = function(){
 
-          console.log('uploading file');
-
          $scope.fileSelected = function(files) {
              if (files && files.length) {
                 $scope.file = files[0];
-                console.log('file is ' +   $scope.file);
              }
 
              $upload.upload({
                url: '/api/upload', //node.js route
-               file: $scope.file
+               file: $scope.file,
+               headers: {
+                 "Authorization": "Bearer " + localStorage.getItem('access_token')
+               }
              })
              .success(function(data) {
-               console.log(data, 'uploaded');
+               // File uploaded successfully
               });
             };
         };

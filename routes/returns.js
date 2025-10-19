@@ -6,7 +6,6 @@ const checkJwt = require('./jwt-helper').checkJwt;
 var format = require('date-format');
 
 function formatDate(date) {
-    console.log('formatting date, yo: ' + date);
     if (date == null) return "";
     else {
         return format('yyyy-MM-dd', date);
@@ -62,14 +61,7 @@ router.route('/returns')
 
         ret.search = ret._id + " " + ret.invoiceId + " " + formatDate(ret.date) + " " + ret.customerName + " " + ret.salesPerson + " " + ret.totalReturnAmount;
 
-        // use save for updates, findOne and update for inserts for now until we
-
-        console.log('return id is ' + ret._id);
-        // figure out the problem with the "pre" in mongoose.
         if (ret._id == null || ret._id == "") {
-
-
-            console.log("creating new return");
 
             ret.save(function(err) {
                 if (err)
@@ -82,7 +74,6 @@ router.route('/returns')
               }
             });
         } else {
-            console.log("updating exisiting return... taxable: " + ret.taxable);
             var query = {
                 _id: ret._id
             };

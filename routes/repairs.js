@@ -40,11 +40,8 @@ router.route('/repairs')
         const newRepair = (req.body._id == null);
         var repair = new Repair();
 
-        if (newRepair) {
-            console.log('creating new repair, repairNumber', req.body.repairNumber);
-        } else {
+        if (!newRepair) {
             repair._id = req.body._id;
-            console.log('updating existing repair', repair._id, 'repairNumber', req.body.repairNumber);
         }
 
         repair.dateOut = req.body.dateOut;
@@ -75,7 +72,6 @@ router.route('/repairs')
         }
 
         else {
-            console.log('saving repair', repair.repairNumber);
             repair.search = repair.repairNumber + " " + repair.itemNumber + " " + repair.description + " " + formatDate(repair.dateOut)
                 + " " + formatDate(repair.expectedReturnDate) + " " + formatDate(repair.returnDate)
                 + " " + repair.customerFirstName + " " + repair.customerLastName + " " + repair.vendor;
@@ -101,10 +97,7 @@ router.route('/repairs')
                     }
                 }
 
-                const message = 'repair ' + doc._id + ' saved';
-                console.log(message);
-
-                return res.send(message);
+                return res.send('repair ' + doc._id + ' saved');
             });
         }
     })
@@ -212,8 +205,7 @@ router.route('/repairs')
     });
 
 router.route('/repairs/:repair_id/print')
-//  .get(checkJwt, function(req, res) {
-    .get( function(req, res) {
+    .get(checkJwt, function(req, res) {
 
 
         var opts = { format: '%s%v', symbol: '$' };
@@ -269,7 +261,6 @@ router.route('/repairs/:repair_id/return')
                 res.send(err);
 
             if(repair.returnDate==null){
-                console.log('return date was null, setting to now');
                 repair.returnDate = new Date();
                 repair.save(function(err) {
                     if (err)
@@ -293,9 +284,6 @@ router.route('/repairs/email')
     .post(checkJwt, function(req, res) {
 
         var to = req.body.emailAddresses.split(/[ ,\n]+/);
-
-        console.log("emailing repair " + req.body.invoiceId + " to " + JSON.stringify(to));
-
         var from = config.tenant.email;
 
         Repair.findById(req.body.repairId, function (err, repair) {
@@ -340,8 +328,7 @@ router.route('/repairs/email')
 
                         ses.send(command)
                             .then(data => {
-                                console.log('Email sent:');
-                                console.log(data);
+                                // Email sent successfully
                             })
                             .catch(err => {
                                 console.error('Error sending email:', err);

@@ -48,10 +48,8 @@ router.route('/outs')
             {
                 upsert: false, useFindAndModify:false
             }, function (err, doc) {
-                if (err) 
-                    console.log('error updating log out item',err);
-                else
-                    console.log('updated existing log out item successfully');
+                if (err)
+                    console.error('Error updating log out item:', err);
 
                 return res.send("Saved log out item");
             });
@@ -61,11 +59,9 @@ router.route('/outs')
 
             out.save(function (err, result) {
                 if (err) {
-                    console.log('error saving log out: ' + err);
+                    console.error('Error saving log out:', err);
                 }
 
-
-                console.log("sucessfully saved new log out entry", result._id);
                 return res.send("sucessfully saved new log out entry ");
             });
         }
@@ -73,7 +69,7 @@ router.route('/outs')
     })
 
     // get all log entries
-    .get(function (req, res) {
+    .get(checkJwt, function (req, res) {
 
         var draw = req.query.draw;
         var start = 0;
@@ -96,11 +92,7 @@ router.route('/outs')
             sort(sortClause).skip(parseInt(start)).limit(parseInt(length))
             .exec(function (err, outs) {
 
-                if (outs == null) {
-                    console.log("no log out items found");
-                }
-
-                else {
+                if (outs != null) {
 
                     for (var i = 0; i < outs.length; i++) {
                         results.data.push(

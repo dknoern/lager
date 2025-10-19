@@ -32,7 +32,6 @@ module.exports.updateProductHistory = async function (lineItems, status, action,
             }, {
                 upsert: false, useFindAndModify: false
             });
-            console.log('updated product', lineItem.productId,'history and set status to',status);
         }
     }
 }

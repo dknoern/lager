@@ -25,7 +25,6 @@
                     'Content-Type': 'application/json'
                 }
             }).then(function successCallback(response) {
-                console.log(response.statusText);
 
                 Messenger().post({
                     message: 'repair emailed to '+ document.getElementById('emailAddresses').value,
@@ -43,7 +42,6 @@
         }
 
         $scope.addItem = function(itemId) {
-            console.log('setting item id to ' + itemId);
 
             $http.get("api/products/" + itemId)
                 .then(function(response) {
@@ -76,8 +74,6 @@
 
                 var customerId = $location.search().customerId;
                 if (customerId != "new") {
-
-                    console.log("existing invoice, copying customer data");
 
                     $http.get('api/customers/' + customerId).
                     success(function(customer) {
@@ -121,10 +117,8 @@
                     'Content-Type': 'application/json'
                 }
             }).then(function successCallback(response) {
-                console.log(response.statusText);
                 $state.go('app.repairs');
             }, function errorCallback(response) {
-                console.log(response.statusText);
                 Messenger().post({
                     message: response.data.error,
                     type: "success"

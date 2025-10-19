@@ -30,28 +30,16 @@ var scopeHolder;
             }).$promise.then(function (thedata) {
                 $scope.data = thedata;
 
-
-                if(thedata.itemNumber!=null){
-                    console.log('itemNumber=',thedata.itemNumber);
-                }else{
-                    console.log('no itemNumber=');
-                }
-
                 const logRedoDate = new Date('2023-01-07');
                 const logDate = new Date(thedata.date);
-
-                console.log('logRedoDate',logRedoDate);
-                console.log('logDate',new Date(thedata.date));
 
                 var imagesKey = thedata._id; // newer log or older log with no itemNumbers
 
                 if(logDate < logRedoDate){
-                    console.log('pre-dates log redo');
                     $scope.data.oldLog=true;
 
                     if(thedata.lineItems!=null&&thedata.lineItems.length==1&&thedata.lineItems[0].itemNumber!=null){
                         imagesKey = thedata.lineItems[0].productId;
-                        console.log("using productId for images");
                     }
                 }else{
                     $scope.data.oldLog=false;
@@ -93,10 +81,9 @@ var scopeHolder;
                     'Content-Type': 'application/json'
                 }
             }).then(function successCallback(response) {
-                console.log(response.statusText);
                 $state.go('app.log');
             }, function errorCallback(response) {
-                console.log(response.statusText);
+                // Error handled by UI
             });
         }
 
@@ -108,21 +95,21 @@ var scopeHolder;
         }
 
         $scope.uploadFile = function () {
-            alert('uploading file');
-            console.log('uploading file');
 
             $scope.fileSelected = function (files) {
                 if (files && files.length) {
                     $scope.file = files[0];
-                    console.log('file is ' + $scope.file);
                 }
 
                 $upload.upload({
                     url: '/api/upload', //node.js route
-                    file: $scope.file
+                    file: $scope.file,
+                    headers: {
+                        "Authorization": "Bearer " + localStorage.getItem('access_token')
+                    }
                 })
                     .success(function (data) {
-                        console.log(data, 'uploaded');
+                        // File uploaded successfully
                     });
             };
         };
@@ -182,7 +169,6 @@ var scopeHolder;
 
         $scope.addItem = function (itemId) {
 
-            console.log('addItem, itemId = ' + itemId);
             $http.get("api/products/" + itemId)
                 .then(function (response) {
 
@@ -191,9 +177,6 @@ var scopeHolder;
                         itemNumber: response.data.itemNumber,
                         productId: response.data._id
                     }
-
-                    console.log('adding item', response.data.title);
-                    console.log('itemNumber', response.data.itemNumber);
 
                     if ($scope.data.lineItems == null) {
                         $scope.data.lineItems = new Array();
@@ -206,11 +189,9 @@ var scopeHolder;
         }
 
         $scope.addMisc = function () {
-            console.log('adding misc item');
             var lineItem = {
                 name: ""
             }
-            console.log('adding misc item');
             if ($scope.data.lineItems == null) {
                 $scope.data.lineItems = new Array();
             }
@@ -233,7 +214,6 @@ var scopeHolder;
                     if($scope.data.customerName == null) {
                         $scope.data.customerName = response.data.customerFirstName + ' ' + response.data.customerLastName;
                     }
-                    console.log('adding repair', response.data.title);
 
                     if ($scope.data.lineItems == null) {
                         $scope.data.lineItems = new Array();
@@ -291,5 +271,6 @@ var scopeHolder;
                 repairTableShown = true;
             }
         })
+
     }
 })();

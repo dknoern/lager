@@ -65,7 +65,7 @@ router.route('/customers')
                 }
             }, function(err, counter) {
                 if (err) {
-                    console.log(err);
+                    console.error("Error incrementing customer counter:", err);
                     return res.send(500, {
                         error: err
                     });
@@ -209,7 +209,6 @@ router.route('/customers/:customer_id')
 router.route('/customers/merge')
     .post(checkJwt, function (req, res) {
         var idsUnsorted = req.body.ids;
-        console.log('merging customers ', idsUnsorted);
         var ids = idsUnsorted.sort(function (a, b) {
             return a - b;
         });
@@ -225,11 +224,10 @@ function mergeCustomers(ids, res) {
         query.select('customer date invoiceNumber customerId total invoiceType lineItems');
         query.exec(function (err, invoices) {
             if (err) {
-                console.log("error ", err)
+                console.error("Error fetching invoices for merge:", err);
             } else {
                 for (var i = 0; i < invoices.length; i++) {
                     if (id != canonicalId){
-                      console.log("moving invoice", invoices[i]._id, "from customer", invoices[i].customerId, "to", canonicalId);
                       invoices[i].customerId = canonicalId;
                       invoices[i].save(function (err) {
                       });
@@ -242,11 +240,10 @@ function mergeCustomers(ids, res) {
         query3.select('customerId');
         query3.exec(function (err, returns) {
             if (err) {
-                console.log("error ", err)
+                console.error("Error fetching returns for merge:", err);
             } else {
                 for (var i = 0; i < returns.length; i++) {
                     if (id != canonicalId){
-                      console.log("moving return", returns[i]._id, "from customer", returns[i].customerId, "to", canonicalId);
                       returns[i].customerId = canonicalId;
                       returns[i].save(function (err) {
                       });
@@ -261,13 +258,10 @@ function mergeCustomers(ids, res) {
         for (var i = 1; i < ids.length; i++) {
             const customer = await Customer.findById(ids[i]).exec();
             overlayCustomer(canonicalCustomer, customer);
-            console.log("deleting merged customer", ids[i]);
             await Customer.deleteOne({ _id: ids[i] }, function (err) {
-                if (err) console.log(err);
+                if (err) console.error("Error deleting merged customer:", err);
             });
         }
-
-        console.log('updating canonical customer', canonicalId, canonicalCustomer.firstName, getLastOrCompany(canonicalCustomer));
 
         await canonicalCustomer.save();
 

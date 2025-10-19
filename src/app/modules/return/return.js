@@ -92,10 +92,9 @@
                 'Content-Type': 'application/json'
             }
         }).then(function successCallback(response) {
-            console.log(response.statusText);
             $state.go('app.returns');
         }, function errorCallback(response) {
-            console.log(response.statusText);
+            // Error handled by UI
         });
     }
 

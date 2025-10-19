@@ -30,7 +30,6 @@ var scopeHolder;
                     'Content-Type': 'application/json'
                 }
             }).then(function successCallback(response) {
-                console.log(response.statusText);
 
                 Messenger().post({
                     message: 'invoice emailed to '+ document.getElementById('emailAddresses').value,
@@ -67,7 +66,6 @@ var scopeHolder;
 
         $scope.addItem = function(itemId) {
 
-            console.log('addItem, itemId = ' + itemId);
             $http.get("api/products/" + itemId)
                 .then(function(response) {
 
@@ -156,7 +154,6 @@ var scopeHolder;
                     'Content-Type': 'application/json'
                 }
             }).then(function successCallback(response) {
-                console.log(response.statusText);
                 $state.go('app.invoices');
 
                 Messenger().post({
@@ -167,7 +164,7 @@ var scopeHolder;
                 );
 
             }, function errorCallback(response) {
-                console.log(response.statusText);
+                // Error handled by UI
             });
         }
 
@@ -211,8 +208,6 @@ var scopeHolder;
                 }
 
                 if(customerId != "new"){
-
-                console.log("existing invoice, copying customer data");
 
                 $http.get('api/customers/' + customerId).
                 success(function(customer) {
@@ -281,7 +276,6 @@ var scopeHolder;
                     'Content-Type': 'application/json'
                 }
             }).then(function successCallback(response) {
-                console.log(response.statusText);
                 $state.go('app.invoices');
             }, function errorCallback(response) {
                 Messenger().post({
@@ -290,7 +284,6 @@ var scopeHolder;
                     showCloseButton: true
                 }
             );
-                console.log(response.statusText);
             });
         }
 

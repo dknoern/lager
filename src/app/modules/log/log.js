@@ -18,12 +18,18 @@
         $scope.day = d.getDate();
 
 
+        var accessToken = localStorage.getItem('access_token');
         jQuery('#example').DataTable({
             "processing": true,
             "serverSide": true,
             "ordering": false,
             "pageLength": 10,
-            "ajax": "/api/logs",
+            "ajax": {
+                "url": "/api/logs",
+                "headers": {
+                    "Authorization": "Bearer " + accessToken
+                }
+            },
             "dom": 'Bfrtip',
             stateSave: true,
             "buttons": [

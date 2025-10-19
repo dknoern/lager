@@ -76,12 +76,11 @@
                     'Content-Type': 'application/json'
                 }
             }).then(function successCallback(response) {
-                console.log(response.statusText);
 
                 $state.go('app.customers');
 
             }, function errorCallback(response) {
-                console.log(response.statusText);
+                // Error handled by UI
             });
 
         }
@@ -99,7 +98,6 @@
                     'Content-Type': 'application/json'
                 }
             }).then(function successCallback(response) {
-                console.log(response.statusText);
                 $state.go('app.customers');
 
                 Messenger().post({
@@ -110,7 +108,7 @@
                 );
 
             }, function errorCallback(response) {
-                console.log(response.statusText);
+                // Error handled by UI
             });
         }
 

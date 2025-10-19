@@ -25,12 +25,20 @@
           setSession(authResult);
           $state.go('app.inventory');
         } else if (err) {
+          console.error('Authentication error:', err);
+
+          // Show error message using Messenger if available
+          if (typeof Messenger !== 'undefined') {
+            Messenger().post({
+              message: 'Login must be enabled by admin. Please request access.',
+              type: 'error',
+              showCloseButton: true
+            });
+          }
+
           $timeout(function() {
             $state.go('app.inventory');
           });
-          console.log(err);
-
-          alert('Login must be enabled by admin, please request access');
         }
       });
     }

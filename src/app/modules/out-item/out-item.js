@@ -34,12 +34,6 @@ var scopeHolder;
             }).$promise.then(function (thedata) {
                 $scope.data = thedata;
 
-                if (thedata.itemNumber != null) {
-                    console.log('itemNumber=', thedata.itemNumber);
-                } else {
-                    console.log('no itemNumber=');
-                }
-
                 var imagesKey = thedata._id; // newer log or older log with no itemNumbers
 
                 $http.get('api/upload/' + imagesKey).
@@ -64,10 +58,9 @@ var scopeHolder;
                     'Content-Type': 'application/json'
                 }
             }).then(function successCallback(response) {
-                console.log(response.statusText);
                 $state.go('app.out');
             }, function errorCallback(response) {
-                console.log(response.statusText);
+                // Error handled by UI
             });
         }
 
@@ -80,20 +73,20 @@ var scopeHolder;
 
         $scope.uploadFile = function () {
 
-            console.log('uploading file');
-
             $scope.fileSelected = function (files) {
                 if (files && files.length) {
                     $scope.file = files[0];
-                    console.log('file is ' + $scope.file);
                 }
 
                 $upload.upload({
                     url: '/api/upload', //node.js route
-                    file: $scope.file
+                    file: $scope.file,
+                    headers: {
+                        "Authorization": "Bearer " + localStorage.getItem('access_token')
+                    }
                 })
                     .success(function (data) {
-                        console.log(data, 'uploaded');
+                        // File uploaded successfully
                     });
             };
         };
@@ -145,7 +138,6 @@ var scopeHolder;
         $scope.esign = function () {
             var canvas = document.getElementById("sig-canvas");
             var signature = canvas.toDataURL();
-            console.log('saving signature');
             canvas.width = canvas.width;
 
             $http({
@@ -159,7 +151,6 @@ var scopeHolder;
                     'Content-Type': 'application/json'
                 }
             }).then(function successCallback(response) {
-                console.log(response.statusText);
 
                 $scope.data.signature = response.data.signature;
                 $scope.data.signatureDate = response.data.signatureDate;
@@ -171,7 +162,7 @@ var scopeHolder;
 
             }, function errorCallback(response) {
                 Messenger().post({
-                    message: "Dnable to save signature: " + response.data.error,
+                    message: "Unable to save signature: " + response.data.error,
                     type: "danger",
                 });
             });

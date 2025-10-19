@@ -63,7 +63,6 @@ var InvoiceSchema = new mongoose.Schema({
     trackingNumber: String
 });
 
-// TODO: remove pre hook
 InvoiceSchema.pre('save', function (next) {
     var doc = this;
 
