@@ -115,7 +115,10 @@
 
         // collapse .collapse only if new and old active links belong to different .collapse
         if (!$newActiveLink.is('.active > .collapse > li > a')) {
-          this.$el.find('.active .active').closest('.collapse').collapse('hide');
+          var $collapseEl = this.$el.find('.active .active').closest('.collapse');
+          if ($collapseEl.length && typeof $collapseEl.collapse === 'function') {
+            $collapseEl.collapse('hide');
+          }
         }
         this.$el.find('.sidebar-nav .active').removeClass('active');
 
