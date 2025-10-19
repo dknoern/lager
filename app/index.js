@@ -56,8 +56,7 @@
       responseType: 'token id_token',
       audience: AUTH0_AUDIENCE,
       redirectUri: AUTH0_CALLBACK_URL,
-      scope: 'openid profile',
-      icon: 'https://github.com/dknoern/lager/blob/main/assets/images/logo/logo-small.png'
+      scope: 'openid profile email'
     });
 
     $locationProvider.hashPrefix('');
