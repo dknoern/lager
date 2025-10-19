@@ -3,59 +3,56 @@
         <section class="widget widget-invoice">
 
             <div class="widget-body">
-<div>
+                <div>
 
-    <ng-include src="printableUrl"></ng-include>
+                    <ng-include src="printableUrl"></ng-include>
 
-
-    <hr/>
-                <div class="btn-toolbar mt-lg text-align-right hidden-print">
-                    <button data-ng-click="print()" class="btn btn-inverse">
-                        <i class="fa fa-print"></i>
-                        &nbsp;&nbsp;
-                        Print
-                    </button>
-                    <a href="/#/app/repair/edit/{{data._id}}">
-                        <button class="btn btn-success">
-                            Edit
-                            &nbsp;
-                            <span class="circle bg-white">
+                    <hr />
+                    <div class="btn-toolbar mt-lg text-align-right hidden-print">
+                        <button data-ng-click="print()" class="btn btn-inverse">
+                            <i class="fa fa-print"></i>
+                            &nbsp;&nbsp;
+                            Print
+                        </button>
+                        <a href="/#/app/repair/edit/{{data._id}}">
+                            <button class="btn btn-success">
+                                Edit
+                                &nbsp;
+                                <span class="circle bg-white">
                                     <i class="fa fa-edit text-success"></i>
                                 </span>
-                        </button></a>
+                            </button></a>
 
-                    <button class="btn btn-primary" data-toggle="modal" data-target="#emailModal">
-                      EMail
-                      &nbsp;
-                      <span class="circle bg-white">
-                          <i class="fa fa-envelope text-primary"></i>
-                      </span>
-                    </button>
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#emailModal">
+                            EMail
+                            &nbsp;
+                            <span class="circle bg-white">
+                                <i class="fa fa-envelope text-primary"></i>
+                            </span>
+                        </button>
 
-                </div>
-
-                <!-- IMAGE GALLERY -->
-                <div class="row gallery" data-ui-jq="magnificPopup"
-                    data-sn-gallery data-options="{ itemSelector: '.gallery-item'}"
-                    data-ui-options="{ delegate: '.thumbnail > a',  type: 'image', gallery: { enabled: true  } }">
-                    <div data-ng-repeat="item in images"
-                        class="col-sm-6 col-md-3 gallery-item" data-groups='{{item.groups}}'
-                        data-title="{{item.name}}">
-                        <div class="thumbnail">
-                            <a href="{{item.src}}"><img data-ng-src="{{item.src}}" alt="..."></a>
-                        </div>
                     </div>
-                    <div class="col-sm-6 col-md-3 js-shuffle-sizer"></div>
+
+                    <!-- IMAGE GALLERY -->
+                    <div class="row gallery" data-ui-jq="magnificPopup" data-sn-gallery
+                        data-options="{ itemSelector: '.gallery-item'}"
+                        data-ui-options="{ delegate: '.thumbnail > a',  type: 'image', gallery: { enabled: true  } }">
+                        <div data-ng-repeat="item in images" class="col-sm-6 col-md-3 gallery-item"
+                            data-groups='{{item.groups}}' data-title="{{item.name}}">
+                            <div class="thumbnail">
+                                <a href="{{item.src}}"><img data-ng-src="{{item.src}}" alt="..."></a>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-3 js-shuffle-sizer"></div>
+                    </div>
+
                 </div>
-                
-            </div>
         </section>
     </div>
 
 
     <!-- email modal -->
-    <div class="modal fade" id="emailModal" tabindex="-1" role="dialog"
-         aria-labelledby="myModalLabel">
+    <div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog modal-md" role="document">
             <div class="modal-content">
                 <div class="modal-body">
@@ -70,11 +67,12 @@
                                 <p>Enter one or more email addresses, comma delimited.</p>
 
                                 <p>
-                                    <textarea id="emailAddresses"  class="form-control" rows="3">{{data.customerEmail}}</textarea>
+                                    <textarea id="emailAddresses" class="form-control"
+                                        rows="3">{{data.customerEmail}}</textarea>
                                 </p>
                                 <p>Enter optional note to include in email.</p>
                                 <p>
-                                    <textarea id="note"  class="form-control" rows="3"></textarea>
+                                    <textarea id="note" class="form-control" rows="3"></textarea>
                                 </p>
                             </form>
 
@@ -83,8 +81,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success btn-sm"
-                            ng-click="email()" data-dismiss="modal">Send
+                    <button type="button" class="btn btn-success btn-sm" ng-click="email()" data-dismiss="modal">Send
                     </button>
                     <button type="button" class="btn btn-info btn-sm" data-dismiss="modal">Cancel
                     </button>
@@ -92,11 +89,4 @@
             </div>
         </div>
     </div>
-
-</div>
-
-    </div>
-</div>
-
-
 </div>

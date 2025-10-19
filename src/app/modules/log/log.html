@@ -11,9 +11,7 @@
 
     <div class="widget-body">
 
-
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
-             aria-labelledby="myModalLabel">
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog modal-sm" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -31,10 +29,8 @@
                             <div class="row">
                                 <div class="col-md-8">
                                     <div class="form-group">
-                                        <input id="selectedDate" type="text"
-                                               class="form-control input-no-border"
-                                               placeholder="MM/DD/YYYY" ng-model="selectedDate"
-                                               ng-change="checkDate()">
+                                        <input id="selectedDate" type="text" class="form-control input-no-border"
+                                            placeholder="MM/DD/YYYY" ng-model="selectedDate" ng-change="checkDate()">
                                     </div>
                                 </div>
                             </div>
@@ -45,13 +41,12 @@
                             Cancel
                         </button>
                         <button type="button" id="dateChangeButton" class="btn btn-success btn-sm"
-                                ng-click="selectDate()" data-dismiss="modal">OK
+                            ng-click="selectDate()" data-dismiss="modal">OK
                         </button>
                     </div>
                 </div>
             </div>
         </div>
-
 
         <div class="mt">
 
@@ -59,9 +54,9 @@
 
                 <a href="/#/app/log-item">
                     <button type="button" class="btn btn-primary">
-        <span class="icon">
-          <i class="fa fa-plus-circle"></i>
-        </span>
+                        <span class="icon">
+                            <i class="fa fa-plus-circle"></i>
+                        </span>
                         New Item
                     </button>
                 </a>
@@ -69,16 +64,16 @@
 
             <table id="example" class="display" cellspacing="0" width="100%">
                 <thead>
-                <tr>
-                    <th style="white-space: nowrap;">Date</th>
-                    <th style="white-space: nowrap;">Received From</th>
-                    <th style="white-space: nowrap;">Customer</th>
-                    <th>Item Received</th>
-                    <th style="white-space: nowrap;">Item #</th>
-                    <th style="white-space: nowrap;">Repair #</th>
-                    <th>By</th>
-                    <th>Comments</th>
-                </tr>
+                    <tr>
+                        <th style="white-space: nowrap;">Date</th>
+                        <th style="white-space: nowrap;">Received From</th>
+                        <th style="white-space: nowrap;">Customer</th>
+                        <th>Item Received</th>
+                        <th style="white-space: nowrap;">Item #</th>
+                        <th style="white-space: nowrap;">Repair #</th>
+                        <th>By</th>
+                        <th>Comments</th>
+                    </tr>
                 </thead>
             </table>
         </div>

@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     var theDataTable = null;
@@ -10,58 +10,56 @@
 
     function ReportsCtrl($scope, $resource, $http, $window, DTOptionsBuilder, jQuery, $state) {
 
-        $scope.hideButton = function(){
+        $scope.hideButton = function () {
             $scope.hide();
         }
 
         /**
          * handle submission of bulk load for show
          */
-        $scope.processBulkEntry = function(){
+        $scope.processBulkEntry = function () {
             var itemNumbers = document.getElementById("itemNumbers").value;
             var data = itemNumbers.split(/[ ,\n]+/);
             $http.post('api/products/outtoshow', data).
-            success(function(response) {
-                document.getElementById("itemNumbers").value = "";
-                document.getElementById("bulkEntryResults").innerHTML = response;
-                theDataTable.ajax.url("/api/reports/show-report").load();
+                success(function (response) {
+                    document.getElementById("itemNumbers").value = "";
+                    document.getElementById("bulkEntryResults").innerHTML = response;
+                    theDataTable.ajax.url("/api/reports/show-report").load();
 
-                Messenger().post({
-                    message: response,
-                    type: "success",
-                    showCloseButton: true
+                    Messenger().post({
+                        message: response,
+                        type: "success",
+                        showCloseButton: true
+                    });
+
+                }).error(function (err) {
+                    // Error handled by UI
                 });
-
-            }).error(function(err) {
-                // Error handled by UI
-            });
         }
 
         /**
          * handle submission of bulk release from show
          */
-        $scope.processBulkRelease = function(){
+        $scope.processBulkRelease = function () {
             $http.post('api/products/backfromshow').
-            success(function(response) {
-                document.getElementById("bulkReleaseResults").innerHTML = response;
-                theDataTable.ajax.url("/api/reports/show-report").load();
+                success(function (response) {
+                    document.getElementById("bulkReleaseResults").innerHTML = response;
+                    theDataTable.ajax.url("/api/reports/show-report").load();
 
-                Messenger().post({
-                    message: response,
-                    type: "success",
-                    showCloseButton: true
+                    Messenger().post({
+                        message: response,
+                        type: "success",
+                        showCloseButton: true
+                    });
+                }).error(function (err) {
+                    // Error handled by UI
                 });
-            }).error(function(err) {
-                // Error handled by UI
-            });
         }
 
-
-        $scope.vendorSelected = function(){
-            var reportUri= '/reports/outstanding-repairs/'+$scope.vendor;
-            theDataTable.ajax.url('/api/reports/outstanding-repairs/'+$scope.vendor).load();
+        $scope.vendorSelected = function () {
+            var reportUri = '/reports/outstanding-repairs/' + $scope.vendor;
+            theDataTable.ajax.url('/api/reports/outstanding-repairs/' + $scope.vendor).load();
         }
-
 
         function isDailyReport(reportId) {
             return "daily-sales" == reportId || "log-items" == reportId;
@@ -101,15 +99,15 @@
             return isValid;
         }
 
-        $scope.checkDate = function() {
+        $scope.checkDate = function () {
 
-          var valid = false;
-          if(isMonthlyReport($scope.reportId)) valid = isValidMMYYYY($scope.selectedDate);
-          else valid = isValidMMDDYYYY($scope.selectedDate);
-          document.getElementById("dateChangeButton").disabled = !valid;
+            var valid = false;
+            if (isMonthlyReport($scope.reportId)) valid = isValidMMYYYY($scope.selectedDate);
+            else valid = isValidMMDDYYYY($scope.selectedDate);
+            document.getElementById("dateChangeButton").disabled = !valid;
         }
 
-        $scope.selectDate = function() {
+        $scope.selectDate = function () {
             $scope.selectedDate = document.getElementById('selectedDate').value;
             Messenger().post({
                 message: 'setting date to ' + $scope.selectedDate,
@@ -118,23 +116,23 @@
 
             var fields = $scope.selectedDate.split('/');
 
-            if(isDailyReport($scope.reportId)){
+            if (isDailyReport($scope.reportId)) {
 
-              $scope.month = fields[0];
-              $scope.day = fields[1];
-              $scope.year = fields[2];
-              reportUrl = "/api/reports/" + $scope.reportId + "/" + $scope.year + "/" + $scope.month + "/" + $scope.day;
+                $scope.month = fields[0];
+                $scope.day = fields[1];
+                $scope.year = fields[2];
+                reportUrl = "/api/reports/" + $scope.reportId + "/" + $scope.year + "/" + $scope.month + "/" + $scope.day;
 
-            }else{
-              $scope.month = fields[0];
-              $scope.year = fields[1];
-              reportUrl = "/api/reports/" + $scope.reportId + "/" + $scope.year + "/" + $scope.month;
+            } else {
+                $scope.month = fields[0];
+                $scope.year = fields[1];
+                reportUrl = "/api/reports/" + $scope.reportId + "/" + $scope.year + "/" + $scope.month;
             }
 
             theDataTable.ajax.url(reportUrl).load();
         }
 
-        $scope.print = function() {
+        $scope.print = function () {
             $window.print();
         };
 
@@ -162,14 +160,14 @@
                 reportUrl += "/" + $scope.vendor;
 
                 $http.get('api/reports/vendors-with-outstanding-repairs').
-                success(function(vendors) {
-                    $scope.vendors = vendors;
-                });
+                    success(function (vendors) {
+                        $scope.vendors = vendors;
+                    });
             }
 
             var accessToken = localStorage.getItem('access_token');
 
-            var reportTitle = reportId.replace("-"," ").replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+            var reportTitle = reportId.replace("-", " ").replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
 
             theDataTable = jQuery('#example').DataTable({
                 "processing": true,

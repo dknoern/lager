@@ -31,7 +31,7 @@ function formatDate(date) {
 }
 
 function isEmpty(str) {
-    return (!str || str.length === 0 );
+    return (!str || str.length === 0);
 }
 
 router.route('/repairs')
@@ -102,12 +102,12 @@ router.route('/repairs')
         }
     })
 
-    .get(checkJwt, function(req, res) {
+    .get(checkJwt, function (req, res) {
 
         var repairNumber = req.query.repairNumber;
 
         if (repairNumber != null) {
-            Repair.findOne({'repairNumber': repairNumber}, '_id description customerFirstName customerLastName itemNumber', function (err, repair) {
+            Repair.findOne({ 'repairNumber': repairNumber }, '_id description customerFirstName customerLastName itemNumber', function (err, repair) {
                 res.json(repair);
             });
             return;
@@ -120,17 +120,17 @@ router.route('/repairs')
         if (req.query.length) length = req.query.length;
         var search = req.query.search.value;
 
-        var query = { $and: [{'search': new RegExp(search, 'i')}] };
+        var query = { $and: [{ 'search': new RegExp(search, 'i') }] };
 
         var opts = { format: '%s%v', symbol: '$' };
 
-        if("outstanding"==req.query.filter){
-            query.$and.push({returnDate:{$eq:null}});
+        if ("outstanding" == req.query.filter) {
+            query.$and.push({ returnDate: { $eq: null } });
             var now = new Date();
-            now.setFullYear(now.getFullYear()-2);
-            var agedOutString = format('yyyy-MM-dd',now);
-            query.$and.push({dateOut:{$gt:agedOutString}});
-       }
+            now.setFullYear(now.getFullYear() - 2);
+            var agedOutString = format('yyyy-MM-dd', now);
+            query.$and.push({ dateOut: { $gt: agedOutString } });
+        }
 
         var results = {
             "draw": draw,
@@ -141,76 +141,76 @@ router.route('/repairs')
 
         Repair.find(
             query
-        , function(err, repairs) {
-            if (err)
-                res.send(err);
+            , function (err, repairs) {
+                if (err)
+                    res.send(err);
 
-            for (var i = 0; i < repairs.length; i++) {
-                var customerName = "";
-                if (repairs[i].customerFirstName) customerName += repairs[i].customerFirstName;
-                if (repairs[i].customerFirstName && repairs[i].customerLastName) customerName += " ";
-                if (repairs[i].customerLastName) customerName += repairs[i].customerLastName;
+                for (var i = 0; i < repairs.length; i++) {
+                    var customerName = "";
+                    if (repairs[i].customerFirstName) customerName += repairs[i].customerFirstName;
+                    if (repairs[i].customerFirstName && repairs[i].customerLastName) customerName += " ";
+                    if (repairs[i].customerLastName) customerName += repairs[i].customerLastName;
 
-                var formattedRepairCost = "";
-                if(repairs[i].repairCost!=null){
-                    formattedRepairCost = formatCurrency(repairs[i].repairCost,opts);
+                    var formattedRepairCost = "";
+                    if (repairs[i].repairCost != null) {
+                        formattedRepairCost = formatCurrency(repairs[i].repairCost, opts);
+                    }
+
+                    results.data.push(
+                        [
+                            '<a href=\"#\" onclick=\"selectRepair(\'' + repairs[i]._id + '\');return false;\">' + repairs[i].repairNumber + '</a>',
+                            repairs[i].itemNumber,
+                            repairs[i].description,
+                            '<div style="white-space: nowrap;">' + formatDate(repairs[i].dateOut) + '</div>',
+                            '<div style="white-space: nowrap;">' + formatDate(repairs[i].customerApprovedDate) + '</div>',
+                            '<div style="white-space: nowrap;">' + formatDate(repairs[i].returnDate) + '</div>',
+                            customerName,
+                            repairs[i].vendor,
+                            formattedRepairCost
+                        ]
+                    );
                 }
 
-                results.data.push(
-                    [
-                        '<a href=\"#\" onclick=\"selectRepair(\'' + repairs[i]._id + '\');return false;\">' + repairs[i].repairNumber + '</a>',
-                        repairs[i].itemNumber,
-                        repairs[i].description,
-                        '<div style="white-space: nowrap;">' + formatDate(repairs[i].dateOut)+'</div>',
-                        '<div style="white-space: nowrap;">' + formatDate(repairs[i].customerApprovedDate)+'</div>',
-                        '<div style="white-space: nowrap;">' + formatDate(repairs[i].returnDate)+'</div>',
-                        customerName,
-                        repairs[i].vendor,
-                        formattedRepairCost
-                    ]
-                );
-            }
+                Repair.estimatedDocumentCount({}, function (err, count) {
+                    results.recordsTotal = count;
 
-            Repair.estimatedDocumentCount({}, function(err, count) {
-                results.recordsTotal = count;
-
-                if ((search == '' || search == null)&&"all"==req.query.filter) {
-                    results.recordsFiltered = count;
-                    res.json(results);
-                } else {
-                    Repair.countDocuments(
-                        query
-                    , function(err, count) {
-
+                    if ((search == '' || search == null) && "all" == req.query.filter) {
                         results.recordsFiltered = count;
                         res.json(results);
-                    });
-                }
-            });
+                    } else {
+                        Repair.countDocuments(
+                            query
+                            , function (err, count) {
 
-        }).sort({
-            dateOut: -1
-        }).skip(parseInt(start)).limit(parseInt(length)).select({
-            description: 1,
-            dateOut: 1,
-            customerApprovedDate: 1,
-            returnDate: 1,
-            customerFirstName: 1,
-            customerLastName: 1,
-            repairNumber: 1,
-            repairCost: 1,
-            itemNumber: 1,
-            vendor: 1
-        });
+                                results.recordsFiltered = count;
+                                res.json(results);
+                            });
+                    }
+                });
+
+            }).sort({
+                dateOut: -1
+            }).skip(parseInt(start)).limit(parseInt(length)).select({
+                description: 1,
+                dateOut: 1,
+                customerApprovedDate: 1,
+                returnDate: 1,
+                customerFirstName: 1,
+                customerLastName: 1,
+                repairNumber: 1,
+                repairCost: 1,
+                itemNumber: 1,
+                vendor: 1
+            });
     });
 
 router.route('/repairs/:repair_id/print')
-    .get(checkJwt, function(req, res) {
+    .get(checkJwt, function (req, res) {
 
 
         var opts = { format: '%s%v', symbol: '$' };
 
-        Repair.findById(req.params.repair_id, function(err, repair) {
+        Repair.findById(req.params.repair_id, function (err, repair) {
             if (err) {
                 res.send(err);
             }
@@ -226,7 +226,7 @@ router.route('/repairs/:repair_id/print')
                         tenantPhone: config.tenant.phone,
                         tenantFax: config.tenant.fax,
                         tenantAppRoot: config.tenant.appRoot
-                
+
                     });
                     res.send(output);
                 });
@@ -234,10 +234,9 @@ router.route('/repairs/:repair_id/print')
         });
     });
 
-
 router.route('/repairs/:repair_id')
- .get(checkJwt, function(req, res) {
-        Repair.findById(req.params.repair_id, function(err, ret) {
+    .get(checkJwt, function (req, res) {
+        Repair.findById(req.params.repair_id, function (err, ret) {
             if (err)
                 res.send(err);
             res.json(ret);
@@ -245,9 +244,9 @@ router.route('/repairs/:repair_id')
     });
 
 router.route('/repairs/products/:item_id')
- .get(checkJwt, function(req, res) {
+    .get(checkJwt, function (req, res) {
 
-        Repair.find({itemId:req.params.item_id}, function(err, ret) {
+        Repair.find({ itemId: req.params.item_id }, function (err, ret) {
             if (err)
                 res.send(err);
             res.json(ret);
@@ -255,24 +254,24 @@ router.route('/repairs/products/:item_id')
     });
 
 router.route('/repairs/:repair_id/return')
-    .put(checkJwt, function(req, res) {
-        Repair.findById(req.params.repair_id, function(err, repair) {
+    .put(checkJwt, function (req, res) {
+        Repair.findById(req.params.repair_id, function (err, repair) {
             if (err)
                 res.send(err);
 
-            if(repair.returnDate==null){
+            if (repair.returnDate == null) {
                 repair.returnDate = new Date();
-                repair.save(function(err) {
+                repair.save(function (err) {
                     if (err)
                         res.send(err);
 
-                    history.updateProductHistory([{productId: repair.itemId}], "In Stock", "back from repair", req.user['http://mynamespace/name'],null);
+                    history.updateProductHistory([{ productId: repair.itemId }], "In Stock", "back from repair", req.user['http://mynamespace/name'], null);
 
                     res.json({
                         message: 'Repair updated!'
                     });
                 });
-            }else{
+            } else {
                 res.json({
                     message: 'Repair was already returned'
                 });
@@ -281,62 +280,62 @@ router.route('/repairs/:repair_id/return')
     });
 
 router.route('/repairs/email')
-    .post(checkJwt, function(req, res) {
+    .post(checkJwt, function (req, res) {
 
         var to = req.body.emailAddresses.split(/[ ,\n]+/);
         var from = config.tenant.email;
 
         Repair.findById(req.body.repairId, function (err, repair) {
-                if (err) {
-                    res.send(err);
+            if (err) {
+                res.send(err);
 
-                    return "Error formatting repair";
-                }
-                else {
-                    fs.readFile('./src/app/modules/repair/repair-content.html', 'utf-8', function (err, template) {
-                        if (err) throw err;
-                        var output =
-                            "<p>" + req.body.note + " </p>" + mustache.to_html(template, {
-                                data: repair,
-                                tenantAddress: config.tenant.address,
-                                tenantCity: config.tenant.city,
-                                tenantState: config.tenant.state,
-                                tenantZip: config.tenant.zip,
-                                tenantPhone: config.tenant.phone,
-                                tenantFax: config.tenant.fax,
-                                tenantAppRoot: config.tenant.appRoot
-                            });
-                        const command = new SendEmailCommand({
-                                Source: from,
-                                Destination: {
-                                    ToAddresses: to
-                                },
-                                Message: {
-                                    Subject: {
-                                        Data: `${config.tenant.name} Repair`
-                                    },
-                                    Body: {
-                                        Text: {
-                                            Data: 'repair can only be viewed using HTML-capable email browser'
-                                        },
-                                        Html: {
-                                            Data: output
-                                        }
-                                    }
-                                }
-                            });
-
-                        ses.send(command)
-                            .then(data => {
-                                // Email sent successfully
-                            })
-                            .catch(err => {
-                                console.error('Error sending email:', err);
-                                throw err;
-                            });
-                    });
-                }
+                return "Error formatting repair";
             }
+            else {
+                fs.readFile('./src/app/modules/repair/repair-content.html', 'utf-8', function (err, template) {
+                    if (err) throw err;
+                    var output =
+                        "<p>" + req.body.note + " </p>" + mustache.to_html(template, {
+                            data: repair,
+                            tenantAddress: config.tenant.address,
+                            tenantCity: config.tenant.city,
+                            tenantState: config.tenant.state,
+                            tenantZip: config.tenant.zip,
+                            tenantPhone: config.tenant.phone,
+                            tenantFax: config.tenant.fax,
+                            tenantAppRoot: config.tenant.appRoot
+                        });
+                    const command = new SendEmailCommand({
+                        Source: from,
+                        Destination: {
+                            ToAddresses: to
+                        },
+                        Message: {
+                            Subject: {
+                                Data: `${config.tenant.name} Repair`
+                            },
+                            Body: {
+                                Text: {
+                                    Data: 'repair can only be viewed using HTML-capable email browser'
+                                },
+                                Html: {
+                                    Data: output
+                                }
+                            }
+                        }
+                    });
+
+                    ses.send(command)
+                        .then(data => {
+                            // Email sent successfully
+                        })
+                        .catch(err => {
+                            console.error('Error sending email:', err);
+                            throw err;
+                        });
+                });
+            }
+        }
         );
 
         res.json("ok");

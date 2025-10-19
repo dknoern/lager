@@ -12,28 +12,28 @@ function formatDate(date) {
     }
 }
 
-function buildItemNumberList(lineItems){
+function buildItemNumberList(lineItems) {
     var itemNumber = "";
 
     var foundFirst = false;
 
-    if(lineItems!=null && lineItems.length>0){
-        
-        for(var i=0;i<lineItems.length;i++){
+    if (lineItems != null && lineItems.length > 0) {
+
+        for (var i = 0; i < lineItems.length; i++) {
 
             var theNumber = null;
-            if(lineItems[i]!=null&&lineItems[i].itemNumber!=null && lineItems[i].itemNumber!=""){
+            if (lineItems[i] != null && lineItems[i].itemNumber != null && lineItems[i].itemNumber != "") {
                 theNumber = lineItems[i].itemNumber;
             }
-            else if(lineItems[i]!=null&&lineItems[i].productId!=null) {
+            else if (lineItems[i] != null && lineItems[i].productId != null) {
                 theNumber = lineItems[i].productId;
             }
 
-            if(theNumber!=null){
-                if(foundFirst) itemNumber += ", ";
-                if(lineItems[i].included==false) itemNumber += "<del>";
+            if (theNumber != null) {
+                if (foundFirst) itemNumber += ", ";
+                if (lineItems[i].included == false) itemNumber += "<del>";
                 itemNumber += theNumber;
-                if(lineItems[i].included==false) itemNumber += "</del>";
+                if (lineItems[i].included == false) itemNumber += "</del>";
                 foundFirst = true;
             }
         }
@@ -42,7 +42,7 @@ function buildItemNumberList(lineItems){
 }
 
 router.route('/returns')
-    .post(checkJwt, function(req, res) {
+    .post(checkJwt, function (req, res) {
         var ret = new Return();
 
         ret._id = req.body._id;
@@ -63,15 +63,14 @@ router.route('/returns')
 
         if (ret._id == null || ret._id == "") {
 
-            ret.save(function(err) {
-                if (err)
-                {
+            ret.save(function (err) {
+                if (err) {
                     res.send(err);
-                  }else{
-                res.json({
-                    message: 'return saved'
-                });
-              }
+                } else {
+                    res.json({
+                        message: 'return saved'
+                    });
+                }
             });
         } else {
             var query = {
@@ -79,7 +78,7 @@ router.route('/returns')
             };
             Return.findOneAndUpdate(query, ret, {
                 upsert: true
-            }, function(err, doc) {
+            }, function (err, doc) {
                 if (err) return res.send(500, {
                     error: err
                 });
@@ -95,10 +94,10 @@ router.route('/returns')
             }
         }
 
-        history.updateProductHistory(includedLineItems, "In Stock", "item returned", req.user['http://mynamespace/name'],null);
+        history.updateProductHistory(includedLineItems, "In Stock", "item returned", req.user['http://mynamespace/name'], null);
     })
 
-    .get(checkJwt,function(req, res) {
+    .get(checkJwt, function (req, res) {
 
         var draw = req.query.draw;
         var start = 0;
@@ -115,16 +114,16 @@ router.route('/returns')
         };
 
         Return.find({
-                 'search': new RegExp(search, 'i')
-/*
-            $or: [{
-                    'customer': new RegExp(search, 'i')
-                },
-                {
-                    'lastName': new RegExp(search, 'i')
-                }
-            ]*/
-        }, function(err, returns) {
+            'search': new RegExp(search, 'i')
+            /*
+                        $or: [{
+                                'customer': new RegExp(search, 'i')
+                            },
+                            {
+                                'lastName': new RegExp(search, 'i')
+                            }
+                        ]*/
+        }, function (err, returns) {
             if (err)
                 res.send(err);
 
@@ -143,7 +142,7 @@ router.route('/returns')
                 );
             }
 
-            Return.estimatedDocumentCount({}, function(err, count) {
+            Return.estimatedDocumentCount({}, function (err, count) {
                 results.recordsTotal = count;
 
                 if (search == '' || search == null) {
@@ -152,7 +151,7 @@ router.route('/returns')
                 } else {
                     Return.countDocuments({
                         'search': new RegExp(search, 'i')
-                    }, function(err, count) {
+                    }, function (err, count) {
 
                         results.recordsFiltered = count;
                         res.json(results);
@@ -167,34 +166,34 @@ router.route('/returns')
             returnDate: 1,
             customerName: 1,
             salesPerson: 1,
-            lineItems:1,
+            lineItems: 1,
             totalReturnAmount: 1
         });
 
     });
 
 router.route('/returns/:return_id')
-    .get(checkJwt, function(req, res) {
-        Return.findById(req.params.return_id, function(err, ret) {
+    .get(checkJwt, function (req, res) {
+        Return.findById(req.params.return_id, function (err, ret) {
             if (err)
                 res.send(err);
             res.json(ret);
         });
     })
 
-    .put(checkJwt, function(req, res) {
-        Return.findById(req.params.return_id, function(err, ret) {
+    .put(checkJwt, function (req, res) {
+        Return.findById(req.params.return_id, function (err, ret) {
             if (err)
                 res.send(err);
 
             ret.customerName = req.body.customerName;
             ret.shipping = req.body.shipping;
 
-            ret.save(function(err) {
+            ret.save(function (err) {
                 if (err) {
                     res.send(err);
 
-                }else {
+                } else {
                     res.json({
                         message: 'Return updated!'
                     });
@@ -204,8 +203,8 @@ router.route('/returns/:return_id')
     })
 
 router.route('/returns/:return_id/items')
-    .post(checkJwt, function(req, res) {
-        Return.findById(req.params.return_id, function(err, ret) {
+    .post(checkJwt, function (req, res) {
+        Return.findById(req.params.return_id, function (err, ret) {
             if (err)
                 res.send(err);
 
@@ -215,7 +214,7 @@ router.route('/returns/:return_id/items')
 
             ret.lineItems.push(lineItem);
 
-            ret.save(function(err) {
+            ret.save(function (err) {
                 if (err)
                     res.send(err);
 
@@ -227,7 +226,7 @@ router.route('/returns/:return_id/items')
     })
 
 router.route('/customers/:customer_id/returns')
-    .get(checkJwt, function(req, res) {
+    .get(checkJwt, function (req, res) {
 
         var customerId = req.params.customer_id;
         var query = Return.find({
@@ -236,7 +235,7 @@ router.route('/customers/:customer_id/returns')
 
         query.select('customer returnDate returnNumber customerId totalReturnAmount');
 
-        query.exec(function(err, returns) {
+        query.exec(function (err, returns) {
             if (err)
                 res.send(err);
 

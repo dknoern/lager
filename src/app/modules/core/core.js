@@ -1,4 +1,4 @@
-(function() {
+(function () {
   'use strict';
 
   angular
@@ -6,11 +6,11 @@
     .controller('App', AppController)
     .factory('jQuery', jQueryService)
     .factory('$exceptionHandler', exceptionHandler)
-  ;
+    ;
 
-  AppController.$inject = ['config', '$scope', '$localStorage', '$state','authService'];
-  function AppController(config, $scope, $localStorage, $state,authService) {
-    /*jshint validthis: true */
+  AppController.$inject = ['config', '$scope', '$localStorage', '$state', 'authService'];
+  function AppController(config, $scope, $localStorage, $state, authService) {
+
     var vm = this;
 
     vm.title = config.appTitle;
@@ -21,24 +21,18 @@
     if (authService.getCachedProfile()) {
       vm.profile = authService.getCachedProfile();
     } else {
-      authService.getProfile(function(err, profile) {
+      authService.getProfile(function (err, profile) {
         vm.profile = profile;
         $scope.$apply();
       });
     }
 
-
-
-    //auth.profilePromise.then(function(profile) {
-  //    $scope.profile = profile;
-  //  });
-    // Or using the object
     $scope.profile = vm.auth.profile;
 
     $scope.app = config;
     $scope.$state = $state;
 
-    if (angular.isDefined($localStorage.state)){
+    if (angular.isDefined($localStorage.state)) {
       $scope.app.state = $localStorage.state;
     } else {
       $localStorage.state = $scope.app.state;

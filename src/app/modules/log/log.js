@@ -3,7 +3,7 @@
 
     angular.module('singApp.log')
         .controller('LogCtrl', LogCtrl)
-    ;
+        ;
 
     LogCtrl.$inject = ['$scope', '$resource', 'DTOptionsBuilder', 'jQuery', 'authService', '$window'];
 
@@ -16,7 +16,6 @@
         $scope.year = d.getFullYear();
         $scope.month = d.getMonth() + 1;
         $scope.day = d.getDate();
-
 
         var accessToken = localStorage.getItem('access_token');
         jQuery('#example').DataTable({
@@ -52,9 +51,7 @@
 
         });
 
-
-
-        $scope.print = function() {
+        $scope.print = function () {
             $window.print();
         };
     }

@@ -1,27 +1,22 @@
 <script>
- function assignProductNumber()
- {
+  function assignProductNumber() {
 
-   var type = document.getElementById('product-type').value;
-   var itemNumber = document.getElementById('itemNumber').value;
-  var consignment = document.getElementById('consignment').value;
+    var type = document.getElementById('product-type').value;
+    var itemNumber = document.getElementById('itemNumber').value;
+    var consignment = document.getElementById('consignment').value;
 
-   if(consignment != "")
-   {
-     document.getElementById('itemNumber').value = "";
-   }
+    if (consignment != "") {
+      document.getElementById('itemNumber').value = "";
+    }
 
-    else if(type=='Jewelry')
-     {
-       document.getElementById('itemNumber').value = "J2000123";
-     }
-     else {
-       document.getElementById('itemNumber').value = "2000123";
-     }
- }
+    else if (type == 'Jewelry') {
+      document.getElementById('itemNumber').value = "J2000123";
+    }
+    else {
+      document.getElementById('itemNumber').value = "2000123";
+    }
+  }
 </script>
-
-
 
 <h1 class="page-title"><span class="fw-semi-bold">New Product</span></h1>
 <div data-ng-controller="ItemCtrl">
@@ -32,164 +27,150 @@
           <form class="form-horizontal" role="form">
             <div class="row">
               <div class="col-sm-7">
-            <fieldset>
+                <fieldset>
 
-              <div class="form-group">
-                <label for="product-type" class="col-sm-3 control-label">Type</label>
-                <div class="col-sm-8">
+                  <div class="form-group">
+                    <label for="product-type" class="col-sm-3 control-label">Type</label>
+                    <div class="col-sm-8">
+                      <select id="product-type" class="selectpicker" data-selectpicker data-width="auto"
+                        onChange="assignProductNumber()">
+                        <option></option>
+                        <option>Accessories</option>
+                        <option>Jewelry</option>
+                        <option>Watch</option>
+                      </select>
+                    </div>
+                  </div>
 
-                  <select id="product-type" class="selectpicker" data-selectpicker
-                          data-width="auto" onChange="assignProductNumber()">
-                    <option></option>
-                    <option>Accessories</option>
-                    <option>Jewelry</option>
-                    <option>Watch</option>
-                  </select>
+                  <div class="form-group">
+                    <label for="manufacturer" class="col-sm-3 control-label">Manufacturer</label>
+                    <div class="col-sm-8">
+                      <select id="manufacturer" class="selectpicker" data-selectpicker>
+                        <option></option>
+                        <option>A. Lange & Sohne</option>
+                        <option>Audemars Piguet</option>
+                        <option>Baume & Mercier</option>
+                        <option>Blancpain</option>
+                        <option>Breguet</option>
+                        <option>Breitling</option>
+                        <option>Bvlgari</option>
+                        <option>Cartier</option>
+                        <option>Chanel</option>
+                        <option>Chopard</option>
+                        <option>Chronoswiss</option>
+                        <option>Concord</option>
+                        <option>Corum</option>
+                        <option>Ebel</option>
+                        <option>F.P. Journe</option>
+                        <option>Franck Muller</option>
+                        <option>Gerald Genta</option>
+                        <option>Girard-Perregaux</option>
+                        <option>Hublot</option>
+                        <option>IWC</option>
+                        <option>Jaeger-LeCou</option>ltre
+                        <option>Movado</option>
+                        <option>Omega</option>
+                        <option>Panerai</option>
+                        <option>Parmigiani</option>
+                        <option>Patek Philippe & Co</option>.
+                        <option>Piaget</option>
+                        <option>Roger Dubuis</option>
+                        <option>Rolex</option>
+                        <option>Ulysse Nardin</option>
+                        <option>Vacheron Constantin</option>
+                        <option>Additional Brands</option>
+                        <option>Maurice Lacroix</option>
+                        <option>Zenith</option>
+                      </select>
+                    </div>
+                  </div>
 
-                </div>
+                  <div class="form-group">
+                    <label for="normal-field" class="col-sm-3 control-label">Item No</label>
+                    <div class="col-sm-8">
+                      <input type="text" id="itemNumber" class="form-control" value="">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="hint-field" class="col-sm-3 control-label">Paid ($)</label>
+                    <div class="col-sm-8">
+                      <input type="text" id="last-name-field" class="form-control" value="">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="hint-field" class="col-sm-3 control-label">Seller</label>
+                    <div class="col-sm-8">
+                      <input type="text" id="last-name-field" class="form-control">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="normal-field" class="col-sm-3 control-label">Comments</label>
+                    <div class="col-sm-8">
+                      <textarea rows=6 cols="40"></textarea>
+                    </div>
+                  </div>
+                </fieldset>
               </div>
 
-              <div class="form-group">
-                <label for="manufacturer" class="col-sm-3 control-label">Manufacturer</label>
-                <div class="col-sm-8">
-                  <select id="manufacturer" class="selectpicker" data-selectpicker>
-                    <option></option>
-                    <option>A. Lange & Sohne</option>
-                    <option>Audemars Piguet</option>
-                    <option>Baume & Mercier</option>
-                    <option>Blancpain</option>
-                    <option>Breguet</option>
-                    <option>Breitling</option>
-                    <option>Bvlgari</option>
-                    <option>Cartier</option>
-                    <option>Chanel</option>
-                    <option>Chopard</option>
-                    <option>Chronoswiss</option>
-                    <option>Concord</option>
-                    <option>Corum</option>
-                    <option>Ebel</option>
-                    <option>F.P. Journe</option>
-                    <option>Franck Muller</option>
-                    <option>Gerald Genta</option>
-                    <option>Girard-Perregaux</option>
-                    <option>Hublot</option>
-                    <option>IWC</option>
-                    <option>Jaeger-LeCou</option>ltre
-                    <option>Movado</option>
-                    <option>Omega</option>
-                    <option>Panerai</option>
-                    <option>Parmigiani</option>
-                    <option>Patek Philippe & Co</option>.
-                    <option>Piaget</option>
-                    <option>Roger Dubuis</option>
-                    <option>Rolex</option>
-                    <option>Ulysse Nardin</option>
-                    <option>Vacheron Constantin</option>
-                    <option>Additional Brands</option>
-                    <option>Maurice Lacroix</option>
-                    <option>Zenith</option>
+              <div class="col-sm-5">
+                <div class="form-group">
+                  <label for="datetimepicker1" class="col-sm-3 control-label">Date</label>
+                  <div class="col-sm-8">
+                    <input id="datetimepicker1" data-ui-jq="datetimepicker" data-ui-options="{ format: 'MM/DD/YYYY' }"
+                      data-ng-init="dt = '09/13/2014'" data-ng-model="dt" data-ng-change="dtChanged(dt)" type="text"
+                      class="form-control" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="hint-field" class="col-sm-3 control-label">Case</label>
+                  <div class="col-sm-8">
+                    <input type="text" id="company-field" class="form-control">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="hint-field" class="col-sm-3 control-label">Style</label>
+                  <div class="col-sm-8">
+                    <input type="text" id="company-field" class="form-control">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="method" class="col-sm-3 control-label">Method</label>
+                  <div class="col-sm-8">
+                    <select id="method" class="selectpicker" data-selectpicker data-width="auto"
+                      onchange="assignProductNumber()">
+                      <option></option>
+                      <option>Cash</option>
+                      <option>Check</option>
+                      <option>Card</option>
+                      <option>Paypal</option>
                     </select>
+                  </div>
                 </div>
-              </div>
 
-
-              <div class="form-group">
-                <label for="normal-field" class="col-sm-3 control-label">Item No</label>
-                <div class="col-sm-8">
-                  <input type="text" id="itemNumber" class="form-control" value="" >
+                <div class="form-group">
+                  <label for="hint-field" class="col-sm-3 control-label">Consign</label>
+                  <div class="col-sm-8">
+                    <input type="text" id="consignment" class="form-control" onchange="assignProductNumber()">
+                  </div>
                 </div>
-              </div>
 
-              <div class="form-group">
-                <label for="hint-field" class="col-sm-3 control-label">Paid ($)</label>
-                <div class="col-sm-8">
-                  <input type="text" id="last-name-field" class="form-control" value="">
+                <div class="clearfix">
+                  <p>
+                    <img src="assets/images/watch.jpeg" / width="100">
+                  </p>
+                  <button class="btn btn-default mb-xs" role="button">
+                    Upload Image
+                  </button>
                 </div>
+                </fieldset>
               </div>
-
-              <div class="form-group">
-                <label for="hint-field" class="col-sm-3 control-label">Seller</label>
-                <div class="col-sm-8">
-                  <input type="text" id="last-name-field" class="form-control">
-                </div>
-              </div>
-
-
-              <div class="form-group">
-                <label for="normal-field" class="col-sm-3 control-label">Comments</label>
-                <div class="col-sm-8">
-                  <textarea rows=6 cols="40"></textarea>
-                </div>
-              </div>
-
-            </fieldset>
-
-          </div>
-
-            <div class="col-sm-5">
-
-              <div class="form-group">
-                <label for="datetimepicker1" class="col-sm-3 control-label">Date</label>
-                <div class="col-sm-8">
-                  <input id="datetimepicker1" data-ui-jq="datetimepicker" data-ui-options="{ format: 'MM/DD/YYYY' }"
-                         data-ng-init="dt = '09/13/2014'" data-ng-model="dt"
-                         data-ng-change="dtChanged(dt)"
-                         type="text" class="form-control" />
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="hint-field" class="col-sm-3 control-label">Case</label>
-                <div class="col-sm-8">
-                  <input type="text" id="company-field" class="form-control">
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="hint-field" class="col-sm-3 control-label">Style</label>
-                <div class="col-sm-8">
-                  <input type="text" id="company-field" class="form-control">
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="method" class="col-sm-3 control-label">Method</label>
-                <div class="col-sm-8">
-                  <select id="method" class="selectpicker" data-selectpicker
-                          data-width="auto" onchange="assignProductNumber()">
-                    <option></option>
-                    <option>Cash</option>
-                    <option>Check</option>
-                    <option>Card</option>
-                    <option>Paypal</option>
-                  </select>
-
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="hint-field" class="col-sm-3 control-label">Consign</label>
-                <div class="col-sm-8">
-  <input type="text" id="consignment" class="form-control"  onchange="assignProductNumber()">
-                </div>
-              </div>
-
-
-
-              <div class="clearfix">
-                <p>
-                <img src="assets/images/watch.jpeg"/ width="100">
-              </p>
-              <button class="btn btn-default mb-xs" role="button">
-                Upload Image
-              </button>
-              </div>
-
-            </fieldset>
-
             </div>
-          </div>
-
 
             <div class="form-actions">
               <div class="row">
@@ -210,6 +191,4 @@
 
     </div>
   </div>
-
-
 </div>

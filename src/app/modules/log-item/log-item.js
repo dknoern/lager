@@ -6,7 +6,7 @@ var scopeHolder;
     angular.module('singApp.logitem')
         .controller('LogItemCtrl', LogItemCtrl);
 
-    LogItemCtrl.$inject = ['$scope', '$resource', '$http', '$location','$window', '$state', 'jQuery', 'authService'];
+    LogItemCtrl.$inject = ['$scope', '$resource', '$http', '$location', '$window', '$state', 'jQuery', 'authService'];
 
     function LogItemCtrl($scope, $resource, $http, $location, $window, $state, jQuery, authService, $upload) {
         scopeHolder = $scope;
@@ -35,14 +35,14 @@ var scopeHolder;
 
                 var imagesKey = thedata._id; // newer log or older log with no itemNumbers
 
-                if(logDate < logRedoDate){
-                    $scope.data.oldLog=true;
+                if (logDate < logRedoDate) {
+                    $scope.data.oldLog = true;
 
-                    if(thedata.lineItems!=null&&thedata.lineItems.length==1&&thedata.lineItems[0].itemNumber!=null){
+                    if (thedata.lineItems != null && thedata.lineItems.length == 1 && thedata.lineItems[0].itemNumber != null) {
                         imagesKey = thedata.lineItems[0].productId;
                     }
-                }else{
-                    $scope.data.oldLog=false;
+                } else {
+                    $scope.data.oldLog = false;
                 }
 
                 $http.get('api/upload/' + imagesKey).
@@ -51,7 +51,7 @@ var scopeHolder;
                     });
             })
 
-        }else{
+        } else {
             $scope.data = {
                 "user": receivedBy
             };
@@ -115,11 +115,11 @@ var scopeHolder;
         };
 
 
-        $scope.delete = function(url){
+        $scope.delete = function (url) {
             $scope.selectedImage = url;
         }
 
-        $scope.conFirmDelete = function() {
+        $scope.conFirmDelete = function () {
 
             var filenameFull = $scope.selectedImage;
 
@@ -211,7 +211,7 @@ var scopeHolder;
                         repairCost: 0
                     }
 
-                    if($scope.data.customerName == null) {
+                    if ($scope.data.customerName == null) {
                         $scope.data.customerName = response.data.customerFirstName + ' ' + response.data.customerLastName;
                     }
 
@@ -225,7 +225,7 @@ var scopeHolder;
             $('#repairModal').modal('hide');
         }
 
-        $scope.removeItem = function(index) {
+        $scope.removeItem = function (index) {
             $scope.data.lineItems.splice(index, 1);
         }
 
@@ -240,7 +240,7 @@ var scopeHolder;
                     "ajax": {
                         "url": "/api/products",
                         "data": {
-                            "status": "Out" 
+                            "status": "Out"
                         },
                         "headers": {
                             "Authorization": "Bearer " + accessToken

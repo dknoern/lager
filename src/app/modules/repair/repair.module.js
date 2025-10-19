@@ -15,7 +15,6 @@
 
     function appConfig($stateProvider) {
 
-
         $stateProvider
             .state('app.repairnew', {
                 url: '/repair/new',
@@ -42,9 +41,5 @@
                     $scope.repairId = $stateParams.repairId;
                 }
             });
-
-
-
-
     }
 })();

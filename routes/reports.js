@@ -9,12 +9,12 @@ const checkJwt = require('./jwt-helper').checkJwt;
 var format = require('date-format');
 var formatCurrency = require('format-currency');
 
-function formatMoney(value){
-    if(value==null || value=="") return "";
-    else return formatCurrency(value,  { format: '%s%v', code: "", symbol: '$' });
+function formatMoney(value) {
+    if (value == null || value == "") return "";
+    else return formatCurrency(value, { format: '%s%v', code: "", symbol: '$' });
 }
 
-function getBySellerType(sellerType, res){
+function getBySellerType(sellerType, res) {
     var results = {
         "data": []
     };
@@ -72,8 +72,8 @@ router.route('/reports/vendors-with-outstanding-repairs')
 
             for (var i = 0; i < vendors.length; i++) {
 
-                if(!vendorList.includes(vendors[i].vendor))
-                vendorList.push(vendors[i].vendor);
+                if (!vendorList.includes(vendors[i].vendor))
+                    vendorList.push(vendors[i].vendor);
             }
 
             res.json(vendorList);
@@ -90,7 +90,7 @@ router.route('/reports/outstanding-repairs/:vendor')
 
         var vendor = req.params.vendor.toLowerCase();
 
-        if(vendor=="all") vendor="";
+        if (vendor == "all") vendor = "";
 
         var results = {
             "data": []
@@ -178,8 +178,8 @@ router.route('/reports/daily-sales/:year/:month/:day')
                 $gte: new Date(year, month - 1, day),
                 $lt: new Date(year, month - 1, day + 1)
             },
-            "invoiceType": {$nin: [ "Partner", "Consignment" ] }
-    }, function (err, invoices) {
+            "invoiceType": { $nin: ["Partner", "Consignment"] }
+        }, function (err, invoices) {
 
             if (err)
                 res.send(err);
@@ -246,7 +246,7 @@ router.route('/reports/log-items/:year/:month/:day')
                     [
                         format('yyyy-MM-dd', logItems[i].date),
                         logItems[i].receivedFrom,
-                        "<a href=\"/#/app/log-item/" + logItems[i].id +"\">" + logItems[i].title + "</a>",
+                        "<a href=\"/#/app/log-item/" + logItems[i].id + "\">" + logItems[i].title + "</a>",
                         logItems[i].receivedBy,
                         logItems[i].comments,
                     ]
@@ -308,8 +308,6 @@ router.route('/reports/returns-summary/:year/:month')
         });
     });
 
-
-
 router.route('/reports/items/sellertype/:sellerType')
     .get(checkJwt, function (req, res) {
         var sellerType = req.params.sellerType;
@@ -349,13 +347,7 @@ router.route('/reports/items/sellertype/:sellerType')
             cost: 1,
             sellingPrice: 1
         });
-
-
     });
-
-
-
-
 
 router.route('/reports/monthly-sales/:year/:month')
     .get(checkJwt, function (req, res) {
@@ -446,7 +438,7 @@ router.route('/reports/out-at-show')
             _id: 1,
             title: 1,
             lastUpdated: 1,
-            itemNumber:1
+            itemNumber: 1
         });
     });
 
@@ -459,17 +451,16 @@ router.route('/reports/in-stock')
 
         Product.find({
             $and: [{
-                status: { $in: ["In Stock","Partnership","Consignment"] }
+                status: { $in: ["In Stock", "Partnership", "Consignment"] }
             },
-                { itemNumber: {$ne: null} }
-                ]
+            { itemNumber: { $ne: null } }
+            ]
         }, function (err, products) {
 
             if (err)
                 res.send(err);
 
             for (var i = 0; i < products.length; i++) {
-
 
                 results.data.push(
                     [
@@ -489,7 +480,7 @@ router.route('/reports/in-stock')
             _id: 1,
             title: 1,
             lastUpdated: 1,
-            itemNumber:1,
+            itemNumber: 1,
             seller: 1,
             status: 1,
             productType: 1
@@ -568,25 +559,21 @@ router.route('/reports/last-sale-date')
         });
     });
 
-
-
-    router.route('/reports/customers')
+router.route('/reports/customers')
     .get(checkJwt, function (req, res) {
         var results = {
             "data": []
         };
 
-
         Customer.find({
-        }, function(err, customers) {
+        }, function (err, customers) {
             if (err)
                 res.send(err);
 
             for (var i = 0; i < customers.length; i++) {
 
-
                 var cityAndState = customers[i].city;
-                if(customers[i].state!=null && customers[i].state!=""){
+                if (customers[i].state != null && customers[i].state != "") {
                     cityAndState += ', ' + customers[i].state;
                 }
 

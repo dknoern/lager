@@ -1,18 +1,17 @@
 <script>
 
-function selectCustomer(id){
-  $('#customerModal').modal('hide')
-   document.location.href = "/#/app/repair/edit/new?customerId="+id;
-}
+  function selectCustomer(id) {
+    $('#customerModal').modal('hide')
+    document.location.href = "/#/app/repair/edit/new?customerId=" + id;
+  }
 
-function toggleRepairFilter(){
+  function toggleRepairFilter() {
     scopeHolder.toggleRepairFilter();
-}
+  }
 
-function selectRepair(id){
-   document.location.href = "/#/app/repair/"+id;
-}
-</script>
+  function selectRepair(id) {
+    document.location.href = "/#/app/repair/" + id;
+  }
 </script>
 
 <h1 class="page-title"><span class="fw-semi-bold">Repairs</span></h1>
@@ -28,57 +27,58 @@ function selectRepair(id){
           </span>New Repair</button>
       </p>
 
-        <select onchange="toggleRepairFilter()" id="repairFilter">
-            <option value="outstanding">Outstanding Repairs</option>
-            <option value="all">All Repairs</option>
-        </select>
-        <p></p>
+      <select onchange="toggleRepairFilter()" id="repairFilter">
+        <option value="outstanding">Outstanding Repairs</option>
+        <option value="all">All Repairs</option>
+      </select>
+      <p></p>
 
       <table id="example" class="display" cellspacing="0" width="100%">
-          <thead>
-              <tr>
-                  <th>Repair</th>
-                  <th>Item</th>
-                  <th>Description</th>
-                  <th>Out</th>
-                  <th>Approved</th>
-                  <th>Returned</th>
-                  <th>Customer</th>
-                  <th>Vendor</th>
-                  <th>Cost</th>
-              </tr>
-          </thead>
+        <thead>
+          <tr>
+            <th>Repair</th>
+            <th>Item</th>
+            <th>Description</th>
+            <th>Out</th>
+            <th>Approved</th>
+            <th>Returned</th>
+            <th>Customer</th>
+            <th>Vendor</th>
+            <th>Cost</th>
+          </tr>
+        </thead>
       </table>
     </div>
 
-          <!-- Customer Modal -->
-          <div class="modal fade" id="customerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-              <div class="modal-dialog modal-lg" role="document">
-                  <div class="modal-content">
-                      <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                          <h4 class="modal-title" id="myModalLabel">Select customer for repair</h4>
-                      </div>
-                      <div class="modal-body">
-
-                        <table id="customerTable" class="display" cellspacing="0" width="100%">
-                            <thead>
-                                <tr>
-                                    <th>Number</th>
-                                    <th>Name</th>
-                                    <th>City</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
-                                    <th>Company</th>
-                                </tr>
-                            </thead>
-                        </table>
-                      </div>
-                      <div class="modal-footer">
-                          <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancel</button>
-                      </div>
-                  </div>
-              </div>
+    <!-- Customer Modal -->
+    <div class="modal fade" id="customerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Select customer for repair</h4>
           </div>
+          <div class="modal-body">
+
+            <table id="customerTable" class="display" cellspacing="0" width="100%">
+              <thead>
+                <tr>
+                  <th>Number</th>
+                  <th>Name</th>
+                  <th>City</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Company</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>

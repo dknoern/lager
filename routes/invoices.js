@@ -134,7 +134,6 @@ async function upsertInvoice(req,res){
     });
 }
 
-
 router.route('/invoices')
     .post(checkJwt, function(req, res) {
         upsertInvoice(req,res);
@@ -147,7 +146,6 @@ router.route('/invoices')
         var length = 10;
         if (req.query.start) start = req.query.start;
         if (req.query.length) length = req.query.length;
-
 
         var search = req.query.search.value;
 
@@ -180,11 +178,8 @@ router.route('/invoices')
                     for (var j=0;j< invoices[i].lineItems.length ;j++){
                         itemNo += invoices[i].lineItems[j].itemNumber + "<br/>";
                         itemName +=  " " + invoices[i].lineItems[j].name + "<br/>";
-
                     }
-
                 }
-
 
                 var customerName = "";
                 if(invoices[i].customerFirstName!=null) customerName +=invoices[i].customerFirstName + " ";
@@ -216,7 +211,6 @@ router.route('/invoices')
                         'search': new RegExp(search, 'i')
 
                     }, function(err, count) {
-
                         results.recordsFiltered = count;
                         res.json(results);
                     });
@@ -253,7 +247,6 @@ router.route('/invoices/:invoice_id/print')
                 invoice.dateFMT =  format('MM/dd/yyyy', invoice.date);
 
                 for (var i = 0; i < invoice.lineItems.length; i++) {
-
                     invoice.lineItems[i].nameFMT = invoice.lineItems[i].name.toUpperCase();
                     invoice.lineItems[i].amountFMT = formatCurrency(invoice.lineItems[i].amount, opts);
                     invoice.lineItems[i].itemNumberFMT = invoice.lineItems[i].itemNumber+ format('dd', invoice.date);
@@ -395,7 +388,6 @@ router.route('/invoices/partner/:product_id')
                     }
                 }
             });
-
     });
 
 // find invoices for a particular customer
@@ -445,7 +437,6 @@ router.route('/customers/:customer_id/invoices')
           }
           })
         });
-
 
     router.route('/customers/:customer_id/invoiceCount')
         .get(checkJwt, function(req, res) {

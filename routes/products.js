@@ -18,76 +18,74 @@ router.use(function (req, res, next) {
 
 router.route('/products/outtoshow')
     .post(checkJwt, function (req, res) {
-            var itemNumbers = req.body;
-            var enteredCount = 0;
-            var query;
-            var ors = {$or: []};
+        var itemNumbers = req.body;
+        var enteredCount = 0;
+        var query;
+        var ors = { $or: [] };
 
-            for (var i = 0; i < itemNumbers.length; i++) {
-                if (itemNumbers[i] != null && itemNumbers[i].length > 0) {
-                    enteredCount++;
-                    ors.$or.push({'itemNumber': itemNumbers[i]})
-                }
-            }
-
-            if (enteredCount > 0) {
-                query = {$and: [{'status': "In Stock"}, ors]};
-                Product.update(query, {
-                        "$push": {
-                            "history": {
-                                user: req.user['http://mynamespace/name'],
-                                date: Date.now(),
-                                action: "sent to show"
-                            }
-                        },
-                        "$set": {"lastUpdated": Date.now(), "status": "At Show"}
-                    }, {multi: true},
-                    function (err, obj) {
-                        if (err) {
-                            console.error('Error updating products to At Show:', err);
-                            return res.send("unable to set anything to At Show: " + err);
-                        } else {
-                            var nModified = obj.nModified;
-                            return res.send("Entered a total of " + enteredCount + " products.  Updated total of " + nModified + " from \"In Stock\" to \"At Show\"");
-                        }
-                    });
+        for (var i = 0; i < itemNumbers.length; i++) {
+            if (itemNumbers[i] != null && itemNumbers[i].length > 0) {
+                enteredCount++;
+                ors.$or.push({ 'itemNumber': itemNumbers[i] })
             }
         }
-    );
 
-
-router.route('/products/backfromshow')
-    .post(checkJwt, function (req, res) {
-            Product.update({'status': "At Show"},
-                {
-                    "$push": {
-                        "history": {
-                            user: req.user['http://mynamespace/name'],
-                            date: Date.now(),
-                            action: "returned from show"
-                        }
-                        },
-                    "$set": {"lastUpdated": Date.now(), "status": "In Stock"}
-                    }, {multi: true},
+        if (enteredCount > 0) {
+            query = { $and: [{ 'status': "In Stock" }, ors] };
+            Product.update(query, {
+                "$push": {
+                    "history": {
+                        user: req.user['http://mynamespace/name'],
+                        date: Date.now(),
+                        action: "sent to show"
+                    }
+                },
+                "$set": { "lastUpdated": Date.now(), "status": "At Show" }
+            }, { multi: true },
                 function (err, obj) {
                     if (err) {
-                        console.error('Error updating products back from show:', err);
+                        console.error('Error updating products to At Show:', err);
                         return res.send("unable to set anything to At Show: " + err);
                     } else {
                         var nModified = obj.nModified;
-                        return res.send("Updated total of " + nModified + " from \"At Show\" to \"In Stock\"");
+                        return res.send("Entered a total of " + enteredCount + " products.  Updated total of " + nModified + " from \"In Stock\" to \"At Show\"");
                     }
                 });
         }
+    }
     );
 
+router.route('/products/backfromshow')
+    .post(checkJwt, function (req, res) {
+        Product.update({ 'status': "At Show" },
+            {
+                "$push": {
+                    "history": {
+                        user: req.user['http://mynamespace/name'],
+                        date: Date.now(),
+                        action: "returned from show"
+                    }
+                },
+                "$set": { "lastUpdated": Date.now(), "status": "In Stock" }
+            }, { multi: true },
+            function (err, obj) {
+                if (err) {
+                    console.error('Error updating products back from show:', err);
+                    return res.send("unable to set anything to At Show: " + err);
+                } else {
+                    var nModified = obj.nModified;
+                    return res.send("Updated total of " + nModified + " from \"At Show\" to \"In Stock\"");
+                }
+            });
+    }
+    );
 
 router.route('/products')
     .post(checkJwt, function (req, res) {
 
         // validate
         if (!req.body.itemNumber) {
-            return res.send(400, {error: "item number is required"});
+            return res.send(400, { error: "item number is required" });
         }
 
         var longDesc = req.body.longDesc;
@@ -131,11 +129,11 @@ router.route('/products')
         // is existing item?
         if (req.body._id == null) {
 
-            Product.findOne({'itemNumber': req.body.itemNumber}, '_id lastUpdated', function (err, dupeProduct) {
-                if (err) return res.send(500, {error: err});
+            Product.findOne({ 'itemNumber': req.body.itemNumber }, '_id lastUpdated', function (err, dupeProduct) {
+                if (err) return res.send(500, { error: err });
 
                 else if (dupeProduct != null) {
-                    return res.send(409, {error: 'error: item number ' + req.body.itemNumber + ' already exists'});
+                    return res.send(409, { error: 'error: item number ' + req.body.itemNumber + ' already exists' });
 
                 } else {
 
@@ -148,7 +146,7 @@ router.route('/products')
 
                     product.status = 'In Stock';
 
-                    Product.create(product, function (err,createdProduct) {
+                    Product.create(product, function (err, createdProduct) {
                         if (err) {
                             console.error('Error saving product:', err);
                             return res.send(err);
@@ -182,12 +180,12 @@ router.route('/products')
     })
 
     // no checkJwt for inventory list... makes logout more reliable and inventory list is "public" anyway
-    .get( function(req, res) {
+    .get(function (req, res) {
 
         var itemNumber = req.query.itemNumber;
 
         if (itemNumber != null) {
-            Product.findOne({'itemNumber': itemNumber}, '_id title status', function (err, product) {
+            Product.findOne({ 'itemNumber': itemNumber }, '_id title status', function (err, product) {
                 res.json(product);
             });
             return;
@@ -213,13 +211,13 @@ router.route('/products')
         var statusFilter;
         if (status == "Available") {
             // value of "Available" maps to "In Stock" and "Partnership"
-            statusFilter = { $in: ["In Stock","Partnership"] }
+            statusFilter = { $in: ["In Stock", "Partnership"] }
 
         } else if (status == "Out") {
             // value of "Out" maps to "Sold" and "Memo"
-            statusFilter = { $in: ["Sold","Memo","Incoming"] }
+            statusFilter = { $in: ["Sold", "Memo", "Incoming"] }
 
-        }else {
+        } else {
             statusFilter = {
                 $ne: "Deleted"
             };
@@ -235,19 +233,19 @@ router.route('/products')
                 sortOrder = 1;
         }
 
-        var sortClause = {lastUpdated: sortOrder};
+        var sortClause = { lastUpdated: sortOrder };
         if ("0" == sortColumn)
-            sortClause = {itemNumber: sortOrder};
+            sortClause = { itemNumber: sortOrder };
         else if ("1" == sortColumn)
-            sortClause = {title: sortOrder};
+            sortClause = { title: sortOrder };
         else if ("2" == sortColumn)
-            sortClause = {serialNo: sortOrder};
+            sortClause = { serialNo: sortOrder };
         else if ("3" == sortColumn)
-            sortClause = {sellingPrice: sortOrder};
+            sortClause = { sellingPrice: sortOrder };
         else if ("4" == sortColumn)
-            sortClause = {modelNumber: sortOrder};
+            sortClause = { modelNumber: sortOrder };
         else if ("5" == sortColumn)
-            sortClause = {status: sortOrder};
+            sortClause = { status: sortOrder };
 
         Product.find({
             $and: [
@@ -280,7 +278,7 @@ router.route('/products')
                     badgeStyle = "info" // aqua
 
                 var titleAndDial = products[i].title;
-                if(products[i].dial!=null && products[i].dial !=""){
+                if (products[i].dial != null && products[i].dial != "") {
                     titleAndDial += ' - ' + products[i].dial;
                 }
 
@@ -289,7 +287,7 @@ router.route('/products')
                         '<a href=\"#\" onclick=\"selectProduct(\'' + products[i]._id + '\');return false;\">' + products[i].itemNumber + '</a>',
                         titleAndDial,
                         products[i].serialNo,
-                        formatCurrency(products[i].sellingPrice,opts),
+                        formatCurrency(products[i].sellingPrice, opts),
                         products[i].modelNumber,
                         "<span class=\"badge bg-" + badgeStyle + "\">" + status + "</span>",
                         format('yyyy-MM-dd', products[i].lastUpdated),
@@ -304,7 +302,7 @@ router.route('/products')
                     { itemNumber: { $ne: "" } },
                     { title: { $ne: null } }
                 ]
-    
+
             }, function (err, count) {
                 results.recordsTotal = count;
 
@@ -315,10 +313,10 @@ router.route('/products')
                     Product.countDocuments({
 
                         $and: [
-                            { status: {$ne: "Deleted"}},
-                            { itemNumber: {$ne: null}},
-                            { itemNumber: {$ne: ""}},
-                            {'search': new RegExp(search, 'i')}
+                            { status: { $ne: "Deleted" } },
+                            { itemNumber: { $ne: null } },
+                            { itemNumber: { $ne: "" } },
+                            { 'search': new RegExp(search, 'i') }
                         ]
 
                     }, function (err, count) {
@@ -349,7 +347,7 @@ router.route('/products/:product_id')
             Product.findById(req.params.product_id, function (err, product) {
                 if (err) {
                     res.send(err);
-                }else {
+                } else {
                     res.json(product);
                 }
             });
@@ -382,7 +380,7 @@ router.route('/products/:product_id')
             });
         });
     });
-   
+
 router.route('/products/:product_id/status')
     .put(checkJwt, function (req, res) {
 
@@ -436,7 +434,7 @@ router.route('/products/:itemNumber/undelete')
             upsert: true, useFindAndModify: false
         }, function (err, doc) {
 
-            if (err){
+            if (err) {
                 res.send(err);
             }
 

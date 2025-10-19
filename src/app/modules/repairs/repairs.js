@@ -1,6 +1,6 @@
 var scopeHolder;
 
-(function() {
+(function () {
     'use strict';
 
     angular.module('singApp.repairs')
@@ -18,7 +18,7 @@ var scopeHolder;
             "processing": true,
             "serverSide": true,
             "ordering": false,
-                stateSave: true,
+            stateSave: true,
             "ajax": {
                 url: "/api/repairs?filter=outstanding",
                 headers: {
@@ -26,30 +26,29 @@ var scopeHolder;
                 }
             }
         }
-
         );
 
-        $scope.toggleRepairFilter = function() {
+        $scope.toggleRepairFilter = function () {
             var repairFilter = document.getElementById("repairFilter");
-            theDataTable.ajax.url("/api/repairs?filter="+ repairFilter.value).load();
+            theDataTable.ajax.url("/api/repairs?filter=" + repairFilter.value).load();
         };
 
         var customerTableShown = false;
         $('#customerModal').on('show.bs.modal', function (e) {
-        if(customerTableShown==false){
-           jQuery('#customerTable').DataTable( {
-              "processing": true,
-              "serverSide": true,
-              "ordering": false,
-              "ajax": {
-                  url: "api/customers",
-                  headers: {
-                      "Authorization": "Bearer " + accessToken
-                  }
-              }
-            } );
-            customerTableShown = true;
-          }
+            if (customerTableShown == false) {
+                jQuery('#customerTable').DataTable({
+                    "processing": true,
+                    "serverSide": true,
+                    "ordering": false,
+                    "ajax": {
+                        url: "api/customers",
+                        headers: {
+                            "Authorization": "Bearer " + accessToken
+                        }
+                    }
+                });
+                customerTableShown = true;
+            }
         })
 
     }

@@ -31,8 +31,8 @@
                     </button>
 
                     <ul class="dropdown-menu">
-                        <li ng-if="data.oldLog==false" ng-disabled="true"><a href="#" data-toggle="modal" data-toggle="modal"
-                                data-target="#addImagesModal">Add Images</a></li>
+                        <li ng-if="data.oldLog==false" ng-disabled="true"><a href="#" data-toggle="modal"
+                                data-toggle="modal" data-target="#addImagesModal">Add Images</a></li>
                         <li><a ng-click="print()"><i class="fa fa-print"></i> Print</a></li>
                     </ul>
                 </div>
@@ -50,7 +50,6 @@
                             <div class="col-sm-12">
 
                                 <fieldset>
-
                                     <div class="form-group" ng-if="data.date!=null">
                                         <label for="date" class="col-sm-3 control-label">Date</label>
                                         <div class="col-sm-8">
@@ -59,7 +58,6 @@
                                                 value="{{data.date | date : 'MM/dd/y'}}" readonly="readonly">
                                         </div>
                                     </div>
-
                                     <div class="form-group required">
                                         <label for="receivedFrom" class="col-sm-3 control-label">Received
                                             From</label>
@@ -76,7 +74,6 @@
                                             </select>
                                         </div>
                                     </div>
-
                                     <div class="form-group">
                                         <label for="customerName" class="col-sm-3 control-label">Customer
                                             Name</label>
@@ -85,26 +82,24 @@
                                                 ng-model="data.customerName">
                                         </div>
                                     </div>
-
                                     <div class="form-group">
                                         <label for="receivedBy" class="col-sm-3 control-label">Received
                                             By</label>
                                         <div class="col-sm-8">
-                                            <input type="text" id="receivedBy" class="form-control" ng-model="data.user">
+                                            <input type="text" id="receivedBy" class="form-control"
+                                                ng-model="data.user">
                                         </div>
                                     </div>
-
                                     <div class="form-group">
                                         <label for="comments" class="col-sm-3 control-label">Note/Comment</label>
                                         <div class="col-sm-8">
-                                            <textarea id="comments" rows=6 cols="40" ng-model="data.comments"></textarea>
+                                            <textarea id="comments" rows=6 cols="40"
+                                                ng-model="data.comments"></textarea>
                                         </div>
                                     </div>
-
                                     <div class="form-actions">
                                         <div class="row">
                                             <div class="col-sm-offset-1 col-sm-10">
-
                                                 <h2>Items</h2>
                                                 <div ng-if="data._id==null">
                                                     <!-- New line item modal -->
@@ -215,17 +210,21 @@
                                                                 <textarea cols="70" rows="1" id="name"
                                                                     ng-model="lineItem.name"></textarea>
                                                             </td>
-                                                            <td><a href="/#/app/item/{{lineItem.productId}}">{{lineItem.itemNumber}}</a></td>
-                                                            <td ng-if="lineItem.repairId!=null" ><a href="/#/app/repair/{{lineItem.repairId}}">{{lineItem.repairNumber}}</a></td>
-                                                            <td ng-if="lineItem.repairId==null" >{{lineItem.repairNumber}}</td>
+                                                            <td><a
+                                                                    href="/#/app/item/{{lineItem.productId}}">{{lineItem.itemNumber}}</a>
+                                                            </td>
+                                                            <td ng-if="lineItem.repairId!=null"><a
+                                                                    href="/#/app/repair/{{lineItem.repairId}}">{{lineItem.repairNumber}}</a>
+                                                            </td>
+                                                            <td ng-if="lineItem.repairId==null">
+                                                                {{lineItem.repairNumber}}</td>
                                                             <td>
                                                                 <div ng-if="lineItem.repairNumber!=null"
                                                                     class="input-group">
                                                                     <span class="input-group-addon">$</span>
-                                                                    <input type="text" type="number"
-                                                                        step="0.01" id="lineItemAmount"
-                                                                        ng-model="lineItem.repairCost"
-                                                                        size="7">
+                                                                    <input type="text" type="number" step="0.01"
+                                                                        id="lineItemAmount"
+                                                                        ng-model="lineItem.repairCost" size="7">
                                                                 </div>
                                                             </td>
                                                             <td>

@@ -1,31 +1,29 @@
-
 <h1 class="page-title"><span class="fw-semi-bold">Outstanding Repairs</span></h1>
 
 <section class="widget">
   <div class="widget-body" data-ng-controller="ReportsCtrl">
     <div class="mt">
 
+      <div class="hidden-prin">
+        <select id="vendor" class="selectpicker" data-selectpicker data-width="auto" ng-model="vendor"
+          ng-change="vendorSelected()">
+          <option ng-repeat="vendorx in vendors">{{ vendorx }}</option>
+        </select>
+      </div>
 
-        <div class="hidden-prin">
-                <select id="vendor" class="selectpicker" data-selectpicker data-width="auto" ng-model="vendor" ng-change="vendorSelected()">
-                    <option ng-repeat="vendorx in vendors">{{ vendorx }}</option>
-                </select>
-        </div>
-
-        <p></p>
+      <p></p>
 
       <table id="example" class="display" cellspacing="0" width="100%">
-          <thead>
-              <tr>
-                  <th>Repair #</th>
-                  <th>Item #</th>
-                  <th>Vendor</th>
-                  <th>Description</th>
-                  <th>Date Out</th>
-              </tr>
-          </thead>
+        <thead>
+          <tr>
+            <th>Repair #</th>
+            <th>Item #</th>
+            <th>Vendor</th>
+            <th>Description</th>
+            <th>Date Out</th>
+          </tr>
+        </thead>
       </table>
-
     </div>
   </div>
 </section>

@@ -34,26 +34,25 @@ router.route('/outs')
 
             Out.findOneAndUpdate({
                 _id: req.body._id
-            }, 
-            {
-                // don't update date
-                "$set": {
-                    "sentTo": out.sentTo,
-                    "description": out.description,
-                    "user": out.user,
-                    "comments": out.comments,
-                    "search": out.search
-                }
             },
-            {
-                upsert: false, useFindAndModify:false
-            }, function (err, doc) {
-                if (err)
-                    console.error('Error updating log out item:', err);
+                {
+                    // don't update date
+                    "$set": {
+                        "sentTo": out.sentTo,
+                        "description": out.description,
+                        "user": out.user,
+                        "comments": out.comments,
+                        "search": out.search
+                    }
+                },
+                {
+                    upsert: false, useFindAndModify: false
+                }, function (err, doc) {
+                    if (err)
+                        console.error('Error updating log out item:', err);
 
-                return res.send("Saved log out item");
-            });
-
+                    return res.send("Saved log out item");
+                });
 
         } else {
 
@@ -141,26 +140,26 @@ router.route('/outs/:out_id')
     });
 
 
-    // e-sign
-    router.route('/outs-sign')
-        .post(checkJwt, function (req, res) {
-            Out.findOneAndUpdate(
-                { "_id": req.body.outId },
-                {
-                    "$set": {
-                        "signatureDate": Date.now(),
-                        "signatureUser": req.user['http://mynamespace/name'],
-                        "signature": req.body.signature
-                    }
-                }, {
-                "new": true,
-                "upsert": false,
-                "useFindAndModify": false
-            }, function (err, doc) {
-                if (err)
-                    res.send(err);
-                res.json(doc);
-            });
+// e-sign
+router.route('/outs-sign')
+    .post(checkJwt, function (req, res) {
+        Out.findOneAndUpdate(
+            { "_id": req.body.outId },
+            {
+                "$set": {
+                    "signatureDate": Date.now(),
+                    "signatureUser": req.user['http://mynamespace/name'],
+                    "signature": req.body.signature
+                }
+            }, {
+            "new": true,
+            "upsert": false,
+            "useFindAndModify": false
+        }, function (err, doc) {
+            if (err)
+                res.send(err);
+            res.json(doc);
         });
-    
+    });
+
 module.exports = router;

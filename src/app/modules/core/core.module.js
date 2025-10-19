@@ -1,4 +1,4 @@
-(function() {
+(function () {
   'use strict';
 
   var core = angular.module('singApp.core', [
@@ -13,18 +13,18 @@
 
   appConfig.$inject = ['$stateProvider', '$urlRouterProvider'];
   function appConfig($stateProvider, $urlRouterProvider) {
-      $stateProvider
-          .state('app', {
-              url: '/app',
-              //abstract: true,
-              templateUrl: 'app/modules/core/app.html',
-              controller: 'App',
-              controllerAs: 'vm'
-          });
-
-      $urlRouterProvider.otherwise(function ($injector) {
-          var $state = $injector.get('$state');
-          $state.go('app.inventory');
+    $stateProvider
+      .state('app', {
+        url: '/app',
+        //abstract: true,
+        templateUrl: 'app/modules/core/app.html',
+        controller: 'App',
+        controllerAs: 'vm'
       });
+
+    $urlRouterProvider.otherwise(function ($injector) {
+      var $state = $injector.get('$state');
+      $state.go('app.inventory');
+    });
   }
 })();

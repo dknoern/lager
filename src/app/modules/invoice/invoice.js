@@ -1,6 +1,6 @@
 var scopeHolder;
 
-(function() {
+(function () {
     'use strict';
 
     angular.module('singApp.invoice')
@@ -16,7 +16,7 @@ var scopeHolder;
 
         $scope.states = refdataService.states();
 
-        $scope.email = function() {
+        $scope.email = function () {
 
             $http({
                 method: "POST",
@@ -32,7 +32,7 @@ var scopeHolder;
             }).then(function successCallback(response) {
 
                 Messenger().post({
-                    message: 'invoice emailed to '+ document.getElementById('emailAddresses').value,
+                    message: 'invoice emailed to ' + document.getElementById('emailAddresses').value,
                     type: "success",
                 });
 
@@ -49,11 +49,11 @@ var scopeHolder;
         }
 
 
-        $scope.copyAddress = function() {
+        $scope.copyAddress = function () {
 
             var copying = document.getElementById('copyAddress').checked;
 
-            if(copying) {
+            if (copying) {
                 $scope.data.billingAddress1 = $scope.data.shipAddress1;
                 $scope.data.billingAddress2 = $scope.data.shipAddress2;
                 $scope.data.billingAddress3 = $scope.data.shipAddress3;
@@ -64,10 +64,10 @@ var scopeHolder;
             }
         }
 
-        $scope.addItem = function(itemId) {
+        $scope.addItem = function (itemId) {
 
             $http.get("api/products/" + itemId)
-                .then(function(response) {
+                .then(function (response) {
 
                     var lineItem = {
                         name: response.data.title,
@@ -90,58 +90,57 @@ var scopeHolder;
         }
 
 
-        $scope.addMisc = function() {
+        $scope.addMisc = function () {
 
-                    var lineItem = {
-                        name: '',
-                        productId: '',
-                        itemNumber: '',
-                        amount: 0.0,
-                        serialNumber: '',
-                        modelNumber: '',
-                        longDesc: ''
-                    }
+            var lineItem = {
+                name: '',
+                productId: '',
+                itemNumber: '',
+                amount: 0.0,
+                serialNumber: '',
+                modelNumber: '',
+                longDesc: ''
+            }
 
-                    if ($scope.data.lineItems == null) {
-                        $scope.data.lineItems = new Array();
-                    }
-                    $scope.data.lineItems.push(lineItem);
+            if ($scope.data.lineItems == null) {
+                $scope.data.lineItems = new Array();
+            }
+            $scope.data.lineItems.push(lineItem);
 
             $('#productModal').modal('hide');
         }
 
-        $scope.removeItem = function(index) {
+        $scope.removeItem = function (index) {
             var arr = $scope.data.lineItems;
             $scope.data.lineItems.splice(index, 1);
             $scope.computeTotals();
         }
 
-        $scope.computeTotals = function() {
+        $scope.computeTotals = function () {
 
             // make sure shipping and taxexempt have values
-            if($scope.data.shipping==null){
+            if ($scope.data.shipping == null) {
                 $scope.data.shipping = 0.0;
             }
 
-            if($scope.data.taxExempt==null){
+            if ($scope.data.taxExempt == null) {
                 $scope.data.taxExempt = false;
             }
 
 
             var total = 0.0;
-            $scope.data.lineItems.forEach(function(item) {
+            $scope.data.lineItems.forEach(function (item) {
                 total += item.amount;
             });
 
             $scope.data.subtotal = total;
 
             var taxRate = 0.00;
-            if ($scope.data.methodOfSale != 'Ebay' && $scope.data.shipState == "TX" && $scope.data.taxExempt == false &&  $scope.data.invoiceType == 'Invoice')
+            if ($scope.data.methodOfSale != 'Ebay' && $scope.data.shipState == "TX" && $scope.data.taxExempt == false && $scope.data.invoiceType == 'Invoice')
                 taxRate = 0.0825;
             $scope.data.tax = taxRate * total;
             $scope.data.total = $scope.data.subtotal + $scope.data.tax + $scope.data.shipping;
         }
-
 
         $scope.deleteInvoice = function () {
 
@@ -157,10 +156,10 @@ var scopeHolder;
                 $state.go('app.invoices');
 
                 Messenger().post({
-                        message: 'Deleted invoice ' + invoiceId,
-                        type: "success",
-                        showCloseButton: true
-                    }
+                    message: 'Deleted invoice ' + invoiceId,
+                    type: "success",
+                    showCloseButton: true
+                }
                 );
 
             }, function errorCallback(response) {
@@ -168,30 +167,24 @@ var scopeHolder;
             });
         }
 
-
-
-
-
-
-        $scope.print = function() {
+        $scope.print = function () {
             $window.print();
         };
 
+        if ($scope.invoiceId) {
 
-            if ($scope.invoiceId) {
+            $scope.printableUrl = '/api/invoices/' + $scope.invoiceId + '/print?t=' + new Date().getTime();
 
-                $scope.printableUrl = '/api/invoices/' + $scope.invoiceId + '/print?t='+ new Date().getTime();
-
-                if ("new" == $scope.invoiceId) {
+            if ("new" == $scope.invoiceId) {
                 var customerId = $location.search().customerId;
 
 
-                    if (authService != null && authService.getCachedProfile() != null && authService.getCachedProfile().name != null) {
-                        var salesPerson = authService.getCachedProfile().name;
-                        if (salesPerson != null && salesPerson.length > 0 && salesPerson.indexOf("@") > 0) {
-                            salesPerson = salesPerson.substring(0, salesPerson.indexOf("@"));
-                        }
+                if (authService != null && authService.getCachedProfile() != null && authService.getCachedProfile().name != null) {
+                    var salesPerson = authService.getCachedProfile().name;
+                    if (salesPerson != null && salesPerson.length > 0 && salesPerson.indexOf("@") > 0) {
+                        salesPerson = salesPerson.substring(0, salesPerson.indexOf("@"));
                     }
+                }
 
                 console.log("new invoice, setting base data....");
 
@@ -207,39 +200,39 @@ var scopeHolder;
                     taxExempt: false
                 }
 
-                if(customerId != "new"){
+                if (customerId != "new") {
 
-                $http.get('api/customers/' + customerId).
-                success(function(customer) {
-                    $scope.customer = customer;
-                    var fullName = customer.firstName + ' ' + customer.lastName;
+                    $http.get('api/customers/' + customerId).
+                        success(function (customer) {
+                            $scope.customer = customer;
+                            var fullName = customer.firstName + ' ' + customer.lastName;
 
-                    // fill in invoice data from existing customer
-                    $scope.data.customerFirstName = customer.firstName;
-                    $scope.data.customerLastName = customer.lastName;
-                    $scope.data.customerId = customerId;
-                    $scope.data.customerEmail = customer.email;
-                    $scope.data.customerPhone = customer.phone;
-                    $scope.data.shipToName = fullName;
-                    $scope.data.shipAddress1 = customer.address1;
-                    $scope.data.shipAddress2 = customer.address2;
-                    $scope.data.shipAddress3 = customer.address3;
-                    $scope.data.shipCity = customer.city;
-                    $scope.data.shipState = customer.state;
-                    $scope.data.shipZip = customer.zip;
-                    $scope.data.shipCountry = customer.country;
-                    $scope.data.customerEmail = customer.email;
-                    $scope.data.customerPhone = customer.phone;
-                    $scope.data.copyAddress = customer.copyAddress;
-                    $scope.data.billingAddress1 = customer.billingAddress1;
-                    $scope.data.billingAddress2 = customer.billingAddress2;
-                    $scope.data.billingAddress2 = customer.billingAddress3;
-                    $scope.data.billingCity = customer.billingCity;
-                    $scope.data.billingState = customer.billingState;
-                    $scope.data.billingZip = customer.billingZip;
-                    $scope.data.billingCountry = customer.billingCountry;
-                });
-              }
+                            // fill in invoice data from existing customer
+                            $scope.data.customerFirstName = customer.firstName;
+                            $scope.data.customerLastName = customer.lastName;
+                            $scope.data.customerId = customerId;
+                            $scope.data.customerEmail = customer.email;
+                            $scope.data.customerPhone = customer.phone;
+                            $scope.data.shipToName = fullName;
+                            $scope.data.shipAddress1 = customer.address1;
+                            $scope.data.shipAddress2 = customer.address2;
+                            $scope.data.shipAddress3 = customer.address3;
+                            $scope.data.shipCity = customer.city;
+                            $scope.data.shipState = customer.state;
+                            $scope.data.shipZip = customer.zip;
+                            $scope.data.shipCountry = customer.country;
+                            $scope.data.customerEmail = customer.email;
+                            $scope.data.customerPhone = customer.phone;
+                            $scope.data.copyAddress = customer.copyAddress;
+                            $scope.data.billingAddress1 = customer.billingAddress1;
+                            $scope.data.billingAddress2 = customer.billingAddress2;
+                            $scope.data.billingAddress2 = customer.billingAddress3;
+                            $scope.data.billingCity = customer.billingCity;
+                            $scope.data.billingState = customer.billingState;
+                            $scope.data.billingZip = customer.billingZip;
+                            $scope.data.billingCountry = customer.billingCountry;
+                        });
+                }
 
             } else {
                 $scope.data = $resource('api/invoices/:id').get({
@@ -254,19 +247,15 @@ var scopeHolder;
 
         } else if ($scope.productId) {
 
+            $http.get('api/invoices/partner/' + $scope.productId).
+                success(function (invoice) {
 
-            // partner invoice... find invoice by type and lineItem productID;
-
-            $http.get('api/invoices/partner/'+$scope.productId).
-            success(function(invoice) {
-
-                $scope.data = invoice;
-                $scope.printableUrl = '/api/invoices/' + invoice._id + '/print?t='+ new Date().getTime();
-            });
-
+                    $scope.data = invoice;
+                    $scope.printableUrl = '/api/invoices/' + invoice._id + '/print?t=' + new Date().getTime();
+                });
         }
 
-        $scope.go = function() {
+        $scope.go = function () {
 
             $http({
                 method: "POST",
@@ -279,17 +268,17 @@ var scopeHolder;
                 $state.go('app.invoices');
             }, function errorCallback(response) {
                 Messenger().post({
-                    message: 'Error saving invoice ' +$scope.data._id + ": "+ response.data.error,
+                    message: 'Error saving invoice ' + $scope.data._id + ": " + response.data.error,
                     type: "danger",
                     showCloseButton: true
                 }
-            );
+                );
             });
         }
 
         var productTableShown = false;
 
-        $('#productModal').on('show.bs.modal', function(e) {
+        $('#productModal').on('show.bs.modal', function (e) {
             if (productTableShown == false) {
 
                 var accessToken = localStorage.getItem('access_token');
@@ -306,15 +295,13 @@ var scopeHolder;
                         "headers": {
                             "Authorization": "Bearer " + accessToken
                         }
-                      },
-                    "order": [[ 5, 'desc' ]]
+                    },
+                    "order": [[5, 'desc']]
                 });
                 productTableShown = true;
             }
         })
 
         jQuery('#datetimepicker2').datetimepicker();
-
-
     }
 })();

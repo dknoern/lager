@@ -1,10 +1,10 @@
-(function() {
+(function () {
   'use strict';
 
   angular.module('singApp.components.dropzone')
     .directive('dropzone', dropzone)
     .factory('Dropzone', DropzoneFactory)
-  ;
+    ;
 
   /* ========================================================================
    * Handle no-border input groups focus
@@ -12,7 +12,7 @@
    */
 
   dropzone.$inject = ['Dropzone'];
-  function dropzone(Dropzone){
+  function dropzone(Dropzone) {
     return function (scope, element, attrs) {
       var config, dropzone;
 
@@ -42,7 +42,7 @@
   }
 
   DropzoneFactory.$inject = ['$window'];
-  function DropzoneFactory($window){
+  function DropzoneFactory($window) {
     return $window.Dropzone;
   }
 

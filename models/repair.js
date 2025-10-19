@@ -27,8 +27,6 @@ var RepairSchema = new mongoose.Schema({
     customerApprovedDate: Date
 });
 
-
-
 RepairSchema.virtual('dateOutFMT').get(function () {
     return format('MM/dd/yyyy', this.dateOut);
 });
@@ -42,6 +40,5 @@ RepairSchema.virtual('repairCostFMT').get(function () {
     if(this.repairCost==null) return "";
     else return formatCurrency(this.repairCost, opts);
 });
-
 
 module.exports = mongoose.model('Repair', RepairSchema);

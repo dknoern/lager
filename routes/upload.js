@@ -24,7 +24,7 @@ var upload = multer({ storage: storage });
 router.route(`/${UPLOAD}`)
     .post(checkJwt, upload.single('file'), function (req, res, err) {
 
-        if(err!=null && err.message!=null){
+        if (err != null && err.message != null) {
             console.error('Upload error:', err.message);
         }
         return res.send("post...");

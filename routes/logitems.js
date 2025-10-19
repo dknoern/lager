@@ -41,26 +41,26 @@ router.route('/logs')
 
             Log.findOneAndUpdate({
                 _id: req.body._id
-            }, 
-            {
-                // don't update date
-                "$set": {
-                    "receivedFrom": log.receivedFrom,
-                    "customerName": log.customerName,
-                    "user": log.user,
-                    "comments": log.comments,
-                    "lineItems": log.lineItems,
-                    "search": log.search
-                }
             },
-            {
-                upsert: false, useFindAndModify:false
-            }, function (err, doc) {
-                if (err)
-                    console.error('Error updating log item:', err);
+                {
+                    // don't update date
+                    "$set": {
+                        "receivedFrom": log.receivedFrom,
+                        "customerName": log.customerName,
+                        "user": log.user,
+                        "comments": log.comments,
+                        "lineItems": log.lineItems,
+                        "search": log.search
+                    }
+                },
+                {
+                    upsert: false, useFindAndModify: false
+                }, function (err, doc) {
+                    if (err)
+                        console.error('Error updating log item:', err);
 
-                return res.send("Saved log item");
-            });
+                    return res.send("Saved log item");
+                });
 
             log.lineItems.forEach(lineItem => {
                 updateRepairDetails(lineItem, log.comments);
@@ -110,13 +110,13 @@ router.route('/logs')
         //Log.find({ 'search': new RegExp(search, 'i') }).
 
         Log.find({
-            $or:[
-                {'receivedFrom': new RegExp(search, 'i')},
-                {'customerName': new RegExp(search, 'i')},
-                {'comments': new RegExp(search, 'i')},
-                {'lineItems': { $elemMatch: {"name": new RegExp(search, 'i')}}},
-                {'lineItems': { $elemMatch: {"itemNumber": new RegExp(search, 'i')}}},
-                {'lineItems': { $elemMatch: {"repairNumber": new RegExp(search, 'i')}}},
+            $or: [
+                { 'receivedFrom': new RegExp(search, 'i') },
+                { 'customerName': new RegExp(search, 'i') },
+                { 'comments': new RegExp(search, 'i') },
+                { 'lineItems': { $elemMatch: { "name": new RegExp(search, 'i') } } },
+                { 'lineItems': { $elemMatch: { "itemNumber": new RegExp(search, 'i') } } },
+                { 'lineItems': { $elemMatch: { "repairNumber": new RegExp(search, 'i') } } },
             ]
         }).
             sort(sortClause).skip(parseInt(start)).limit(parseInt(length))
@@ -210,9 +210,9 @@ function receiveProduct(log, lineItem) {
 
         // item could be in repair even if sold or memoed
         if (repair) {
-            if(sold){
+            if (sold) {
                 newStatus = "Sold";
-            } else if(memo) {
+            } else if (memo) {
                 newStatus = "Memo";
             } else {
                 newStatus = "In Stock";
@@ -309,10 +309,10 @@ function updateRepairDetails(lineItem, comments) {
         });
 }
 
-function valueOrBlank(value){
-    if(value !=null) return value;
+function valueOrBlank(value) {
+    if (value != null) return value;
     return "";
-  
+
 }
 
 module.exports = router;

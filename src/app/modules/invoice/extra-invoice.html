@@ -2,9 +2,7 @@
   <div class="col-md-11" id="invoice">
 
     <div id="printable">
-
-    <ng-include src="printableUrl"></ng-include>
-
+      <ng-include src="printableUrl"></ng-include>
 
     </div>
 
@@ -14,13 +12,13 @@
         &nbsp;&nbsp;
         Print
       </button>
-      <a href="/#/app/invoice/edit/{{data._id}}"  ng-if="'Partner' !=invoiceType" >
+      <a href="/#/app/invoice/edit/{{data._id}}" ng-if="'Partner' !=invoiceType">
         <button class="btn btn-success">
           Edit
           &nbsp;
           <span class="circle bg-white">
-                                    <i class="fa fa-edit text-success"></i>
-                                </span>
+            <i class="fa fa-edit text-success"></i>
+          </span>
         </button></a>
 
 
@@ -28,70 +26,46 @@
         EMail
         &nbsp;
         <span class="circle bg-white">
-                              <i class="fa fa-envelope text-primary"></i>
-                          </span>
+          <i class="fa fa-envelope text-primary"></i>
+        </span>
       </button>
-
-
-      <!--a href="/api/invoices/{{data._id}}/pdf" download>
-      <button class="btn btn-danger">
-        PDF
-        &nbsp;
-        <span class="circle bg-white">
-                              <i class="fa fa-file-pdf-o text-danger"></i>
-                          </span>
-      </button>
-      </a-->
-
-
     </div>
-
-
   </div>
 
+  <!-- email modal -->
+  <div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-md" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
 
+          <section class="widget">
+            <header>
+              <h5><strong>Enter Email Addresses</strong></h5>
+            </header>
+            <div class="widget-body">
 
+              <form>
+                <p>Enter one or more email addresses, comma delimited.</p>
+                <p>
+                  <textarea id="emailAddresses" class="form-control" rows="3">{{data.customerEmail}}</textarea>
+                </p>
+                <p>Enter optional note to include in email.</p>
+                <p>
+                  <textarea id="note" name="note" class="form-control" rows="3"></textarea>
+                </p>
+              </form>
+            </div>
+          </section>
 
-
-
-<!-- email modal -->
-<div class="modal fade" id="emailModal" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel">
-  <div class="modal-dialog modal-md" role="document">
-    <div class="modal-content">
-      <div class="modal-body">
-
-        <section class="widget">
-          <header>
-            <h5><strong>Enter Email Addresses</strong></h5>
-          </header>
-          <div class="widget-body">
-
-            <form>
-              <p>Enter one or more email addresses, comma delimited.</p>
-              <p>
-              <textarea id="emailAddresses"  class="form-control" rows="3">{{data.customerEmail}}</textarea>
-              </p>
-              <p>Enter optional note to include in email.</p>
-              <p>
-              <textarea id="note" name="note" class="form-control" rows="3"></textarea>
-              </p>
-            </form>
-          </div>
-        </section>
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-success btn-sm"
-                ng-click="email()" data-dismiss="modal">Send
-        </button>
-        <button type="button" class="btn btn-info btn-sm" data-dismiss="modal">Cancel
-        </button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success btn-sm" ng-click="email()" data-dismiss="modal">Send
+          </button>
+          <button type="button" class="btn btn-info btn-sm" data-dismiss="modal">Cancel
+          </button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
 </div>
-
-

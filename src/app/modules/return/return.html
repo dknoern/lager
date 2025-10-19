@@ -6,95 +6,84 @@
                 <div class="widget-body">
                     <form class="form-horizontal" role="form">
                         <fieldset>
-
                             <div class="row">
                                 <div class="col-sm-6">
                                     <fieldset>
-                                        <input type="hidden" id="customerId" class="form-control" ng-model="data.customerId" readonly="readonly">
+                                        <input type="hidden" id="customerId" class="form-control"
+                                            ng-model="data.customerId" readonly="readonly">
 
-                                        <input type="hidden" id="invoiceId" class="form-control" ng-model="data._id" readonly="readonly">
+                                        <input type="hidden" id="invoiceId" class="form-control" ng-model="data._id"
+                                            readonly="readonly">
 
                                         <div class="form-group">
                                             <label for="id-field" class="col-sm-3 control-label">Return No</label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="id-field" class="form-control" ng-model="data._id" readonly="readonly">
+                                                <input type="text" id="id-field" class="form-control"
+                                                    ng-model="data._id" readonly="readonly">
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="returnNo-field" class="col-sm-3 control-label">Invoice No</label>
+                                            <label for="returnNo-field" class="col-sm-3 control-label">Invoice
+                                                No</label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="returnNo-field" class="form-control" ng-model="data.invoiceId" readonly="readonly">
+                                                <input type="text" id="returnNo-field" class="form-control"
+                                                    ng-model="data.invoiceId" readonly="readonly">
                                             </div>
                                         </div>
 
-
-
-                                        <input type="hidden" id="invoiceNumber-field" class="form-control" ng-model="data.invoiceNumber" readonly="readonly">
-
+                                        <input type="hidden" id="invoiceNumber-field" class="form-control"
+                                            ng-model="data.invoiceNumber" readonly="readonly">
 
                                         <div class="form-group">
                                             <label for="date-field" class="col-sm-3 control-label">Date</label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="date-field" class="form-control"  readonly="readonly" value="{{data.returnDate | date: 'MM/dd/y'}}">
+                                                <input type="text" id="date-field" class="form-control"
+                                                    readonly="readonly" value="{{data.returnDate | date: 'MM/dd/y'}}">
                                             </div>
                                         </div>
-
-
                                         <div class="form-group">
                                             <label for="customer-field" class="col-sm-3 control-label">Customer</label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="customer-field" class="form-control" ng-model="data.customerName">
+                                                <input type="text" id="customer-field" class="form-control"
+                                                    ng-model="data.customerName">
                                             </div>
                                         </div>
-
-
-
-
                                         <div class="form-group">
                                             <label for="shipping" class="col-sm-3 control-label">Shipping</label>
                                             <div class="col-sm-8">
                                                 <div class="input-group">
                                                     <span class="input-group-addon">$</span>
-                                                    <input type="number" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency" id="shipping" ng-model="data.shipping" ng-change="computeTotals()">
+                                                    <input type="number" min="0" step="0.01" data-number-to-fixed="2"
+                                                        data-number-stepfactor="100" class="form-control currency"
+                                                        id="shipping" ng-model="data.shipping"
+                                                        ng-change="computeTotals()">
                                                 </div>
                                             </div>
-
-
                                             <div class="form-group">
                                                 <div class="col-sm-2"></div>
                                                 <div class="col-sm-9">
                                                     <div class="form-group checkbox checkbox-primary">
-                                                        <input type="checkbox" id="taxable"
-                                                               ng-model="data.taxable" ng-change="computeTotals()">
+                                                        <input type="checkbox" id="taxable" ng-model="data.taxable"
+                                                            ng-change="computeTotals()">
                                                         <label for="taxable">Taxable</label>
                                                     </div>
-
                                                 </div>
                                             </div>
                                         </div>
                                     </fieldset>
                                 </div>
-
-
                                 <div class="col-sm-6">
                                     <fieldset>
                                     </fieldset>
                                 </div>
-
                             </div>
-
                         </fieldset>
 
                         <div class="form-actions">
                             <div class="row">
                                 <div class="col-sm-offset-1 col-sm-7">
 
-
                                     <h2>Line Items</h2>
-
-
-
-
                                     <table class="table table-striped table-hover" width="95%">
                                         <thead>
                                             <tr>
@@ -109,10 +98,10 @@
 
 
                                                 <td ng-if="lineItem.included">
-                                                  {{lineItem.name}}
+                                                    {{lineItem.name}}
                                                 </td>
                                                 <td ng-if="!lineItem.included">
-                                                  <del>{{lineItem.name}}</del>
+                                                    <del>{{lineItem.name}}</del>
                                                 </td>
                                                 <td ng-if="lineItem.included">{{lineItem.itemNumber}}</td>
                                                 <td ng-if="!lineItem.included"><del>{{lineItem.itemNumber}}</del></td>
@@ -120,12 +109,16 @@
                                                 <td ng-if="lineItem.included">${{lineItem.amount}}</td>
                                                 <td ng-if="!lineItem.included"><del>${{lineItem.amount}}</del></td>
                                                 <td>
-                                                    <button ng-if="!lineItem.included" type="button" class="btn btn-success btn-sm" ng-click="includeItem($index,true)">
-                                                      <span class="glyphicon glyphicon-plus" ></span> Include
+                                                    <button ng-if="!lineItem.included" type="button"
+                                                        class="btn btn-success btn-sm"
+                                                        ng-click="includeItem($index,true)">
+                                                        <span class="glyphicon glyphicon-plus"></span> Include
                                                     </button>
-                                                    <button ng-if="lineItem.included && !data._id" type="button" class="btn btn-danger btn-sm" ng-click="includeItem($index,false)">
-                                                      <span class="glyphicon glyphicon-minus" ></span> Exclude
-                                                   </button>
+                                                    <button ng-if="lineItem.included && !data._id" type="button"
+                                                        class="btn btn-danger btn-sm"
+                                                        ng-click="includeItem($index,false)">
+                                                        <span class="glyphicon glyphicon-minus"></span> Exclude
+                                                    </button>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -140,28 +133,25 @@
                                                 <td><b><span id="shipping">{{data.shipping | currency}}</span></b></td>
                                                 <td></td>
 
-                                                <tr>
-                                                    <td><b>Tax (TX)</b></td>
-                                                    <td></td>
-                                                    <td><b><span id="salesTax">{{data.salesTax | currency}}</span></b></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>Total</b></td>
-                                                    <td></td>
-                                                    <td><b><span id="totalReturnAmount">{{data.totalReturnAmount | currency}}</span></b></td>
-                                                    <td></td>
-                                                </tr>
+                                            <tr>
+                                                <td><b>Tax (TX)</b></td>
+                                                <td></td>
+                                                <td><b><span id="salesTax">{{data.salesTax | currency}}</span></b></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td><b>Total</b></td>
+                                                <td></td>
+                                                <td><b><span id="totalReturnAmount">{{data.totalReturnAmount |
+                                                            currency}}</span></b></td>
+                                                <td></td>
+                                            </tr>
 
                                         </tbody>
                                     </table>
-
-
-
                                 </div>
                             </div>
                         </div>
-
 
                         <div class="form-actions">
                             <div class="row">

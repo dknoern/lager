@@ -42,7 +42,6 @@
                 }
             });
 
-
         $stateProvider
             .state('app.consignmentinvoice', {
                 url: '/consignmentinvoice/:productId',
@@ -51,8 +50,5 @@
                     $scope.productId = $stateParams.productId;
                 }
             });
-
-
-
     }
 })();
