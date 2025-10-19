@@ -2,6 +2,9 @@
 /*        Layout       */
 /***********************/
 
+@use "sass:color";
+@use "sass:math";
+
 .app{
   height: 100%; //fill entire body height
 }
@@ -288,7 +291,7 @@
   }
 
   > .open > a{
-    background-color: lighten($sidebar-item-hover-bg-color, 2%);
+    background-color: color.adjust($sidebar-item-hover-bg-color, $lightness: 2%);
   }
 
   > li:last-child > a{
@@ -316,7 +319,7 @@
   > li ul{
     padding: 0;
     font-size: 13px;
-    background-color: lighten($sidebar-bg-color, 5%);
+    background-color: color.adjust($sidebar-bg-color, $lightness: 5%);
     list-style: none;
 
     @media (min-width: $screen-md-min) and (min-height: $screen-md-height), (max-width: $screen-xs-max){
@@ -327,7 +330,7 @@
       > a{
         padding: 5px 0 5px 40px;
         &:hover{
-          background-color: lighten($sidebar-item-hover-bg-color, 5%);
+          background-color: color.adjust($sidebar-item-hover-bg-color, $lightness: 5%);
         }
       }
 
@@ -353,13 +356,13 @@
      &:before{
        content: "";
        display: block;
-       padding-top: $line-height-computed/2;
+       padding-top: math.div($line-height-computed, 2);
      }
 
      &:after{
        content: "";
        display: block;
-       padding-bottom: $line-height-computed/2;
+       padding-bottom: math.div($line-height-computed, 2);
      }
    }
 }
@@ -520,7 +523,7 @@
     }
 
     + li {
-      margin-top: $line-height-computed/2;
+      margin-top: math.div($line-height-computed, 2);
     }
   }
 }
@@ -542,7 +545,7 @@
   }
   .alert{
     margin-bottom: 0;
-    padding: $line-height-computed/2 $sidebar-padding-horizontal;
+    padding: math.div($line-height-computed, 2) $sidebar-padding-horizontal;
     padding-right: $sidebar-padding-horizontal + $sidebar-slim-scroll-width;
 
     .close{
@@ -554,7 +557,7 @@
   }
 
   .progress{
-    background-color: lighten($sidebar-bg-color, 10%);
+    background-color: color.adjust($sidebar-bg-color, $lightness: 10%);
   }
 }
 
@@ -643,7 +646,7 @@
   .message-list{
     list-style: none;
     padding-left: 0;
-    padding-top: $line-height-computed/2;
+    padding-top: math.div($line-height-computed, 2);
   }
 
   .message{
@@ -1146,7 +1149,7 @@ input[type=search], input.search {
 /***********************/
 
 .btn-inverse {
-  @include button-variant($white, $gray, darken($gray, 10%));
+  @include button-variant($white, $gray, color.adjust($gray, $lightness: -10%));
 }
 
 /***********************/

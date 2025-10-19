@@ -1,3 +1,4 @@
+@use "sass:color";
 /**
  * override custom libs styles. This files is not required for core sing functionality and may be removed
  */
@@ -360,7 +361,7 @@ input.parsley-error{
       color: $white;
     }
     > li.done > a {
-      background-color: lighten($brand-primary, 28%);
+      background-color: color.adjust($brand-primary, $lightness: 28%);
       color: $white;
       cursor: pointer;
     }

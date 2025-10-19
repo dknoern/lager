@@ -1,3 +1,4 @@
+@use "sass:color";
 /***********************************/
 /**            UTILS              **/
 /***********************************/
@@ -248,10 +249,10 @@
 
 @include keyframes('bg-attention'){
   0%{
-    background-color: lighten($brand-warning, 43%);
+    background-color: color.adjust($brand-warning, $lightness: 43%);
   }
   5%{
-    background-color: lighten($brand-warning, 33%);
+    background-color: color.adjust($brand-warning, $lightness: 33%);
   }
   0%{
     background-color: rgba(0,0,0,0);

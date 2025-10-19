@@ -1,3 +1,4 @@
+@use "sass:color";
 /***********************/
 /*                     */
 /*   Custom Widgets    */
@@ -677,7 +678,7 @@
       }
 
       > a {
-        color: lighten($text-color, 30%);
+        color: color.adjust($text-color, $lightness: 30%);
         text-decoration: none;
 
         &:hover,
@@ -865,11 +866,11 @@
     border-radius: 50%;
     text-align: center;
 
-    &.event-icon-danger{ background-color: $brand-danger; border-color: lighten($brand-danger, 7%)}
-    &.event-icon-warning{ background-color: $brand-warning; border-color: lighten($brand-warning, 7%)}
-    &.event-icon-success{ background-color: $brand-success; border-color: lighten($brand-success, 7%)}
-    &.event-icon-info{ background-color: $brand-info; border-color: lighten($brand-info, 7%)}
-    &.event-icon-primary{ background-color: $brand-primary; border-color: lighten($brand-primary, 7%)}
+    &.event-icon-danger{ background-color: $brand-danger; border-color: color.adjust($brand-danger, $lightness: 7%)}
+    &.event-icon-warning{ background-color: $brand-warning; border-color: color.adjust($brand-warning, $lightness: 7%)}
+    &.event-icon-success{ background-color: $brand-success; border-color: color.adjust($brand-success, $lightness: 7%)}
+    &.event-icon-info{ background-color: $brand-info; border-color: color.adjust($brand-info, $lightness: 7%)}
+    &.event-icon-primary{ background-color: $brand-primary; border-color: color.adjust($brand-primary, $lightness: 7%)}
 
     &.event-icon-danger,
     &.event-icon-warning,
@@ -976,7 +977,7 @@
 
 .nav-email-folders{
   > li > a {
-    color: darken($gray-semi-light, 20%);
+    color: color.adjust($gray-semi-light, $lightness: -20%);
     font-weight: $font-weight-normal;
 
     &:hover,

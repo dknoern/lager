@@ -191,13 +191,19 @@ The project uses SCSS (Sass) for styling, which compiles to CSS:
 
 - **Source files**: `app/*.scss`, `app/theme/*.scss`
 - **Generated files**: `app/*.css` (auto-generated, don't edit directly)
-- **Build command**: `npm run build:css`
-- **Watch mode**: `npm run watch:css` (auto-rebuilds on SCSS changes)
+
+#### Build Commands:
+
+- **`npm run build:css`** - Build CSS with deprecation warnings (for development)
+- **`npm run build:css:silent`** - Build CSS silently (no warnings)
+- **`npm run watch:css`** - Auto-rebuild on SCSS changes (for active development)
 
 The CSS is automatically built:
-- During `npm install` (via `postinstall` hook)
+- During `npm install` (via `postinstall` hook, runs silently)
 - During Docker image builds
-- Manually with `npm run build:css`
+- Manually with any of the build commands above
+
+**Note**: Some deprecation warnings are expected from Bootstrap 3 and Font Awesome, which use older Sass syntax. These are harmless and don't affect functionality.
 
 ### Key Files
 

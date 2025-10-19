@@ -66,9 +66,10 @@
   "scripts": {
     "start": "node server.js",
     "build": "npm run build:css",
-    "build:css": "sass --load-path=node_modules app/vendor.scss app/vendor.css && sass --load-path=node_modules app/index.scss app/index.css",
-    "watch:css": "sass --load-path=node_modules --watch app/vendor.scss:app/vendor.css app/index.scss:app/index.css",
-    "postinstall": "npm run build:css"
+    "build:css": "sass --load-path=node_modules --quiet-deps app/vendor.scss app/vendor.css && sass --load-path=node_modules --quiet-deps app/index.scss app/index.css",
+    "build:css:silent": "sass --load-path=node_modules --quiet-deps --quiet app/vendor.scss app/vendor.css && sass --load-path=node_modules --quiet-deps --quiet app/index.scss app/index.css",
+    "watch:css": "sass --load-path=node_modules --quiet-deps --watch app/vendor.scss:app/vendor.css app/index.scss:app/index.css",
+    "postinstall": "npm run build:css:silent"
   },
   "engines": {
     "node": ">=0.10.0"

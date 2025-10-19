@@ -1,3 +1,4 @@
+@use "sass:color";
 //
 // Typography
 // --------------------------------------------------
@@ -51,19 +52,19 @@ legend {
 
 .input-group-addon{
   &.bg-primary{
-    border-color: darken($brand-primary, 10%);
+    border-color: color.adjust($brand-primary, $lightness: -10%);
   }
   &.bg-success{
-    border-color: darken($state-success-bg, 10%);
+    border-color: color.adjust($state-success-bg, $lightness: -10%);
   }
   &.bg-info{
-    border-color: darken($state-info-bg, 10%);
+    border-color: color.adjust($state-info-bg, $lightness: -10%);
   }
   &.bg-warning{
-    border-color: darken($state-warning-bg, 10%);
+    border-color: color.adjust($state-warning-bg, $lightness: -10%);
   }
   &.bg-danger{
-    border-color: darken($state-danger-bg, 10%);
+    border-color: color.adjust($state-danger-bg, $lightness: -10%);
   }
 }
 
@@ -428,7 +429,7 @@ legend {
 }
 
 .btn-gray{
-  @include button-variant($text-color, $gray-semi-lighter, darken($gray-semi-lighter, 5%));
+  @include button-variant($text-color, $gray-semi-lighter, color.adjust($gray-semi-lighter, $lightness: -5%));
 }
 
 .btn-outline{
