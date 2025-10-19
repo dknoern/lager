@@ -112,17 +112,14 @@
 
       changeActiveNavigationItem: function (event, toState, toParams) {
         var stateName = toState.name || toState;
-        console.log('Navigation: Changing active item to state:', stateName);
-        
+
         var $newActiveLink = this.$el.find('a[data-ui-sref="' + stateName + '"]');
-        console.log('Navigation: Found links with data-ui-sref="' + stateName + '":', $newActiveLink.length);
-        
+
         // If no exact match found, try to find by href as fallback
         if ($newActiveLink.length === 0) {
           var href = $state.href(toState, toParams);
           $newActiveLink = this.$el.find('a[href="' + href + '"]');
-          console.log('Navigation: Fallback to href="' + href + '":', $newActiveLink.length);
-        }
+       }
 
         // collapse .collapse only if new and old active links belong to different .collapse
         if (!$newActiveLink.is('.active > .collapse > li > a')) {
@@ -134,17 +131,13 @@
         
         // Remove active class from all items
         this.$el.find('.sidebar-nav .active').removeClass('active');
-        console.log('Navigation: Removed all active classes');
 
         if ($newActiveLink.length > 0) {
           $newActiveLink.closest('li').addClass('active')
             .parents('li').addClass('active');
-          console.log('Navigation: Added active class to new item');
-          
+         
           // uncollapse parent
           $newActiveLink.closest('.collapse').addClass('in').siblings('a[data-toggle=collapse]').removeClass('collapsed');
-        } else {
-          console.warn('Navigation: No matching link found for state:', stateName);
         }
       },
 
@@ -242,7 +235,6 @@
         $transitions.onStart({}, function(transition) {
           var toState = transition.to();
           var toParams = transition.params();
-          console.log('Navigation: transition.onStart event fired for state:', toState.name);
           d.changeActiveNavigationItem(null, toState, toParams);
         });
         
@@ -252,7 +244,6 @@
         
         // Keep the old event listeners as fallback for compatibility
         $rootScope.$on('$stateChangeStart', function(event, toState, toParams) {
-          console.log('Navigation: $stateChangeStart event fired for state:', toState.name);
           d.changeActiveNavigationItem(event, toState, toParams);
         });
         $rootScope.$on('$stateChangeSuccess', jQuery.proxy(d.collapseNavIfSmallScreen, d));
