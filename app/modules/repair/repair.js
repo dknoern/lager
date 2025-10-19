@@ -51,9 +51,9 @@
                     $scope.data.description = response.data.title;
 
                     $http.get('api/upload/' + $scope.data.itemId).
-                        success(function (images) {
-                            $scope.images = images;
-                            $scope.data.images = images;
+                        then(function (response) {
+                            $scope.images = response.data;
+                            $scope.data.images = response.data;
                         });
                 });
         }
@@ -76,26 +76,26 @@
                 if (customerId != "new") {
 
                     $http.get('api/customers/' + customerId).
-                        success(function (customer) {
-                            $scope.customer = customer;
-                            var fullName = customer.firstName + ' ' + customer.lastName;
+                        then(function (response) {
+                            $scope.customer = response.data;
+                            var fullName = response.data.firstName + ' ' + response.data.lastName;
 
                             // fill in invoice data from existing customer
-                            $scope.data.customerFirstName = customer.firstName;
-                            $scope.data.customerLastName = customer.lastName;
-                            $scope.data.email = customer.email;
-                            $scope.data.phone = customer.phone;
-                            $scope.data.customerId = customer._id;
+                            $scope.data.customerFirstName = response.data.firstName;
+                            $scope.data.customerLastName = response.data.lastName;
+                            $scope.data.email = response.data.email;
+                            $scope.data.phone = response.data.phone;
+                            $scope.data.customerId = response.data._id;
                         });
                 }
 
             } else {
                 $http.get('api/repairs/' + $scope.repairId).
-                    success(function (data) {
-                        $scope.data = data;
+                    then(function (response) {
+                        $scope.data = response.data;
                         $http.get('api/upload/' + $scope.repairId).
-                            success(function (images) {
-                                $scope.images = images;
+                            then(function (response) {
+                                $scope.images = response.data;
                             });
 
                     });
@@ -164,8 +164,8 @@
 
         $scope.imagesAdded = function () {
             $http.get('api/upload/' + $scope.repairId).
-                success(function (images) {
-                    $scope.images = images;
+                then(function (response) {
+                    $scope.images = response.data;
                 });
         }
 
@@ -178,11 +178,11 @@
             }
 
             $http.get('api/upload/rotate/' + filename + '/' + direction).
-                success(function (images) {
+                then(function (response) {
 
                     $http.get('api/upload/' + $scope.repairId).
-                        success(function (images) {
-                            $scope.images = images;
+                        then(function (response) {
+                            $scope.images = response.data;
                         });
                 });
         }
@@ -201,10 +201,10 @@
                 filename = filename.split("?")[0];
             }
 
-            $http.delete('api/upload/delete/' + filename).success(function () {
+            $http.delete('api/upload/delete/' + filename).then(function (response) {
 
-                $http.get('api/upload/' + $scope.repairId).success(function (images) {
-                    $scope.images = images;
+                $http.get('api/upload/' + $scope.repairId).then(function (response) {
+                    $scope.images = response.data;
                 });
 
                 Messenger().post({

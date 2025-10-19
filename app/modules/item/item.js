@@ -10,17 +10,17 @@
 
         if ($scope.itemId) {
             $http.get('api/upload/' + $scope.itemId).
-                success(function (images) {
-                    $scope.images = images;
+                then(function (response) {
+                    $scope.images = response.data;
                 });
 
             $http.get('api/products/' + $scope.itemId).
-                success(function (result) {
-                    $scope.data = result;
+                then(function (response) {
+                    $scope.data = response.data;
 
                     $http.get('api/repairs/products/' + $scope.itemId).
-                        success(function (images) {
-                            $scope.repairs = images;
+                        then(function (response) {
+                            $scope.repairs = response.data;
                             $scope.totalRepairCost = 0;
 
                             for (var i = 0; i < $scope.repairs.length; i++) {
@@ -234,7 +234,7 @@
                         "Authorization": "Bearer " + localStorage.getItem('access_token')
                     }
                 })
-                    .success(function (data) {
+                    .then(function (response) {
                         // File uploaded successfully
                     });
             };
@@ -253,11 +253,11 @@
             }
 
             $http.get('api/upload/rotate/' + filename + '/' + direction).
-                success(function (images) {
+                then(function (response) {
 
                     $http.get('api/upload/' + $scope.itemId).
-                        success(function (images) {
-                            $scope.images = images;
+                        then(function (response) {
+                            $scope.images = response.data;
                         });
                 });
         }
@@ -275,10 +275,10 @@
                 filename = filename.split("?")[0];
             }
 
-            $http.delete('api/upload/delete/' + filename).success(function () {
+            $http.delete('api/upload/delete/' + filename).then(function (response) {
 
-                $http.get('api/upload/' + $scope.itemId).success(function (images) {
-                    $scope.images = images;
+                $http.get('api/upload/' + $scope.itemId).then(function (response) {
+                    $scope.images = response.data;
                 });
 
                 Messenger().post({

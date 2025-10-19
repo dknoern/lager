@@ -21,18 +21,18 @@
             var itemNumbers = document.getElementById("itemNumbers").value;
             var data = itemNumbers.split(/[ ,\n]+/);
             $http.post('api/products/outtoshow', data).
-                success(function (response) {
+                then(function (response) {
                     document.getElementById("itemNumbers").value = "";
-                    document.getElementById("bulkEntryResults").innerHTML = response;
+                    document.getElementById("bulkEntryResults").innerHTML = response.data;
                     theDataTable.ajax.url("/api/reports/show-report").load();
 
                     Messenger().post({
-                        message: response,
+                        message: response.data,
                         type: "success",
                         showCloseButton: true
                     });
 
-                }).error(function (err) {
+                }, function (err) {
                     // Error handled by UI
                 });
         }
@@ -42,16 +42,16 @@
          */
         $scope.processBulkRelease = function () {
             $http.post('api/products/backfromshow').
-                success(function (response) {
-                    document.getElementById("bulkReleaseResults").innerHTML = response;
+                then(function (response) {
+                    document.getElementById("bulkReleaseResults").innerHTML = response.data;
                     theDataTable.ajax.url("/api/reports/show-report").load();
 
                     Messenger().post({
-                        message: response,
+                        message: response.data,
                         type: "success",
                         showCloseButton: true
                     });
-                }).error(function (err) {
+                }, function (err) {
                     // Error handled by UI
                 });
         }
@@ -160,8 +160,8 @@
                 reportUrl += "/" + $scope.vendor;
 
                 $http.get('api/reports/vendors-with-outstanding-repairs').
-                    success(function (vendors) {
-                        $scope.vendors = vendors;
+                    then(function (response) {
+                        $scope.vendors = response.data;
                     });
             }
 

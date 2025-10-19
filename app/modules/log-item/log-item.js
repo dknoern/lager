@@ -108,7 +108,7 @@ var scopeHolder;
                         "Authorization": "Bearer " + localStorage.getItem('access_token')
                     }
                 })
-                    .success(function (data) {
+                    .then(function (response) {
                         // File uploaded successfully
                     });
             };
@@ -130,10 +130,10 @@ var scopeHolder;
                 filename = filename.split("?")[0];
             }
 
-            $http.delete('api/upload/delete/' + filename).success(function () {
+            $http.delete('api/upload/delete/' + filename).then(function (response) {
 
-                $http.get('api/upload/' + $scope.itemId).success(function (images) {
-                    $scope.images = images;
+                $http.get('api/upload/' + $scope.itemId).then(function (response) {
+                    $scope.images = response.data;
                 });
 
                 Messenger().post({

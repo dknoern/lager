@@ -14,8 +14,8 @@
 
         if ($scope.customerId) {
             $http.get('api/customers/' + $scope.customerId).
-            success(function(data) {
-                $scope.data = data;
+            then(function(response) {
+                $scope.data = response.data;
             });
 
            jQuery('#invoiceTable').DataTable( {
@@ -35,14 +35,14 @@
             } );
 
             $http.get('api/customers/'+$scope.customerId + '/returns').
-            success(function(returns) {
-                $scope.returns = returns;
+            then(function(response) {
+                $scope.returns = response.data;
             });
 
 
             $http.get('api/customers/' + $scope.customerId + '/invoiceCount').
-            success(function(data) {
-                $scope.invoiceCount = data.invoiceCount;
+            then(function(response) {
+                $scope.invoiceCount = response.data.invoiceCount;
             });
 
         }else{
