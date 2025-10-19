@@ -61,6 +61,20 @@ Edit `.env` with your actual credentials:
 npm install
 ```
 
+This will automatically:
+- Install all npm dependencies
+- Build CSS from SCSS source files (via `postinstall` hook)
+
+If you need to rebuild CSS manually:
+```bash
+npm run build:css
+```
+
+For active CSS development with auto-rebuild on changes:
+```bash
+npm run watch:css
+```
+
 ### 2. Start MongoDB
 
 Make sure MongoDB is running locally:
@@ -100,6 +114,11 @@ The application will be available at [http://localhost:3000](http://localhost:30
 ```bash
 docker build -t lager .
 ```
+
+The Docker build process will automatically:
+- Install dependencies
+- Build CSS from SCSS sources
+- Create an optimized production image
 
 ### 2. Configure Environment
 
@@ -150,6 +169,11 @@ docker-compose down -v
 ```
 lager/
 ├── app/                   # Frontend AngularJS code
+│   ├── theme/             # SCSS theme files
+│   ├── vendor.scss        # Vendor CSS imports (source)
+│   ├── index.scss         # Application CSS (source)
+│   ├── vendor.css         # Compiled vendor CSS (generated)
+│   └── index.css          # Compiled app CSS (generated)
 ├── assets/                # Static assets
 ├── models/                # Mongoose data models
 ├── routes/                # Express API routes
@@ -160,6 +184,20 @@ lager/
 ├── docker-compose.yml     # Docker Compose configuration
 └── .env                   # Environment variables (not in git)
 ```
+
+### CSS/SCSS Development
+
+The project uses SCSS (Sass) for styling, which compiles to CSS:
+
+- **Source files**: `app/*.scss`, `app/theme/*.scss`
+- **Generated files**: `app/*.css` (auto-generated, don't edit directly)
+- **Build command**: `npm run build:css`
+- **Watch mode**: `npm run watch:css` (auto-rebuilds on SCSS changes)
+
+The CSS is automatically built:
+- During `npm install` (via `postinstall` hook)
+- During Docker image builds
+- Manually with `npm run build:css`
 
 ### Key Files
 

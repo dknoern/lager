@@ -24,3 +24,8 @@ data/
 traefik
 .env
 *.iml
+
+# Generated CSS and source maps (built from SCSS)
+app/vendor.css
+app/index.css
+app/*.css.map

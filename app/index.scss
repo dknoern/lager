@@ -1,9 +1,8 @@
 @import "theme/variables";
 @import "theme/mixins";
-@import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/variables";
-@import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins";
-@import "../../node_modules/font-awesome/scss/variables";
-@import "../../bower_components/select2-bootstrap-css/lib/select2-bootstrap";
+@import "bootstrap-sass/assets/stylesheets/bootstrap/variables";
+@import "bootstrap-sass/assets/stylesheets/bootstrap/mixins";
+@import "font-awesome/scss/variables";
 
 @import "theme/general";
 @import "theme/global-transitions";

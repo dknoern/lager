@@ -25,6 +25,15 @@ $brand-info:            #5dc4bf !default; //#61c4b8 !default; //#5DADE2 !default
 $brand-warning:         #f0b518 !default;
 $brand-danger:          #dd5826 !default; // #e5603b !default;
 
+// Theme colors map (for Bootstrap 4 compatibility with awesome-bootstrap-checkbox)
+$theme-colors: (
+  "primary": $brand-primary,
+  "success": $brand-success,
+  "info": $brand-info,
+  "warning": $brand-warning,
+  "danger": $brand-danger
+) !default;
+
 $brand-primary-light: #dee4ee !default;
 
 $brand-success-light:         #ecfaec !default;
@@ -34,6 +43,13 @@ $brand-danger-light:          #fff2ef !default;
 
 $addition-bg: #f8f8f8 !default;
 
+// Input variables (for awesome-bootstrap-checkbox compatibility)
+$input-border-color: #ccc !default;
+$input-disabled-bg: $gray-lighter !default;
+
+// Form feedback variables (for Bootstrap 4 compatibility)
+$form-feedback-invalid-color: $brand-danger !default;
+$form-feedback-valid-color: $brand-success !default;
 
 $sidebar-bg-color: #242424 !default;
 $sidebar-color: #aaa !default;

@@ -2,6 +2,9 @@
   "name": "lager",
   "version": "0.1.0",
   "description": "Lager Inventory App",
+  "devDependencies": {
+    "sass": "^1.80.7"
+  },
   "dependencies": {
     "@aws-sdk/client-ses": "^3.0.0",
     "angular": "1.8.3",
@@ -61,7 +64,11 @@
     "widgster": "1.0.0"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "build": "npm run build:css",
+    "build:css": "sass --load-path=node_modules app/vendor.scss app/vendor.css && sass --load-path=node_modules app/index.scss app/index.css",
+    "watch:css": "sass --load-path=node_modules --watch app/vendor.scss:app/vendor.css app/index.scss:app/index.css",
+    "postinstall": "npm run build:css"
   },
   "engines": {
     "node": ">=0.10.0"
