@@ -16,16 +16,35 @@
     vm.title = config.appTitle;
 
     vm.auth = authService;
-    vm.profile;
+    vm.profile = null;
 
-    if (authService.getCachedProfile()) {
-      vm.profile = authService.getCachedProfile();
-    } else {
-      authService.getProfile(function (err, profile) {
-        vm.profile = profile;
-        $scope.$apply();
-      });
+    // Initialize profile data
+    function loadProfile() {
+      var cachedProfile = authService.getCachedProfile();
+      if (cachedProfile) {
+        vm.profile = cachedProfile;
+      } else if (authService.isAuthenticated()) {
+        // Only try to load profile if user is authenticated
+        authService.getProfile(function (err, profile) {
+          if (!err && profile) {
+            vm.profile = profile;
+            $scope.$apply();
+          }
+        });
+      }
     }
+
+    // Load profile immediately
+    loadProfile();
+
+    // Watch for authentication state changes
+    $scope.$watch(function() {
+      return authService.isAuthenticated();
+    }, function(isAuth) {
+      if (isAuth && !vm.profile) {
+        loadProfile();
+      }
+    });
 
     $scope.profile = vm.auth.profile;
 

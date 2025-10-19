@@ -59,6 +59,8 @@
       localStorage.removeItem('access_token');
       localStorage.removeItem('id_token');
       localStorage.removeItem('expires_at');
+      localStorage.removeItem('user_profile');
+      userProfile = null;
       clearTimeout(tokenRenewalTimeout);
       $state.go('app.inventory');
     }
@@ -89,12 +91,31 @@
 
     function setUserProfile(profile) {
       userProfile = profile;
-
+      // Persist profile to localStorage
+      if (profile) {
+        localStorage.setItem('user_profile', JSON.stringify(profile));
+      }
     }
 
     function getCachedProfile() {
-
-      return userProfile;
+      // First check memory cache
+      if (userProfile) {
+        return userProfile;
+      }
+      
+      // Then check localStorage
+      var storedProfile = localStorage.getItem('user_profile');
+      if (storedProfile) {
+        try {
+          userProfile = JSON.parse(storedProfile);
+          return userProfile;
+        } catch (e) {
+          // If parsing fails, remove corrupted data
+          localStorage.removeItem('user_profile');
+        }
+      }
+      
+      return null;
     }
 
       function renewToken() {
