@@ -149,12 +149,11 @@ docker-compose down -v
 
 ```
 lager/
-├── app/                   # Frontend AngularJS modules
+├── app/                   # Frontend AngularJS code
 ├── assets/                # Static assets
 ├── models/                # Mongoose data models
 ├── routes/                # Express API routes
-├── src/                   # Frontend source code
-├── uploads/               # Uploaded images
+├── sample/                # Sample data and images
 ├── config.js              # Configuration loader
 ├── server.js              # Express server
 ├── Dockerfile             # Docker build configuration
