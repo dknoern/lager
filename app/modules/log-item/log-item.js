@@ -46,8 +46,8 @@ var scopeHolder;
                 }
 
                 $http.get('api/upload/' + imagesKey).
-                    success(function (images) {
-                        $scope.images = images;
+                    then(function (response) {
+                        $scope.images = response.data;
                     });
             })
 

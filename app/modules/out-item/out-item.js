@@ -37,8 +37,8 @@ var scopeHolder;
                 var imagesKey = thedata._id; // newer log or older log with no itemNumbers
 
                 $http.get('api/upload/' + imagesKey).
-                    success(function (images) {
-                        $scope.images = images;
+                    then(function (response) {
+                        $scope.images = response.data;
                     });
             })
 

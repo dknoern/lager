@@ -30,7 +30,6 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY --from=builder /app/app/vendor.css /app/app/index.css ./app/
 COPY routes ./routes
 COPY server.js ./server.js
-COPY src ./src
 COPY index.html ./index.html
 COPY config.js ./config.js
 
