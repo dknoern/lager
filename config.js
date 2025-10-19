@@ -52,7 +52,7 @@ const avatax = {
 const auth0 = {
     clientId: process.env.AUTH0_CLIENT_ID,
     domain: process.env.AUTH0_DOMAIN,
-    callbackUrl: process.env.AUTH0_CALLBACK_URL || 'http://localhost:3000/app/inventory',
+    callbackUrl: process.env.AUTH0_CALLBACK_URL || 'http://localhost:3000/auth/callback/auth0',
     audience: process.env.AUTH0_AUDIENCE || 'https://lager/api'
 };
 

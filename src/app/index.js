@@ -44,7 +44,7 @@
         ) {
             $stateProvider
             .state('callback', {
-              url: '/callback',
+              url: '/auth/callback/auth0',
               controller: 'CallbackController',
               templateUrl: 'app/callback/callback.html',
                 controllerAs: 'vm'
