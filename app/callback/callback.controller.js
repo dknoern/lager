@@ -6,6 +6,11 @@
     .module('singApp')
     .controller('CallbackController', callbackController);
 
-  function callbackController() {}
+  callbackController.$inject = ['authService'];
+
+  function callbackController(authService) {
+    // Handle Auth0 callback authentication
+    authService.handleAuthentication();
+  }
 
 })();

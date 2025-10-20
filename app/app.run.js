@@ -9,7 +9,8 @@
   run.$inject = ['authService'];
 
   function run(authService) {
-    authService.handleAuthentication();
+    // Only schedule token renewal on app startup
+    // Authentication handling is now done in CallbackController
     authService.scheduleRenewal();
   }
 
