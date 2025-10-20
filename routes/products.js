@@ -284,7 +284,7 @@ router.route('/products')
 
                 results.data.push(
                     [
-                        '<a href=\"#\" onclick=\"selectProduct(\'' + products[i]._id + '\');return false;\">' + products[i].itemNumber + '</a>',
+                        '<a href=\"/app/products/' + products[i]._id + '\">' + products[i].itemNumber + '</a>',
                         titleAndDial,
                         products[i].serialNo,
                         formatCurrency(products[i].sellingPrice, opts),

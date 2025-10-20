@@ -158,7 +158,7 @@ router.route('/repairs')
 
                     results.data.push(
                         [
-                            '<a href=\"#\" onclick=\"selectRepair(\'' + repairs[i]._id + '\');return false;\">' + repairs[i].repairNumber + '</a>',
+                            '<a href=\"/app/repairs/' + repairs[i]._id + '\">' + repairs[i].repairNumber + '</a>',
                             repairs[i].itemNumber,
                             repairs[i].description,
                             '<div style="white-space: nowrap;">' + formatDate(repairs[i].dateOut) + '</div>',

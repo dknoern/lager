@@ -96,7 +96,7 @@ router.route('/outs')
                     for (var i = 0; i < outs.length; i++) {
                         results.data.push(
                             [
-                                '<a href=\"#\" onclick=\"selectOut(\'' + outs[i]._id + '\');return false;\"><div style="white-space: nowrap;">' + format('yyyy-MM-dd hh:mm', outs[i].date) + '</div></a>',
+                                '<a href=\"/app/outs/' + outs[i]._id + '\"><div style="white-space: nowrap;">' + format('yyyy-MM-dd hh:mm', outs[i].date) + '</div></a>',
                                 outs[i].sentTo,
                                 outs[i].description,
                                 outs[i].user,

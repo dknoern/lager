@@ -127,7 +127,7 @@ router.route('/logs')
                     for (var i = 0; i < logs.length; i++) {
                         results.data.push(
                             [
-                                '<a href=\"#\" onclick=\"selectLog(\'' + logs[i]._id + '\');return false;\"><div style="white-space: nowrap;">' + format('yyyy-MM-dd hh:mm', logs[i].date) + '</div></a>',
+                                '<a href=\"/app/logs/' + logs[i]._id + '\"><div style="white-space: nowrap;">' + format('yyyy-MM-dd hh:mm', logs[i].date) + '</div></a>',
                                 logs[i].receivedFrom,
                                 logs[i].customerName,
                                 logs[i].lineItems.map(function (k) { return k.name }).join(","),
