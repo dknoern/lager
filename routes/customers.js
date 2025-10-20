@@ -6,6 +6,7 @@ var Invoice = require('../models/invoice');
 var Return = require('../models/return');
 
 const checkJwt = require('./jwt-helper').checkJwt;
+const { isEmpty, valueOrBlank, getLastOrCompany, overlayField } = require('./utils/validation-utils');
 
 router.use(function(req, res, next) {
     next();
@@ -298,25 +299,6 @@ function overlayCustomer(canonicalCustomer, customer) {
     canonicalCustomer.billingCountry = overlayField(canonicalCustomer.billingCountry, customer.billingCountry); 
 }
 
-function overlayField(canonicalField, field) {
-    if(isEmpty(canonicalField) && !isEmpty(field)){
-        canonicalField = field;
-    }
-    return canonicalField;
-}
-
-function isEmpty(str) {
-    return (!str || str.length === 0 );
-}
-
-function getLastOrCompany(customer){
-    var lastOrCompany = "";
-    if(!isEmpty(customer.lastName)) {
-        lastOrCompany = customer.lastName;
-    }else if (!isEmpty(customer.company)){
-        lastOrCompany = customer.company;
-    }
-    return lastOrCompany;
-}
+// Utility functions moved to ./utils/validation-utils.js
 
 module.exports = router;

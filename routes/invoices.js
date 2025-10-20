@@ -8,23 +8,10 @@ var Product = require('../models/product');
 var Avatax = require('avatax');
 const config = require('../config');
 
-var mustache = require("mustache");
-var fs = require("fs");
-
 const checkJwt = require('./jwt-helper').checkJwt;
 const formatCurrency = require('format-currency');
-
-// load AWS SDK v3
-const { SESClient, SendEmailCommand } = require('@aws-sdk/client-ses');
-
-// create SES client
-const ses = new SESClient({
-    region: config.aws.region,
-    credentials: {
-        accessKeyId: config.aws.accessKeyId,
-        secretAccessKey: config.aws.secretAccessKey
-    }
-});
+const { renderTemplate } = require('./utils/email-utils');
+const { sendTemplatedEmail, parseEmailAddresses } = require('./utils/email-utils');
 
 // Config references
 const avataxCredentials = config.avatax.credentials;
@@ -234,45 +221,32 @@ router.route('/invoices/:invoice_id/print')
     .get(checkJwt, function(req, res) {
         var opts = { format: '%s%v', symbol: '$' };
 
-        Invoice.findById(req.params.invoice_id, function(err, invoice) {
+        Invoice.findById(req.params.invoice_id, async function(err, invoice) {
             if (err) {
                 res.send(err);
+                return;
             }
-            else {
 
-                invoice.subtotalFMT = formatCurrency(invoice.subtotal, opts);
-                invoice.taxFMT = formatCurrency(invoice.tax, opts);
-                invoice.shippingFMT = formatCurrency(invoice.shipping, opts);
-                invoice.totalFMT = formatCurrency(invoice.total, opts);
-                invoice.dateFMT =  format('MM/dd/yyyy', invoice.date);
+            // Format currency fields
+            invoice.subtotalFMT = formatCurrency(invoice.subtotal, opts);
+            invoice.taxFMT = formatCurrency(invoice.tax, opts);
+            invoice.shippingFMT = formatCurrency(invoice.shipping, opts);
+            invoice.totalFMT = formatCurrency(invoice.total, opts);
+            invoice.dateFMT = format('MM/dd/yyyy', invoice.date);
 
-                for (var i = 0; i < invoice.lineItems.length; i++) {
-                    invoice.lineItems[i].nameFMT = invoice.lineItems[i].name.toUpperCase();
-                    invoice.lineItems[i].amountFMT = formatCurrency(invoice.lineItems[i].amount, opts);
-                    invoice.lineItems[i].itemNumberFMT = invoice.lineItems[i].itemNumber+ format('dd', invoice.date);
-                }
+            // Format line items
+            for (var i = 0; i < invoice.lineItems.length; i++) {
+                invoice.lineItems[i].nameFMT = invoice.lineItems[i].name.toUpperCase();
+                invoice.lineItems[i].amountFMT = formatCurrency(invoice.lineItems[i].amount, opts);
+                invoice.lineItems[i].itemNumberFMT = invoice.lineItems[i].itemNumber + format('dd', invoice.date);
+            }
 
-                fs.readFile('./app/modules/invoice/invoice-content.html', 'utf-8', function (err, template) {
-                    if (err) throw err;
-                    var output = mustache.to_html(template, {
-                        data: invoice,
-                        fontSize:11,
-                        bigFontSize:14,
-                        hugeFontSize:32,
-                        footerFontSize:8,
-                        iconWidth:32,
-                        tenantName: config.tenant.name,
-                        tenantWebsite: config.tenant.website,
-                        tenantBankWireTransferInstructions: config.tenant.bankWireTransferInstructions,
-                        tenantAddress: config.tenant.address,
-                        tenantCity: config.tenant.city,
-                        tenantState: config.tenant.state,
-                        tenantZip: config.tenant.zip,
-                        tenantPhone: config.tenant.phone,
-                        tenantAppRoot: config.tenant.appRoot
-                    });
-                    res.send(output);
-                });
+            try {
+                const output = await renderTemplate('./app/modules/invoice/invoice-content.html', invoice);
+                res.send(output);
+            } catch (error) {
+                console.error('Error rendering invoice template:', error);
+                res.status(500).send('Error rendering invoice');
             }
         });
     });
@@ -449,71 +423,26 @@ router.route('/customers/:customer_id/invoices')
 router.route('/invoices/email')
     .post(checkJwt, function(req, res) {
 
-        var to = req.body.emailAddresses.split(/[ ,\n]+/);
-        var from = config.tenant.email;
+        const to = parseEmailAddresses(req.body.emailAddresses);
+        const subject = `${config.tenant.name} Invoice`;
+        const templatePath = './app/modules/invoice/invoice-content.html';
+        const note = req.body.note;
 
-        Invoice.findById(req.body.invoiceId, function (err, invoice) {
-                if (err) {
-                    console.error("Error fetching invoice:", err);
-                    res.send(err);
-                    return;
-                }
-                else {
-                    fs.readFile('./app/modules/invoice/invoice-content.html', 'utf-8', function (err, template) {
-                        if (err) throw err;
-                        var output =
-                            "<p>" + req.body.note + " </p>" + mustache.to_html(template, {
-                                data: invoice,
-                                fontSize:11,
-                                bigFontSize:14,
-                                hugeFontSize:32,
-                                footerFontSize:8,
-                                iconWidth:32,
-                                tenantName: config.tenant.name,
-                                tenantWebsite: config.tenant.website,
-                                tenantBankWireTransferInstructions: config.tenant.bankWireTransferInstructions,
-                                tenantAddress: config.tenant.address,
-                                tenantCity: config.tenant.city,
-                                tenantState: config.tenant.state,
-                                tenantZip: config.tenant.zip,
-                                tenantPhone: config.tenant.phone,
-                                tenantAppRoot: config.tenant.appRoot
-                            });
-
-                        const command = new SendEmailCommand({
-                                Source: from,
-                                Destination: {
-                                    ToAddresses: to
-                                },
-                                Message: {
-                                    Subject: {
-                                        Data: `${config.tenant.name} Invoice`
-                                    },
-                                    Body: {
-                                        Text: {
-                                            Data: 'invoice can only be viewed using HTML-capable email browser'
-                                        },
-                                        Html: {
-                                            Data: output
-                                        }
-                                    }
-                                }
-                            });
-
-                        ses.send(command)
-                            .then(data => {
-                                // Email sent successfully
-                            })
-                            .catch(err => {
-                                console.error("Error sending email:", err);
-                                throw err;
-                            });
-                    });
-                }
+        Invoice.findById(req.body.invoiceId, async function (err, invoice) {
+            if (err) {
+                console.error("Error fetching invoice:", err);
+                res.send(err);
+                return;
             }
-        );
 
-        res.json("ok");
+            try {
+                await sendTemplatedEmail(to, subject, templatePath, invoice, note);
+                res.json("ok");
+            } catch (error) {
+                console.error('Error sending invoice email:', error);
+                res.status(500).send('Error sending email');
+            }
+        });
     });
 
 async function calcTax(invoice){

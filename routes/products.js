@@ -4,13 +4,9 @@ var Product = require('../models/product');
 const checkJwt = require('./jwt-helper').checkJwt;
 var format = require('date-format');
 const formatCurrency = require('format-currency');
+const { formatDate } = require('./utils/date-utils');
 
-function formatDate(date) {
-    if (date == null) return "";
-    else {
-        return format('yyyy-MM-dd', date);
-    }
-}
+// formatDate function moved to ./utils/date-utils.js
 
 router.use(function (req, res, next) {
     next();

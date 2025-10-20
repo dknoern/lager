@@ -5,13 +5,10 @@ var Log = require('../models/log');
 var Repair = require('../models/repair');
 const checkJwt = require('./jwt-helper').checkJwt;
 var format = require('date-format');
+const { formatDate, formatDateTime } = require('./utils/date-utils');
+const { valueOrBlank } = require('./utils/validation-utils');
 
-function formatDate(date) {
-    if (date == null) return "";
-    else {
-        return format('yyyy-MM-dd', date);
-    }
-}
+// formatDate function moved to ./utils/date-utils.js
 
 router.use(function (req, res, next) {
     next();
@@ -127,7 +124,7 @@ router.route('/logs')
                     for (var i = 0; i < logs.length; i++) {
                         results.data.push(
                             [
-                                '<a href=\"/app/logs/' + logs[i]._id + '\"><div style="white-space: nowrap;">' + format('yyyy-MM-dd hh:mm', logs[i].date) + '</div></a>',
+                                '<a href=\"/app/logs/' + logs[i]._id + '\"><div style="white-space: nowrap;">' + formatDateTime(logs[i].date) + '</div></a>',
                                 logs[i].receivedFrom,
                                 logs[i].customerName,
                                 logs[i].lineItems.map(function (k) { return k.name }).join(","),
@@ -309,10 +306,6 @@ function updateRepairDetails(lineItem, comments) {
         });
 }
 
-function valueOrBlank(value) {
-    if (value != null) return value;
-    return "";
-
-}
+// valueOrBlank function moved to ./utils/validation-utils.js
 
 module.exports = router;

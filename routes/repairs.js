@@ -6,33 +6,12 @@ const checkJwt = require('./jwt-helper').checkJwt;
 var format = require('date-format');
 const config = require('../config');
 
-var mustache = require("mustache");
-var fs = require("fs");
-
 const formatCurrency = require('format-currency');
+const { formatDateTime } = require('./utils/date-utils');
+const { isEmpty } = require('./utils/validation-utils');
+const { sendTemplatedEmail, parseEmailAddresses } = require('./utils/email-utils');
 
-// load AWS SDK v3
-const { SESClient, SendEmailCommand } = require('@aws-sdk/client-ses');
-
-// create SES client
-const ses = new SESClient({
-    region: config.aws.region,
-    credentials: {
-        accessKeyId: config.aws.accessKeyId,
-        secretAccessKey: config.aws.secretAccessKey
-    }
-});
-
-function formatDate(date) {
-    if (date == null) return "";
-    else {
-        return format('yyyy-MM-dd  hh:mm', date);
-    }
-}
-
-function isEmpty(str) {
-    return (!str || str.length === 0);
-}
+// Utility functions moved to shared utilities
 
 router.route('/repairs')
     .post(checkJwt, function (req, res) {
@@ -72,8 +51,8 @@ router.route('/repairs')
         }
 
         else {
-            repair.search = repair.repairNumber + " " + repair.itemNumber + " " + repair.description + " " + formatDate(repair.dateOut)
-                + " " + formatDate(repair.expectedReturnDate) + " " + formatDate(repair.returnDate)
+            repair.search = repair.repairNumber + " " + repair.itemNumber + " " + repair.description + " " + formatDateTime(repair.dateOut)
+                + " " + formatDateTime(repair.expectedReturnDate) + " " + formatDateTime(repair.returnDate)
                 + " " + repair.customerFirstName + " " + repair.customerLastName + " " + repair.vendor;
 
             Repair.findOneAndUpdate({
@@ -161,9 +140,9 @@ router.route('/repairs')
                             '<a href=\"/app/repairs/' + repairs[i]._id + '\">' + repairs[i].repairNumber + '</a>',
                             repairs[i].itemNumber,
                             repairs[i].description,
-                            '<div style="white-space: nowrap;">' + formatDate(repairs[i].dateOut) + '</div>',
-                            '<div style="white-space: nowrap;">' + formatDate(repairs[i].customerApprovedDate) + '</div>',
-                            '<div style="white-space: nowrap;">' + formatDate(repairs[i].returnDate) + '</div>',
+                            '<div style="white-space: nowrap;">' + formatDateTime(repairs[i].dateOut) + '</div>',
+                            '<div style="white-space: nowrap;">' + formatDateTime(repairs[i].customerApprovedDate) + '</div>',
+                            '<div style="white-space: nowrap;">' + formatDateTime(repairs[i].returnDate) + '</div>',
                             customerName,
                             repairs[i].vendor,
                             formattedRepairCost
@@ -282,63 +261,25 @@ router.route('/repairs/:repair_id/return')
 router.route('/repairs/email')
     .post(checkJwt, function (req, res) {
 
-        var to = req.body.emailAddresses.split(/[ ,\n]+/);
-        var from = config.tenant.email;
+        const to = parseEmailAddresses(req.body.emailAddresses);
+        const subject = `${config.tenant.name} Repair`;
+        const templatePath = './app/modules/repair/repair-content.html';
+        const note = req.body.note;
 
-        Repair.findById(req.body.repairId, function (err, repair) {
+        Repair.findById(req.body.repairId, async function (err, repair) {
             if (err) {
                 res.send(err);
-
-                return "Error formatting repair";
+                return;
             }
-            else {
-                fs.readFile('./app/modules/repair/repair-content.html', 'utf-8', function (err, template) {
-                    if (err) throw err;
-                    var output =
-                        "<p>" + req.body.note + " </p>" + mustache.to_html(template, {
-                            data: repair,
-                            tenantAddress: config.tenant.address,
-                            tenantCity: config.tenant.city,
-                            tenantState: config.tenant.state,
-                            tenantZip: config.tenant.zip,
-                            tenantPhone: config.tenant.phone,
-                            tenantFax: config.tenant.fax,
-                            tenantAppRoot: config.tenant.appRoot
-                        });
-                    const command = new SendEmailCommand({
-                        Source: from,
-                        Destination: {
-                            ToAddresses: to
-                        },
-                        Message: {
-                            Subject: {
-                                Data: `${config.tenant.name} Repair`
-                            },
-                            Body: {
-                                Text: {
-                                    Data: 'repair can only be viewed using HTML-capable email browser'
-                                },
-                                Html: {
-                                    Data: output
-                                }
-                            }
-                        }
-                    });
 
-                    ses.send(command)
-                        .then(data => {
-                            // Email sent successfully
-                        })
-                        .catch(err => {
-                            console.error('Error sending email:', err);
-                            throw err;
-                        });
-                });
+            try {
+                await sendTemplatedEmail(to, subject, templatePath, repair, note);
+                res.json("ok");
+            } catch (error) {
+                console.error('Error sending repair email:', error);
+                res.status(500).send('Error sending email');
             }
-        }
-        );
-
-        res.json("ok");
+        });
     });
 
 module.exports = router;

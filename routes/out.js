@@ -3,13 +3,9 @@ var router = express.Router();
 var Out = require('../models/out');
 const checkJwt = require('./jwt-helper').checkJwt;
 var format = require('date-format');
+const { formatDate, formatDateTime } = require('./utils/date-utils');
 
-function formatDate(date) {
-    if (date == null) return "";
-    else {
-        return format('yyyy-MM-dd', date);
-    }
-}
+// formatDate function moved to ./utils/date-utils.js
 
 router.use(function (req, res, next) {
     next();
@@ -96,7 +92,7 @@ router.route('/outs')
                     for (var i = 0; i < outs.length; i++) {
                         results.data.push(
                             [
-                                '<a href=\"/app/outs/' + outs[i]._id + '\"><div style="white-space: nowrap;">' + format('yyyy-MM-dd hh:mm', outs[i].date) + '</div></a>',
+                                '<a href=\"/app/outs/' + outs[i]._id + '\"><div style="white-space: nowrap;">' + formatDateTime(outs[i].date) + '</div></a>',
                                 outs[i].sentTo,
                                 outs[i].description,
                                 outs[i].user,
