@@ -258,7 +258,7 @@ var scopeHolder;
                     "serverSide": true,
                     "ordering": true,
                     "ajax": {
-                        "url": "/api/products",
+                        "url": "/api/products?modal=true",
                         "data": {
                             "status": "Out"
                         },
@@ -281,7 +281,7 @@ var scopeHolder;
                     "serverSide": true,
                     "ordering": true,
                     "ajax": {
-                        "url": "/api/repairs?filter=outstanding",
+                        "url": "/api/repairs?filter=outstanding&modal=true",
                         "headers": {
                             "Authorization": "Bearer " + accessToken
                         }

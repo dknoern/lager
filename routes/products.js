@@ -242,8 +242,16 @@ router.route('/products')
                 titleAndDial += ' - ' + product.dial;
             }
 
+            // Check if this is being called from a modal context (for invoice/repair line item selection)
+            var productLink;
+            if (req.query.modal === 'true') {
+                productLink = '<a href="#" onclick="selectProduct(\'' + product._id + '\')">' + product.itemNumber + '</a>';
+            } else {
+                productLink = '<a href="/app/products/' + product._id + '">' + product.itemNumber + '</a>';
+            }
+
             return [
-                '<a href="/app/products/' + product._id + '">' + product.itemNumber + '</a>',
+                productLink,
                 titleAndDial,
                 product.serialNo,
                 formatCurrency(product.sellingPrice, opts),

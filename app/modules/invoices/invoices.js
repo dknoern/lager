@@ -34,7 +34,7 @@
           "serverSide": true,
           "ordering": false,
           "ajax": {
-            url: "/api/customers",
+            url: "/api/customers?modal=true",
             headers: {
               "Authorization": "Bearer " + accessToken
             }

@@ -89,8 +89,16 @@ router.route('/customers')
                 cityAndState += ', ' + customer.state;
             }
             
+            // Check if this is being called from a modal context (for invoice/repair creation)
+            var customerLink;
+            if (req.query.modal === 'true') {
+                customerLink = '<a href="#" onclick="selectCustomer(' + customer._id + ')">' + customer._id + '</a>';
+            } else {
+                customerLink = '<a href="/app/customers/' + customer._id + '">' + customer._id + '</a>';
+            }
+            
             return [
-                '<a href="/app/customers/' + customer._id + '">' + customer._id + '</a>',
+                customerLink,
                 customer.firstName + ' ' + getLastOrCompany(customer),
                 cityAndState,
                 customer.email,

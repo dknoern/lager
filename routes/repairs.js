@@ -118,8 +118,16 @@ router.route('/repairs')
                 formattedRepairCost = formatCurrency(repair.repairCost, opts);
             }
 
+            // Check if this is being called from a modal context (for log item repair selection)
+            var repairLink;
+            if (req.query.modal === 'true') {
+                repairLink = '<a href="#" onclick="selectRepair(\'' + repair._id + '\')">' + repair.repairNumber + '</a>';
+            } else {
+                repairLink = '<a href="/app/repairs/' + repair._id + '">' + repair.repairNumber + '</a>';
+            }
+
             return [
-                '<a href="/app/repairs/' + repair._id + '">' + repair.repairNumber + '</a>',
+                repairLink,
                 repair.itemNumber,
                 repair.description,
                 '<div style="white-space: nowrap;">' + formatDateTime(repair.dateOut) + '</div>',

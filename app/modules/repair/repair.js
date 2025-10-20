@@ -147,7 +147,7 @@
                     "serverSide": true,
                     "ordering": false,
                     "ajax": {
-                        "url": "/api/products",
+                        "url": "/api/products?modal=true",
                         headers: {
                             "Authorization": "Bearer " + accessToken
                         },

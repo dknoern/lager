@@ -14,7 +14,8 @@
         var invoiceId = $location.search().invoiceId;
 
         $http.get('api/invoices/' + invoiceId).
-          success(function (invoice) {
+          then(function (response) {
+            var invoice = response.data;
             $scope.invoice = invoice;
 
             var returnItems = new Array();

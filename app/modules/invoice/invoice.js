@@ -203,7 +203,8 @@ var scopeHolder;
                 if (customerId != "new") {
 
                     $http.get('api/customers/' + customerId).
-                        success(function (customer) {
+                        then(function (response) {
+                            var customer = response.data;
                             $scope.customer = customer;
                             var fullName = customer.firstName + ' ' + customer.lastName;
 
@@ -288,7 +289,7 @@ var scopeHolder;
                     "serverSide": true,
                     "ordering": true,
                     "ajax": {
-                        "url": "/api/products",
+                        "url": "/api/products?modal=true",
                         "data": {
                             "status": "Available" // will trigger backend query for In Stock and Partnership
                         },
