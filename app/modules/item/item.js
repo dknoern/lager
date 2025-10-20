@@ -215,8 +215,8 @@
 
         $scope.imagesAdded = function () {
             $http.get('api/upload/' + $scope.itemId).
-                success(function (images) {
-                    $scope.images = images;
+                then(function (response) {
+                    $scope.images = response.data;
                 });
         }
 

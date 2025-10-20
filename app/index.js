@@ -60,6 +60,7 @@
     });
 
     $locationProvider.hashPrefix('');
+    $locationProvider.html5Mode(true);
 
     jwtOptionsProvider.config({
       tokenGetter: function () {

@@ -131,7 +131,7 @@ router.route('/returns')
 
                 results.data.push(
                     [
-                        '<a href=\"/#/app/returns/' + returns[i]._id + '\">' + returns[i]._id + '</a>',
+                        '<a href=\"/app/returns/' + returns[i]._id + '\">' + returns[i]._id + '</a>',
                         returns[i].invoiceId,
                         buildItemNumberList(returns[i].lineItems),
                         format('yyyy-MM-dd', returns[i].returnDate),

@@ -89,8 +89,8 @@ var scopeHolder;
 
         $scope.imagesAdded = function () {
             $http.get('api/upload/' + $scope.data._id).
-                success(function (images) {
-                    $scope.images = images;
+                then(function (response) {
+                    $scope.images = response.data;
                 });
         }
 
@@ -228,6 +228,26 @@ var scopeHolder;
         $scope.removeItem = function (index) {
             $scope.data.lineItems.splice(index, 1);
         }
+
+        // Configure dropzone to automatically refresh images after successful upload
+        $scope.dropzoneConfig = {
+            'options': {
+                'url': '/api/upload',
+                'paramName': 'file',
+                'maxFilesize': 10,
+                'acceptedFiles': 'image/*',
+                'addRemoveLinks': true,
+                'init': function() {
+                    this.on('success', function(file, response) {
+                        // Automatically refresh images after successful upload
+                        if ($scope.data && $scope.data._id) {
+                            $scope.imagesAdded();
+                        }
+                    });
+                }
+            },
+            'eventHandlers': {}
+        };
 
         var productTableShown = false;
         $('#productModal').on('show.bs.modal', function (e) {

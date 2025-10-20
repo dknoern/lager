@@ -66,8 +66,8 @@ var scopeHolder;
 
         $scope.imagesAdded = function () {
             $http.get('api/upload/' + $scope.data._id).
-                success(function (images) {
-                    $scope.images = images;
+                then(function (response) {
+                    $scope.images = response.data;
                 });
         }
 
