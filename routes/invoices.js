@@ -12,6 +12,7 @@ const checkJwt = require('./jwt-helper').checkJwt;
 const formatCurrency = require('format-currency');
 const { renderTemplate } = require('./utils/email-utils');
 const { sendTemplatedEmail, parseEmailAddresses } = require('./utils/email-utils');
+const { parseDataTablesRequest, handleDataTablesQueryWithEstimatedCount, sendDataTablesResponse } = require('./utils/datatables-helper');
 
 // Config references
 const avataxCredentials = config.avatax.credentials;
@@ -127,94 +128,53 @@ router.route('/invoices')
     })
 
     .get(checkJwt, function(req, res) {
-        var query = "";
-        var draw = req.query.draw;
-        var start = 0;
-        var length = 10;
-        if (req.query.start) start = req.query.start;
-        if (req.query.length) length = req.query.length;
+        const params = parseDataTablesRequest(req);
+        const opts = { format: '%s%v', symbol: '$' };
+        
+        const transformRow = (invoice) => {
+            let itemNo = "";
+            let itemName = "";
 
-        var search = req.query.search.value;
-
-        var opts = { format: '%s%v', symbol: '$' };
-
-        var results = {
-            "draw": draw,
-            "recordsTotal": 0,
-            "recordsFiltered": 0,
-            "data": []
-        };
-
-        Invoice.find({
-
-            'search': new RegExp(search, 'i'),
-            status: {$ne: 'Deleted'}
-
-        }, function(err, invoices) {
-            if (err)
-                res.send(err);
-
-            for (var i = 0; i < invoices.length; i++) {
-
-                var itemNo = "";
-                var itemName = "";
-
-                if (invoices[i].lineItems != null) {
-
-
-                    for (var j=0;j< invoices[i].lineItems.length ;j++){
-                        itemNo += invoices[i].lineItems[j].itemNumber + "<br/>";
-                        itemName +=  " " + invoices[i].lineItems[j].name + "<br/>";
-                    }
+            if (invoice.lineItems != null) {
+                for (let j = 0; j < invoice.lineItems.length; j++) {
+                    itemNo += invoice.lineItems[j].itemNumber + "<br/>";
+                    itemName += " " + invoice.lineItems[j].name + "<br/>";
                 }
-
-                var customerName = "";
-                if(invoices[i].customerFirstName!=null) customerName +=invoices[i].customerFirstName + " ";
-                if(invoices[i].customerLastName!=null) customerName +=invoices[i].customerLastName + " ";
-
-                results.data.push(
-                    [
-                        '<a href=\"/app/invoices/' + invoices[i]._id + '\">' + invoices[i]._id + '</a>',
-                        customerName,
-                        '<div style="white-space: nowrap;">' + format('yyyy-MM-dd', invoices[i].date)+'</div>',
-                        itemNo,
-                        itemName,
-                        invoices[i].trackingNumber,
-                        formatCurrency(invoices[i].total,opts),
-                        invoices[i].invoiceType
-                    ]
-                );
             }
 
-            Invoice.estimatedDocumentCount({}, function(err, count) {
-                results.recordsTotal = count;
+            let customerName = "";
+            if (invoice.customerFirstName != null) customerName += invoice.customerFirstName + " ";
+            if (invoice.customerLastName != null) customerName += invoice.customerLastName + " ";
 
-                if (search == '' || search == null) {
-                    results.recordsFiltered = count;
-                    res.json(results);
-                } else {
-                    Invoice.countDocuments({
-
-                        'search': new RegExp(search, 'i')
-
-                    }, function(err, count) {
-                        results.recordsFiltered = count;
-                        res.json(results);
-                    });
-                }
-            });
-
-        }).sort({
-            _id: -1
-        }).skip(parseInt(start)).limit(parseInt(length)).select({
-            customerFirstName: 1,
-            customerLastName: 1,
-            date: 1,
-            lineItems: 1,
-            total: 1,
-            invoiceType: 1,
-            trackingNumber: 1
+            return [
+                '<a href="/app/invoices/' + invoice._id + '">' + invoice._id + '</a>',
+                customerName,
+                '<div style="white-space: nowrap;">' + format('yyyy-MM-dd', invoice.date) + '</div>',
+                itemNo,
+                itemName,
+                invoice.trackingNumber,
+                formatCurrency(invoice.total, opts),
+                invoice.invoiceType
+            ];
+        };
+        
+        const queryPromise = handleDataTablesQueryWithEstimatedCount(Invoice, params, {
+            baseQuery: { status: {$ne: 'Deleted'} },
+            searchField: 'search',
+            sortClause: { _id: -1 },
+            selectFields: {
+                customerFirstName: 1,
+                customerLastName: 1,
+                date: 1,
+                lineItems: 1,
+                total: 1,
+                invoiceType: 1,
+                trackingNumber: 1
+            },
+            transformRow
         });
+        
+        sendDataTablesResponse(res, queryPromise);
     });
 
 router.route('/invoices/:invoice_id/print')

@@ -10,6 +10,7 @@ const formatCurrency = require('format-currency');
 const { formatDateTime } = require('./utils/date-utils');
 const { isEmpty } = require('./utils/validation-utils');
 const { sendTemplatedEmail, parseEmailAddresses } = require('./utils/email-utils');
+const { parseDataTablesRequest, handleDataTablesQueryWithEstimatedCount, sendDataTablesResponse } = require('./utils/datatables-helper');
 
 // Utility functions moved to shared utilities
 
@@ -92,84 +93,47 @@ router.route('/repairs')
             return;
         }
 
-        var draw = req.query.draw;
-        var start = 0;
-        var length = 10;
-        if (req.query.start) start = req.query.start;
-        if (req.query.length) length = req.query.length;
-        var search = req.query.search.value;
-
-        var query = { $and: [{ 'search': new RegExp(search, 'i') }] };
-
-        var opts = { format: '%s%v', symbol: '$' };
-
+        const params = parseDataTablesRequest(req);
+        const opts = { format: '%s%v', symbol: '$' };
+        
+        // Build base query with optional outstanding filter
+        let baseQuery = {};
         if ("outstanding" == req.query.filter) {
-            query.$and.push({ returnDate: { $eq: null } });
-            var now = new Date();
-            now.setFullYear(now.getFullYear() - 2);
-            var agedOutString = format('yyyy-MM-dd', now);
-            query.$and.push({ dateOut: { $gt: agedOutString } });
+            baseQuery = {
+                returnDate: { $eq: null },
+                dateOut: { $gt: format('yyyy-MM-dd', new Date(new Date().setFullYear(new Date().getFullYear() - 2))) }
+            };
         }
+        
+        const transformRow = (repair) => {
+            var customerName = "";
+            if (repair.customerFirstName) customerName += repair.customerFirstName;
+            if (repair.customerFirstName && repair.customerLastName) customerName += " ";
+            if (repair.customerLastName) customerName += repair.customerLastName;
 
-        var results = {
-            "draw": draw,
-            "recordsTotal": 0,
-            "recordsFiltered": 0,
-            "data": []
+            var formattedRepairCost = "";
+            if (repair.repairCost != null) {
+                formattedRepairCost = formatCurrency(repair.repairCost, opts);
+            }
+
+            return [
+                '<a href="/app/repairs/' + repair._id + '">' + repair.repairNumber + '</a>',
+                repair.itemNumber,
+                repair.description,
+                '<div style="white-space: nowrap;">' + formatDateTime(repair.dateOut) + '</div>',
+                '<div style="white-space: nowrap;">' + formatDateTime(repair.customerApprovedDate) + '</div>',
+                '<div style="white-space: nowrap;">' + formatDateTime(repair.returnDate) + '</div>',
+                customerName,
+                repair.vendor,
+                formattedRepairCost
+            ];
         };
-
-        Repair.find(
-            query
-            , function (err, repairs) {
-                if (err)
-                    res.send(err);
-
-                for (var i = 0; i < repairs.length; i++) {
-                    var customerName = "";
-                    if (repairs[i].customerFirstName) customerName += repairs[i].customerFirstName;
-                    if (repairs[i].customerFirstName && repairs[i].customerLastName) customerName += " ";
-                    if (repairs[i].customerLastName) customerName += repairs[i].customerLastName;
-
-                    var formattedRepairCost = "";
-                    if (repairs[i].repairCost != null) {
-                        formattedRepairCost = formatCurrency(repairs[i].repairCost, opts);
-                    }
-
-                    results.data.push(
-                        [
-                            '<a href=\"/app/repairs/' + repairs[i]._id + '\">' + repairs[i].repairNumber + '</a>',
-                            repairs[i].itemNumber,
-                            repairs[i].description,
-                            '<div style="white-space: nowrap;">' + formatDateTime(repairs[i].dateOut) + '</div>',
-                            '<div style="white-space: nowrap;">' + formatDateTime(repairs[i].customerApprovedDate) + '</div>',
-                            '<div style="white-space: nowrap;">' + formatDateTime(repairs[i].returnDate) + '</div>',
-                            customerName,
-                            repairs[i].vendor,
-                            formattedRepairCost
-                        ]
-                    );
-                }
-
-                Repair.estimatedDocumentCount({}, function (err, count) {
-                    results.recordsTotal = count;
-
-                    if ((search == '' || search == null) && "all" == req.query.filter) {
-                        results.recordsFiltered = count;
-                        res.json(results);
-                    } else {
-                        Repair.countDocuments(
-                            query
-                            , function (err, count) {
-
-                                results.recordsFiltered = count;
-                                res.json(results);
-                            });
-                    }
-                });
-
-            }).sort({
-                dateOut: -1
-            }).skip(parseInt(start)).limit(parseInt(length)).select({
+        
+        const queryPromise = handleDataTablesQueryWithEstimatedCount(Repair, params, {
+            baseQuery,
+            searchField: 'search',
+            sortClause: { dateOut: -1 },
+            selectFields: {
                 description: 1,
                 dateOut: 1,
                 customerApprovedDate: 1,
@@ -180,7 +144,11 @@ router.route('/repairs')
                 repairCost: 1,
                 itemNumber: 1,
                 vendor: 1
-            });
+            },
+            transformRow
+        });
+        
+        sendDataTablesResponse(res, queryPromise);
     });
 
 router.route('/repairs/:repair_id/print')

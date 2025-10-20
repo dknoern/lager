@@ -7,6 +7,7 @@ var Return = require('../models/return');
 
 const checkJwt = require('./jwt-helper').checkJwt;
 const { isEmpty, valueOrBlank, getLastOrCompany, overlayField } = require('./utils/validation-utils');
+const { parseDataTablesRequest, handleDataTablesQueryWithEstimatedCount, sendDataTablesResponse } = require('./utils/datatables-helper');
 
 router.use(function(req, res, next) {
     next();
@@ -80,83 +81,42 @@ router.route('/customers')
     })
 
     .get(checkJwt, function(req, res) {
-
-        var query = "";
-        var draw = req.query.draw;
-        var start = 0;
-        var length = 10;
-        if (req.query.start) start = req.query.start;
-        if (req.query.length) length = req.query.length;
-        var search = req.query.search.value;
-
-        var results = {
-            "draw": draw,
-            "recordsTotal": 0,
-            "recordsFiltered": 0,
-            "data": []
-        };
-
-        Customer.find({
-
-            'search': new RegExp(search, 'i'),
-            'status': {$ne: 'Deleted'} 
-
-        }, function(err, customers) {
-            if (err)
-                res.send(err);
-
-            for (var i = 0; i < customers.length; i++) {
-
-
-                var cityAndState = customers[i].city;
-                if(customers[i].state!=null && customers[i].state!=""){
-                    cityAndState += ', ' + customers[i].state;
-                }
-
-                results.data.push(
-                    [
-                      '<a href=\"/app/customers/' + customers[i]._id + '\">' + customers[i]._id + '</a>',
-                        customers[i].firstName + ' ' + getLastOrCompany(customers[i]),
-                       cityAndState,
-                        customers[i].email,
-                        customers[i].phone,
-                        customers[i].company,
-                        '<input type="checkbox" class="togglecheck" onclick="toggleCustomer(this, '+customers[i]._id + ')" id='+customers[i]._id+'>'
-                    ]
-                );
+        const params = parseDataTablesRequest(req);
+        
+        const transformRow = (customer) => {
+            var cityAndState = customer.city;
+            if(customer.state != null && customer.state != ""){
+                cityAndState += ', ' + customer.state;
             }
-
-            Customer.estimatedDocumentCount({}, function(err, count) {
-                results.recordsTotal = count;
-
-                if (search == '' || search == null) {
-                    results.recordsFiltered = count;
-                    res.json(results);
-                } else {
-                    Customer.countDocuments({
-                        'search': new RegExp(search, 'i'),
-            'status': {$ne: 'Deleted'} 
-                    }, function(err, count) {
-
-
-                        results.recordsFiltered = count;
-                        res.json(results);
-                    });
-                }
-
-            });
-
-        }).sort({
-            lastUpdated: -1
-        }).skip(parseInt(start)).limit(parseInt(length)).select({
-            firstName: 1,
-            lastName: 1,
-            city: 1,
-            state: 1,
-            email: 1,
-            phone: 1,
-            company: 1
+            
+            return [
+                '<a href="/app/customers/' + customer._id + '">' + customer._id + '</a>',
+                customer.firstName + ' ' + getLastOrCompany(customer),
+                cityAndState,
+                customer.email,
+                customer.phone,
+                customer.company,
+                '<input type="checkbox" class="togglecheck" onclick="toggleCustomer(this, '+customer._id + ')" id='+customer._id+'>'
+            ];
+        };
+        
+        const queryPromise = handleDataTablesQueryWithEstimatedCount(Customer, params, {
+            baseQuery: { 'status': {$ne: 'Deleted'} },
+            searchField: 'search',
+            sortClause: { lastUpdated: -1 },
+            selectFields: {
+                firstName: 1,
+                lastName: 1,
+                city: 1,
+                state: 1,
+                email: 1,
+                phone: 1,
+                company: 1
+            },
+            transformRow
         });
+        
+        sendDataTablesResponse(res, queryPromise);
 
     });
 

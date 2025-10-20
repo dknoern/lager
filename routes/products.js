@@ -5,6 +5,7 @@ const checkJwt = require('./jwt-helper').checkJwt;
 var format = require('date-format');
 const formatCurrency = require('format-currency');
 const { formatDate } = require('./utils/date-utils');
+const { parseDataTablesRequest, buildSortClause, handleDataTablesQuery, sendDataTablesResponse } = require('./utils/datatables-helper');
 
 // formatDate function moved to ./utils/date-utils.js
 
@@ -187,153 +188,91 @@ router.route('/products')
             return;
         }
 
-        var status = req.query.status;
-
-        var draw = req.query.draw;
-        var start = 0;
-        var length = 10;
-
-        if (req.query.start) start = req.query.start;
-        if (req.query.length) length = req.query.length;
-
-        var search = req.query.search.value;
-        var results = {
-            "draw": draw,
-            "recordsTotal": 0,
-            "recordsFiltered": 0,
-            "data": []
-        };
-
-        var statusFilter;
+        const params = parseDataTablesRequest(req);
+        const status = req.query.status;
+        
+        // Build status filter based on query parameter
+        let statusFilter;
         if (status == "Available") {
-            // value of "Available" maps to "In Stock" and "Partnership"
-            statusFilter = { $in: ["In Stock", "Partnership"] }
-
+            statusFilter = { $in: ["In Stock", "Partnership"] };
         } else if (status == "Out") {
-            // value of "Out" maps to "Sold" and "Memo"
-            statusFilter = { $in: ["Sold", "Memo", "Incoming"] }
-
+            statusFilter = { $in: ["Sold", "Memo", "Incoming"] };
         } else {
-            statusFilter = {
-                $ne: "Deleted"
-            };
+            statusFilter = { $ne: "Deleted" };
         }
-
-        var sortOrder = -1;
-
-        if (req.query.order != null) {
-            var sortColumn = req.query.order[0]['column'];
-
-
-            if ("asc" == req.query.order[0]['dir'])
-                sortOrder = 1;
-        }
-
-        var sortClause = { lastUpdated: sortOrder };
-        if ("0" == sortColumn)
-            sortClause = { itemNumber: sortOrder };
-        else if ("1" == sortColumn)
-            sortClause = { title: sortOrder };
-        else if ("2" == sortColumn)
-            sortClause = { serialNo: sortOrder };
-        else if ("3" == sortColumn)
-            sortClause = { sellingPrice: sortOrder };
-        else if ("4" == sortColumn)
-            sortClause = { modelNumber: sortOrder };
-        else if ("5" == sortColumn)
-            sortClause = { status: sortOrder };
-
-        Product.find({
+        
+        // Build base query
+        const baseQuery = {
             $and: [
                 { status: statusFilter },
                 { itemNumber: { $ne: null } },
                 { itemNumber: { $ne: "" } },
-                { title: { $ne: null } },
-                { 'search': new RegExp(search, 'i') }
+                { title: { $ne: null } }
             ]
-        }, function (err, products) {
+        };
+        
+        // Column mapping for sorting
+        const columnMap = {
+            '0': 'itemNumber',
+            '1': 'title',
+            '2': 'serialNo',
+            '3': 'sellingPrice',
+            '4': 'modelNumber',
+            '5': 'status'
+        };
+        
+        const sortClause = buildSortClause(params.order, columnMap, { lastUpdated: -1 });
+        
+        const transformRow = (product) => {
+            const opts = { format: '%s%v', symbol: '$' };
+            
+            const status = product.statusDisplay;
+            let badgeStyle = "default"; // grey
+            if (status == 'In Stock' || status == 'Partnership' || status == 'Consignment' || status == 'Problem')
+                badgeStyle = "success"; // green
+            else if (status == 'Repair' || status == 'Memo' || status == 'At Show')
+                badgeStyle = "warning" // yellow
+            else if (status == 'Sale Pending')
+                badgeStyle = "danger" // red
+            else if (status == 'Incoming')
+                badgeStyle = "info" // aqua
 
-            if (err)
-                res.send(err);
-
-            var opts = { format: '%s%v', symbol: '$' };
-
-
-            for (var i = 0; i < products.length; i++) {
-
-                var status = products[i].statusDisplay;
-
-                var badgeStyle = "default"; // grey
-                if (status == 'In Stock' || status == 'Partnership' || status == 'Consignment' || status == 'Problem')
-                    badgeStyle = "success"; // green
-                else if (status == 'Repair' || status == 'Memo' || status == 'At Show')
-                    badgeStyle = "warning" // yellow
-                else if (status == 'Sale Pending')
-                    badgeStyle = "danger" // red
-                else if (status == 'Incoming')
-                    badgeStyle = "info" // aqua
-
-                var titleAndDial = products[i].title;
-                if (products[i].dial != null && products[i].dial != "") {
-                    titleAndDial += ' - ' + products[i].dial;
-                }
-
-                results.data.push(
-                    [
-                        '<a href=\"/app/products/' + products[i]._id + '\">' + products[i].itemNumber + '</a>',
-                        titleAndDial,
-                        products[i].serialNo,
-                        formatCurrency(products[i].sellingPrice, opts),
-                        products[i].modelNumber,
-                        "<span class=\"badge bg-" + badgeStyle + "\">" + status + "</span>",
-                        format('yyyy-MM-dd', products[i].lastUpdated),
-                    ]
-                );
+            let titleAndDial = product.title;
+            if (product.dial != null && product.dial != "") {
+                titleAndDial += ' - ' + product.dial;
             }
 
-            Product.countDocuments({
-                $and: [
-                    { status: statusFilter },
-                    { itemNumber: { $ne: null } },
-                    { itemNumber: { $ne: "" } },
-                    { title: { $ne: null } }
-                ]
-
-            }, function (err, count) {
-                results.recordsTotal = count;
-
-                if (search == '' || search == null) {
-                    results.recordsFiltered = count;
-                    res.json(results);
-                } else {
-                    Product.countDocuments({
-
-                        $and: [
-                            { status: { $ne: "Deleted" } },
-                            { itemNumber: { $ne: null } },
-                            { itemNumber: { $ne: "" } },
-                            { 'search': new RegExp(search, 'i') }
-                        ]
-
-                    }, function (err, count) {
-                        results.recordsFiltered = count;
-                        res.json(results);
-                    });
-                }
-            });
-
-        }).sort(sortClause).skip(parseInt(start)).limit(parseInt(length)).select({
-            itemNumber: 1,
-            title: 1,
-            dial: 1,
-            sellingPrice: 1,
-            serialNo: 1,
-            modelNumber: 1,
-            status: 1,
-            productType: 1,
-            lastUpdated: 1,
-            sellerType: 1
+            return [
+                '<a href="/app/products/' + product._id + '">' + product.itemNumber + '</a>',
+                titleAndDial,
+                product.serialNo,
+                formatCurrency(product.sellingPrice, opts),
+                product.modelNumber,
+                "<span class=\"badge bg-" + badgeStyle + "\">" + status + "</span>",
+                format('yyyy-MM-dd', product.lastUpdated)
+            ];
+        };
+        
+        const queryPromise = handleDataTablesQuery(Product, params, {
+            baseQuery,
+            searchField: 'search',
+            sortClause,
+            selectFields: {
+                itemNumber: 1,
+                title: 1,
+                dial: 1,
+                sellingPrice: 1,
+                serialNo: 1,
+                modelNumber: 1,
+                status: 1,
+                productType: 1,
+                lastUpdated: 1,
+                sellerType: 1
+            },
+            transformRow
         });
+        
+        sendDataTablesResponse(res, queryPromise);
     });
 
 router.route('/products/:product_id')

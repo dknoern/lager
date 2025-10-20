@@ -4,6 +4,7 @@ var Out = require('../models/out');
 const checkJwt = require('./jwt-helper').checkJwt;
 var format = require('date-format');
 const { formatDate, formatDateTime } = require('./utils/date-utils');
+const { parseDataTablesRequest, handleDataTablesQuery, sendDataTablesResponse } = require('./utils/datatables-helper');
 
 // formatDate function moved to ./utils/date-utils.js
 
@@ -65,60 +66,26 @@ router.route('/outs')
 
     // get all log entries
     .get(checkJwt, function (req, res) {
-
-        var draw = req.query.draw;
-        var start = 0;
-        var length = 10;
-
-        if (req.query.start) start = req.query.start;
-        if (req.query.length) length = req.query.length;
-
-        var search = req.query.search.value;
-        var results = {
-            "draw": draw,
-            "recordsTotal": 0,
-            "recordsFiltered": 0,
-            "data": []
+        const params = parseDataTablesRequest(req);
+        
+        const transformRow = (out) => {
+            return [
+                '<a href="/app/outs/' + out._id + '"><div style="white-space: nowrap;">' + formatDateTime(out.date) + '</div></a>',
+                out.sentTo,
+                out.description,
+                out.user,
+                out.comments
+            ];
         };
-
-        var sortClause = { "date": -1 };
-
-        Out.find({ 'search': new RegExp(search, 'i') }).
-            sort(sortClause).skip(parseInt(start)).limit(parseInt(length))
-            .exec(function (err, outs) {
-
-                if (outs != null) {
-
-                    for (var i = 0; i < outs.length; i++) {
-                        results.data.push(
-                            [
-                                '<a href=\"/app/outs/' + outs[i]._id + '\"><div style="white-space: nowrap;">' + formatDateTime(outs[i].date) + '</div></a>',
-                                outs[i].sentTo,
-                                outs[i].description,
-                                outs[i].user,
-                                outs[i].comments
-                            ]
-                        );
-                    }
-
-                    Out.countDocuments({
-                    }, function (err, count) {
-                        results.recordsTotal = count;
-
-                        if (search == '' || search == null) {
-                            results.recordsFiltered = count;
-                            res.json(results);
-                        } else {
-                            Out.countDocuments({
-                                'search': new RegExp(search, 'i')
-                            }, function (err, count) {
-                                results.recordsFiltered = count;
-                                res.json(results);
-                            });
-                        }
-                    });
-                }
-            });
+        
+        const queryPromise = handleDataTablesQuery(Out, params, {
+            baseQuery: {},
+            searchField: 'search',
+            sortClause: { date: -1 },
+            transformRow
+        });
+        
+        sendDataTablesResponse(res, queryPromise);
     });
 
 // get specified 
