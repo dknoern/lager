@@ -5,6 +5,8 @@ var history = require('./history');
 const checkJwt = require('./jwt-helper').checkJwt;
 var format = require('date-format');
 const config = require('../config');
+const fs = require('fs');
+const mustache = require('mustache');
 
 const formatCurrency = require('format-currency');
 const { formatDateTime } = require('./utils/date-utils');
