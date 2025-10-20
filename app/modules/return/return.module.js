@@ -16,9 +16,24 @@
   appConfig.$inject = ['$stateProvider'];
 
   function appConfig($stateProvider) {
+    // Order matters: more specific routes must come first
+    $stateProvider
+      .state('app.newreturn', {
+        url: '/returns/new',
+        templateUrl: 'app/modules/return/return.html',
+        controller: function($scope, $location) {
+          $scope.returnId = 'new';
+          // Handle invoiceId from query params
+          var invoiceId = $location.search().invoiceId;
+          if (invoiceId) {
+            $scope.invoiceId = invoiceId;
+          }
+        }
+      });
+
     $stateProvider
       .state('app.return', {
-        url: '/return/:returnId',
+        url: '/returns/:returnId',
         templateUrl: 'app/modules/return/return.html',
         controller: function($scope, $stateParams) {
           $scope.returnId = $stateParams.returnId;

@@ -15,7 +15,7 @@
   function appConfig($stateProvider) {
     $stateProvider
       .state('app.log', {
-        url: '/log',
+        url: '/logs',
         templateUrl: 'app/modules/log/log.html',
         controller: 'LogCtrl',
         controllerAs: 'vm'

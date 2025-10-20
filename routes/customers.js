@@ -114,7 +114,6 @@ router.route('/customers')
 
                 results.data.push(
                     [
-                    //  '<a href=\"/#/app/customer/' + customers[i]._id + '\">' + customers[i]._id + '</a>',
                       '<a href=\"#\" onclick=\"selectCustomer(' + customers[i]._id + ');return false;\">' + customers[i]._id + '</a>',
                         customers[i].firstName + ' ' + getLastOrCompany(customers[i]),
                        cityAndState,

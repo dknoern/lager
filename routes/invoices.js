@@ -187,7 +187,7 @@ router.route('/invoices')
 
                 results.data.push(
                     [
-                        '<a href=\"/#/app/invoice/' + invoices[i]._id + '\">' + invoices[i]._id + '</a>',
+                        '<a href=\"/#/app/invoices/' + invoices[i]._id + '\">' + invoices[i]._id + '</a>',
                         customerName,
                         '<div style="white-space: nowrap;">' + format('yyyy-MM-dd', invoices[i].date)+'</div>',
                         itemNo,
@@ -423,7 +423,7 @@ router.route('/customers/:customer_id/invoices')
 
                 results.data.push(
                     [
-                        '<a href=\"/#/app/invoice/' + invoices[i]._id + '\">' + invoices[i]._id + '</a>',
+                        '<a href=\"/#/app/invoices/' + invoices[i]._id + '\">' + invoices[i]._id + '</a>',
                         '<div style="white-space: nowrap;">' + format('yyyy-MM-dd', invoices[i].date)+'</div>',
                         itemNo,
                         itemName,

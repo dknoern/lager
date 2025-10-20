@@ -453,17 +453,6 @@
                                     <div class="col-sm-8">
                                         <div class="form-group checkbox checkbox-primary">
                                             <input type="checkbox" id="ebay" ng-model="data.ebayNoReserve">
-                                            <label for="ebay">Ebay NR</label>
-                                        </div>
-
-                                        <div class="form-group checkbox checkbox-primary">
-                                            <input type="checkbox" id="inventory" ng-model="data.inventoryItem">
-                                            <label for="inventory">Inventory</label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
                                     <label for="status" class="col-sm-3 control-label">Status</label>
                                     <div class="col-sm-8">
                                         <input type="text" id="status" class="form-control" readonly="readonly"
@@ -587,16 +576,16 @@
                                                     <td>{{historyEntry.action}}
                                                         <span
                                                             ng-if="historyEntry.refDoc!=null && historyEntry.action.startsWith('in repair')">
-                                                            - <a href="/#/app/repair/{{historyEntry.refDoc}}">repair</a>
+                                                            - <a href="/#/app/repairs/{{historyEntry.refDoc}}">repair</a>
                                                         </span>
                                                         <span
                                                             ng-if="historyEntry.refDoc!=null && !historyEntry.action.startsWith('in repair') && !historyEntry.action.startsWith('received')">
                                                             <a
-                                                                href="/#/app/invoice/{{historyEntry.refDoc}}">{{historyEntry.refDoc}}</a>
+                                                                href="/#/app/invoices/{{historyEntry.refDoc}}">{{historyEntry.refDoc}}</a>
                                                         </span>
                                                         <span
                                                             ng-if="historyEntry.refDoc!=null && historyEntry.action.startsWith('received')">
-                                                            - <a href="/#/app/log-item/{{historyEntry.refDoc}}">log</a>
+                                                            - <a href="/#/app/logs/{{historyEntry.refDoc}}">log</a>
                                                         </span>
                                                     </td>
                                                 </tr>
@@ -650,7 +639,7 @@
                                     <button type="submit" class="btn btn-primary" ng-click="go()"
                                         ng-disabled="productForm.$invalid">Save
                                     </button>
-                                    <a href="/#/app/inventory">
+                                    <a href="/#/app/products">
                                         <button type="button" class="btn btn-inverse"> Cancel
                                         </button>
                                     </a>

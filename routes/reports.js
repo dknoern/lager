@@ -246,7 +246,7 @@ router.route('/reports/log-items/:year/:month/:day')
                     [
                         format('yyyy-MM-dd', logItems[i].date),
                         logItems[i].receivedFrom,
-                        "<a href=\"/#/app/log-item/" + logItems[i].id + "\">" + logItems[i].title + "</a>",
+                        "<a href=\"/#/app/logs/" + logItems[i].id + "\">" + logItems[i].title + "</a>",
                         logItems[i].receivedBy,
                         logItems[i].comments,
                     ]

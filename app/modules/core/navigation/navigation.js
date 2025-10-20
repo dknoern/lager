@@ -115,6 +115,41 @@
 
         var $newActiveLink = this.$el.find('a[data-ui-sref="' + stateName + '"]');
 
+        // Special case: if on customer-related pages, highlight the Customers nav item
+        if ($newActiveLink.length === 0 && (stateName === 'app.customer' || stateName === 'app.newcustomer')) {
+          $newActiveLink = this.$el.find('a[data-ui-sref="app.customers"]');
+        }
+
+        // Special case: if on product-related pages, highlight the Products nav item
+        if ($newActiveLink.length === 0 && (stateName === 'app.item' || stateName === 'app.edititem' || stateName === 'app.newitem')) {
+          $newActiveLink = this.$el.find('a[data-ui-sref="app.products"]');
+        }
+
+        // Special case: if on invoice-related pages, highlight the Invoices nav item
+        if ($newActiveLink.length === 0 && (stateName === 'app.invoice' || stateName === 'app.extrainvoice' || stateName === 'app.partnerinvoice' || stateName === 'app.consignmentinvoice' || stateName === 'app.newinvoice')) {
+          $newActiveLink = this.$el.find('a[data-ui-sref="app.invoices"]');
+        }
+
+        // Special case: if on return-related pages, highlight the Returns nav item
+        if ($newActiveLink.length === 0 && (stateName === 'app.return' || stateName === 'app.newreturn')) {
+          $newActiveLink = this.$el.find('a[data-ui-sref="app.returns"]');
+        }
+
+        // Special case: if on repair-related pages, highlight the Repairs nav item
+        if ($newActiveLink.length === 0 && (stateName === 'app.repair' || stateName === 'app.repairnew' || stateName === 'app.repairedit')) {
+          $newActiveLink = this.$el.find('a[data-ui-sref="app.repairs"]');
+        }
+
+        // Special case: if on log-related pages, highlight the Log In nav item
+        if ($newActiveLink.length === 0 && (stateName === 'app.logitem' || stateName === 'app.mewlogitem')) {
+          $newActiveLink = this.$el.find('a[data-ui-sref="app.log"]');
+        }
+
+        // Special case: if on out-related pages, highlight the Log Out Items nav item
+        if ($newActiveLink.length === 0 && (stateName === 'app.outitem' || stateName === 'app.newoutitem')) {
+          $newActiveLink = this.$el.find('a[data-ui-sref="app.out"]');
+        }
+
         // If no exact match found, try to find by href as fallback
         if ($newActiveLink.length === 0) {
           var href = $state.href(toState, toParams);

@@ -14,8 +14,8 @@
 
   function appConfig($stateProvider) {
     $stateProvider
-      .state('app.inventory', {
-        url: '/inventory',
+      .state('app.products', {
+        url: '/products',
         templateUrl: 'app/modules/inventory/inventory.html',
         controller: 'AngularWayCtrl',
         controllerAs: 'vm'

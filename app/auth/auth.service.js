@@ -17,7 +17,7 @@
       angularAuth0.parseHash(function (err, authResult) {
         if (authResult && authResult.accessToken && authResult.idToken) {
           setSession(authResult);
-          $state.go("app.inventory");
+          $state.go("app.products");
         } else if (err) {
           console.error("Authentication error:", err);
 
@@ -31,7 +31,7 @@
           }
 
           $timeout(function () {
-            $state.go("app.inventory");
+            $state.go("app.products");
           });
         }
       });
@@ -57,7 +57,7 @@
       localStorage.removeItem("user_profile");
       userProfile = null;
       clearTimeout(tokenRenewalTimeout);
-      $state.go("app.inventory");
+      $state.go("app.products");
     }
 
     function isAuthenticated() {

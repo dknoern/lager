@@ -15,7 +15,7 @@
   function appConfig($stateProvider) {
     $stateProvider
       .state('app.out', {
-        url: '/out',
+        url: '/outs',
         templateUrl: 'app/modules/out/out.html',
         controller: 'OutCtrl',
         controllerAs: 'vm'

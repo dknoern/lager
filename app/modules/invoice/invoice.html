@@ -458,7 +458,7 @@
                                     <!-- Save/Cancel buttons after line items and totals -->
                                     <br>
                                     <button type="submit" class="btn btn-primary" ng-click="go()" ng-disabled="invoiceForm.$invalid">Save Invoice</button>
-                                    <button type="button" class="btn btn-default" onclick="window.location.href='/#/app/inventory'" style="margin-left: 10px;">Cancel</button>
+                                    <button type="button" class="btn btn-default" onclick="window.location.href='/#/app/products'" style="margin-left: 10px;">Cancel</button>
                                     
                                 </div>
                             </div>
@@ -467,7 +467,7 @@
                         <div ng-if="data.invoiceType != 'Partner' && data._id" class="form-actions" ng-show="data.invoiceType!='Consignment'">
                             <div class="row">
                                 <div class="col-sm-offset-4 col-sm-7">
-                                  <a href="/#/app/return/new?invoiceId={{data._id}}" class="btn btn-danger">Return item(s)</a>
+                                  <a href="/#/app/returns/new?invoiceId={{data._id}}" class="btn btn-danger">Return item(s)</a>
                                 </div>
                             </div>
                         </div>

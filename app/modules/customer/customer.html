@@ -251,7 +251,7 @@
       <div id="tabs1c" class="tab-content mb-lg">
         <div class="tab-pane active clearfix" id="tab1">
           <div>
-            <a href="/#/app/invoice/edit/new?customerId={{data._id}}" class="btn btn-primary">New</a>
+            <a href="/#/app/invoices/new/edit?customerId={{data._id}}" class="btn btn-primary">New</a>
           </div>
 
           <div class="mt">
@@ -268,7 +268,7 @@
             </thead>
             <!--tbody>
             <tr data-ng-repeat="invoice in invoices">
-              <td><a href="/#/app/invoice/{{invoice._id}}">{{invoice._id}}</a></td>
+              <td><a href="/#/app/invoices/{{invoice._id}}">{{invoice._id}}</a></td>
               <td>{{invoice.date | date:'yyyy-MM-dd'}}</td>
               <td>{{invoice.lineItems[0].itemNumber}}</td>
               <td>{{invoice.lineItems[0].name}}</td>
@@ -303,7 +303,7 @@
             </thead>
             <tbody>
             <tr data-ng-repeat="ret in returns">
-              <td><a href="/#/app/return/{{ret._id}}">{{ret._id}}</a></td>
+              <td><a href="/#/app/returns/{{ret._id}}">{{ret._id}}</a></td>
               <td>{{ret.returnDate  | date:'yyyy-MM-dd'}}</td>
               <td>{{ret.totalReturnAmount | currency}}</td>
             </tr>

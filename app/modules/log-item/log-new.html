@@ -211,10 +211,10 @@
                                                                     ng-model="lineItem.name"></textarea>
                                                             </td>
                                                             <td><a
-                                                                    href="/#/app/item/{{lineItem.productId}}">{{lineItem.itemNumber}}</a>
+                                                                    href="/#/app/products/{{lineItem.productId}}">{{lineItem.itemNumber}}</a>
                                                             </td>
                                                             <td ng-if="lineItem.repairId!=null"><a
-                                                                    href="/#/app/repair/{{lineItem.repairId}}">{{lineItem.repairNumber}}</a>
+                                                                    href="/#/app/repairs/{{lineItem.repairId}}">{{lineItem.repairNumber}}</a>
                                                             </td>
                                                             <td ng-if="lineItem.repairId==null">
                                                                 {{lineItem.repairNumber}}</td>

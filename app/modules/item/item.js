@@ -148,7 +148,7 @@
                     'Content-Type': 'application/json'
                 }
             }).then(function successCallback(response) {
-                $state.go('app.inventory');
+                $state.go('app.products');
 
                 Messenger().post({
                     message: 'item saved',
@@ -182,7 +182,7 @@
                     'Content-Type': 'application/json'
                 }
             }).then(function successCallback(response) {
-                $state.go('app.inventory');
+                $state.go('app.products');
 
                 Messenger().post({
                     message: 'Deleted item ' + itemNumber,

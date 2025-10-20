@@ -16,7 +16,7 @@
   function appConfig($stateProvider) {
     $stateProvider
       .state('app.item', {
-        url: '/item/:itemId',
+        url: '/products/:itemId',
         templateUrl: 'app/modules/item/item.html',
         controller: function ($scope, $stateParams) {
           $scope.itemId = $stateParams.itemId;
@@ -26,7 +26,7 @@
 
     $stateProvider
       .state('app.edititem', {
-        url: '/item/:itemId/edit',
+        url: '/products/:itemId/edit',
         templateUrl: 'app/modules/item/item.html',
         controller: function ($scope, $stateParams) {
           $scope.itemId = $stateParams.itemId;
@@ -36,7 +36,7 @@
 
     $stateProvider
       .state('app.newitem', {
-        url: '/item',
+        url: '/products/new',
         templateUrl: 'app/modules/item/item.html'
       })
   }

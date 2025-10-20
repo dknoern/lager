@@ -18,7 +18,7 @@
   function appConfig($stateProvider) {
     $stateProvider
       .state('app.customer', {
-        url: '/customer/:customerId',
+        url: '/customers/:customerId',
         templateUrl: 'app/modules/customer/customer.html',
         controller: function($scope, $stateParams) {
           $scope.customerId = $stateParams.customerId;
@@ -28,7 +28,7 @@
 
       $stateProvider
         .state('app.newcustomer', {
-          url: '/customer',
+          url: '/customers/new',
           templateUrl: 'app/modules/customer/customer.html'
         })
   }
