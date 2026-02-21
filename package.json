@@ -6,7 +6,7 @@
     "sass": "^1.80.7"
   },
   "dependencies": {
-    "@aws-sdk/client-ses": "^3.0.0",
+    "@aws-sdk/client-ses": "^3.995.0",
     "angular": "1.8.3",
     "angular-animate": "1.8.3",
     "angular-auth0": "^3.0.0",
